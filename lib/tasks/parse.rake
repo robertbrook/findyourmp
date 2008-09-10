@@ -76,7 +76,13 @@ namespace :fymp do
     if percentage_complete
       estimated_time = (duration / percentage_complete)
       estimated_remaining = ((estimated_time - duration) / 60).to_i
-      puts "estimated time remaining: #{estimated_remaining} mins"
+      if estimated_remaining > 60
+        estimated_remaining = (estimated_remaining * 10 / 60) / 10.0
+        estimated_remaining = "#{estimated_remaining} hours"
+      else
+        estimated_remaining = "#{estimated_remaining} mins"
+      end
+      puts "estimated time remaining: #{estimated_remaining}"
     else
       puts "duration: #{duration}"
     end
