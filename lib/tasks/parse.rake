@@ -9,6 +9,7 @@ namespace :fymp do
     unless File.exist?(postcode_file)
       $stderr.puts "Data file not found: #{postcode_file}"
     else
+      puts 'loading data from file'
       start_timing
       post_codes = []
       IO.foreach(postcode_file) do |line|
@@ -21,10 +22,15 @@ namespace :fymp do
       Postcode.delete_all
       columns = [:code, :constituency_id]
 
-      post_codes.in_groups_of(1000) do |codes|
-        start_timing
+      total = post_codes.size.to_f
+      index = 0
+      group_size = 1000
+      puts 'saving data to db'
+      post_codes.in_groups_of(group_size) do |codes|
         Postcode.import columns, codes
-        log_duration
+        index = index.next
+        percentage_complete = (group_size * index) / total
+        log_duration percentage_complete
       end
     end
   end
@@ -65,8 +71,14 @@ namespace :fymp do
     @start = Time.now
   end
 
-  def log_duration
+  def log_duration percentage_complete=nil
     duration = Time.now - @start
-    puts "duration: #{duration}"
+    if percentage_complete
+      estimated_time = (duration / percentage_complete)
+      estimated_remaining = ((estimated_time - duration) / 60).to_i
+      puts "estimated time remaining: #{estimated_remaining} mins"
+    else
+      puts "duration: #{duration}"
+    end
   end
 end
