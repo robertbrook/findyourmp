@@ -9,28 +9,32 @@ namespace :fymp do
     unless File.exist?(postcode_file)
       $stderr.puts "Data file not found: #{postcode_file}"
     else
-      puts 'loading data from file'
       start_timing
       post_codes = []
+
+      total = post_codes.size.to_f
+      index = 0
+      groups = 0
+      group_size = 1000
+      puts 'saving data to db'
+
+      Postcode.delete_all
+      columns = [:code, :constituency_id]
+      total = `cat #{postcode_file} | wc -l`
+      total = total.strip.to_f
+
       IO.foreach(postcode_file) do |line|
         code = line[0..6]
         constituency_id = line[8..10]
         post_codes << [code, constituency_id]
-      end
-      log_duration
-
-      Postcode.delete_all
-      columns = [:code, :constituency_id]
-
-      total = post_codes.size.to_f
-      index = 0
-      group_size = 1000
-      puts 'saving data to db'
-      post_codes.in_groups_of(group_size) do |codes|
-        Postcode.import columns, codes
         index = index.next
-        percentage_complete = (group_size * index) / total
-        log_duration percentage_complete
+        if (index % group_size) == 0
+          Postcode.import columns, post_codes
+          groups = groups.next
+          percentage_complete = (group_size * groups) / total
+          log_duration percentage_complete
+          post_codes = []
+        end
       end
     end
   end
