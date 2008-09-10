@@ -5,3 +5,4 @@ config/database.yml
 .DS_Store
 doc
 data
+db/*.sqlite3*
