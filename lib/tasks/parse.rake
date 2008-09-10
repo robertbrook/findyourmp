@@ -20,7 +20,7 @@ namespace :fymp do
         if termination_date == blank_date
           consistuency_code = line[62..64]
           unless consistuency_code == blank_code
-            post_codes << line[0..6] << space << consistuency_code.to_i
+            post_codes << line[0..6] << space << consistuency_code
             post_codes << new_line
           end
         end
