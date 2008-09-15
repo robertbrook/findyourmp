@@ -26,8 +26,8 @@ namespace :fymp do
         IO.foreach(postcode_file) do |line|
           code = line[0..6]
           constituency_id = line[8..10]
-          post_codes << %Q[INSERT INTO "postcodes" VALUES(1,'#{code}',#{constituency_id});]
           index = index.next
+          post_codes << %Q[INSERT INTO "postcodes" VALUES(#{index},'#{code}',#{constituency_id});]
           if (index % group_size) == 0
             file.write(post_codes.join("\n"))
             groups = groups.next
