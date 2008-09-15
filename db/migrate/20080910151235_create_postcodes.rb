@@ -1,7 +1,7 @@
 class CreatePostcodes < ActiveRecord::Migration
   def self.up
     create_table :postcodes do |t|
-      t.string :code
+      t.string :code, :limit => 7
       t.integer :constituency_id
     end
   end
