@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080910151235) do
+ActiveRecord::Schema.define(:version => 20080915164638) do
+
+  create_table "constituencies", :force => true do |t|
+    t.string "name"
+  end
 
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
