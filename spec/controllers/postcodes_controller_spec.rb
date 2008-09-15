@@ -7,6 +7,7 @@ describe PostcodesController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @postcode_record = mock(Postcode, :constituency_id => @constituency_id, :code => @canonical_postcode)
+    Postcode.stub!(:find_by_code).and_return nil
   end
 
   def self.get_request_should_be_successful
@@ -43,10 +44,6 @@ describe PostcodesController do
   end
 
   describe "when asked for constituency given a postcode" do
-    before do
-      Postcode.stub!(:find_by_code).and_return nil
-    end
-
     def do_get
       get :index, :postcode => @postcode
     end
@@ -55,7 +52,6 @@ describe PostcodesController do
 
     describe 'and no matching postcode found' do
       it 'should state no consituency_id found' do
-        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return nil
         do_get
         response.body.should == "no constituency_id found for: #{@postcode.squeeze(' ').strip}"
       end
@@ -80,6 +76,12 @@ describe PostcodesController do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
         do_get
         response.body.should == "constituency_id: #{@constituency_id}"
+      end
+    end
+    describe 'and a matching postcode not found' do
+      it 'should redirect to index search form' do
+        do_get
+        response.should redirect_to(:action=>'index')
       end
     end
   end

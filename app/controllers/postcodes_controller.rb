@@ -18,9 +18,11 @@ class PostcodesController < ApplicationController
 
   def show
     code = params[:postcode]
-    if code
-      postcode = Postcode.find_by_code(code)
+    postcode = Postcode.find_by_code(code)
+    if postcode
       render :text => "constituency_id: #{postcode.constituency_id}"
+    else
+      redirect_to :action=>'index'
     end
   end
 end
