@@ -86,7 +86,7 @@ namespace :fymp do
       else
         estimated_remaining = "#{estimated_remaining} mins"
       end
-      puts "estimated time remaining: #{estimated_remaining}"
+      puts "remaining: #{estimated_remaining}"
     else
       puts "duration: #{duration}"
     end
