@@ -83,7 +83,8 @@ namespace :fymp do
     if percentage_complete
       estimated_time = (duration / percentage_complete)
       estimated_remaining = ((estimated_time - duration).seconds.ago)
-      puts "#{time_ago_in_words(estimated_remaining).capitalize} remaining"
+      due = (Time.now + estimated_remaining).strftime('%I:%M%p').downcase
+      puts "#{time_ago_in_words(estimated_remaining).capitalize} remaining, due to complete about #{due}."
     else
       puts "duration: #{duration}"
     end
