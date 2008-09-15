@@ -1,9 +1,27 @@
 data = File.expand_path(File.dirname(__FILE__) + '/../../data')
 data_file = "#{data}/NSPDC_AUG_2008_UK_100M.txt"
 postcode_file = "#{data}/postcodes.txt"
+constituency_file = "#{data}/Westminster Parliamentary Constituency names and codes UK as at 05_05.txt"
 postcode_sql = "#{data}/postcodes.sql"
 
 namespace :fymp do
+
+  desc "Populate data for constituencies in DB"
+  task :constituencies => :environment do
+    unless File.exist?(constituency_file)
+      $stderr.puts "Data file not found: #{constituency_file}"
+    else
+      Constituency.delete_all
+
+      IO.foreach(constituency_file) do |line|
+        constituency_id = line[0..2]
+        constituency_name = line[3..(line.length-1)].strip
+        constituency = Constituency.new :name=>constituency_name
+        constituency.id = constituency_id
+        constituency.save!
+      end
+    end
+  end
 
   desc "Populate data for postcode and constituency ID in DB"
   task :populate => :environment do
