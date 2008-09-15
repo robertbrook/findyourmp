@@ -83,7 +83,7 @@ namespace :fymp do
     if percentage_complete
       estimated_time = (duration / percentage_complete)
       estimated_remaining = ((estimated_time - duration).seconds.ago)
-      puts "remaining: #{time_ago_in_words(estimated_remaining)}"
+      puts "#{time_ago_in_words(estimated_remaining).capitalize} remaining"
     else
       puts "duration: #{duration}"
     end
