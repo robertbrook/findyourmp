@@ -27,7 +27,7 @@ namespace :fymp do
       include ActionView::Helpers::DateHelper
 
       IO.foreach(postcode_file) do |line|
-        code = line[0..6]
+        code = line[0..6].tr(' ','')
         constituency_id = line[8..10]
         post_codes << [code, constituency_id]
         index = index.next

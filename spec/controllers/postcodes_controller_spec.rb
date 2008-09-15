@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PostcodesController do
 
   before do
-    @postcode = 'N1 1AA'
+    @postcode = 'N1  1AA'
     @constituency_id = 801
     @postcode_record = mock(Postcode, :constituency_id => @constituency_id)
   end
@@ -52,12 +52,12 @@ describe PostcodesController do
       it 'should state no consituency_id found' do
         Postcode.should_receive(:find_by_code).and_return nil
         do_get
-        response.body.should == "no constituency_id found for: #{@postcode}"
+        response.body.should == "no constituency_id found for: #{@postcode.squeeze(' ')}"
       end
     end
     describe 'and a matching postcode found' do
       it 'should show consituency_id for postcode' do
-        Postcode.should_receive(:find_by_code).and_return @postcode_record
+        Postcode.should_receive(:find_by_code).with(@postcode.tr(' ','')).and_return @postcode_record
         do_get
         response.body.should == "constituency_id: #{@constituency_id}"
       end
