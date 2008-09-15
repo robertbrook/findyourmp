@@ -1,7 +1,6 @@
 class PostcodesController < ApplicationController
 
   def index
-    render :text=>'enter post code'
   end
 
   def constituency

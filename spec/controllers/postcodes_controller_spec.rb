@@ -26,4 +26,13 @@ describe PostcodesController do
       params_from(:get, "/N1 1AA").should == {:controller => "postcodes", :action => "constituency", :postcode=>'N1 1AA'}
     end
   end
+
+  describe "when asked for home page" do
+    def do_get
+      get :index
+    end
+    get_request_should_be_successful
+    should_render_template 'index'
+  end
+
 end
