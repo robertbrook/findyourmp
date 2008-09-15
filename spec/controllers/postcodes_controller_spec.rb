@@ -2,6 +2,12 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PostcodesController do
 
+  before do
+    @postcode = 'N1 1AA'
+    @constituency_id = 801
+    @postcode_record = mock(Postcode, :constituency_id => @constituency_id)
+  end
+
   def self.get_request_should_be_successful
     eval %Q|    it "should be successful" do
       do_get
@@ -21,10 +27,6 @@ describe PostcodesController do
       route_for(:controller => "postcodes", :action => "index").should == "/"
       params_from(:get, "/").should == {:controller => "postcodes", :action => "index"}
     end
-    it 'should find constituency route' do
-      route_for(:controller => "postcodes", :action => "constituency", :postcode=>'N1 1AA').should == "/N1%201AA"
-      params_from(:get, "/N1 1AA").should == {:controller => "postcodes", :action => "constituency", :postcode=>'N1 1AA'}
-    end
   end
 
   describe "when asked for home page" do
@@ -35,4 +37,30 @@ describe PostcodesController do
     should_render_template 'index'
   end
 
+  describe "when asked for constituency given a postcode" do
+    before do
+      Postcode.stub!(:find_by_code).and_return nil
+    end
+
+    def do_get
+      get :index, :postcode => @postcode
+    end
+
+    get_request_should_be_successful
+
+    describe 'and no matching postcode found' do
+      it 'should state no consituency_id found' do
+        Postcode.should_receive(:find_by_code).and_return nil
+        do_get
+        response.body.should == "no constituency_id found for: #{@postcode}"
+      end
+    end
+    describe 'and a matching postcode found' do
+      it 'should show consituency_id for postcode' do
+        Postcode.should_receive(:find_by_code).and_return @postcode_record
+        do_get
+        response.body.should == "constituency_id: #{@constituency_id}"
+      end
+    end
+  end
 end
