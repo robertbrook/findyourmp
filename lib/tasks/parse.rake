@@ -5,41 +5,6 @@ postcode_sql = "#{data}/postcodes.sql"
 
 namespace :fymp do
 
-  task :make_sql do
-    unless File.exist?(postcode_file)
-      $stderr.puts "Data file not found: #{postcode_file}, try running rake fymp:parse"
-    else
-      start_timing
-      post_codes = []
-
-      total = post_codes.size.to_f
-      index = 0
-      groups = 0
-      group_size = 1000
-      puts 'saving data to sql dump'
-
-      columns = [:code, :constituency_id]
-      total = `cat #{postcode_file} | wc -l`
-      total = total.strip.to_f
-
-      File.open(postcode_sql, 'w') do |file|
-        IO.foreach(postcode_file) do |line|
-          code = line[0..6]
-          constituency_id = line[8..10]
-          index = index.next
-          post_codes << %Q[INSERT INTO "postcodes" VALUES(#{index},'#{code}',#{constituency_id});]
-          if (index % group_size) == 0
-            file.write(post_codes.join("\n"))
-            groups = groups.next
-            percentage_complete = (group_size * groups) / total
-            log_duration percentage_complete
-            post_codes = []
-          end
-        end
-      end
-    end
-  end
-
   desc "Populate data for postcode and constituency ID in DB"
   task :populate => :environment do
     unless File.exist?(postcode_file)
@@ -58,6 +23,8 @@ namespace :fymp do
       columns = [:code, :constituency_id]
       total = `cat #{postcode_file} | wc -l`
       total = total.strip.to_f
+
+      include ActionView::Helpers::DateHelper
 
       IO.foreach(postcode_file) do |line|
         code = line[0..6]
@@ -115,14 +82,8 @@ namespace :fymp do
     duration = Time.now - @start
     if percentage_complete
       estimated_time = (duration / percentage_complete)
-      estimated_remaining = ((estimated_time - duration) / 60).to_i
-      if estimated_remaining > 60
-        estimated_remaining = (estimated_remaining * 10 / 60) / 10.0
-        estimated_remaining = "#{estimated_remaining} hours"
-      else
-        estimated_remaining = "#{estimated_remaining} mins"
-      end
-      puts "remaining: #{estimated_remaining}"
+      estimated_remaining = ((estimated_time - duration).seconds.ago)
+      puts "remaining: #{time_ago_in_words(estimated_remaining)}"
     else
       puts "duration: #{duration}"
     end
