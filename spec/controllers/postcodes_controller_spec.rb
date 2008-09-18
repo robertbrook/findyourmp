@@ -7,9 +7,13 @@ describe PostcodesController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name = 'Islington South'
-    constituency = mock(Constituency, :name => @constituency_name)
-    @postcode_record = mock(Postcode, :constituency_id => @constituency_id,
-        :code => @canonical_postcode, :constituency => constituency)
+    constituency = mock_model(Constituency, :name => @constituency_name)
+    @json = '{json : {}}'
+    @xml = '<xml/>'
+
+    @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
+        :code => @canonical_postcode, :constituency => constituency,
+        :to_xml => @xml, :to_json => @json)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -35,6 +39,10 @@ describe PostcodesController do
     it 'should find show action' do
       route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode).should == "/postcodes/#{@canonical_postcode}"
       params_from(:get, "/postcodes/#{@canonical_postcode}").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode}
+    end
+    it 'should find show action with json format' do
+      route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format => 'json').should == "/postcodes/#{@canonical_postcode}.json"
+      params_from(:get, "/postcodes/#{@canonical_postcode}.json").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format=>'json'}
     end
   end
 
@@ -70,15 +78,39 @@ describe PostcodesController do
   end
 
   describe "when asked to show postcode" do
-    def do_get
-      get :show, :postcode => @canonical_postcode
+    def do_get format=nil
+      if format
+        get :show, :postcode => @canonical_postcode, :format => format
+      else
+        get :show, :postcode => @canonical_postcode
+      end
     end
 
     describe 'and a matching postcode found' do
-      it 'should return consituency_id' do
+      before do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+      end
+      it 'should return consituency_id' do
         do_get
-        response.body.should == "constituency_id: #{@constituency_id}<br /> constituency: #{@constituency_name} "
+        response.body.should == "constituency_id: #{@constituency_id}<br /> constituency: #{@constituency_name}"
+      end
+      it 'should return html format' do
+        do_get
+        response.content_type.should == "text/html"
+      end
+      it 'should return xml format' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+        response.body.should == @xml
+      end
+      it 'should return json format' do
+        do_get 'json'
+        response.content_type.should == "application/json"
+        response.body.should == @json
+      end
+      it 'should return text format' do
+        do_get 'text'
+        response.content_type.should == "text/plain"
       end
     end
     describe 'and a matching postcode not found' do
