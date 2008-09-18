@@ -4,6 +4,7 @@ describe PostcodesController do
 
   before do
     @postcode = ' N1  1aA '
+    @postcode_with_space = 'N1 1AA'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name = 'Islington South'
@@ -132,6 +133,16 @@ describe PostcodesController do
         response.body.should == "postcode: #{@canonical_postcode}\nconstituency_id: #{@constituency_id}\nconstituency: #{@constituency_name}"
       end
     end
+
+    describe 'and postcode matches if space removed' do
+      it 'should redirect to canoncial postcode url' do
+        Postcode.should_receive(:find_by_code).with(@postcode_with_space).and_return nil
+        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+        get :show, :postcode => @postcode_with_space
+        response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode)
+      end
+    end
+
     describe 'and a matching postcode not found' do
       it 'should redirect to index search form' do
         do_get
