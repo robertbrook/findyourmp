@@ -21,10 +21,10 @@ class PostcodesController < ApplicationController
     postcode = Postcode.find_by_code(code)
     if postcode
       respond_to do |format|
-        format.html { render :text => "constituency_id: #{postcode.constituency_id}<br /> constituency: #{postcode.constituency.name}" }
+        format.html { @postcode = postcode }
         format.xml  { render :xml => postcode.to_xml }
         format.json { render :json => postcode.to_json }
-        format.text { render :text => "constituency_id: #{postcode.constituency_id}<br /> constituency: #{postcode.constituency.name}" }
+        format.text { render :text => "postcode: #{postcode.code}\nconstituency_id: #{postcode.constituency_id}\nconstituency: #{postcode.constituency.name}" }
       end
     else
       flash[:notice] = "postcode #{code} not found" if code

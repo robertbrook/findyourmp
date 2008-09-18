@@ -90,9 +90,11 @@ describe PostcodesController do
       before do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
       end
-      it 'should return consituency_id' do
+      should_render_template 'show'
+
+      it 'should assign postcode to view' do
         do_get
-        response.body.should == "constituency_id: #{@constituency_id}<br /> constituency: #{@constituency_name}"
+        assigns[:postcode].should == @postcode_record
       end
       it 'should return html format' do
         do_get
@@ -111,6 +113,7 @@ describe PostcodesController do
       it 'should return text format' do
         do_get 'text'
         response.content_type.should == "text/plain"
+        response.body.should == "postcode: #{@canonical_postcode}\nconstituency_id: #{@constituency_id}\nconstituency: #{@constituency_name}"
       end
     end
     describe 'and a matching postcode not found' do

@@ -1,0 +1,11 @@
+%html
+  %head
+    %title= @postcode.code
+  %body
+    %div
+      %p
+        = "postcode: #{@postcode.code}"
+        %br
+        = "constituency_id: #{@postcode.constituency_id}"
+        %br
+        = "constituency: #{@postcode.constituency.name}"
