@@ -2,6 +2,8 @@ class PostcodesController < ApplicationController
 
   def index
     code = params[:postcode]
+    @postcode_count = Postcode.count
+    @constituency_count = Constituency.count
 
     if code
       code.strip!
@@ -20,7 +22,12 @@ class PostcodesController < ApplicationController
     code = params[:postcode]
     postcode = Postcode.find_by_code(code)
     if postcode
-      render :text => "constituency_id: #{postcode.constituency_id}<br /> constituency: #{postcode.constituency.name} "
+      respond_to do |format|
+        format.html { @postcode = postcode }
+        format.xml  { render :xml => postcode.to_xml }
+        format.json { render :json => postcode.to_json }
+        format.text { render :text => "postcode: #{postcode.code}\nconstituency_id: #{postcode.constituency_id}\nconstituency: #{postcode.constituency.name}" }
+      end
     else
       flash[:notice] = "postcode #{code} not found" if code
       redirect_to :action=>'index'
