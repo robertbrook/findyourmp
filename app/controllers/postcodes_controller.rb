@@ -22,6 +22,14 @@ class PostcodesController < ApplicationController
   def show
     code = params[:postcode]
     postcode = Postcode.find_by_code(code)
+
+    unless postcode
+      postcode = Postcode.find_by_code(code.tr(' ',''))
+      if postcode
+        redirect_to :action=>'show', :postcode=>postcode.code
+      end
+    end
+
     if postcode
       respond_to do |format|
         format.html { @postcode = postcode }

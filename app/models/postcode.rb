@@ -8,4 +8,9 @@ class Postcode < ActiveRecord::Base
     constituency.name
   end
 
+  def code_with_space
+    suffix = code[-3,3]
+    prefix = code[0..-4]
+    "#{prefix} #{suffix}"
+  end
 end
