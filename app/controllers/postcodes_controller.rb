@@ -2,6 +2,8 @@ class PostcodesController < ApplicationController
 
   def index
     code = params[:postcode]
+    @postcode_count = Postcode.count
+    @constituency_count = Constituency.count
 
     if code
       code.strip!

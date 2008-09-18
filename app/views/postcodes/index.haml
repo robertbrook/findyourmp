@@ -2,6 +2,13 @@
   %head
     %title Find your constituency
   %body
-    - if flash[:notice]
-      #notice= flash[:notice]
-    #search= render :partial => 'search_form'
+    %div
+      %p
+        Postcodes:
+        = number_with_delimiter(@postcode_count)
+      %p
+        Constituencies:
+        = @constituency_count
+      - if flash[:notice]
+        #notice= flash[:notice]
+      #search= render :partial => 'search_form'

@@ -47,11 +47,27 @@ describe PostcodesController do
   end
 
   describe "when asked for home page" do
+    before do
+      @postcode_count = 1700000
+      @constituency_count = 646
+      Postcode.stub!(:count).and_return @postcode_count
+      Constituency.stub!(:count).and_return @constituency_count
+    end
+
     def do_get
       get :index
     end
     get_request_should_be_successful
     should_render_template 'index'
+
+    it 'should assign postcode count to view' do
+      do_get
+      assigns[:postcode_count].should == @postcode_count
+    end
+    it 'should assign constituency count to view' do
+      do_get
+      assigns[:constituency_count].should == @constituency_count
+    end
   end
 
   describe "when asked for constituency given a postcode" do
