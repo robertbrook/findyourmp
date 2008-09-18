@@ -8,4 +8,10 @@
         %br
         = "constituency_id: #{@postcode.constituency_id}"
         %br
-        = "constituency: #{@postcode.constituency.name}"
+        = "constituency: #{@postcode.constituency_name}"
+        %br
+        - if @postcode.member_name
+          = "member: #{@postcode.member_name}"
+        - else
+          = "constituency is vacant"
+
