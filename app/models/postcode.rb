@@ -1,6 +1,5 @@
 class Postcode < ActiveRecord::Base
 
-  class << self
-  end
+  belongs_to :constituency
 
 end

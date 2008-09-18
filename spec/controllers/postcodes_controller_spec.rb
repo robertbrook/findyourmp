@@ -6,7 +6,10 @@ describe PostcodesController do
     @postcode = ' N1  1aA '
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
-    @postcode_record = mock(Postcode, :constituency_id => @constituency_id, :code => @canonical_postcode)
+    @constituency_name = 'Islington South'
+    constituency = mock(Constituency, :name => @constituency_name)
+    @postcode_record = mock(Postcode, :constituency_id => @constituency_id,
+        :code => @canonical_postcode, :constituency => constituency)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -75,7 +78,7 @@ describe PostcodesController do
       it 'should return consituency_id' do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
         do_get
-        response.body.should == "constituency_id: #{@constituency_id}"
+        response.body.should == "constituency_id: #{@constituency_id}<br /> constituency: #{@constituency_name} "
       end
     end
     describe 'and a matching postcode not found' do
