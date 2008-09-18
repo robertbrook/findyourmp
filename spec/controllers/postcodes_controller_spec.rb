@@ -75,18 +75,18 @@ describe PostcodesController do
       get :index, :postcode => @postcode
     end
 
-    get_request_should_be_successful
-
     describe 'and no matching postcode found' do
-      it 'should state no consituency_id found' do
+      it 'should redirect to root page' do
         do_get
-        response.body.should == "no constituency_id found for: #{@postcode.squeeze(' ').strip}"
+        response.should redirect_to("")
       end
     end
 
     describe 'and a matching postcode found' do
-      it 'should show consituency_id for postcode' do
+      before do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+      end
+      it 'should show consituency_id for postcode' do
         do_get
         response.should redirect_to("postcodes/#{@canonical_postcode}")
       end

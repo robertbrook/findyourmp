@@ -5,15 +5,16 @@ class PostcodesController < ApplicationController
     @postcode_count = Postcode.count
     @constituency_count = Constituency.count
 
-    if code
+    unless code.blank?
       code.strip!
       code.upcase!
       postcode = Postcode.find_by_code(code.tr(' ',''))
 
       if postcode
-        redirect_to :action=>'show',:postcode=>postcode.code
+        redirect_to :action=>'show', :postcode=>postcode.code
       else
-        render :text => "no constituency_id found for: #{code.squeeze(' ')}"
+        flash[:not_found] = "Postcode #{code} not found." if code
+        redirect_to :action=>'index'
       end
     end
   end
@@ -29,7 +30,9 @@ class PostcodesController < ApplicationController
         format.text { render :text => "postcode: #{postcode.code}\nconstituency_id: #{postcode.constituency_id}\nconstituency: #{postcode.constituency.name}" }
       end
     else
-      flash[:notice] = "postcode #{code} not found" if code
+      flash[:not_found] = "Postcode #{code} not found." if code
+
+      params[:postcode] = nil
       redirect_to :action=>'index'
     end
   end
