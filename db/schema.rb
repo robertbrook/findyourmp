@@ -12,7 +12,7 @@
 ActiveRecord::Schema.define(:version => 20080910151235) do
 
   create_table "postcodes", :force => true do |t|
-    t.string  "code",            :limit => 7
+    t.string  "code"
     t.integer "constituency_id"
   end
 

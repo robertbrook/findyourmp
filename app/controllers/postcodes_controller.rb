@@ -20,7 +20,15 @@ class PostcodesController < ApplicationController
     code = params[:postcode]
     postcode = Postcode.find_by_code(code)
     if postcode
-      render :text => "constituency_id: #{postcode.constituency_id}"
+      
+      respond_to do |wants|
+          wants.html {render :text => "constituency_id: #{postcode.constituency_id}"}
+          wants.xml { render :text => "some xml" }
+        end
+      
+      
+
+      
     else
       redirect_to :action=>'index'
     end
