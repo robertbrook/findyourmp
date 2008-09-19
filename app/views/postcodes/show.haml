@@ -1,17 +1,10 @@
-%html
-  %head
-    %title= @postcode.code
-  %body
-    %div
-      %p
-        = "postcode: #{@postcode.code}"
-        %br
-        = "constituency_id: #{@postcode.constituency_id}"
-        %br
-        = "constituency: #{@postcode.constituency_name}"
-        %br
-        - if @postcode.member_name
-          = "member: #{@postcode.member_name}"
-        - else
-          = "constituency is vacant"
+- @title= @postcode.code
+
+%p= "Post code: #{@postcode.code}"
+%p= "Constituency: #{@postcode.constituency_name} (ID #{@postcode.constituency_id})"
+%p
+- if @postcode.member_name
+  = "Member: #{@postcode.member_name}"
+- else
+  = "No recorded member"
 
