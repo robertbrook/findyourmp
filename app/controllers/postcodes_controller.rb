@@ -35,6 +35,7 @@ class PostcodesController < ApplicationController
         format.html { @postcode = postcode }
         format.xml  { @postcode = postcode }
         format.json { render :json => postcode.to_json }
+        format.js { render :json => postcode.to_json }
         format.text { render :text => "postcode: #{postcode.code}\nconstituency_id: #{postcode.constituency_id}\nconstituency: #{postcode.constituency.name}" }
       end
     else
