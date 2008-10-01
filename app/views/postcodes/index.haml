@@ -1,7 +1,2 @@
-%p
-  Postcodes:
-  = number_with_delimiter(@postcode_count)
-%p
-  Constituencies:
-  = @constituency_count
-
+%p= "<strong>" + number_with_delimiter(@postcode_count) + "</strong> POSTCODES"
+%p= "<strong>" + @constituency_count.to_s + "</strong> CONSTITUENCIES"
