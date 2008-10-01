@@ -9,7 +9,8 @@
   - else
     = "NO RECORDED MEMBER"
 
-%p
+%p{:style=>'float: right'}
+  Other formats:
   = link_to('xml', url_for(:action=>:show,:format=>:xml))
   = link_to('json', url_for(:action=>:show,:format=>:js))
 
