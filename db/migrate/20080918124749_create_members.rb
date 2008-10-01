@@ -4,6 +4,8 @@ class CreateMembers < ActiveRecord::Migration
       t.string :name
       t.integer :constituency_id
     end
+
+    add_index :members, :constituency_id
   end
 
   def self.down

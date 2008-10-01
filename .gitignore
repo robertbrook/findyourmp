@@ -2,6 +2,7 @@ log/*.log
 tmp/**/*
 test
 config/database.yml
+config/database.yml.bak
 .DS_Store
 doc
 data

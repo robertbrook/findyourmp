@@ -16,15 +16,17 @@ ActiveRecord::Schema.define(:version => 20080918124749) do
   end
 
   create_table "members", :force => true do |t|
-    t.string   "name"
-    t.integer  "constituency_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string  "name"
+    t.integer "constituency_id"
   end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
     t.integer "constituency_id"
   end
+
+  add_index "postcodes", ["constituency_id"], :name => "index_postcodes_on_constituency_id"
 
 end
