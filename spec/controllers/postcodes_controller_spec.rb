@@ -14,7 +14,7 @@ describe PostcodesController do
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :constituency => constituency,
-        :to_xml => @xml, :to_json => @json)
+        :to_json => @json)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -120,7 +120,6 @@ describe PostcodesController do
       it 'should return xml format' do
         do_get 'xml'
         response.content_type.should == "application/xml"
-        response.body.should == @xml
       end
       it 'should return json format' do
         do_get 'json'

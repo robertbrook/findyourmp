@@ -5,6 +5,6 @@
 %p= "CONSTITUENCY <strong>#{@postcode.constituency_name} (#{@postcode.constituency_id})</strong>"
 %p
   - if @postcode.member_name
-    = "MEMBER <strong>#{@postcode.member_name}</strong>"
+    = "MEMBER <strong>#{@postcode.member_name.strip}</strong>"
   - else
     = "NO RECORDED MEMBER"
