@@ -1,16 +1,15 @@
 - @title= @postcode.code
 
-%p= "POSTCODE: <strong>#{@postcode.code_with_space}</strong>"
+%p= "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
 
-%p= "CONSTITUENCY: <strong>#{@postcode.constituency_name} (#{@postcode.constituency_id})</strong>"
+%p= "CONSTITUENCY<br/><strong>#{@postcode.constituency_name} (#{@postcode.constituency_id})</strong>"
 %p
   - if @postcode.member_name
-    = "MEMBER: <strong>#{@postcode.member_name.strip}</strong>"
+    = "MEMBER<br/><strong>#{@postcode.member_name.strip}</strong>"
   - else
     = "NO RECORDED MEMBER"
 
 %p{:style=>'float: right'}
-  Other formats:
-  = link_to('xml', url_for(:action=>:show,:format=>:xml))
-  = link_to('json', url_for(:action=>:show,:format=>:js))
+  = link_to('XML', url_for(:action=>:show,:format=>:xml))
+  = link_to('JSON', url_for(:action=>:show,:format=>:js))
 
