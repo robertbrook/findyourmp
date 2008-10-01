@@ -12,6 +12,26 @@ describe Postcode do
     @postcode.stub!(:constituency).and_return @constituency
   end
 
+  describe 'when asked for postcode' do
+    describe 'with 5 digit postcode' do
+      it 'should return postcode with space in right place' do
+        @postcode.stub!(:code).and_return 'N12SD'
+        @postcode.code_with_space.should == 'N1 2SD'
+      end
+    end
+    describe 'with 6 digit postcode' do
+      it 'should return postcode with space in right place' do
+        @postcode.stub!(:code).and_return 'SW12SD'
+        @postcode.code_with_space.should == 'SW1 2SD'
+      end
+    end
+    describe 'with 7 digit postcode' do
+      it 'should return postcode with space in right place' do
+        @postcode.stub!(:code).and_return 'WD257BG'
+        @postcode.code_with_space.should == 'WD25 7BG'
+      end
+    end
+  end
   describe 'with constituency' do
     describe 'when asked for constituency name' do
       it 'should return constituency name' do

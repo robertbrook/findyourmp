@@ -1,14 +1,13 @@
 - @title= @postcode.code
 
-%p= "Post code: #{@postcode.code}"
-%p= "Constituency: #{@postcode.constituency_name} (ID #{@postcode.constituency_id})"
 %p
-- if @postcode.member_name
-  = "Member: #{@postcode.member_name}"
-- else
-  = "No recorded member"
-
-
-
-
-
+  = "postcode: #{@postcode.code_with_space}"
+%p
+  = "constituency_id: #{@postcode.constituency_id}"
+%p
+  = "constituency: #{@postcode.constituency_name}"
+%p
+  - if @postcode.member_name
+    = "member: #{@postcode.member_name}"
+  - else
+    = "constituency is vacant"

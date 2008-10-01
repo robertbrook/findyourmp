@@ -3,9 +3,9 @@ class CreateMembers < ActiveRecord::Migration
     create_table :members do |t|
       t.string :name
       t.integer :constituency_id
-
-      t.timestamps
     end
+
+    add_index :members, :constituency_id
   end
 
   def self.down

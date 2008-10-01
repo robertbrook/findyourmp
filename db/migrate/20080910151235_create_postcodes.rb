@@ -4,6 +4,8 @@ class CreatePostcodes < ActiveRecord::Migration
       t.string :code, :limit => 7
       t.integer :constituency_id
     end
+
+    add_index :postcodes, :constituency_id
   end
 
   def self.down
