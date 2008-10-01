@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20080918124749) do
   add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "postcodes", :force => true do |t|
-    t.string  "code",            :limit => 7
+    t.string  "code"
     t.integer "constituency_id"
   end
 

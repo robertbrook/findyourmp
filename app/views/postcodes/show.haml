@@ -1,18 +1,13 @@
-%html
-  %head
-    %title= @postcode.code
-  %body
-    %div
-      %p
-        = "postcode: #{@postcode.code_with_space}"
-      %p
-        = "constituency_id: #{@postcode.constituency_id}"
-      %p
-        = "constituency: #{@postcode.constituency_name}"
-      %p
-        - if @postcode.member_name
-          = "member: #{@postcode.member_name}"
-        - else
-          = "constituency is vacant"
-      %p
-        = link_to "See map of postcode's area", "http://maps.google.co.uk/maps?output=html&q=#{@postcode.code_with_space.sub(' ','+')}"
+- @title= @postcode.code
+
+%p
+  = "postcode: #{@postcode.code_with_space}"
+%p
+  = "constituency_id: #{@postcode.constituency_id}"
+%p
+  = "constituency: #{@postcode.constituency_name}"
+%p
+  - if @postcode.member_name
+    = "member: #{@postcode.member_name}"
+  - else
+    = "constituency is vacant"
