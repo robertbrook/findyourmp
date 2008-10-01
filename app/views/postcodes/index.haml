@@ -4,14 +4,6 @@
 %p
   Constituencies:
   = @constituency_count
-%p#search= render :partial => 'search_form'
 - if flash[:not_found]
   %p#notice
     = flash[:not_found]
-  %p
-    = link_to 'Find your postcode', 'http://postcode.royalmail.com/portal/rm/postcodefinder'
-    at the Royal Mail website.
-  %p
-    Read the
-    = link_to 'definition of a postcode', 'http://www.govtalk.gov.uk/gdsc/html/frames/PostCode.htm'
-    at the UK GovTalk website.
