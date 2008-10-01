@@ -84,7 +84,10 @@ namespace :fymp do
         post_codes << [code, constituency_id]
         index = index.next
         if (index % group_size) == 0
-          Postcode.import columns, post_codes
+          # Postcode.import columns, post_codes
+          post_codes.each do |codes|
+            Postcode.create :code => codes[0], :constituency_id => codes[1]
+          end
           groups = groups.next
           percentage_complete = (group_size * groups) / total
           log_duration percentage_complete
