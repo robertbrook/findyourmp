@@ -24,7 +24,7 @@ namespace :fymp do
           if vacant
             $stderr.puts "Constituency is vacant: #{constituency_name}"
           else
-            member_name = member_name.split('(')[0]
+            member_name = member_name.split('(')[0].strip
             constituency = Constituency.find_by_constituency_name(constituency_name)
             if constituency
               member = Member.new :name => member_name, :constituency_id => constituency.id
