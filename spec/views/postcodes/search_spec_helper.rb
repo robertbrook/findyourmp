@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "renders search form", :shared => true do
   def do_render
-    render @template
+    @layout ? render(@template, :layout=>@layout) : render(@template)
   end
   it "should render search form" do
     do_render
@@ -20,6 +20,6 @@ describe "renders search form", :shared => true do
   end
   it 'should show submit search button' do
     do_render
-    response.should have_tag("input[value=Find constituency id][type=submit]")
+    response.should have_tag("input[value=SEARCH][type=submit]")
   end
 end
