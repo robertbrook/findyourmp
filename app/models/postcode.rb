@@ -34,4 +34,7 @@ class Postcode < ActiveRecord::Base
     "#{headers}\n#{values}\n"
   end
 
+  def to_output_yaml
+    "---\n#{to_text}"
+  end
 end

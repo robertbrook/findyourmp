@@ -38,6 +38,7 @@ class PostcodesController < ApplicationController
         format.js { render :json => postcode.to_json }
         format.text { render :text => postcode.to_text }
         format.csv { render :text => postcode.to_csv }
+        format.yaml { render :text => postcode.to_output_yaml }
       end
     else
       flash[:not_found] = "Postcode #{code} not found." if code

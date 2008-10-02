@@ -33,6 +33,11 @@ describe Postcode do
         @postcode.to_csv.should == %Q|postcode,constituency_id,constituency_name,member_name\n"N1 2SD",123,"Islington South","Edmund Husserl"\n|
       end
     end
+    describe 'in yaml' do
+      it 'should create yaml correctly' do
+        @postcode.to_output_yaml.should == %Q|---\npostcode: N1 2SD\nconstituency_id: 123\nconstituency_name: Islington South\nmember_name: Edmund Husserl\n|
+      end
+    end
   end
   describe 'when asked for postcode' do
     describe 'with 5 digit postcode' do

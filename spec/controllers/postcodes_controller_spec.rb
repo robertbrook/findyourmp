@@ -13,10 +13,11 @@ describe PostcodesController do
     @text = "text:"
     @xml = '<xml/>'
     @csv = 'c,s,v'
+    @yaml = '---yaml:'
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :constituency => constituency,
-        :to_json => @json, :to_text => @text, :to_csv => @csv)
+        :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -56,6 +57,7 @@ describe PostcodesController do
     should_route_show_action 'txt'
     should_route_show_action 'text'
     should_route_show_action 'csv'
+    should_route_show_action 'yaml'
   end
 
   describe "when asked for home page" do
@@ -156,6 +158,11 @@ describe PostcodesController do
         do_get 'csv'
         response.content_type.should == "text/csv"
         response.body.should == @csv
+      end
+      it 'should return yaml format' do
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+        response.body.should == @yaml
       end
     end
 
