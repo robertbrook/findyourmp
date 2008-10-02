@@ -32,6 +32,13 @@ describe PostcodesController do
     end|
   end
 
+  def self.should_route_show_action format
+    eval %Q|    it 'should find show action with #{format} format' do
+      route_for(:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format => '#{format}').should == "/postcodes/N11AA.#{format}"
+      params_from(:get, "/postcodes/N11AA.#{format}").should == {:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format=>'#{format}'}
+    end|
+  end
+
   describe "when finding route for action" do
     it 'should find index root' do
       route_for(:controller => "postcodes", :action => "index").should == "/"
@@ -41,10 +48,12 @@ describe PostcodesController do
       route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode).should == "/postcodes/#{@canonical_postcode}"
       params_from(:get, "/postcodes/#{@canonical_postcode}").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode}
     end
-    it 'should find show action with json format' do
-      route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format => 'json').should == "/postcodes/#{@canonical_postcode}.json"
-      params_from(:get, "/postcodes/#{@canonical_postcode}.json").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format=>'json'}
-    end
+    should_route_show_action 'xml'
+    should_route_show_action 'json'
+    should_route_show_action 'js'
+    should_route_show_action 'txt'
+    should_route_show_action 'text'
+    should_route_show_action 'csv'
   end
 
   describe "when asked for home page" do
