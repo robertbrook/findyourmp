@@ -21,7 +21,7 @@ class PostcodesController < ApplicationController
 
   def show
     code = params[:postcode]
-    postcode = Postcode.find_by_code(code)
+    postcode = Postcode.find_by_code(code, :include => {:constituency => :member})
 
     unless postcode
       postcode = Postcode.find_by_code(code.tr(' ',''))
