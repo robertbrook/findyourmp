@@ -7,11 +7,33 @@ describe Postcode do
   before do
     @postcode = Postcode.new
     @constituency_name = 'Islington South'
-    @member_name = 'Tiberius Kirk'
-    @constituency = mock_model(Constituency, :name => @constituency_name, :member_name => @member_name)
+    @member_name = 'Edmund Husserl'
+    @constituency = mock_model(Constituency, :id => 123, :name => @constituency_name, :member_name => @member_name)
     @postcode.stub!(:constituency).and_return @constituency
+    @postcode.stub!(:constituency_id).and_return @constituency.id
   end
 
+  describe 'when asked for formatted version' do
+    before do
+      @postcode.stub!(:code).and_return 'N12SD'
+    end
+
+    describe 'in json' do
+      it 'should create json correctly' do
+        @postcode.to_json.should == %Q|{"postcode": {"code": "N1 2SD", "constituency_id": 123, "constituency_name": "Islington South", "member_name": "Edmund Husserl"}|
+      end
+    end
+    describe 'in text' do
+      it 'should create text correctly' do
+        @postcode.to_text.should == %Q|postcode: N1 2SD\nconstituency_id: 123\nconstituency_name: Islington South\nmember_name: Edmund Husserl\n|
+      end
+    end
+    describe 'in csv' do
+      it 'should create csv correctly' do
+        @postcode.to_csv.should == %Q|postcode,constituency_id,constituency_name,member_name\n"N1 2SD",123,"Islington South","Edmund Husserl"\n|
+      end
+    end
+  end
   describe 'when asked for postcode' do
     describe 'with 5 digit postcode' do
       it 'should return postcode with space in right place' do

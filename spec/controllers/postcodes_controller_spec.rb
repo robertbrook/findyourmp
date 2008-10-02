@@ -10,11 +10,13 @@ describe PostcodesController do
     @constituency_name = 'Islington South'
     constituency = mock_model(Constituency, :name => @constituency_name)
     @json = '{json : {}}'
+    @text = "text:"
     @xml = '<xml/>'
+    @csv = 'c,s,v'
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :constituency => constituency,
-        :to_json => @json)
+        :to_json => @json, :to_text => @text, :to_csv => @csv)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -135,10 +137,25 @@ describe PostcodesController do
         response.content_type.should == "application/json"
         response.body.should == @json
       end
+      it 'should return js format' do
+        do_get 'js'
+        response.content_type.should == "text/javascript"
+        response.body.should == @json
+      end
       it 'should return text format' do
         do_get 'text'
         response.content_type.should == "text/plain"
-        response.body.should == "postcode: #{@canonical_postcode}\nconstituency_id: #{@constituency_id}\nconstituency: #{@constituency_name}"
+        response.body.should == @text
+      end
+      it 'should return txt format' do
+        do_get 'txt'
+        response.content_type.should == "text/plain"
+        response.body.should == @text
+      end
+      it 'should return csv format' do
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+        response.body.should == @csv
       end
     end
 
