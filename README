@@ -1,0 +1,16 @@
+Changing to MySQL:
+
+ sudo mysqladmin create findyourmp_test
+ sudo mysqladmin create findyourmp_development
+ sudo mysqladmin create findyourmp_production
+
+ git pull
+
+ mv config/database.yml.example config/database.yml
+
+ rake db:migrate:reset
+
+ rake fymp:constituencies
+ rake fymp:members
+
+ rake fymp:populate
