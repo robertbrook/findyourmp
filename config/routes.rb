@@ -5,5 +5,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
 
+  map.connect '/postcodes/toggle_admin', :controller => "postcodes", :action => 'toggle_admin'
   # See how all your routes lay out with "rake routes"
 end
