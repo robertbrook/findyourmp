@@ -19,13 +19,6 @@ class PostcodesController < ApplicationController
     end
   end
 
-  def toggle_admin
-    if request.post?
-      session[:is_admin] = !session[:is_admin]
-    end
-    redirect_to :back
-  end
-
   def show
     code = params[:postcode]
     postcode = Postcode.find_postcode_by_code(code)
