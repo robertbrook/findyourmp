@@ -3,4 +3,7 @@
   POSTCODES
 %p
   %strong= @constituency_count
-  CONSTITUENCIES
+  - if @is_admin
+    = link_to 'CONSTITUENCIES', constituencies_path
+  - else
+    CONSTITUENCIES

@@ -10,3 +10,6 @@
 [submodule "vendor/plugins/rspec"]
 	path = vendor/plugins/rspec
 	url = git://github.com/dchelimsky/rspec.git
+[submodule "vendor/plugins/make_resourceful"]
+	path = vendor/plugins/make_resourceful
+	url = git://github.com/jcfischer/make_resourceful.git
