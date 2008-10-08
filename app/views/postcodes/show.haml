@@ -5,11 +5,15 @@
 %p= "CONSTITUENCY<br/><strong>#{@postcode.constituency_name} (#{@postcode.constituency_id})</strong>"
 %p
   - if @postcode.member_name
-    = "MEMBER<br/><strong>#{@postcode.member_name.strip}</strong>"
+    = "MEMBER<br/><strong>#{@postcode.member_name}</strong>"
   - else
     = "NO RECORDED MEMBER"
 
 %p{:style=>'float: right'}
   = link_to('XML', url_for(:action=>:show,:format=>:xml))
-  = link_to('JSON', url_for(:action=>:show,:format=>:js))
+  = link_to('JSON', url_for(:action=>:show,:format=>:json))
+  = link_to('JS', url_for(:action=>:show,:format=>:js))
+  = link_to('CSV', url_for(:action=>:show,:format=>:csv))
+  = link_to('TEXT', url_for(:action=>:show,:format=>:txt))
+  = link_to('YAML', url_for(:action=>:show,:format=>:yaml))
 

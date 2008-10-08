@@ -10,11 +10,14 @@ describe PostcodesController do
     @constituency_name = 'Islington South'
     constituency = mock_model(Constituency, :name => @constituency_name)
     @json = '{json : {}}'
+    @text = "text:"
     @xml = '<xml/>'
+    @csv = 'c,s,v'
+    @yaml = '---yaml:'
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :constituency => constituency,
-        :to_json => @json)
+        :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
     Postcode.stub!(:find_by_code).and_return nil
   end
 
@@ -32,6 +35,13 @@ describe PostcodesController do
     end|
   end
 
+  def self.should_route_show_action format
+    eval %Q|    it 'should find show action with #{format} format' do
+      route_for(:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format => '#{format}').should == "/postcodes/N11AA.#{format}"
+      params_from(:get, "/postcodes/N11AA.#{format}").should == {:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format=>'#{format}'}
+    end|
+  end
+
   describe "when finding route for action" do
     it 'should find index root' do
       route_for(:controller => "postcodes", :action => "index").should == "/"
@@ -41,10 +51,13 @@ describe PostcodesController do
       route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode).should == "/postcodes/#{@canonical_postcode}"
       params_from(:get, "/postcodes/#{@canonical_postcode}").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode}
     end
-    it 'should find show action with json format' do
-      route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format => 'json').should == "/postcodes/#{@canonical_postcode}.json"
-      params_from(:get, "/postcodes/#{@canonical_postcode}.json").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode, :format=>'json'}
-    end
+    should_route_show_action 'xml'
+    should_route_show_action 'json'
+    should_route_show_action 'js'
+    should_route_show_action 'txt'
+    should_route_show_action 'text'
+    should_route_show_action 'csv'
+    should_route_show_action 'yaml'
   end
 
   describe "when asked for home page" do
@@ -126,10 +139,30 @@ describe PostcodesController do
         response.content_type.should == "application/json"
         response.body.should == @json
       end
+      it 'should return js format' do
+        do_get 'js'
+        response.content_type.should == "text/javascript"
+        response.body.should == @json
+      end
       it 'should return text format' do
         do_get 'text'
         response.content_type.should == "text/plain"
-        response.body.should == "postcode: #{@canonical_postcode}\nconstituency_id: #{@constituency_id}\nconstituency: #{@constituency_name}"
+        response.body.should == @text
+      end
+      it 'should return txt format' do
+        do_get 'txt'
+        response.content_type.should == "text/plain"
+        response.body.should == @text
+      end
+      it 'should return csv format' do
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+        response.body.should == @csv
+      end
+      it 'should return yaml format' do
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+        response.body.should == @yaml
       end
     end
 

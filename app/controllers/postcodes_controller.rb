@@ -21,7 +21,7 @@ class PostcodesController < ApplicationController
 
   def show
     code = params[:postcode]
-    postcode = Postcode.find_by_code(code)
+    postcode = Postcode.find_by_code(code, :include => {:constituency => :member})
 
     unless postcode
       postcode = Postcode.find_by_code(code.tr(' ',''))
@@ -36,7 +36,9 @@ class PostcodesController < ApplicationController
         format.xml  { @postcode = postcode }
         format.json { render :json => postcode.to_json }
         format.js { render :json => postcode.to_json }
-        format.text { render :text => "postcode: #{postcode.code}\nconstituency_id: #{postcode.constituency_id}\nconstituency: #{postcode.constituency.name}" }
+        format.text { render :text => postcode.to_text }
+        format.csv { render :text => postcode.to_csv }
+        format.yaml { render :text => postcode.to_output_yaml }
       end
     else
       flash[:not_found] = "Postcode #{code} not found." if code
