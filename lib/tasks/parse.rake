@@ -89,31 +89,45 @@ TEMPLATE3 = %Q|    </p>
     while offset < total
       postcodes = Postcode.find(:all, :offset => offset, :limit => group_size, :include => {:constituency => :member})
       postcodes.each do |postcode|
-        html = [TEMPLATE]
-        html << %Q|    <p>POSTCODE<br/><strong>#{postcode.code_with_space}</strong></p>|
-        html << %Q|    <p>CONSTITUENCY<br/><strong>#{postcode.constituency_name} (#{postcode.constituency_id})</strong></p>|
-        if postcode.member_name
-          html << "<p>MEMBER<br/><strong>#{postcode.member_name}</strong></p>"
-        else
-          html << "<p>NO RECORDED MEMBER</p>"
+        dir = "public/postcodes/#{postcode.code_prefix}"
+        filename = "#{dir}/#{postcode.code}.html"
+        html = []
+
+        unless File.exist?(filename) || postcode.constituency_id == 800 || postcode.constituency_id == 900
+          begin
+            write_to_file html, postcode, dir, filename
+          rescue Exception => e
+            $stderr.puts e.to_s
+          end
         end
-        html << TEMPLATE2
-        html << %Q|      <a href="/postcodes/#{postcode.code}.xml">XML</a>|
-        html << %Q|      <a href="/postcodes/#{postcode.code}.json">JSON</a>|
-        html << %Q|      <a href="/postcodes/#{postcode.code}.js">JS</a>|
-        html << %Q|      <a href="/postcodes/#{postcode.code}.csv">CSV</a>|
-        html << %Q|      <a href="/postcodes/#{postcode.code}.txt">TEXT</a>|
-        html << %Q|      <a href="/postcodes/#{postcode.code}.yaml">YAML</a>|
-        html << TEMPLATE3
-        dir = "public/postcodes/#{postcode.code[0..1]}"
-        Dir.mkdir(dir) unless File.exist?(dir)
-        File.open("#{dir}/#{postcode.code}.html", 'w') { |f| f.write(html.join("\n")) }
       end
       index = index.next
       offset = index * group_size
       percentage_complete = offset / total
       log_duration percentage_complete
     end
+  end
+
+  def write_to_file html, postcode, dir, filename
+    html << TEMPLATE
+    html << %Q|    <p>POSTCODE<br/><strong>#{postcode.code_with_space}</strong></p>|
+    html << %Q|    <p>CONSTITUENCY<br/><strong>#{postcode.constituency_name} (#{postcode.constituency_id})</strong></p>|
+    if postcode.member_name
+      html << "<p>MEMBER<br/><strong>#{postcode.member_name}</strong></p>"
+    else
+      html << "<p>NO RECORDED MEMBER</p>"
+    end
+    html << TEMPLATE2
+    html << %Q|      <a href="/postcodes/#{postcode.code}.xml">XML</a>|
+    html << %Q|      <a href="/postcodes/#{postcode.code}.json">JSON</a>|
+    html << %Q|      <a href="/postcodes/#{postcode.code}.js">JS</a>|
+    html << %Q|      <a href="/postcodes/#{postcode.code}.csv">CSV</a>|
+    html << %Q|      <a href="/postcodes/#{postcode.code}.txt">TEXT</a>|
+    html << %Q|      <a href="/postcodes/#{postcode.code}.yaml">YAML</a>|
+    html << TEMPLATE3
+    Dir.mkdir(dir) unless File.exist?(dir)
+    File.open(filename, 'w') { |f| f.write(html.join("\n")) }
+    html.clear
   end
 
   desc "Populate data for postcode and constituency ID in DB"

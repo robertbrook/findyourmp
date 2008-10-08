@@ -5,13 +5,20 @@ class Postcode < ActiveRecord::Base
   delegate :member_name, :to => :constituency
 
   def constituency_name
-    constituency.name
+    if constituency
+      constituency.name
+    else
+      raise "constituency not found for constituency_id: #{constituency_id}, postcode: #{code}"
+    end
+  end
+
+  def code_prefix
+    code[0..-4]
   end
 
   def code_with_space
     suffix = code[-3,3]
-    prefix = code[0..-4]
-    "#{prefix} #{suffix}"
+    "#{code_prefix} #{suffix}"
   end
 
   def to_json
