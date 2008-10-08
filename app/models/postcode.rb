@@ -4,6 +4,12 @@ class Postcode < ActiveRecord::Base
 
   delegate :member_name, :to => :constituency
 
+  class << self
+    def find_postcode_by_code code
+      find_by_code(code, :include => {:constituency => :member})
+    end
+  end
+
   def constituency_name
     if constituency
       constituency.name

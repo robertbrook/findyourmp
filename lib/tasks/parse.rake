@@ -64,7 +64,7 @@ namespace :fymp do
     group_size = 1000
 
     include ActionView::Helpers::DateHelper
-    require 'open-uri'
+    # require 'open-uri'
     offset = index * group_size
 
     TEMPLATE = %Q|<html>

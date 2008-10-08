@@ -89,14 +89,14 @@ describe PostcodesController do
       get :index, :postcode => @postcode
     end
 
-    describe 'and no matching postcode found' do
+    describe 'and no matching postcode is found' do
       it 'should redirect to root page' do
         do_get
         response.should redirect_to("")
       end
     end
 
-    describe 'and a matching postcode found' do
+    describe 'and a matching postcode is found' do
       before do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
       end
@@ -116,9 +116,9 @@ describe PostcodesController do
       end
     end
 
-    describe 'and a matching postcode found' do
+    describe 'and a matching postcode is found' do
       before do
-        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@canonical_postcode).and_return @postcode_record
       end
       should_render_template 'show'
 
@@ -168,14 +168,14 @@ describe PostcodesController do
 
     describe 'and postcode matches if space removed' do
       it 'should redirect to canoncial postcode url' do
-        Postcode.should_receive(:find_by_code).with(@postcode_with_space).and_return nil
-        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode_with_space).and_return nil
+        Postcode.should_receive(:find_postcode_by_code).with(@canonical_postcode).and_return @postcode_record
         get :show, :postcode => @postcode_with_space
         response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode)
       end
     end
 
-    describe 'and a matching postcode not found' do
+    describe 'and a matching postcode is not found' do
       it 'should redirect to index search form' do
         do_get
         response.should redirect_to(:action=>'index')

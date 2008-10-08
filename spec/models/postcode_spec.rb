@@ -13,6 +13,13 @@ describe Postcode do
     @postcode.stub!(:constituency_id).and_return @constituency.id
   end
 
+  describe 'when asked to find postcode by code' do
+    it 'should return match including its constituency and member' do
+      code = 'N12SD'
+      Postcode.should_receive(:find_by_code).with(code, :include => {:constituency => :member}).and_return @postcode
+      Postcode.find_postcode_by_code(code).should == @postcode
+    end
+  end
   describe 'when asked for formatted version' do
     before do
       @postcode.stub!(:code).and_return 'N12SD'
