@@ -1,0 +1,10 @@
+%p
+  %b== Constituency:
+  =h @constituency.name
+- if @constituency.member
+  %p
+    %b== Member:
+    =h @constituency.member.name
+
+= link_to 'Edit', edit_constituency_path(@constituency)
+= link_to 'Back', constituencies_path

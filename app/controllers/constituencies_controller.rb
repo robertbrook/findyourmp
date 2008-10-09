@@ -1,5 +1,2 @@
-class ConstituenciesController < ApplicationController
-  make_resourceful do
-    actions :all
-  end
+class ConstituenciesController < ResourceController::Base
 end
