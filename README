@@ -1,10 +1,13 @@
-Changing to MySQL:
 
  sudo mysqladmin create findyourmp_test
  sudo mysqladmin create findyourmp_development
  sudo mysqladmin create findyourmp_production
 
  git pull
+
+ git submodule init
+
+ git submodule update
 
  mv config/database.yml.example config/database.yml
 
