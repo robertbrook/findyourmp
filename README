@@ -13,7 +13,10 @@
 
  rake db:migrate:reset
 
+ # the steps below requires data which is not in git repository
+
  rake fymp:constituencies
  rake fymp:members
 
+ rake fymp:parse
  rake fymp:populate
