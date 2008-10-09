@@ -30,4 +30,5 @@ class ApplicationController < ActionController::Base
     redirect_to :back
   end
 
+#pointless comment line for testing purposes
 end
