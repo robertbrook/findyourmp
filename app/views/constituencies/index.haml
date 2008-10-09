@@ -1,0 +1,14 @@
+%h1 Listing constituencies
+
+%table
+  %tr
+    %th Name
+  -for constituency in @constituencies
+    %tr
+      %td= h constituency.name
+
+      %td= link_to 'Show', constituency_path(constituency)
+      %td= link_to 'Edit', edit_constituency_path(constituency)
+      %td= link_to 'Destroy', constituency_path(constituency), :confirm => 'Are you sure?', :method => :delete
+
+= link_to 'New constituency', new_constituency_path

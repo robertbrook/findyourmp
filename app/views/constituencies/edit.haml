@@ -1,0 +1,14 @@
+%h1
+  Editing constituency
+=error_messages_for :constituency
+-form_for(@constituency) do |f|
+  %p
+    %b Name
+    = f.text_field :name
+
+  %p= f.submit "Update"
+
+= link_to 'Show', constituency_path(@constituency)
+= link_to 'Back', constituencies_path
+- if @constituency.member
+  = link_to 'Edit member', edit_constituency_member_path(@constituency)
