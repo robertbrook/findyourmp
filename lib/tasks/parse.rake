@@ -7,6 +7,10 @@ postcode_sql = "#{data}/postcodes.sql"
 
 namespace :fymp do
 
+  def is_vacant?(name)
+    name == 'Vacant'
+  end
+
   desc "Populate data for members in DB"
   task :members => :environment do
     unless File.exist?(member_file)
@@ -19,16 +23,14 @@ namespace :fymp do
           parts = line.split("\t")
           constituency_name = parts[0].strip
           member_name = parts[1].strip
-          vacant = member_name == 'Vacant'
 
-          if vacant
+          if is_vacant?(member_name)
             $stderr.puts "Constituency is vacant: #{constituency_name}"
           else
             member_name = member_name.split('(')[0].strip
             constituency = Constituency.find_by_constituency_name(constituency_name)
             if constituency
-              member = Member.new :name => member_name, :constituency_id => constituency.id
-              member.save!
+              Member.create! :name => member_name, :constituency_id => constituency.id
             else
               $stderr.puts "Cannot create member for: #{line}"
             end
@@ -185,7 +187,8 @@ TEMPLATE3 = %Q|    </p>
         if termination_date == blank_date
           consistuency_code = line[62..64]
           unless consistuency_code == blank_code
-            post_codes << line[0..6] << space << consistuency_code
+            post_code = line[0..6]
+            post_codes << post_code << space << consistuency_code
             post_codes << new_line
           end
         end

@@ -2,7 +2,7 @@
 =error_messages_for :member
 
 - @member = @constituency.member
-- form_for([:constituency, @member]) do |f|
+- form_for([@constituency, @member]) do |f|
   %p
     %b Name
     = f.text_field :name
