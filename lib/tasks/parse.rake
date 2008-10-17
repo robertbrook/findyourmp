@@ -1,48 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../timer')
+require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
 data = File.expand_path(File.dirname(__FILE__) + '/../../data')
 data_file = "#{data}/NSPDC_AUG_2008_UK_100M.txt"
 postcode_file = "#{data}/postcodes.txt"
 constituency_file = "#{data}/Westminster Parliamentary Constituency names and codes UK as at 05_05.txt"
-member_file = "#{data}/ConstituencyToMember.txt"
 postcode_sql = "#{data}/postcodes.sql"
 
 namespace :fymp do
 
   include FindYourMP::Timer
-
-  def is_vacant?(name)
-    name == 'Vacant'
-  end
+  include FindYourMP::DataLoader
 
   desc "Populate data for members in DB"
   task :members => :environment do
-    unless File.exist?(member_file)
-      $stderr.puts "Data file not found: #{member_file}"
-    else
-      Member.delete_all
-
-      IO.foreach(member_file) do |line|
-        begin
-          parts = line.split("\t")
-          constituency_name = parts[0].strip
-          member_name = parts[1].strip
-
-          if is_vacant?(member_name)
-            $stderr.puts "Constituency is vacant: #{constituency_name}"
-          else
-            member_name = member_name.split('(')[0].strip
-            constituency = Constituency.find_by_constituency_name(constituency_name)
-            if constituency
-              Member.create! :name => member_name, :constituency_id => constituency.id
-            else
-              $stderr.puts "Cannot create member for: #{line}"
-            end
-          end
-        rescue Exception => e
-          $stderr.puts "Cannot create member for: #{line} | #{e.to_s}"
-        end
-      end
-    end
+    load_members
   end
 
   desc "Populate data for constituencies in DB"
