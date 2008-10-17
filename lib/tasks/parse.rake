@@ -1,4 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + '/../timer')
 require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
 require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
 
