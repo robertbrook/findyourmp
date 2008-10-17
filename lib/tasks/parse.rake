@@ -1,3 +1,4 @@
+require File.expand_path(File.dirname(__FILE__) + '/../timer')
 data = File.expand_path(File.dirname(__FILE__) + '/../../data')
 data_file = "#{data}/NSPDC_AUG_2008_UK_100M.txt"
 postcode_file = "#{data}/postcodes.txt"
@@ -6,6 +7,8 @@ member_file = "#{data}/ConstituencyToMember.txt"
 postcode_sql = "#{data}/postcodes.sql"
 
 namespace :fymp do
+
+  include FindYourMP::Timer
 
   def is_vacant?(name)
     name == 'Vacant'
@@ -202,26 +205,10 @@ TEMPLATE3 = %Q|    </p>
       log_duration
     end
   end
-  
+
   desc "Run rcov, then open the index file in the coverage directory"
   task :rcov do
     `rake spec:rcov && open coverage/index.html`
   end
 
-  def start_timing
-    @start = Time.now
-  end
-
-  def log_duration percentage_complete=nil
-    duration = Time.now - @start
-    if percentage_complete
-      estimated_time = (duration / percentage_complete)
-      estimated_remaining = estimated_time - duration
-      due = (Time.now + estimated_remaining).strftime('%I:%M%p').downcase
-      estimated_remaining = estimated_remaining.seconds.ago
-      puts "#{time_ago_in_words(estimated_remaining).capitalize} remaining, due to complete about #{due}."
-    else
-      puts "duration: #{duration}"
-    end
-  end
 end
