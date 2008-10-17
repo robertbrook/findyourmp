@@ -202,6 +202,11 @@ TEMPLATE3 = %Q|    </p>
       log_duration
     end
   end
+  
+  desc "Run rcov, then open the index file in the coverage directory"
+  task :rcov do
+    `rake spec:rcov && open coverage/index.html`
+  end
 
   def start_timing
     @start = Time.now
