@@ -27,17 +27,7 @@ module ActionController
           :singular
         end
 
-      if args.size == 2
-        model_class = args.first.class # Constituency
-        if model_class.respond_to?(:reflect_on_association)
-          second_model_class = args.last.class # Member
-          association_name = second_model_class.name.tableize.singularize.to_sym # :member
-          association = model_class.reflect_on_association(association_name)  # Constituency.reflect_on_association(:member)
-          if association && association.macro == :has_one
-            args.pop
-          end
-        end
-      end
+      args = handle_has_one_nested(args)
 
       args.delete_if {|arg| arg.is_a?(Symbol) || arg.is_a?(String)}
       args << format if format
@@ -50,6 +40,21 @@ module ActionController
       end
 
       __send__(named_route, *args)
+    end
+
+    def handle_has_one_nested(args)
+      if args.size == 2
+        model_class = args.first.class # Constituency
+        if model_class.respond_to?(:reflect_on_association)
+          second_model_class = args.last.class # Member
+          association_name = second_model_class.name.tableize.singularize.to_sym # :member
+          association = model_class.reflect_on_association(association_name)  # Constituency.reflect_on_association(:member)
+          if association && association.macro == :has_one
+            args.pop
+          end
+        end
+      end
+      args
     end
   end
 end
