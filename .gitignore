@@ -6,6 +6,8 @@ config/database.yml.bak
 .DS_Store
 doc
 data
+test.this
+config/test.that
 db/*.sqlite3*
 public/postcodes
 public/postcodes.bak
