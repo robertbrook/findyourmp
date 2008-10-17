@@ -4,15 +4,6 @@ module FindYourMP; end
 
 module FindYourMP::CacheWriter
 
-  def make_cache
-    total = Postcode.count.to_f
-    index = 0
-    group_size = 1000
-
-    include ActionView::Helpers::DateHelper
-
-    offset = index * group_size
-
     TEMPLATE = %Q|<html>
   <head>
     <title>Find your constituency</title>
@@ -29,6 +20,15 @@ TEMPLATE2 = %Q|    <p style='float: right'>|
 TEMPLATE3 = %Q|    </p>
   </body>
 </html>|
+
+  def make_cache
+    total = Postcode.count.to_f
+    index = 0
+    group_size = 1000
+
+    include ActionView::Helpers::DateHelper
+
+    offset = index * group_size
 
     Dir.mkdir("public/postcodes") unless File.exist?("public/postcodes")
     start_timing

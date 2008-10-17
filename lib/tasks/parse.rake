@@ -1,3 +1,7 @@
+require File.expand_path(File.dirname(__FILE__) + '/../timer')
+require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
+require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
+
 namespace :fymp do
 
   include FindYourMP::Timer
@@ -33,4 +37,5 @@ namespace :fymp do
   task :rcov do
     `rake spec:rcov && open coverage/index.html`
   end
+
 end
