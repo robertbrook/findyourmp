@@ -1,14 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../timer')
-require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
-data = File.expand_path(File.dirname(__FILE__) + '/../../data')
-data_file = "#{data}/NSPDC_AUG_2008_UK_100M.txt"
-postcode_file = "#{data}/postcodes.txt"
-postcode_sql = "#{data}/postcodes.sql"
-
 namespace :fymp do
 
   include FindYourMP::Timer
   include FindYourMP::DataLoader
+  include FindYourMP::CacheWriter
 
   desc "Populate data for members in DB"
   task :members => :environment do
@@ -22,151 +16,21 @@ namespace :fymp do
 
   desc "Create cache of all postcode pages"
   task :make_cache => :environment do
-    total = Postcode.count.to_f
-    index = 0
-    group_size = 1000
-
-    include ActionView::Helpers::DateHelper
-    # require 'open-uri'
-    offset = index * group_size
-
-    TEMPLATE = %Q|<html>
-  <head>
-    <title>Find your constituency</title>
-    <style>body {font-size:2em;margin: 5% 10%;} #search input {font-size:1.5em;} a {text-decoration:none;}</style>
-  </head>
-  <body>
-    <div id='search'>
-      <form action="/" method="get">
-        <input id="postcode" name="postcode" type="text" value="" />
-        <input name="commit" type="submit" value="SEARCH" />
-      </form>
-    </div>|
-TEMPLATE2 = %Q|    <p style='float: right'>|
-TEMPLATE3 = %Q|    </p>
-  </body>
-</html>|
-
-    Dir.mkdir("public/postcodes") unless File.exist?("public/postcodes")
-    start_timing
-    while offset < total
-      postcodes = Postcode.find(:all, :offset => offset, :limit => group_size, :include => {:constituency => :member})
-      postcodes.each do |postcode|
-        dir = "public/postcodes/#{postcode.code_prefix}"
-        filename = "#{dir}/#{postcode.code}.html"
-        html = []
-
-        unless File.exist?(filename) || postcode.constituency_id == 800 || postcode.constituency_id == 900
-          begin
-            write_to_file html, postcode, dir, filename
-          rescue Exception => e
-            $stderr.puts e.to_s
-          end
-        end
-      end
-      index = index.next
-      offset = index * group_size
-      percentage_complete = offset / total
-      log_duration percentage_complete
-    end
-  end
-
-  def write_to_file html, postcode, dir, filename
-    html << TEMPLATE
-    html << %Q|    <p>POSTCODE<br/><strong>#{postcode.code_with_space}</strong></p>|
-    html << %Q|    <p>CONSTITUENCY<br/><strong>#{postcode.constituency_name} (#{postcode.constituency_id})</strong></p>|
-    if postcode.member_name
-      html << "<p>MEMBER<br/><strong>#{postcode.member_name}</strong></p>"
-    else
-      html << "<p>NO RECORDED MEMBER</p>"
-    end
-    html << TEMPLATE2
-    html << %Q|      <a href="/postcodes/#{postcode.code}.xml">XML</a>|
-    html << %Q|      <a href="/postcodes/#{postcode.code}.json">JSON</a>|
-    html << %Q|      <a href="/postcodes/#{postcode.code}.js">JS</a>|
-    html << %Q|      <a href="/postcodes/#{postcode.code}.csv">CSV</a>|
-    html << %Q|      <a href="/postcodes/#{postcode.code}.txt">TEXT</a>|
-    html << %Q|      <a href="/postcodes/#{postcode.code}.yaml">YAML</a>|
-    html << TEMPLATE3
-    Dir.mkdir(dir) unless File.exist?(dir)
-    File.open(filename, 'w') { |f| f.write(html.join("\n")) }
-    html.clear
-  end
-
-  desc "Populate data for postcode and constituency ID in DB"
-  task :populate => :environment do
-    unless File.exist?(postcode_file)
-      $stderr.puts "Data file not found: #{postcode_file}, try running rake fymp:parse"
-    else
-      start_timing
-      post_codes = []
-      index = 0
-      groups = 0
-      group_size = 1000
-      puts 'saving data to db'
-
-      Postcode.delete_all
-      columns = [:code, :constituency_id]
-      total = `cat #{postcode_file} | wc -l`
-      total = total.strip.to_f
-
-      include ActionView::Helpers::DateHelper
-
-      IO.foreach(postcode_file) do |line|
-        code = line[0..6].tr(' ','')
-        constituency_id = line[8..10]
-        post_codes << [code, constituency_id]
-        index = index.next
-        if (index % group_size) == 0
-          # Postcode.import columns, post_codes
-          post_codes.each do |codes|
-            Postcode.create :code => codes[0], :constituency_id => codes[1]
-          end
-          groups = groups.next
-          percentage_complete = (group_size * groups) / total
-          log_duration percentage_complete
-          post_codes = []
-        end
-      end
-    end
+    make_cache
   end
 
   desc "Parse data file for postcode and constituency ID *only*"
   task :parse do
-    unless File.exist?(data_file)
-      $stderr.puts "Data file not found: #{data_file}"
-    else
-      start_timing
-      post_codes = []
-      blank_date = '      '
-      blank_code = '   '
-      new_line = "\n"
-      space = ' '
+    parse_postcodes
+  end
 
-      IO.foreach(data_file) do |line|
-        termination_date = line[29..34]
-        if termination_date == blank_date
-          consistuency_code = line[62..64]
-          unless consistuency_code == blank_code
-            post_code = line[0..6]
-            post_codes << post_code << space << consistuency_code
-            post_codes << new_line
-          end
-        end
-      end
-      log_duration
-
-      start_timing
-      File.open(postcode_file,'w') do |file|
-        file.write(post_codes.join(''))
-      end
-      log_duration
-    end
+  desc "Populate data for postcode and constituency ID in DB"
+  task :populate => :environment do
+    load_postcodes
   end
 
   desc "Run rcov, then open the index file in the coverage directory"
   task :rcov do
     `rake spec:rcov && open coverage/index.html`
   end
-
 end
