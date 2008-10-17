@@ -1,8 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/timer')
 
 module FindYourMP; end
-
 module FindYourMP::DataLoader
+
+  include FindYourMP::Timer
 
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + '/../data')
   MEMBER_FILE = "#{DATA_DIR}/ConstituencyToMember.txt"

@@ -4,7 +4,9 @@ module FindYourMP; end
 
 module FindYourMP::CacheWriter
 
-    TEMPLATE = %Q|<html>
+  include FindYourMP::Timer
+
+  TEMPLATE = %Q|<html>
   <head>
     <title>Find your constituency</title>
     <style>body {font-size:2em;margin: 5% 10%;} #search input {font-size:1.5em;} a {text-decoration:none;}</style>

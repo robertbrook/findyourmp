@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
 
 namespace :fymp do
 
-  include FindYourMP::Timer
   include FindYourMP::DataLoader
   include FindYourMP::CacheWriter
 
