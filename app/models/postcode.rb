@@ -6,7 +6,7 @@ class Postcode < ActiveRecord::Base
 
   class << self
     def find_postcode_by_code code
-      find_by_code(code, :include => {:constituency => :member})
+      find_by_code(code, :include => :constituency)
     end
   end
 
