@@ -1,7 +1,6 @@
 class Constituency < ActiveRecord::Base
 
   has_many :postcodes
-  has_one :member
 
   class << self
     def find_by_constituency_name name
@@ -32,10 +31,6 @@ class Constituency < ActiveRecord::Base
 
       constituency
     end
-  end
-
-  def member_name
-    member ? member.name : nil
   end
 
   def code

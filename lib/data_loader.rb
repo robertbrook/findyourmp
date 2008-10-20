@@ -14,7 +14,6 @@ module FindYourMP::DataLoader
 
   def load_members
     return if file_not_found(MEMBER_FILE)
-    Member.delete_all
 
     IO.foreach(MEMBER_FILE) do |line|
       begin
@@ -28,13 +27,14 @@ module FindYourMP::DataLoader
           member_name = member_name.split('(')[0].strip
           constituency = Constituency.find_by_constituency_name(constituency_name)
           if constituency
-            Member.create! :name => member_name, :constituency_id => constituency.id
+            constituency.member_name = member_name
+            constituency.save!
           else
-            log "Cannot create member for: #{line}"
+            log "Cannot find constituency for member for line: #{line}"
           end
         end
       rescue Exception => e
-        log "Cannot create member for: #{line} | #{e.to_s}"
+        log "Cannot set member_name on constituency for: #{line} | #{e.to_s}"
       end
     end
   end

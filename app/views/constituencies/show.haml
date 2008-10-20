@@ -1,10 +1,14 @@
 %p
-  %b== Constituency:
+  %b Constituency:
   =h @constituency.name
-- if @constituency.member
+- unless @constituency.member_name.blank?
   %p
-    %b== Member:
-    =h @constituency.member.name
+    %b Member:
+    =h @constituency.member_name
+- else
+  %p
+    %b Vacant
 
-= link_to 'Edit', edit_constituency_path(@constituency)
-= link_to 'Back', constituencies_path
+%p
+  = link_to 'Edit', edit_constituency_path(@constituency)
+  = link_to 'Back', constituencies_path

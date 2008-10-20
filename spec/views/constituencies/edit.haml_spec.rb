@@ -3,8 +3,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe "/constituency/edit.haml" do
 
   before do
-    member = mock_model(Member, :name => 'name')
-    @constituency = mock_model(Constituency, :member => member)
+    @constituency = mock_model(Constituency, :member_name => 'member_name')
     @constituency.stub!(:name).and_return("MyString")
     assigns[:constituency] = @constituency
   end

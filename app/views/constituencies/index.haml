@@ -4,10 +4,12 @@
   %tr
     %th Code
     %th Name
+    %th Member
   -for constituency in @constituencies
     %tr
       %td= h constituency.code
       %td= h constituency.name
+      %td= h constituency.member_name
 
       %td= link_to 'Show', constituency_path(constituency)
       %td= link_to 'Edit', edit_constituency_path(constituency)

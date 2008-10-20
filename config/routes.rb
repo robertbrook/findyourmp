@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :constituencies, :has_one => :member
+  map.resources :constituencies
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   map.root :controller => "postcodes"
