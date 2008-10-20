@@ -29,4 +29,29 @@ describe Constituency do
       end
     end
   end
+
+  describe 'id is 1' do
+    before do; @constituency.stub!(:id).and_return 1; end
+    describe 'when asked for code' do
+      it 'should return 001' do
+        @constituency.code.should == '001'
+      end
+    end
+  end
+  describe 'id is 10' do
+    before do; @constituency.stub!(:id).and_return 10; end
+    describe 'when asked for code' do
+      it 'should return 010' do
+        @constituency.code.should == '010'
+      end
+    end
+  end
+  describe 'id is 100' do
+    before do; @constituency.stub!(:id).and_return 100; end
+    describe 'when asked for code' do
+      it 'should return 100' do
+        @constituency.code.should == '100'
+      end
+    end
+  end
 end

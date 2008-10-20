@@ -37,4 +37,14 @@ class Constituency < ActiveRecord::Base
   def member_name
     member ? member.name : nil
   end
+
+  def code
+    if id < 10
+      "00#{id}"
+    elsif id < 100
+      "0#{id}"
+    else
+      id.to_s
+    end
+  end
 end
