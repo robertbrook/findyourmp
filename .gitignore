@@ -5,6 +5,7 @@ Capfile
 config/database.yml
 config/database.yml.bak
 config/deploy.rb
+config/virtualserver
 .DS_Store
 doc
 data
