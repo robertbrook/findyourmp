@@ -1,13 +1,13 @@
 log/*.log
 tmp/**/*
 test
+Capfile
 config/database.yml
 config/database.yml.bak
+config/deploy.rb
 .DS_Store
 doc
 data
-test.this
-config/test.that
 db/*.sqlite3*
 public/postcodes
 public/postcodes.bak
