@@ -81,12 +81,11 @@ module FindYourMP::DataLoader
     log_duration
   end
 
-  def load_postcodes
+  def load_postcodes group_size=1000
     return if file_not_found(POSTCODE_FILE)
     start_timing
     index = 0
     groups = 0
-    group_size = 1000
     puts 'saving data to db'
 
     Postcode.delete_all
@@ -104,7 +103,6 @@ module FindYourMP::DataLoader
       post_codes << [code, constituency_id]
       index = index.next
       if (index % group_size) == 0
-        # Postcode.import columns, post_codes
         post_codes.each do |codes|
           Postcode.create :code => codes[0], :constituency_id => codes[1]
         end
@@ -114,6 +112,12 @@ module FindYourMP::DataLoader
         post_codes = []
       end
     end
+
+    # complete remaining
+    post_codes.each do |codes|
+      Postcode.create :code => codes[0], :constituency_id => codes[1]
+    end
+    log_duration 1.0
   end
 
   private
