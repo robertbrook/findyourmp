@@ -103,9 +103,7 @@ module FindYourMP::DataLoader
       post_codes << [code, constituency_id]
       index = index.next
       if (index % group_size) == 0
-        post_codes.each do |codes|
-          Postcode.create :code => codes[0], :constituency_id => codes[1]
-        end
+        load_codes(post_codes)
         groups = groups.next
         percentage_complete = (group_size * groups) / total
         log_duration percentage_complete
@@ -114,13 +112,17 @@ module FindYourMP::DataLoader
     end
 
     # complete remaining
-    post_codes.each do |codes|
-      Postcode.create :code => codes[0], :constituency_id => codes[1]
-    end
+    load_codes(post_codes)
     log_duration 1.0
   end
 
   private
+
+    def load_codes(post_codes)
+      post_codes.each do |codes|
+        Postcode.create :code => codes[0], :constituency_id => codes[1]
+      end
+    end
 
     def is_vacant?(name)
       name == 'Vacant'
