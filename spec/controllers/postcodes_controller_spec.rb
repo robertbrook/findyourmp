@@ -88,6 +88,12 @@ describe PostcodesController do
     def do_get
       get :index, :postcode => @postcode
     end
+  end
+
+  describe "when asked for constituency given a postcode" do
+    def do_get
+      get :index, :postcode => @postcode
+    end
 
     describe 'and no matching postcode is found' do
       it 'should redirect to root page' do

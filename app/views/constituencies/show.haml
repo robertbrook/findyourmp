@@ -1,13 +1,4 @@
-%p
-  %b Constituency:
-  =h @constituency.name
-- unless @constituency.member_name.blank?
-  %p
-    %b Member:
-    =h @constituency.member_name
-- else
-  %p
-    %b Vacant
+= render :partial => 'constituency', :object => @constituency
 
 %p
   = link_to 'Edit', edit_constituency_path(@constituency)

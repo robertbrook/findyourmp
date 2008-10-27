@@ -1,13 +1,8 @@
 - @title= @postcode.code
 
-%p= "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
-
-%p= "CONSTITUENCY<br/><strong>#{@postcode.constituency_name} (#{@postcode.constituency_id})</strong>"
-%p
-  - if @postcode.member_name
-    = "MEMBER<br/><strong>#{@postcode.member_name}</strong>"
-  - else
-    = "NO RECORDED MEMBER"
+%p<
+  = "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
+= render :partial => 'constituencies/constituency', :object => @postcode.constituency
 
 %p{:style=>'float: right'}
   = link_to('XML', url_for(:action=>:show,:format=>:xml))

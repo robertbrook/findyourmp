@@ -11,7 +11,7 @@ class PostcodesController < ApplicationController
       postcode = Postcode.find_by_code(code.tr(' ',''))
 
       if postcode
-        redirect_to :action=>'show', :postcode=>postcode.code
+        redirect_to :action=>'show', :postcode => postcode.code
       else
         flash[:not_found] = "Postcode #{code} not found." if code
         redirect_to :action=>'index'
@@ -37,9 +37,9 @@ class PostcodesController < ApplicationController
         format.html { @postcode = postcode }
         format.xml  { @postcode = postcode }
         format.json { render :json => postcode.to_json }
-        format.js { render :json => postcode.to_json }
+        format.js   { render :json => postcode.to_json }
         format.text { render :text => postcode.to_text }
-        format.csv { render :text => postcode.to_csv }
+        format.csv  { render :text => postcode.to_csv }
         format.yaml { render :text => postcode.to_output_yaml }
       end
     end

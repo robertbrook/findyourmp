@@ -1,0 +1,7 @@
+%p<
+  = "CONSTITUENCY<br/><strong>#{h constituency.name} (#{constituency.id})</strong>"
+%p<
+  - unless constituency.member_name.blank?
+    = "MEMBER<br/><strong>#{h constituency.member_name}</strong>"
+  - else
+    = "NO RECORDED MEMBER"
