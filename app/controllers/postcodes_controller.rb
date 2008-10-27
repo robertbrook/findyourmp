@@ -13,8 +13,16 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
       else
-        flash[:not_found] = "Postcode #{code} not found." if code
-        redirect_to :action=>'index'
+        constituency = Constituency.find(:all, :conditions => %Q|name like "#{code.squeeze(' ')}"|)
+
+        if constituency.empty?
+          flash[:not_found] = "Postcode #{code} not found." if code
+          redirect_to :action=>'index'
+        elsif constituency.size == 1
+          redirect_to :controller=>'constituencies', :action=>'show', :id => constituency.first.id
+        else
+          raise 'case not covered yet'
+        end
       end
     end
   end

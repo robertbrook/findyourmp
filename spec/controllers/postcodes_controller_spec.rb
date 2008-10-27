@@ -8,7 +8,7 @@ describe PostcodesController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name = 'Islington South'
-    constituency = mock_model(Constituency, :name => @constituency_name)
+    @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id)
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -16,7 +16,7 @@ describe PostcodesController do
     @yaml = '---yaml:'
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
-        :code => @canonical_postcode, :constituency => constituency,
+        :code => @canonical_postcode, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
     Postcode.stub!(:find_by_code).and_return nil
   end
@@ -84,9 +84,30 @@ describe PostcodesController do
     end
   end
 
-  describe "when asked for constituency given a postcode" do
+  describe "when asked for constituency given a constituency name" do
     def do_get
-      get :index, :postcode => @postcode
+      get :index, :postcode => @constituency_name
+    end
+
+    before do
+      Postcode.should_receive(:find_by_code).with(@constituency_name.upcase.tr(' ','')).and_return nil
+    end
+
+    describe 'and a matching constituency is not found' do
+      it 'should redirect to root page' do
+        do_get
+        response.should redirect_to("")
+      end
+    end
+
+    describe 'and a matching constituency is found' do
+      before do
+        Constituency.should_receive(:find).with(:all, :conditions => %Q|name like "#{@constituency_name.upcase}"|).and_return [@constituency]
+      end
+      it 'should redirect to constituency view showing constituency' do
+        do_get
+        response.should redirect_to("constituencies/#{@constituency.id}")
+      end
     end
   end
 
@@ -106,7 +127,7 @@ describe PostcodesController do
       before do
         Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
       end
-      it 'should show consituency_id for postcode' do
+      it 'should redirect to postcode view showing constituency' do
         do_get
         response.should redirect_to("postcodes/#{@canonical_postcode}")
       end
