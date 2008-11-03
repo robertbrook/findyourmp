@@ -1,7 +1,7 @@
 - if @constituency
   = render :partial => 'constituency', :object => @constituency
 - elsif @constituencies
-  %p CONSTITUENCY MATCHES
+  %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
   = render :partial => 'constituency_match', :collection => @constituencies
 
 - if @is_admin
