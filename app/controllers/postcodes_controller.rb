@@ -1,27 +1,27 @@
 class PostcodesController < ApplicationController
 
   def index
-    code = params[:postcode]
+    search_term = params[:q]
     @postcode_count = Postcode.count
     @constituency_count = Constituency.count
 
-    unless code.blank?
-      code.strip!
-      code.upcase!
-      postcode = Postcode.find_by_code(code.tr(' ',''))
+    unless search_term.blank?
+      search_term.strip!
+      search_term.upcase!
+      postcode = Postcode.find_by_code(search_term.tr(' ',''))
 
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
       else
-        constituency = Constituency.find(:all, :conditions => %Q|name like "#{code.squeeze(' ')}"|)
+        constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{search_term.squeeze(' ')}%"|)
 
-        if constituency.empty?
-          flash[:not_found] = "Postcode #{code} not found." if code
+        if constituencies.empty?
+          flash[:not_found] = "Postcode #{search_term} not found." if search_term
           redirect_to :action=>'index'
-        elsif constituency.size == 1
-          redirect_to :controller=>'constituencies', :action=>'show', :id => constituency.first.id
+        elsif constituencies.size == 1
+          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
         else
-          raise 'case not covered yet'
+          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :q => search_term
         end
       end
     end

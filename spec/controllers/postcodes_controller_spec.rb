@@ -7,6 +7,7 @@ describe PostcodesController do
     @postcode_with_space = 'N1 1AA'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
+    @constituency_name_part = 'Islington'
     @constituency_name = 'Islington South'
     @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id)
     @json = '{json : {}}'
@@ -84,9 +85,9 @@ describe PostcodesController do
     end
   end
 
-  describe "when asked for constituency given a constituency name" do
+  describe "when asked for constituency given an exact constituency name" do
     def do_get
-      get :index, :postcode => @constituency_name
+      get :index, :q => @constituency_name
     end
 
     before do
@@ -102,7 +103,7 @@ describe PostcodesController do
 
     describe 'and a matching constituency is found' do
       before do
-        Constituency.should_receive(:find).with(:all, :conditions => %Q|name like "#{@constituency_name.upcase}"|).and_return [@constituency]
+        Constituency.should_receive(:find).with(:all, :conditions => %Q|name like "%#{@constituency_name.upcase}%"|).and_return [@constituency]
       end
       it 'should redirect to constituency view showing constituency' do
         do_get
@@ -111,9 +112,38 @@ describe PostcodesController do
     end
   end
 
+  describe "when asked for constituency given part of constituency name" do
+    def do_get
+      get :index, :q => @constituency_name_part
+    end
+
+    before do
+      Postcode.should_receive(:find_by_code).with(@constituency_name_part.upcase.tr(' ','')).and_return nil
+    end
+
+    describe 'and a matching constituency is not found' do
+      it 'should redirect to root page' do
+        do_get
+        response.should redirect_to("")
+      end
+    end
+
+    describe 'and two matching constituencies are found' do
+      before do
+        @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802)
+        matching = [@constituency, @other_constituency]
+        Constituency.should_receive(:find).with(:all, :conditions => %Q|name like "%#{@constituency_name_part.upcase}%"|).and_return matching
+      end
+      it 'should show list of matching constituencies' do
+        do_get
+        response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}?q=#{@constituency_name_part}")
+      end
+    end
+  end
+
   describe "when asked for constituency given a postcode" do
     def do_get
-      get :index, :postcode => @postcode
+      get :index, :q => @postcode
     end
 
     describe 'and no matching postcode is found' do

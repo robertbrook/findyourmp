@@ -1,0 +1,4 @@
+%p<
+  = "<strong>"
+  = link_to "#{highlight(h(constituency_match.name), @search_term)} (#{constituency_match.id})", constituency_path(constituency_match)
+  = "</strong>"
