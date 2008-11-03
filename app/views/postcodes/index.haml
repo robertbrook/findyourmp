@@ -1,3 +1,6 @@
+- if flash[:not_found]
+  %p= flash[:not_found]
+
 %p
   %strong= number_with_delimiter(@postcode_count)
   POSTCODES
