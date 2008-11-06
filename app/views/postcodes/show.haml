@@ -2,7 +2,10 @@
 
 %p<
   = "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
-= render :partial => 'constituencies/constituency', :object => @postcode.constituency
+  - if @postcode.constituency
+    = render :partial => 'constituencies/constituency', :object => @postcode.constituency
+- unless @postcode.constituency
+  %p No constituency found.
 
 %p{:style=>'float: right'}
   = link_to('XML', url_for(:action=>:show,:format=>:xml))
