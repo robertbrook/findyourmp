@@ -13,7 +13,7 @@ class ConstituenciesController < ResourceController::Base
     @is_admin = is_admin?
     if id.include? '+'
       @search_term = params[:q]
-      @constituencies = Constituency.find_all_by_id(id.split('+'))
+      @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
     else
       @constituency = Constituency.find(id)
     end

@@ -74,10 +74,11 @@ describe ConstituenciesController do
       do_get
       assigns[:is_admin].should be_false
     end
-    it 'should assign constituencies to view' do
+    it 'should assign constituencies to view ordered by name' do
       Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@constituency, @other_constituency]
       do_get
-      assigns[:constituencies].should == [@constituency, @other_constituency]
+      constituencies_ordered_by_name = [@other_constituency, @constituency]
+      assigns[:constituencies].should == constituencies_ordered_by_name
     end
     it 'should assign search term to view' do
       do_get
