@@ -41,6 +41,10 @@ describe ConstituenciesController do
       route_for(:controller => "constituencies", :action => "show", :id=>@two_constituency_ids).should == "/constituencies/#{@two_constituency_ids}"
       params_from(:get, "/constituencies/#{@two_constituency_ids}").should == {:controller => "constituencies", :action => "show", :id=>@two_constituency_ids}
     end
+    it 'should find mail action' do
+      route_for(:controller => "constituencies", :action => "mail", :id=>@constituency_id).should == "/constituencies/#{@constituency_id}/mail"
+      params_from(:get, "/constituencies/#{@constituency_id}/mail").should == {:controller => "constituencies", :action => "mail", :id=>@constituency_id.to_s}
+    end
   end
 
   describe "when asked for one constituency by id along with search term" do
@@ -86,4 +90,21 @@ describe ConstituenciesController do
     end
   end
 
+  describe "when asked for mail an MP page" do
+    before do
+      Constituency.stub!(:find).and_return @constituency
+    end
+    def do_get
+      get :mail, :id => @constituency_id
+    end
+
+    get_request_should_be_successful
+    should_render_template 'mail'
+
+    it 'should assign constituency to view' do
+      Constituency.should_receive(:find).with(@constituency_id.to_s).and_return @constituency
+      do_get
+      assigns[:constituency].should == @constituency
+    end
+  end
 end

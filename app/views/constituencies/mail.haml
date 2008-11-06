@@ -1,0 +1,10 @@
+- if @constituency
+  = render :partial => 'constituency', :object => @constituency
+- elsif @constituencies
+  %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
+  = render :partial => 'constituency_match', :collection => @constituencies
+
+- if @is_admin
+  %p
+    = link_to 'Edit', edit_constituency_path(@constituency)
+    = link_to 'Back', constituencies_path
