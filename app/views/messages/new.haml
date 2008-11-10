@@ -8,37 +8,32 @@
 -form_for([@constituency, @message]) do |f|
   %p
     %label{ :for => "sender_email" } Your email address
-    = f.text_field :sender_email
-    *
+    %div= f.text_field(:sender_email) + ' *'
   %p
     %label{ :for => "sender" } Your full name
-    = f.text_field :sender
-    *
+    %div= f.text_field(:sender) + ' *'
   %p
     %label{ :for => "address" } Postal address
-    = f.text_area :address, :rows=>5
+    %div= f.text_area(:address, :rows=>5)
   %p
     %label{ :for => "post_code" } Your postcode
-    = f.text_field :postcode
-    *
+    %div= f.text_field(:postcode) + ' *'
   %p
     %label{ :for => "subject" } Your subject
-    = f.text_field :subject
-    *
+    %div= f.text_field(:subject) + ' *'
   %p
     %label{ :for => "message" } Your message (max chars including spaces 4000)
     %br
-    = f.text_area :message
-    *
+    %div= f.text_area(:message) + ' *'
   %p
     %em.normaltext
       * denotes required text
 
   %p
+    If you do not include a full address and postcode you may not receive a reply. Please note the following
+    = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
+  %p
     = f.submit "Send email"
 
-%p
-  If you do not include a full address and postcode you may not receive a reply. Please note the following
-  = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
 %p
   = link_to 'Cancel', constituency_path(@message.constituency)
