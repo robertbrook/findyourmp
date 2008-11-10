@@ -22,5 +22,6 @@ class ConstituenciesController < ResourceController::Base
   def mail
     id = params[:id]
     @constituency = Constituency.find(id)
+    @member_name = @constituency ? @constituency.member_name : nil
   end
 end

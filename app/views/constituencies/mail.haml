@@ -1,10 +1,44 @@
-- if @constituency
-  = render :partial => 'constituency', :object => @constituency
-- elsif @constituencies
-  %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
-  = render :partial => 'constituency_match', :collection => @constituencies
-
-- if @is_admin
-  %p
-    = link_to 'Edit', edit_constituency_path(@constituency)
-    = link_to 'Back', constituencies_path
+%h1
+  = "Send a message to #{@member_name}"
+%div
+  Please note that MPs will generally only deal with cases concerning their own constituents.  It is therefore important that you include your full address and postcode in this form.  This system does not permit users to send emails from @parliament.uk addresses.  Correspondence by email is forwarded once a day to MPs.  If you wish to contact your MP urgently, you should telephone the House of Commons Switchboard on 020 7219 3000 and ask for your MP's office.
+%div
+  %form{ :name => "", :action => "", :method => "post" }
+    %input{ :name => "submitted", :type => "hidden", :value => "true" }
+    %p
+      %label{ :for => "email_address" } Your email address
+      %input#email_address.textInput{ :name => "email_address", :type => "text", :value => "" }
+      *
+    %p
+      %label{ :for => "full_name" } Your full name
+      %input#full_name.textInput{ :name => "full_name", :type => "text", :value => "" }
+      *
+    %p
+      %label{ :for => "address" } Postal address
+      %textarea#address{ :name => "address" }
+    %p
+      %label{ :for => "post_code" } Your postcode
+      %input#post_code.textInput{ :name => "post_code", :type => "text", :value => "" }
+      *
+    %p
+      %label{ :for => "subject" } Your subject
+      %input#subject.textInput{ :name => "subject", :type => "text", :value => "" }/
+      *
+    %p
+      %label{ :for => "message" } Your message
+      %p.normaltext
+        (max chars including spaces 4000)
+      %textarea#message.textInput{ :name => "message" }
+      *
+    %div
+      %p
+        %em.normaltext
+          * denotes required text
+    %div
+      %input#emailSubmit.normaltext{ :name => "email", :type => "submit", :value => "Send"}
+  %br/
+  %p.normaltext
+    If you do not include a full address and postcode you may not receive a reply. Please note the following
+    %a{ :href => "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank" }
+      email guidance notes
+    \.

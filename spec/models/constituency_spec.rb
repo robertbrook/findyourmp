@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Constituency do
 
   assert_model_has_many :postcodes
+  assert_model_has_many :messages
 
   before do
     @constituency = Constituency.new
