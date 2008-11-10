@@ -42,8 +42,8 @@ class PostcodesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { @postcode = postcode }
-        format.xml  { @postcode = postcode }
+        format.html { @postcode = postcode; @constituency = postcode.constituency }
+        format.xml  { @postcode = postcode; @constituency = postcode.constituency }
         format.json { render :json => postcode.to_json }
         format.js   { render :json => postcode.to_json }
         format.text { render :text => postcode.to_text }

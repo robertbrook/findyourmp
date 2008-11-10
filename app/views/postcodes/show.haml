@@ -2,9 +2,9 @@
 
 %p<
   = "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
-  - if @postcode.constituency
-    = render :partial => 'constituencies/constituency', :object => @postcode.constituency
-- unless @postcode.constituency
+  - if @constituency
+    = render :partial => 'constituencies/constituency', :object => @constituency
+- unless @constituency
   %p No constituency found.
 
 %p{:style=>'float: right'}
