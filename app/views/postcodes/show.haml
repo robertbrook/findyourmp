@@ -1,4 +1,4 @@
-- @title= @postcode.code
+- @title= @postcode.code_with_space
 
 %p<
   = "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
@@ -8,10 +8,4 @@
   %p No constituency found.
 
 %p{:style=>'float: right'}
-  = link_to('XML', url_for(:action=>:show,:format=>:xml))
-  = link_to('JSON', url_for(:action=>:show,:format=>:json))
-  = link_to('JS', url_for(:action=>:show,:format=>:js))
-  = link_to('CSV', url_for(:action=>:show,:format=>:csv))
-  = link_to('TEXT', url_for(:action=>:show,:format=>:txt))
-  = link_to('YAML', url_for(:action=>:show,:format=>:yaml))
-
+  = postcode_format_links
