@@ -1,7 +1,7 @@
 %html
   %head
     %title Find your constituency
-    <style>body {font-size:2em;margin: 5% 10%;} #search input {font-size:1.5em;} a {text-decoration:none;} strong.highlight {font-style:italic;} input {font-size:1em;}</style>
+    <style>body {font-size:1em;margin: 5% 10%;} #search input {font-size:1.5em;} a {text-decoration:none;} strong.highlight {font-style:italic;} input {font-size:1em;} .fieldWithErrors input, .fieldWithErrors textarea {border: solid 1px #cc0000; background-color: #ffcccc; }</style>
   %body
     #search= render :partial => 'layouts/search_form'
     =yield

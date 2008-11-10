@@ -1,6 +1,6 @@
 class ConstituenciesController < ResourceController::Base
 
-  before_filter :redirect_if_not_admin, :except => ['show', 'mail']
+  before_filter :redirect_if_not_admin, :except => ['show']
 
   def redirect_if_not_admin
     unless is_admin?
@@ -19,9 +19,4 @@ class ConstituenciesController < ResourceController::Base
     end
   end
 
-  def mail
-    id = params[:id]
-    @constituency = Constituency.find(id)
-    @member_name = @constituency ? @constituency.member_name : nil
-  end
 end

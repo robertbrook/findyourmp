@@ -1,8 +1,8 @@
 %p<
   - name = @postcode ? link_to(h(constituency.name), constituency_path(constituency)) : h(constituency.name)
   = "CONSTITUENCY<br/><strong>#{name}</strong>"
-%p<
-  - unless constituency.member_name.blank?
-    = "MEMBER<br/><strong>#{h constituency.member_name}</strong>"
-  - else
-    = "NO RECORDED MEMBER"
+- if constituency.member_name.blank?
+  %p NO RECORDED MEMBER
+- else
+  %p= "MEMBER<br/><strong>#{h constituency.member_name}</strong>"
+  %p= link_to 'Email your MP', new_constituency_message_url(constituency)
