@@ -9,12 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080915164638) do
+ActiveRecord::Schema.define(:version => 20080918124749) do
 
   create_table "constituencies", :force => true do |t|
     t.string "name"
     t.string "member_name"
   end
+
+  create_table "members", :force => true do |t|
+    t.string  "name"
+    t.integer "constituency_id"
+  end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
