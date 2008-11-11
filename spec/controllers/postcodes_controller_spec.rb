@@ -183,6 +183,10 @@ describe PostcodesController do
         do_get
         assigns[:postcode].should == @postcode_record
       end
+      it 'should assign constituency to view' do
+        do_get
+        assigns[:constituency].should == @constituency
+      end
       it 'should return html format' do
         do_get
         response.content_type.should == "text/html"

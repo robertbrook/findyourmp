@@ -1,6 +1,7 @@
 class Constituency < ActiveRecord::Base
 
   has_many :postcodes
+  has_many :messages
 
   class << self
     def find_by_constituency_name name
