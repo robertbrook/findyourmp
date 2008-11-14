@@ -11,4 +11,10 @@ class Message < ActiveRecord::Base
   validates_presence_of :message
   validates_inclusion_of :sent, :in => [true, false]
 
+  before_validation_on_create :populate_recipient_with_constituency_member_name
+
+  private
+    def populate_recipient_with_constituency_member_name
+      self.recipient = constituency.member_name
+    end
 end
