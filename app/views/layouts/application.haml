@@ -6,4 +6,4 @@
     #search= render :partial => 'layouts/search_form'
     =yield
     = button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
-    %p If you have any problems using this service please look at the  <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">help</a> pages or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>.
+    #help If you have any problems using this service please look at the  <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">help</a> pages or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>.
