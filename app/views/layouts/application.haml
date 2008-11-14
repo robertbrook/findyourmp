@@ -2,7 +2,7 @@
   %head
     %title= @title || "Find Your MP"
     %style
-      body {line-height:140%;margin: 5% 10%;font-family:sans-serif;} #search input {font-size:1.5em;} a {text-decoration:none;}  input {font-size:1em;} .fieldWithErrors input, .fieldWithErrors textarea {border: solid 1px #cc0000; background-color: #ffcccc; }
+      body {line-height:140%;margin: 5% 10%;font-family:sans-serif;} #search input {font-size:1.5em;} a {text-decoration:none;}  input {font-size:1em;} .fieldWithErrors input, .fieldWithErrors textarea {border: solid 1px #cc0000; background-color: #ffcccc; } #footer {margin-top:4em;} #header {margin-bottom:4em;}
   %body{:id=>"findyourmp-parliament-uk"}
     #header
       %h1= @title || "Find Your MP"
@@ -11,4 +11,4 @@
     #footer
       = button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
       #help If you have any problems using this service please look at the  <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">help</a> pages or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>
-      #copyright <a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">&copy Parliamentary Copyright</a>
+      #copyright The Find You MP Service <a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">&copy UK Parliament</a> and uses data <a href="http://www.statisticsauthority.gov.uk/copyright/index.html">&copy; UK Statistics Authority</a>
