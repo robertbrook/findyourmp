@@ -17,7 +17,7 @@ describe PostcodesController do
     @yaml = '---yaml:'
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
-        :code => @canonical_postcode, :constituency => @constituency,
+        :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
     Postcode.stub!(:find_by_code).and_return nil
   end
@@ -151,7 +151,7 @@ describe PostcodesController do
         do_get
         response.should redirect_to("")
       end
-      it 'should pass last search_term back into form' do
+      it 'should set last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @postcode
       end
@@ -186,6 +186,10 @@ describe PostcodesController do
       it 'should assign postcode to view' do
         do_get
         assigns[:postcode].should == @postcode_record
+      end
+      it 'should set postcode in flash memory' do
+        do_get
+        flash[:postcode].should == @postcode_with_space
       end
       it 'should assign constituency to view' do
         do_get
@@ -245,7 +249,7 @@ describe PostcodesController do
         do_get
         response.should redirect_to(:action=>'index')
       end
-      it 'should pass non-matching postcode text back as last_search_term into form' do
+      it 'should set non-matching postcode text as last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @canonical_postcode
       end

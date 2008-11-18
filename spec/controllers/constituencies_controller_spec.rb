@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ConstituenciesController do
 
   before do
+    @postcode_with_space = 'N1 1AA'
     @constituency_id = 801
     @constituency_name_part = 'Islington'
     @constituency_name = 'Islington South'
@@ -64,6 +65,13 @@ describe ConstituenciesController do
       Constituency.should_receive(:find).with(@constituency_id.to_s).and_return @constituency
       do_get
       assigns[:constituency].should == @constituency
+    end
+    it 'should keep :postcode in flash memory' do
+      flash = mock('flash')
+      @controller.stub!(:flash).and_return flash
+      flash.should_receive(:keep).with(:postcode)
+      flash.stub!(:sweep)
+      do_get
     end
   end
 

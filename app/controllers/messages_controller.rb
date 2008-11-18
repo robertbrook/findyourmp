@@ -10,4 +10,8 @@ class MessagesController < ResourceController::Base
     end
   end
 
+  def new
+    super
+    flash.keep(:postcode)
+  end
 end
