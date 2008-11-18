@@ -7,24 +7,23 @@
 
 -form_for([@constituency, @message]) do |f|
   %p
-    %label{ :for => "sender_email" } Your email address
-    %div= f.text_field(:sender_email) + ' *'
+    = label :message, :sender_email, 'Your email address *'
+    = f.text_field(:sender_email)
   %p
-    %label{ :for => "sender" } Your full name
-    %div= f.text_field(:sender) + ' *'
+    = label :message, :sender, 'Your full name *'
+    = f.text_field(:sender)
   %p
-    %label{ :for => "address" } Postal address
-    %div= f.text_area(:address, :rows=>5)
+    = label :message, :address, 'Postal address'
+    = f.text_area(:address, :rows=>5)
   %p
-    %label{ :for => "post_code" } Your postcode
-    %div= f.text_field(:postcode) + ' *'
+    = label :message, :post_code, 'Your postcode *'
+    = f.text_field(:postcode)
   %p
-    %label{ :for => "subject" } Your subject
-    %div= f.text_field(:subject) + ' *'
+    = label :message, :subject, 'Your subject *'
+    = f.text_field(:subject)
   %p
-    %label{ :for => "message" } Your message (max chars including spaces 4000)
-    %br
-    %div= f.text_area(:message) + ' *'
+    = label :message, :message, 'Your message (max chars including spaces 4000) *'
+    = f.text_area(:message)
   %p
     %em.normaltext
       * denotes required text

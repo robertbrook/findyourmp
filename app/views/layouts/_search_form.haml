@@ -1,4 +1,4 @@
-- postcode = '' unless postcode
+- search_term = @last_search_term ? @last_search_term : ''
 - form_tag('/', :method => :get) do
-  = text_field_tag 'q', postcode, :size => 8
+  = text_field_tag 'q', search_term, :size => 8
   = submit_tag 'SEARCH'

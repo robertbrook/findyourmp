@@ -4,6 +4,7 @@ class PostcodesController < ApplicationController
     search_term = params[:q]
     @postcode_count = Postcode.count
     @constituency_count = Constituency.count
+    @last_search_term = flash[:last_search_term]
 
     unless search_term.blank?
       search_term.strip!
@@ -17,6 +18,7 @@ class PostcodesController < ApplicationController
 
         if constituencies.empty?
           flash[:not_found] = "No matches found for #{search_term}." if search_term
+          flash[:last_search_term] = search_term if search_term
           redirect_to :action=>'index'
         elsif constituencies.size == 1
           redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
@@ -36,7 +38,8 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode=>postcode.code
       else
-        flash[:not_found] = "Postcode #{code} not found." if code
+        flash[:not_found] = "No matches found for #{code}." if code
+        flash[:last_search_term] = code
         params[:postcode] = nil
         redirect_to :action=>'index'
       end

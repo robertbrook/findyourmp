@@ -1,8 +1,7 @@
 %html
   %head
     %title= @title || "Find Your MP"
-    %style
-      body {line-height:140%;margin: 5% 10%;font-family:sans-serif;} #search input {font-size:1.5em;} a {text-decoration:none;}  input {font-size:1em;} .fieldWithErrors input, .fieldWithErrors textarea {border: solid 1px #cc0000; background-color: #ffcccc; } #footer {margin-top:4em;} #header {margin-bottom:4em;}
+    = stylesheet_link_tag 'screen', :media => 'screen'
   %body{:id=>"findyourmp-parliament-uk"}
     #header
       %h1= @title || "Find Your MP"
