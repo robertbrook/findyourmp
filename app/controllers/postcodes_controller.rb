@@ -45,7 +45,7 @@ class PostcodesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { @postcode = postcode; @constituency = postcode.constituency }
+        format.html { @postcode = postcode; @constituency = postcode.constituency; flash[:postcode] = @postcode.code_with_space }
         format.xml  { @postcode = postcode; @constituency = postcode.constituency }
         format.json { render :json => postcode.to_json }
         format.js   { render :json => postcode.to_json }

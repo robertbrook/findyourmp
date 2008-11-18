@@ -5,7 +5,8 @@
 
 = error_messages_for(:message).sub('being saved','being sent')
 
--form_for([@constituency, @message]) do |f|
+- postcode = flash[:postcode]
+- form_for([@constituency, @message]) do |f|
   %p
     = label :message, :sender_email, 'Your email address *'
     = f.text_field(:sender_email)
@@ -16,8 +17,8 @@
     = label :message, :address, 'Postal address'
     = f.text_area(:address, :rows=>5)
   %p
-    = label :message, :post_code, 'Your postcode *'
-    = f.text_field(:postcode)
+    = label :message, :postcode, 'Your postcode *'
+    = f.text_field(:postcode, :value => postcode)
   %p
     = label :message, :subject, 'Your subject *'
     = f.text_field(:subject)

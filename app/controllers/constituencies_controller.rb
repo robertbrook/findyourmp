@@ -10,6 +10,7 @@ class ConstituenciesController < ResourceController::Base
 
   def show
     id = params[:id]
+    flash.keep(:postcode)
     @is_admin = is_admin?
     if id.include? '+'
       @search_term = params[:q]
