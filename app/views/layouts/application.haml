@@ -9,7 +9,6 @@
       #search= render :partial => 'layouts/search_form'
     =yield
     #footer
-      = "The Find Your MP service recognises " + number_with_delimiter(@postcode_count) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
       #copyright <a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">&copy;UK Parliament</a>. <a href="http://www.statisticsauthority.gov.uk/copyright/index.html">&copy;UK Statistics Authority</a>.
       #admin-button= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
       
