@@ -151,6 +151,10 @@ describe PostcodesController do
         do_get
         response.should redirect_to("")
       end
+      it 'should pass search_term back into form' do
+        do_get
+        flash[:last_search_term].should == @postcode
+      end
     end
 
     describe 'and a matching postcode is found' do
