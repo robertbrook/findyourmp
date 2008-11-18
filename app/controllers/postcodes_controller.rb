@@ -38,7 +38,8 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode=>postcode.code
       else
-        flash[:not_found] = "Postcode #{code} not found." if code
+        flash[:not_found] = "No matches found for #{code}." if code
+        flash[:last_search_term] = code
         params[:postcode] = nil
         redirect_to :action=>'index'
       end
