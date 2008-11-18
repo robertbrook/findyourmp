@@ -20,6 +20,6 @@ describe "renders search form", :shared => true do
   end
   it 'should show submit search button' do
     do_render
-    response.should have_tag("input[value=SEARCH][type=submit]")
+    response.should have_tag("input[value=Search][type=submit]")
   end
 end

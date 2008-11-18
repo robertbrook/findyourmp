@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080918124749) do
+ActiveRecord::Schema.define(:version => 20081110144031) do
 
   create_table "constituencies", :force => true do |t|
     t.string "name"
@@ -22,6 +22,21 @@ ActiveRecord::Schema.define(:version => 20080918124749) do
   end
 
   add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
+
+  create_table "messages", :force => true do |t|
+    t.string   "constituency_id"
+    t.string   "sender_email"
+    t.string   "sender"
+    t.string   "recipient"
+    t.string   "address"
+    t.string   "postcode"
+    t.string   "subject"
+    t.text     "message"
+    t.boolean  "sent"
+    t.time     "sent_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
