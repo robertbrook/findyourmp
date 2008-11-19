@@ -12,6 +12,15 @@ Feature: Find MP from postcode
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
 
+  Scenario: Enter postcode that has a constituency with no MP name
+    Given I am on the Front page
+    And there is a postcode "KY8 5XY" in constituency "Glenrothes"
+    And there is no MP in constituency "Glenrothes"
+    When I fill in "search_term" with "KY8 5XY"
+    And I press "Search"
+    Then I should see "Glenrothes"
+    And I should see "NO RECORDED MEMBER"
+
   Scenario: Enter bogus postcode
     Given I am on the Front page
     When I fill in "search_term" with "N1 XXX"
