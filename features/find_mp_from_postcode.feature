@@ -4,11 +4,13 @@ Feature: Find MP from postcode
   want to find my MP using my postcode
 
   Scenario: Enter postcode that has a constituency and an MP name
-    Given there is a postcode "AB101AA" in constituency "Aberdeen North"
     Given I am on the Front page
+    And there is a postcode "AB101AA" in constituency "Aberdeen North"
+    And there is an MP "Frank Doran" in constituency "Aberdeen North"
     When I fill in "search_term" with "AB101AA"
     And I press "Search"
     Then I should see "Aberdeen North"
+    And I should see "Frank Doran"
 
   Scenario: Enter bogus postcode
     Given I am on the Front page
