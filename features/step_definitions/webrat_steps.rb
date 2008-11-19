@@ -1,7 +1,7 @@
 # Commonly used webrat steps
 # http://github.com/brynary/webrat
 
-require 'webrat' if !defined?(Webrat) # Because some people have it installed as a Gem
+# require 'webrat' if !defined?(Webrat) # Because some people have it installed as a Gem
 
 When /^I press "(.*)"$/ do |button|
   clicks_button(button)
