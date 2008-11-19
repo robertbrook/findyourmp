@@ -1,4 +1,8 @@
 
+Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|
+  Postcode.find_or_create_by_code_and_constituency_id(postcode_code.gsub(' ','').strip, 900)
+end
+
 Given /^there is a postcode "(.*)" in constituency "(.*)"$/ do |postcode_code, constituency_name|
   constituency = Constituency.find_or_create_by_name(constituency_name)
   Postcode.find_or_create_by_code_and_constituency_id(postcode_code, constituency.id)

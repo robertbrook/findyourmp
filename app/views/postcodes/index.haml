@@ -1,1 +1,5 @@
-%p= "The Find Your MP service recognises " + number_with_delimiter(@postcode_count) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
+- if flash[:not_found]
+  %p
+    = flash[:not_found]
+%p
+  = "The Find Your MP service recognises " + number_with_delimiter(@postcode_count) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
