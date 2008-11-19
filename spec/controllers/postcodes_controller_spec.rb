@@ -87,7 +87,7 @@ describe PostcodesController do
 
   describe "when asked for constituency given an exact constituency name" do
     def do_get
-      get :index, :q => @constituency_name
+      get :index, :search_term => @constituency_name
     end
 
     before do
@@ -114,7 +114,7 @@ describe PostcodesController do
 
   describe "when asked for constituency given part of constituency name" do
     def do_get
-      get :index, :q => @constituency_name_part
+      get :index, :search_term => @constituency_name_part
     end
 
     before do
@@ -136,14 +136,14 @@ describe PostcodesController do
       end
       it 'should show list of matching constituencies' do
         do_get
-        response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}?q=#{@constituency_name_part}")
+        response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}?search_term=#{@constituency_name_part}")
       end
     end
   end
 
   describe "when asked for constituency given a postcode" do
     def do_get
-      get :index, :q => @postcode
+      get :index, :search_term => @postcode
     end
 
     describe 'and no matching postcode is found' do

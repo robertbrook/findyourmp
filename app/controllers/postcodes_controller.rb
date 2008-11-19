@@ -1,7 +1,7 @@
 class PostcodesController < ApplicationController
 
   def index
-    search_term = params[:q]
+    search_term = params[:search_term]
     @postcode_count = Postcode.count
     @constituency_count = Constituency.count
     @last_search_term = flash[:last_search_term]
@@ -23,7 +23,7 @@ class PostcodesController < ApplicationController
         elsif constituencies.size == 1
           redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
         else
-          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :q => search_term
+          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
         end
       end
     end

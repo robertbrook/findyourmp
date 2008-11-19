@@ -13,3 +13,9 @@
 [submodule "vendor/plugins/resource_controller"]
 	path = vendor/plugins/resource_controller
 	url = git://github.com/giraffesoft/resource_controller.git
+[submodule "vendor/plugins/cucumber"]
+	path = vendor/plugins/cucumber
+	url = git://github.com/aslakhellesoy/cucumber.git
+[submodule "vendor/plugins/webrat"]
+	path = vendor/plugins/webrat
+	url = git://github.com/brynary/webrat.git
