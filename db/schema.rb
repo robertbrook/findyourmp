@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# This file is auto-generated from the current state of the database. Instead of editing this file,
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -15,6 +15,23 @@ ActiveRecord::Schema.define(:version => 20081110144031) do
     t.string "name"
     t.string "member_name"
   end
+
+  create_table "messages", :force => true do |t|
+    t.string   "constituency_id"
+    t.string   "sender_email"
+    t.string   "sender"
+    t.string   "recipient"
+    t.string   "address"
+    t.string   "postcode"
+    t.string   "subject"
+    t.text     "message"
+    t.boolean  "sent"
+    t.time     "sent_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"

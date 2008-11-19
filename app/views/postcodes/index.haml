@@ -1,12 +1,1 @@
-- if flash[:not_found]
-  %p= flash[:not_found]
-
-%p
-  %strong= number_with_delimiter(@postcode_count)
-  POSTCODES
-%p
-  %strong= @constituency_count
-  - if @is_admin
-    = link_to 'CONSTITUENCIES', constituencies_path
-  - else
-    CONSTITUENCIES
+%p= "The Find Your MP service recognises " + number_with_delimiter(@postcode_count) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
