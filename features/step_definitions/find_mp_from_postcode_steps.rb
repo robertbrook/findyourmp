@@ -1,3 +1,20 @@
+Before do
+  Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
+  Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
+
+  Given 'there is a postcode "KY8 5XY" in constituency "Glenrothes"'
+  Given 'there is no MP in constituency "Glenrothes"'
+
+  Given 'there is a postcode "GY1 1AB" with no constituency'
+end
+
+After do
+end
+
+When /^I search for "(.*)"$/ do |postcode_code|
+  When "I fill in \"search_term\" with \"#{postcode_code}\""
+  And 'I press "Search"'
+end
 
 Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|
   Postcode.find_or_create_by_code_and_constituency_id(postcode_code.gsub(' ','').strip, 900)
@@ -27,5 +44,3 @@ end
 Given /I am on the Front page/ do
   visits "/"
 end
-
-
