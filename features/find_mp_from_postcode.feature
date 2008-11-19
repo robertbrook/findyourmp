@@ -24,4 +24,3 @@ Feature: Find MP from postcode
     Given I am on the Front page
     When I search for "GY1 1AB"
     Then I should see "No constituency found."
-
