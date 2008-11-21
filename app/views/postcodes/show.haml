@@ -1,11 +1,17 @@
 - @title= @postcode.code_with_space
 
-%p<
-  = "POSTCODE<br/><strong>#{@postcode.code_with_space}</strong>"
-  - if @constituency
-    = render :partial => 'constituencies/constituency', :object => @constituency
-- unless @constituency
+- if @constituency
+  %p<
+    = "The postcode <code class='postcode'>#{@postcode.code_with_space}</code> is in the Westminster constituency of "
+    %span<
+      - name = @postcode ? link_to(h(@constituency.name), constituency_path(@constituency)) : h(@constituency.name)
+      = "#{name}."
+    - if @constituency.member_name.blank?
+      %span NO RECORDED MEMBER
+    - else
+      %span= ". The sitting Member of Parliament is #{h @constituency.member_name}."
+      %span= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
+- else
   %p No constituency found.
 
-%p{:style=>'float: right'}
-  = postcode_format_links
+%p{:style=>'float: right'}= postcode_format_links

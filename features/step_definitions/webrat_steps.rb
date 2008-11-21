@@ -93,3 +93,4 @@ end
 Then /^the "(.*)" checkbox should be checked$/ do |label|
   field_labeled(label).should be_checked
 end
+
