@@ -5,6 +5,7 @@ Feature: Find MP from postcode
 
   Scenario: Enter postcode that has a constituency and an MP name
     Given I am on the Front page
+    Then I should see "First, type your UK postcode:"
     When I search for "AB101AA"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"

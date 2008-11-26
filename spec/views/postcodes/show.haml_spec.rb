@@ -10,7 +10,9 @@ describe "/postcodes/show.haml" do
     template.stub!(:postcode_format_links).and_return ''
   end
 
-  it_should_behave_like "renders search form"
+  def do_render
+    @layout ? render(@template, :layout=>@layout) : render(@template)
+  end
 
   describe 'when there is no constituency' do
     it 'should show no consituency found warning' do
