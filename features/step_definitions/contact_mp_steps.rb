@@ -42,5 +42,9 @@ When /^I preview message$/ do
 end
 
 When /^I re-edit message$/ do
-  And 'I press "Re-edit your message"'
+  When 'I press "Re-edit your message"'
+end
+
+When /^I send message$/ do
+  When 'I press "Send message"'
 end

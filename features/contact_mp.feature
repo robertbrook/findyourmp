@@ -41,4 +41,8 @@ Feature: Contact MP
     Then I should see "Re-edit your message"
     And I should see "Send message"
 
+  Scenario: Send message
+    Given I am on a preview Message page
+    When I send message
+    Then I should see "Your message has been sent."
 

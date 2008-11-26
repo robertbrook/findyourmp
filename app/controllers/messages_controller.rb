@@ -24,4 +24,5 @@ class MessagesController < ResourceController::Base
       super
     end
   end
+
 end

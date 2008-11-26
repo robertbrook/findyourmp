@@ -1,5 +1,5 @@
 - if @message.sent
-  = render :partial => 'move_along'
+  %h1= "Your message has been sent."
 - else
   %h1= "Preview the Message You've Written"
 
@@ -31,4 +31,6 @@
 
     %p
       = button_to("Re-edit your message", :action => 'edit').sub('"post"','"get"')
-      = button_to("Send message", :action => 'update').sub('"post"','"get"')
+      - form_for([@constituency, @message]) do |f|
+        = f.hidden_field(:sent, :value=>'1')
+        = f.submit "Send message"
