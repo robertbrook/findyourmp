@@ -7,7 +7,8 @@ describe MessagesController do
     @constituency_name_part = 'Islington'
     @constituency_name = 'Islington South'
     @member_name = 'Hon Biggens'
-    @message = mock('message')
+    @message_id = "12"
+    @message = mock(Message, :to_param => @message_id)
     collection = mock('array', :build=>@message)
     @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id, :member_name => @member_name, :messages=>collection)
   end
@@ -25,6 +26,20 @@ describe MessagesController do
       flash.should_receive(:keep).with(:postcode)
       flash.stub!(:sweep)
       do_get
+    end
+  end
+
+
+  describe 'when posted a new message' do
+    def do_post
+      post :create, :constituency_id => @constituency_id, :model => {}
+    end
+    it 'should redirect to show view' do
+      Constituency.stub!(:find).with(@constituency_id.to_s).and_return @constituency
+      Message.stub!(:new).and_return @message
+      @message.should_receive(:save).and_return true
+      do_post
+      response.should redirect_to(constituency_message_url("801",@message_id))
     end
   end
 

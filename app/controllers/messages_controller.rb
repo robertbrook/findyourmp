@@ -2,7 +2,7 @@ class MessagesController < ResourceController::Base
 
   belongs_to :constituency
 
-  before_filter :redirect_if_not_admin, :except => ['new','create']
+  before_filter :redirect_if_not_admin, :except => ['new','create','show']
 
   def redirect_if_not_admin
     unless is_admin?
@@ -14,4 +14,5 @@ class MessagesController < ResourceController::Base
     super
     flash.keep(:postcode)
   end
+
 end

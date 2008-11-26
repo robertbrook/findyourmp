@@ -30,10 +30,8 @@
       * denotes required text
 
   %p
+    = f.submit "Preview your message"
+    %span{:style=>'margin-left: 22em'}= link_to 'Cancel', constituency_path(@message.constituency)
+  %p
     If you do not include a full address and postcode you may not receive a reply. Please note the following
     = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
-  %p
-    = f.submit "Send email"
-
-%p
-  = link_to 'Cancel', constituency_path(@message.constituency)

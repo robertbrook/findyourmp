@@ -16,12 +16,22 @@ Given /I am on a new Message page/ do
   And 'I follow "Send a message to Frank Doran"'
 end
 
-When /^I send message without "(.*)"$/ do |field|
+When /^I preview message without "(.*)"$/ do |field|
   When %Q|I fill in "Your email address" with "here@now.earth"| unless field == 'Your email address'
   When %Q|I fill in "Your full name" with "Micky Muse"| unless field == 'Your full name'
   When %Q|I fill in "Your postal address" with "1 Way Out"| unless field == 'Your postal address'
   When %Q|I fill in "Your postcode" with "AB101AA"| unless field == 'Your postcode'
   When %Q|I fill in "Your subject" with "Problem"| unless field == 'Your subject'
   When %Q|I fill in "Your message" with "Question"| unless field == 'Your message'
-  And 'I press "Send email"'
+  And 'I press "Preview your message"'
+end
+
+When /^I preview message$/ do
+  When %Q|I fill in "Your email address" with "here@now.earth"|
+  When %Q|I fill in "Your full name" with "Micky Muse"|
+  When %Q|I fill in "Your postal address" with "1 Way Out"|
+  When %Q|I fill in "Your postcode" with "AB101AA"|
+  When %Q|I fill in "Your subject" with "Problem"|
+  When %Q|I fill in "Your message" with "Question"|
+  And 'I press "Preview your message"'
 end

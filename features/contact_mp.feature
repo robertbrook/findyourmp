@@ -13,16 +13,21 @@ Feature: Contact MP
     And I should see "Your postcode"
     And I should see "Your subject"
     And I should see "Your message"
-    And I should see "Send email"
+    And I should see "Preview your message"
 
-  Scenario: Send message with complusory field missing
+  Scenario: Preview message with complusory field missing
     Given I am on a new Message page
-    When I send message without "Your email address"
+    When I preview message without "Your email address"
     Then I should see "Sender email can't be blank"
+    And I should see "Preview your message"
 
   More Examples:
     | field_missing      | warning_message         |
     | Your full name     | Sender can't be blank   |
     | Your subject       | Subject can't be blank  |
     | Your message       | Message can't be blank  |
+
+  Scenario: Preview message with all required fields set
+    Given I am on a new Message page
+    When I preview message
 
