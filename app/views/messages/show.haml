@@ -1,0 +1,37 @@
+- if @message.sent
+  = render :partial => 'move_along'
+- else
+  %h1= "Preview the Message You've Written"
+
+  #message
+    %p
+      = label :message, :sender_email, 'Your email address: '
+      .message_sender_email
+        = @message.sender_email
+    %p
+      = label :message, :sender, 'Your full name: '
+      .message_sender
+        = @message.sender
+    %p
+      = label :message, :address, 'Your postal address:'
+      .message_address
+        = @message.address.blank? ? 'not given' : @message.address
+    %p
+      = label :message, :postcode, 'Your postcode: '
+      .message_postcode
+        = @message.postcode
+    %p
+      = label :message, :subject, 'Your subject: '
+      .message_subject
+        = @message.subject
+    %p
+      = label :message, :message, 'Your message: '
+      .message_message
+        = @message.message
+    %p
+      %em.normaltext
+        * denotes required text
+
+    %p
+      = button_to "Re-edit your message", :action => 'edit'
+      = button_to "Send message", :action => 'update'
