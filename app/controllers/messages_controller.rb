@@ -18,7 +18,7 @@ class MessagesController < ResourceController::Base
     if params[:constituency_id] && params[:id]
       if Constituency.exists?(params[:constituency_id])
         message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
-        if message.sent
+        if !message || message.sent
           unless flash[:message_sent]
             redirect_to :controller => 'postcodes', :action => 'index'
           end
