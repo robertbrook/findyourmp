@@ -16,6 +16,11 @@ Given /I am on a new Message page/ do
   And 'I follow "Send a message to Frank Doran"'
 end
 
+Given /I am on a preview Message page/ do
+  Given "I am on a new Message page"
+  And 'I preview message'
+end
+
 When /^I preview message without "(.*)"$/ do |field|
   When %Q|I fill in "Your email address" with "here@now.earth"| unless field == 'Your email address'
   When %Q|I fill in "Your full name" with "Micky Muse"| unless field == 'Your full name'
@@ -34,4 +39,8 @@ When /^I preview message$/ do
   When %Q|I fill in "Your subject" with "Problem"|
   When %Q|I fill in "Your message" with "Question"|
   And 'I press "Preview your message"'
+end
+
+When /^I re-edit message$/ do
+  And 'I press "Re-edit your message"'
 end

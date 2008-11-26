@@ -28,10 +28,7 @@
       = label :message, :message, 'Your message: '
       .message_message
         = @message.message
-    %p
-      %em.normaltext
-        * denotes required text
 
     %p
-      = button_to "Re-edit your message", :action => 'edit'
-      = button_to "Send message", :action => 'update'
+      = button_to("Re-edit your message", :action => 'edit').sub('"post"','"get"')
+      = button_to("Send message", :action => 'update').sub('"post"','"get"')

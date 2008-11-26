@@ -27,8 +27,18 @@ Feature: Contact MP
     | Your subject       | Subject can't be blank  |
     | Your message       | Message can't be blank  |
 
-  Scenario: Preview message with all required fields set
+  Scenario: Preview message
     Given I am on a new Message page
     When I preview message
     Then I should see "Re-edit your message"
     And I should see "Send message"
+
+  Scenario: Re-edit message
+    Given I am on a preview Message page
+    When I re-edit message
+    Then I should see "Preview your message"
+    When I preview message
+    Then I should see "Re-edit your message"
+    And I should see "Send message"
+
+

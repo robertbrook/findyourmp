@@ -1,0 +1,37 @@
+%h1= "Send a message to #{@constituency.member_name}"
+
+%p
+  Please note that MPs will generally only deal with cases concerning their own constituents.  It is therefore important that you include your full address and postcode in this form.  This system does not permit users to send emails from @parliament.uk addresses.  Correspondence by email is forwarded once a day to MPs.  If you wish to contact your MP urgently, you should telephone the House of Commons Switchboard on 020 7219 3000 and ask for your MP's office.
+
+= error_messages_for(:message).sub('being saved','being sent')
+
+- postcode = flash[:postcode]
+- form_for([@constituency, @message]) do |f|
+  %p
+    = label :message, :sender_email, 'Your email address *'
+    = f.text_field(:sender_email)
+  %p
+    = label :message, :sender, 'Your full name *'
+    = f.text_field(:sender)
+  %p
+    = label :message, :address, 'Your postal address'
+    = f.text_area(:address, :rows=>5)
+  %p
+    = label :message, :postcode, 'Your postcode *'
+    = f.text_field(:postcode, :value => postcode)
+  %p
+    = label :message, :subject, 'Your subject *'
+    = f.text_field(:subject)
+  %p
+    = label :message, :message, 'Your message (max chars including spaces 4000) *'
+    = f.text_area(:message)
+  %p
+    %em.normaltext
+      * denotes required text
+
+  %p
+    = f.submit "Preview your message"
+    %span{:style=>'margin-left: 22em'}= link_to 'Cancel', constituency_path(@message.constituency)
+  %p
+    If you do not include a full address and postcode you may not receive a reply. Please note the following
+    = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
