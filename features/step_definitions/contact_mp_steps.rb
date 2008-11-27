@@ -3,12 +3,27 @@ Before do
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
 end
 
+Then /^I should see Message Form$/ do
+  Then 'I should see "Your email address"'
+  And 'I should see "Your full name"'
+  And 'I should see "Your postal address"'
+  And 'I should see "Your postcode"'
+  And 'I should see "Your subject"'
+  And 'I should see "Your message"'
+  And 'I should see "Preview your message"'
+end
+
 Given /^my MP is contactable via email$/ do
   # puts 'set email for constituency'
 end
 
 Given /I am on my Postcode page/ do
   visits "/postcodes/AB101AA"
+end
+
+Given /I am on my Constituency page/ do
+  Given 'I am on the Front page'
+  And 'I search for "Aberdeen North"'
 end
 
 Given /I am on a new Message page/ do

@@ -9,7 +9,6 @@ Feature: Find MP from constituency name
     When I search for "Aberdeen North"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
-    And I should see "Send a message to Frank Doran"
 
   Scenario: Enter an invalid constituency name
     Given I am on the Front page
@@ -25,4 +24,3 @@ Feature: Find MP from constituency name
     When I follow "Aberdeen South"
     Then I should see "Aberdeen South"
     And I should see "Miss Anne Begg"
-    And I should see "Send a message to Miss Anne Begg"
