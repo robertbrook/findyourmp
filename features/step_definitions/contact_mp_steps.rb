@@ -14,7 +14,7 @@ Then /^I should see Message Form$/ do
 end
 
 Given /^my MP is contactable via email$/ do
-  # puts 'set email for constituency'
+  # # puts 'set email for constituency'
 end
 
 Given /I am on my Postcode page/ do
@@ -38,21 +38,21 @@ end
 
 When /^I preview message without "(.*)"$/ do |field|
   When %Q|I fill in "Your email address" with "here@now.earth"| unless field == 'Your email address'
-  When %Q|I fill in "Your full name" with "Micky Muse"| unless field == 'Your full name'
-  When %Q|I fill in "Your postal address" with "1 Way Out"| unless field == 'Your postal address'
-  When %Q|I fill in "Your postcode" with "AB101AA"| unless field == 'Your postcode'
-  When %Q|I fill in "Your subject" with "Problem"| unless field == 'Your subject'
-  When %Q|I fill in "Your message" with "Question"| unless field == 'Your message'
+  And %Q|I fill in "Your full name" with "Micky Muse"| unless field == 'Your full name'
+  And %Q|I fill in "Your postal address" with "1 Way Out"| unless field == 'Your postal address'
+  And %Q|I fill in "Your postcode" with "AB101AA"| unless field == 'Your postcode'
+  And %Q|I fill in "Your subject" with "Problem"| unless field == 'Your subject'
+  And %Q|I fill in "Your message" with "Question"| unless field == 'Your message'
   And 'I press "Preview your message"'
 end
 
 When /^I preview message$/ do
   When %Q|I fill in "Your email address" with "here@now.earth"|
-  When %Q|I fill in "Your full name" with "Micky Muse"|
-  When %Q|I fill in "Your postal address" with "1 Way Out"|
-  When %Q|I fill in "Your postcode" with "AB101AA"|
-  When %Q|I fill in "Your subject" with "Problem"|
-  When %Q|I fill in "Your message" with "Question"|
+  And %Q|I fill in "Your full name" with "Micky Muse"|
+  And %Q|I fill in "Your postal address" with "1 Way Out"|
+  And %Q|I fill in "Your postcode" with "AB101AA"|
+  And %Q|I fill in "Your subject" with "Problem"|
+  And %Q|I fill in "Your message" with "Question"|
   And 'I press "Preview your message"'
 end
 

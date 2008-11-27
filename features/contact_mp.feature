@@ -15,7 +15,7 @@ Feature: Contact MP
     When I follow "Send a message to Frank Doran"
     Then I should see Message Form
 
-  Scenario: Preview message with complusory field missing
+  Scenario: Preview message with compulsory field missing
     Given I am on a new Message page
     When I preview message without "Your email address"
     Then I should see "Sender email can't be blank"

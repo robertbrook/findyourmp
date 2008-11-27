@@ -29,7 +29,6 @@ describe MessagesController do
     end
   end
 
-
   describe 'when posted a new message' do
     def do_post
       post :create, :constituency_id => @constituency_id, :model => {}
