@@ -21,5 +21,8 @@ Feature: Find MP from constituency name
     Then I should see "First, type your UK postcode:"
     When I search for "Aberdeen"
     Then I should see "Aberdeen North"
+    And I should see "Aberdeen South"
+    When I follow "Aberdeen South"
     Then I should see "Aberdeen South"
-
+    And I should see "Miss Anne Begg"
+    And I should see "Send a message to Miss Anne Begg"
