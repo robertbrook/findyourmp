@@ -14,4 +14,4 @@ Feature: Find MP from constituency name
   Scenario: Enter an invalid constituency name
     Given I am on the Front page
     When I search for "Tamaki"
-    And I should see "No matches found for Tamaki."
+    Then I should see "No matches found for Tamaki."
