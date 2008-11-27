@@ -42,4 +42,16 @@ describe MessagesController do
     end
   end
 
+  describe 'when asked to show a new message' do
+    def do_get
+      get :show, :constituency_id => @constituency_id, :id => @message_id
+    end
+    describe 'and authenticity_token matches' do
+      it 'should show view' do
+        @constituency.messages.should_receive(:find).with(@message_id).and_return(@message)
+        Constituency.stub!(:find).with(@constituency_id.to_s).and_return @constituency
+        do_get
+      end
+    end
+  end
 end

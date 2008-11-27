@@ -1,6 +1,6 @@
 class MessagesController < ResourceController::Base
 
-  protect_from_forgery
+  # protect_from_forgery :secret => 'not_very'
 
   belongs_to :constituency
 
@@ -40,9 +40,18 @@ class MessagesController < ResourceController::Base
     end
   end
 
+  def create
+    if params['message']
+      params['message']['authenticity_token'] = params[:authenticity_token]
+    end
+    super
+  end
+
   def update
-    if params['message']['sent'] == '1'
-      flash[:message_sent] = true
+    if params['message']
+      if params['message']['sent'] == '1'
+        flash[:message_sent] = true
+      end
     end
     super
   end

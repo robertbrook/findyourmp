@@ -15,8 +15,9 @@ describe Message do
     @constituency_id = "value for constituency_id"
     @valid_attributes = {
       :constituency_id => @constituency_id,
-      :sender_email => "value for sender_email",
       :sender => "value for sender",
+      :sender_email => "value for sender_email",
+      :authenticity_token => "054e4e1d3d5bd8e9e446490734ce6d1bbc65cfea",
       :address => "value for address",
       :postcode => "value for postcode",
       :subject => "value for subject",
@@ -28,8 +29,9 @@ describe Message do
 
   assert_model_belongs_to :constituency
 
-  assert_checks_presence :sender_email
   assert_checks_presence :sender
+  assert_checks_presence :sender_email
+  assert_checks_presence :authenticity_token
   assert_checks_presence :recipient
   assert_checks_presence :postcode
   assert_checks_presence :subject
