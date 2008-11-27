@@ -7,14 +7,15 @@ class PostcodesController < ApplicationController
     @last_search_term = flash[:last_search_term]
 
     unless search_term.blank?
-      search_term.strip!
-      search_term.upcase!
-      postcode = Postcode.find_by_code(search_term.tr(' ',''))
+      term = String.new search_term
+      term.strip!
+      term.upcase!
+      postcode = Postcode.find_by_code(term.tr(' ',''))
 
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
       else
-        constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{search_term.squeeze(' ')}%"|)
+        constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{term.squeeze(' ')}%"|)
 
         if constituencies.empty?
           flash[:not_found] = "No matches found for #{search_term}." if search_term
