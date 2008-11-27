@@ -15,16 +15,16 @@
     = f.text_field(:sender)
   %p
     = label :message, :address, 'Your postal address'
-    = f.text_area(:address, :rows=>5)
+    = f.text_area(:address, :rows=>3)
   %p
     = label :message, :postcode, 'Your postcode *'
-    = f.text_field(:postcode, :value => postcode)
+    = f.text_field(:postcode, :value => postcode, :size=>8)
   %p
     = label :message, :subject, 'Your subject *'
     = f.text_field(:subject)
   %p
     = label :message, :message, 'Your message (max chars including spaces 4000) *'
-    = f.text_area(:message)
+    = f.text_area(:message, :rows=>30)
   %p
     %em.normaltext
       * denotes required text
