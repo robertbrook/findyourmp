@@ -9,14 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081128121602) do
+ActiveRecord::Schema.define(:version => 20081127144634) do
 
   create_table "constituencies", :force => true do |t|
-    t.string  "name"
-    t.string  "member_name"
-    t.string  "member_email"
-    t.string  "member_biography_url"
-    t.boolean "member_visible"
+    t.string "name"
+    t.string "member_name"
   end
 
   create_table "messages", :force => true do |t|
