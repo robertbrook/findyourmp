@@ -9,11 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081110144031) do
+ActiveRecord::Schema.define(:version => 20081128121602) do
 
   create_table "constituencies", :force => true do |t|
-    t.string "name"
-    t.string "member_name"
+    t.string  "name"
+    t.string  "member_name"
+    t.string  "member_email"
+    t.string  "member_biography_url"
+    t.boolean "member_visible"
   end
 
   create_table "messages", :force => true do |t|
@@ -29,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20081110144031) do
     t.time     "sent_on"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "authenticity_token"
   end
 
   create_table "postcodes", :force => true do |t|
