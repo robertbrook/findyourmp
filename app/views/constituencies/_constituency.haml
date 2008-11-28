@@ -1,11 +1,3 @@
-%p<
-  - name = @postcode ? link_to(h(constituency.name), constituency_path(constituency)) : h(constituency.name)
-  = "CONSTITUENCY<br/><strong>#{name}</strong>"
-- if constituency.member_name.blank?
-  %p NO RECORDED MEMBER
-- else
-  %p
-    MEMBER
-    %strong
-      = link_to "#{h constituency.member_name} (#{constituency.member_party})", constituency.member_biography_url
-  %p= link_to "Send a message to #{constituency.member_name}", new_constituency_message_url(constituency)
+- name = @postcode ? link_to(h(constituency.name), constituency_path(constituency)) : h(constituency.name)
+%h2= name
+= render :partial => 'member'

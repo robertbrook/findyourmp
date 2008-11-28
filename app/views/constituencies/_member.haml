@@ -1,0 +1,5 @@
+- if @constituency.member_name.blank?
+  %p No recorded member.
+- else
+  %p= "The sitting Member of Parliament is #{h @constituency.member_name} (#{@constituency.member_party})."
+  %p= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
