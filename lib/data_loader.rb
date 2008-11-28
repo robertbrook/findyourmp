@@ -24,10 +24,13 @@ module FindYourMP::DataLoader
         if is_vacant?(member_name)
           log "Constituency is vacant: #{constituency_name}"
         else
-          member_name = member_name.split('(')[0].strip
+          name_parts = member_name.split('(')
+          member_name = name_parts[0].strip
+          party = name_parts[1].chomp(')').strip
           constituency = Constituency.find_by_constituency_name(constituency_name)
           if constituency
             constituency.member_name = member_name
+            constituency.member_party = party
             constituency.save!
           else
             log "Cannot find constituency for member for line: #{line}"
