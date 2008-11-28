@@ -15,17 +15,22 @@ Feature: Contact MP
     When I follow "Send a message to Frank Doran"
     Then I should see Message Form
 
-  Scenario: Preview message with compulsory field missing
+  Scenario: Preview message with compulsory field missing and see generic warning
+    Given I am on a new Message page
+    When I preview message without "Your email address"
+    And I should see "1 error prohibited this message from being previewed"
+    And I should see "Preview your message"
+
+  Scenario: Preview message with compulsory field missing and see detailed warning
     Given I am on a new Message page
     When I preview message without "Your email address"
     Then I should see "Sender email can't be blank"
-    And I should see "Preview your message"
 
   More Examples:
-    | field_missing      | warning_message         | button label         |
-    | Your full name     | Sender can't be blank   | Preview your message |
-    | Your subject       | Subject can't be blank  | Preview your message |
-    | Your message       | Message can't be blank  | Preview your message |
+    | field_missing      | warning_message         |
+    | Your full name     | Sender can't be blank   |
+    | Your subject       | Subject can't be blank  |
+    | Your message       | Message can't be blank  |
 
   Scenario: Preview message
     Given I am on a new Message page
