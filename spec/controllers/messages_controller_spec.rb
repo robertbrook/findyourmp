@@ -8,7 +8,8 @@ describe MessagesController do
     @constituency_name = 'Islington South'
     @member_name = 'Hon Biggens'
     @message_id = "12"
-    @message = mock(Message, :to_param => @message_id)
+    @authenticity_token = 'gattaca'
+    @message = mock(Message, :to_param => @message_id, :authenticity_token => @authenticity_token)
     collection = mock('array', :build=>@message)
     @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id, :member_name => @member_name, :messages=>collection)
   end
@@ -42,15 +43,26 @@ describe MessagesController do
     end
   end
 
-  describe 'when asked to show a new message' do
-    def do_get
+  describe 'when asked to show a message' do
+    def do_get token
+      @controller.should_receive(:flash_authenticity_token).any_number_of_times.and_return token
+      @message.stub!(:sent).and_return false
+      @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
+      Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
+      Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
       get :show, :constituency_id => @constituency_id, :id => @message_id
     end
     describe 'and authenticity_token matches' do
       it 'should show view' do
-        @constituency.messages.should_receive(:find).with(@message_id).and_return(@message)
-        Constituency.stub!(:find).with(@constituency_id.to_s).and_return @constituency
-        do_get
+        @message.stub!(:sent).and_return false
+        do_get @authenticity_token
+        response.should be_success
+      end
+    end
+    describe 'and authenticity_token doesn\'t match' do
+      it 'should redirect to index' do
+        do_get 'bad_token'
+        response.code.should == '404'
       end
     end
   end

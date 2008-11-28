@@ -6,7 +6,7 @@ class MessagesController < ResourceController::Base
 
   # before_filter :redirect_if_not_admin, :except => ['new','create','show','edit']
 
-  before_filter :redirect_if_message_sent, :except => ['new']
+  before_filter :redirect_if_message_sent_or_bad_authenticity_token, :except => ['new']
 
   def redirect_if_not_admin
     unless is_admin?
@@ -14,14 +14,30 @@ class MessagesController < ResourceController::Base
     end
   end
 
-  def redirect_if_message_sent
+  def render_not_found
+    render :text=>'not found or expired page', :status=>:not_found
+  end
+
+  def flash_authenticity_token
+    flash['authenticity_token']
+  end
+
+  def redirect_if_message_sent_or_bad_authenticity_token
     if params[:constituency_id] && params[:id]
       if Constituency.exists?(params[:constituency_id])
         message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
         if !message || message.sent
           unless flash[:message_sent]
-            redirect_to :controller => 'postcodes', :action => 'index'
+            render_not_found
           end
+        elsif params[:authenticity_token] && (message.authenticity_token != params[:authenticity_token])
+          render_not_found
+        elsif flash_authenticity_token && (message.authenticity_token != flash_authenticity_token)
+          render_not_found
+        elsif flash_authenticity_token == message.authenticity_token
+          flash.keep('authenticity_token')
+        else
+          render_not_found
         end
       end
     end
@@ -34,8 +50,10 @@ class MessagesController < ResourceController::Base
 
   def edit
     if params[:authenticity_token]
+      flash['authenticity_token'] = params[:authenticity_token]
       redirect_to :action => 'edit'
     else
+      flash.keep('authenticity_token')
       super
     end
   end
@@ -43,6 +61,7 @@ class MessagesController < ResourceController::Base
   def create
     if params['message']
       params['message']['authenticity_token'] = params[:authenticity_token]
+      flash['authenticity_token'] = params[:authenticity_token]
     end
     super
   end
