@@ -1,4 +1,3 @@
-%p<
-  = "<strong>"
-  = link_to "#{highlight(h(constituency_match.name), @search_term)}", constituency_path(constituency_match)
-  = "</strong>"
+%p
+  %strong
+    = link_to "#{highlight(h(constituency_match.name), @search_term)}", constituency_path(constituency_match)

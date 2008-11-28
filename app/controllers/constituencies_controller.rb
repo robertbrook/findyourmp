@@ -13,7 +13,8 @@ class ConstituenciesController < ResourceController::Base
     flash.keep(:postcode)
     @is_admin = is_admin?
     if id.include? '+'
-      @search_term = params[:q]
+      @search_term = params[:search_term]
+      @last_search_term = @search_term
       @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
     else
       @constituency = Constituency.find(id)

@@ -1,6 +1,7 @@
 - if @constituency
   = render :partial => 'constituency', :object => @constituency
 - elsif @constituencies
+  #search= render :partial => 'layouts/search_form'
   %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
   = render :partial => 'constituency_match', :collection => @constituencies
 
