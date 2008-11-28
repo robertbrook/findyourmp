@@ -14,6 +14,7 @@
  rake db:migrate:reset
 
  # the steps below requires data which is not in git repository
+ # files need to end up in the /data directory
 
  rake fymp:constituencies
  rake fymp:members
