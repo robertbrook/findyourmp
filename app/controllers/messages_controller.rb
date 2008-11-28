@@ -26,10 +26,10 @@ class MessagesController < ResourceController::Base
     if params[:constituency_id] && params[:id]
       if Constituency.exists?(params[:constituency_id])
         message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
-        if !message || message.sent
-          unless flash[:message_sent]
-            render_not_found
-          end
+        if message.nil?
+          render_not_found
+        elsif message.sent
+          render_not_found unless flash[:message_sent]
         elsif params[:authenticity_token] && (message.authenticity_token != params[:authenticity_token])
           render_not_found
         elsif flash_authenticity_token && (message.authenticity_token != flash_authenticity_token)
