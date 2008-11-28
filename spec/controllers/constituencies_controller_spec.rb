@@ -80,7 +80,7 @@ describe ConstituenciesController do
       Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
     end
     def do_get
-      get :show, :id => @two_constituency_ids, :q => @constituency_name_part
+      get :show, :id => @two_constituency_ids, :search_term => @constituency_name_part
     end
     it 'should assign is_admin to view' do
       @controller.stub!(:is_admin?).and_return false
@@ -95,7 +95,7 @@ describe ConstituenciesController do
     end
     it 'should assign search term to view' do
       do_get
-      assigns[:search_term].should == @constituency_name_part
+      assigns[:last_search_term].should == @constituency_name_part
     end
   end
 

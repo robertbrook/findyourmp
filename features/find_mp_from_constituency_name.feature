@@ -19,8 +19,8 @@ Feature: Find MP from constituency name
     Given I am on the Front page
     Then I should see "First, type your UK postcode:"
     When I search for "Aberdeen"
-    Then I should see "Aberdeen North"
-    And I should see "Aberdeen South"
-    When I follow "Aberdeen South"
+    Then I should see "<strong class="highlight">Aberdeen</strong> North"
+    And I should see "<strong class="highlight">Aberdeen</strong> South"
+    When I follow "<strong class="highlight">Aberdeen</strong> South"
     Then I should see "Aberdeen South"
     And I should see "Miss Anne Begg"
