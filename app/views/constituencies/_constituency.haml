@@ -4,5 +4,8 @@
 - if constituency.member_name.blank?
   %p NO RECORDED MEMBER
 - else
-  %p= "MEMBER<br/><strong>#{h constituency.member_name} (#{constituency.member_party})</strong>"
+  %p
+    MEMBER
+    %strong
+      = link_to "#{h constituency.member_name} (#{constituency.member_party})", constituency.member_biography_url
   %p= link_to "Send a message to #{constituency.member_name}", new_constituency_message_url(constituency)
