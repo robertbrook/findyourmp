@@ -4,11 +4,27 @@
 
 -form_for(@constituency) do |f|
   %p
-    %label Constituency
+    = label :constituency, :name, 'Constituency'
     = f.text_field :name
   %p
-    %label Member
+    = label :constituency, :member_name, 'Member'
     = f.text_field :member_name
+  %p
+    = label :constituency, :member_party, 'Member party'
+    = f.text_field :member_party
+  %p
+    = label :constituency, :member_email, 'Member email'
+    = f.text_field :member_email
+  %p
+    = label :constituency, :member_biography_url, 'Member biography url'
+    = f.text_field :member_biography_url
+  %p
+    = label :constituency, :member_website, 'Member website'
+    = f.text_field :member_website
+  %p
+    = label :constituency, :member_visible, 'Member visible'
+    = f.check_box :member_visible
+
     = f.submit "Update "
 
 %p

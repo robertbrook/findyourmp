@@ -15,7 +15,7 @@ Feature: Contact MP
     When I follow "Send a message to Frank Doran"
     Then I should see Message Form
 
-  Scenario: Preview message with compulsory field missing and see generic warning
+    Scenario: Preview message with compulsory field missing and see generic warning
     Given I am on a new Message page
     When I preview message without "Your email address"
     And I should see "1 error prohibited this message from being previewed"
