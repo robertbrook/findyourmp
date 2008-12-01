@@ -4,3 +4,5 @@
     = flash[:not_found]
 %p
   = "The Find Your MP service recognises " + number_with_delimiter(@postcode_count) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
+- if @is_admin
+  %p= link_to 'All constituencies', constituencies_path
