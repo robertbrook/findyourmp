@@ -34,9 +34,4 @@ namespace :fymp do
     load_postcodes
   end
 
-  desc "Run rcov, then open the index file in the coverage directory"
-  task :rcov do
-    `rake spec:rcov && open coverage/index.html`
-  end
-
 end
