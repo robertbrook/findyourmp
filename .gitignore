@@ -1,6 +1,7 @@
 log/*.log
 tmp/**/*
 test
+coverage
 config/database.yml
 config/database.yml.bak
 config/virtualserver
