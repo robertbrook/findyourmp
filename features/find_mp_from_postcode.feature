@@ -14,7 +14,7 @@ Feature: Find MP from postcode
     Given I am on the Front page
     When I search for "KY8 5XY"
     Then I should see "Glenrothes"
-    And I should see "No recorded member."
+    And I should see "No sitting member."
 
   Scenario: Enter bogus postcode
     Given I am on the Front page
