@@ -31,6 +31,7 @@ module FindYourMP::DataLoader
           if constituency
             constituency.member_name = member_name
             constituency.member_party = party
+            constituency.member_visible = 1
             constituency.save!
           else
             log "Cannot find constituency for member for line: #{line}"

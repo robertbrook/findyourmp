@@ -8,6 +8,7 @@ Feature: Contact MP
     And I am on a Constituency page
     When I follow "edit"
     Then I should see "Edit constituency"
+    Then I should see "Constituency ID"
     Then I should see "Constituency"
     Then I should see "Member"
     Then I should see "Member party"

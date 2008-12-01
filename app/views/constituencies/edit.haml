@@ -4,6 +4,9 @@
 
 -form_for(@constituency) do |f|
   %p
+    = label :constituency, :id, 'Constituency ID'
+    %span.constituency_id= @constituency.id
+  %p
     = label :constituency, :name, 'Constituency'
     = f.text_field :name
   %p

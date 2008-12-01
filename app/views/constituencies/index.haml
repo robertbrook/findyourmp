@@ -1,18 +1,14 @@
 %h1 Constituencies
 
 %table
-  %tr
-    %th Code
-    %th Name
-    %th Member
-  -for constituency in @constituencies
-    %tr
-      %td= h constituency.code
-      %td= h constituency.name
-      %td= h constituency.member_name
+  %tbody
+    -for constituency in @constituencies
+      %tr
+        %td= h constituency.code
+        %td= link_to h(constituency.name), constituency_path(constituency)
+        %td= h constituency.member_name
 
-      %td= link_to 'Show', constituency_path(constituency)
-      %td= link_to 'Edit', edit_constituency_path(constituency)
-      %td= link_to 'Destroy', constituency_path(constituency), :confirm => 'Are you sure?', :method => :delete
+        %td= link_to 'Edit', edit_constituency_path(constituency)
+        - #%td= link_to 'Destroy', constituency_path(constituency), :confirm => 'Are you sure?', :method => :delete
 
-= link_to 'New constituency', new_constituency_path
+%p= link_to 'New constituency', new_constituency_path
