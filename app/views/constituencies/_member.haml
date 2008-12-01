@@ -1,6 +1,4 @@
-- if @constituency.member_name.blank?
-  %p No recorded member.
-- elsif !@constituency.member_visible
+- if @constituency.no_sitting_member?
   %p No sitting member.
 - else
   %p= "The sitting Member of Parliament is #{h @constituency.member_name} (#{@constituency.member_party})."

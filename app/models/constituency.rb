@@ -43,4 +43,8 @@ class Constituency < ActiveRecord::Base
       id.to_s
     end
   end
+
+  def no_sitting_member?
+    member_name.blank? || !member_visible
+  end
 end

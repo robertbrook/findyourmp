@@ -11,6 +11,10 @@ When /^I follow "(.*)"$/ do |link|
   clicks_link(link)
 end
 
+When /^I clear "(.*)"$/ do |field|
+  fills_in(field, :with => "")
+end
+
 When /^I fill in "(.*)" with "(.*)"$/ do |field, value|
   fills_in(field, :with => value)
 end
