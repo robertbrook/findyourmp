@@ -1,6 +1,7 @@
 log/*.log
 tmp/**/*
 test
+coverage
 config/database.yml
 config/database.yml.bak
 config/virtualserver
@@ -13,3 +14,4 @@ public/postcodes
 public/postcodes.bak
 db/development_structure.sql
 cucumber.yml
+cucumber_growler

@@ -27,10 +27,9 @@ end
 
 Given /^there is an MP "(.*)" in constituency "(.*)"$/ do |member_name, constituency_name|
   constituency = Constituency.find_or_create_by_name(constituency_name)
-  unless constituency.member_name == member_name
-    constituency.member_name = member_name
-    constituency.save
-  end
+  constituency.member_name = member_name
+  constituency.member_visible = true
+  constituency.save
 end
 
 Given /^there is no MP in constituency "(.*)"$/ do |constituency_name|
