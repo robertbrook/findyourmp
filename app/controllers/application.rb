@@ -35,7 +35,11 @@ class ApplicationController < ActionController::Base
     if request.post?
       session[:is_admin] = !session[:is_admin]
     end
-    redirect_to :back
+    if session[:is_admin]
+      redirect_to :back
+    else
+      redirect_to :controller=>'postcodes',:action=>'index'
+    end
   end
 
 end
