@@ -1,5 +1,8 @@
 %h1 Constituencies
 
+= button_to "Hide all members", :action => 'hide_members'
+= button_to "Unhide all members", :action => 'unhide_members'
+
 %table
   %tbody
     -for constituency in @constituencies

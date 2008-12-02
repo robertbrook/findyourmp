@@ -9,6 +9,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
 
+  map.connect '/constituencies/hide_members', :controller => "constituencies", :action => 'hide_members'
+  map.connect '/constituencies/unhide_members', :controller => "constituencies", :action => 'unhide_members'
+
   map.connect '/toggle_admin', :controller => "application", :action => 'toggle_admin'
   # See how all your routes lay out with "rake routes"
 end

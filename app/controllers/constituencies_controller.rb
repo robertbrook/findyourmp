@@ -21,4 +21,27 @@ class ConstituenciesController < ResourceController::Base
     end
   end
 
+  def hide_members
+    if is_admin? && request.post?
+      Constituency.all.each do |constituency|
+        if constituency.member_visible
+          constituency.member_visible = false
+          constituency.save
+        end
+      end
+      redirect_to :back
+    end
+  end
+
+  def unhide_members
+    if is_admin? && request.post?
+      Constituency.all.each do |constituency|
+        unless constituency.member_visible
+          constituency.member_visible = true
+          constituency.save
+        end
+      end
+      redirect_to :back
+    end
+  end
 end
