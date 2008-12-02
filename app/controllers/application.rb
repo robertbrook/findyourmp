@@ -15,6 +15,14 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_is_admin
 
+  def render_not_found
+    render :text => 'not found or expired page', :status => :not_found
+  end
+
+  def respond_not_found_if_not_admin
+    render_not_found unless is_admin?
+  end
+
   def is_admin?
     session[:is_admin]
   end
