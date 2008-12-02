@@ -5,7 +5,6 @@ Feature: Find MP from constituency name
 
   Scenario: Enter a valid constituency name
     Given I am on the Front page
-    Then I should see "First, type your UK postcode:"
     When I search for "Aberdeen North"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
@@ -17,7 +16,6 @@ Feature: Find MP from constituency name
 
   Scenario: Enter part of a valid constituency name
     Given I am on the Front page
-    Then I should see "First, type your UK postcode:"
     When I search for "Aberdeen"
     Then I should see "<strong class="highlight">Aberdeen</strong> North"
     And I should see "<strong class="highlight">Aberdeen</strong> South"

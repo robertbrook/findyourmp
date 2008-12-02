@@ -1,5 +1,4 @@
 - search_term = @last_search_term ? @last_search_term : ''
 - form_tag('/', :method => :get) do
-  = 'First, type your UK postcode:'
   = text_field_tag 'search_term', search_term, :size => 24
   = submit_tag 'Search'
