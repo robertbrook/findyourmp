@@ -7,11 +7,10 @@ Feature: End of Parliament handling
     Given I am logged in as an admin user
     And I am on the Constituency index page
     When I press "Hide all members"
-    Then I should see "Frank Doran \(hidden\)"
+    Then I should see all MPs marked hidden
 
   Scenario: Hide all member details
     Given I am logged in as an admin user
     And I am on the Constituency index page
     When I press "Unhide all members"
-    Then I should not see "Frank Doran \(hidden\)"
-    And I should see "Frank Doran"
+    Then I should see all MPs not marked hidden
