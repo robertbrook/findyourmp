@@ -6,3 +6,4 @@ Feature: End of Parliament handling
   Scenario: Hide all member details
     Given I am logged in as an admin user
     And I am on the Constituency index page
+    # When I press "hide all"
