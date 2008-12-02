@@ -15,3 +15,4 @@ public/postcodes.bak
 db/development_structure.sql
 cucumber.yml
 cucumber_growler
+*~
