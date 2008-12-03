@@ -13,6 +13,10 @@ class Message < ActiveRecord::Base
 
   before_validation_on_create :populate_defaulted_fields
 
+  def authenticate authenticity_token
+    authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
+  end
+
   private
     def populate_defaulted_fields
       self.recipient = constituency.member_name

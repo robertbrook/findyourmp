@@ -45,7 +45,7 @@ describe MessagesController do
 
   describe 'when asked to show a message' do
     def do_get token
-      @controller.should_receive(:flash_authenticity_token).any_number_of_times.and_return token
+      @controller.should_receive(:authenticity_token).any_number_of_times.and_return token
       @message.stub!(:sent).and_return false
       @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
       Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
@@ -55,13 +55,16 @@ describe MessagesController do
     describe 'and authenticity_token matches' do
       it 'should show view' do
         @message.stub!(:sent).and_return false
+        @message.should_receive(:authenticate).with(@authenticity_token).and_return true
         do_get @authenticity_token
         response.should be_success
       end
     end
     describe 'and authenticity_token doesn\'t match' do
       it 'should redirect to index' do
-        do_get 'bad_token'
+        bad_token = 'bad_token'
+        @message.should_receive(:authenticate).with(bad_token).and_return false
+        do_get bad_token
         response.code.should == '404'
       end
     end

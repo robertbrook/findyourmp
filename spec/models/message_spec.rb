@@ -13,11 +13,12 @@ describe Message do
 
   before(:each) do
     @constituency_id = "value for constituency_id"
+    @authenticity_token = "054e4e1d3d5bd8e9e446490734ce6d1bbc65cfea"
     @valid_attributes = {
       :constituency_id => @constituency_id,
       :sender => "value for sender",
       :sender_email => "value for sender_email",
-      :authenticity_token => "054e4e1d3d5bd8e9e446490734ce6d1bbc65cfea",
+      :authenticity_token => @authenticity_token,
       :address => "value for address",
       :postcode => "value for postcode",
       :subject => "value for subject",
@@ -43,7 +44,23 @@ describe Message do
     @member_name = 'member_name'
     constituency = mock_model(Constituency, :member_name=>@member_name, :id => @constituency_id)
     Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
-    message = Message.create!(@valid_attributes)
+    message = Message.new(@valid_attributes)
+    message.valid?.should be_true
     message.recipient.should == @member_name
+  end
+
+  describe 'when asked to authenticate authenticity_token' do
+    before do
+      @message = Message.new(@valid_attributes)
+    end
+    it 'should return false if given token is nil' do
+      @message.authenticate(nil).should be_false
+    end
+    it 'should return false if given token does not match own authenticity_token' do
+      @message.authenticate('bad_token').should be_false
+    end
+    it 'should return false if given token matches own authenticity_token' do
+      @message.authenticate(@authenticity_token).should be_true
+    end
   end
 end
