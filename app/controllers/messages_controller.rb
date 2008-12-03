@@ -11,15 +11,16 @@ class MessagesController < ResourceController::Base
   def respond_not_found_if_message_sent_or_bad_authenticity_token
     if params[:constituency_id] && params[:id]
       if Constituency.exists?(params[:constituency_id])
-        message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
+        @message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
 
-        if message.nil?
+        if @message.nil?
           render_not_found
 
-        elsif message.sent
-          render_not_found unless flash[:message_sent]
+        elsif @message.sent
+          show_sent_message = (flash[:message_sent] && params[:action] == 'show')
+          render_not_found unless show_sent_message
 
-        elsif !message.authenticate(authenticity_token)
+        elsif !@message.authenticate(authenticity_token)
           render_not_found
         end
       end
@@ -50,12 +51,16 @@ class MessagesController < ResourceController::Base
   end
 
   def update
-    if params['message']
-      if params['message']['sent'] == '1'
-        flash[:message_sent] = true
-      end
-    end
     flash.keep('authenticity_token')
-    super
+    send_message = params['message'] && params['message']['sent'] == '1'
+
+    if send_message
+      @message.deliver
+      flash[:message_sent] = true
+      redirect_to :action => 'show'
+    else
+      super
+    end
   end
+
 end

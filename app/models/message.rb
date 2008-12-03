@@ -17,6 +17,13 @@ class Message < ActiveRecord::Base
     authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
   end
 
+  def deliver
+    MessageMailer.deliver_sent(self)
+    MessageMailer.deliver_confirm(self)
+    self.sent = 1
+    save!
+  end
+
   private
     def populate_defaulted_fields
       self.recipient = constituency.member_name
