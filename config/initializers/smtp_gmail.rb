@@ -5,8 +5,14 @@
 #     See mailer.yml.sample
 #
 
-require "smtp_tls"
+mailer_conf = "#{RAILS_ROOT}/config/mailer.yml"
 
-mailer_config = File.open("#{RAILS_ROOT}/config/mailer.yml") 
-mailer_options = YAML.load(mailer_config) 
-ActionMailer::Base.smtp_settings = mailer_options 
+if File.exists?(mailer_conf)
+  require "smtp_tls"
+
+  mailer_config = File.open(mailer_conf)
+  mailer_options = YAML.load(mailer_config)
+  ActionMailer::Base.smtp_settings = mailer_options
+elsif ActionMailer::Base.delivery_method == :smtp
+  raise "config/mailer.yml not found, failed to setup smtp_tls plugin"
+end
