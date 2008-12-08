@@ -65,4 +65,27 @@ describe Message do
       @message.authenticate(@authenticity_token).should be_true
     end
   end
+
+  describe 'when asked to deliver message' do
+    before do
+      @message = Message.new(@valid_attributes)
+      MessageMailer.stub!(:deliver_sent)
+      MessageMailer.stub!(:deliver_confirm)
+      @message.stub!(:save!)
+    end
+    it 'should deliver sent message' do
+      MessageMailer.should_receive(:deliver_sent).with(@message)
+      @message.deliver
+    end
+    it 'should deliver confirm message' do
+      MessageMailer.should_receive(:deliver_confirm).with(@message)
+      @message.deliver
+    end
+    it 'should set sent to true' do
+      @message.sent.should be_false
+      @message.should_receive(:save!)
+      @message.deliver
+      @message.sent.should be_true
+    end
+  end
 end
