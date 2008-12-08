@@ -17,7 +17,7 @@ namespace :serverbuild do
   desc "Install Passenger"
   task :install_passenger, :roles => :app  do
     #install the latest version of the gem
-    sudo "gem install passenger"    
+    sudo "gem install passenger"
 
     #go to the the gem directory and run the rake task to build and install passenger
     run <<-EOB
@@ -31,7 +31,7 @@ namespace :serverbuild do
     data = ""
     gemversion = get_passenger_version
     
-    source = File.read("config/apache2.temp")
+    source = File.read("config/apache2.conf.example")
     
     source.each { |line|
       line.gsub!("[PASSENGER-VERSION]", gemversion)
