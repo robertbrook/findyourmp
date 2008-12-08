@@ -2,7 +2,7 @@ class MessageMailer < ActionMailer::Base
 
   def sent(message, sent_at = Time.now)
     subject    message.subject
-    recipients message.recipient
+    recipients "#{message.recipient} <#{message.recipient_email}>"
     from       "no_reply@findyourmp.parliament.uk"
     sent_on    sent_at
 
