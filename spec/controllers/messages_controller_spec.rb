@@ -43,13 +43,40 @@ describe MessagesController do
     end
   end
 
+  def handle_authentication_filter token
+    @controller.should_receive(:authenticity_token).any_number_of_times.and_return token
+    @message.stub!(:sent).and_return false
+    @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
+    Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
+    Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
+  end
+
+  describe 'when posted message sent set to true' do
+    def do_post token
+      handle_authentication_filter token
+      @message.should_receive(:authenticate).with(@authenticity_token).and_return true
+      post :update, {:constituency_id => @constituency_id, :id => @message_id, :message => {:sent => '1'}}
+    end
+
+    it 'should set deliver message' do
+      @message.should_receive(:deliver)
+      do_post @authenticity_token
+    end
+    it 'should set flash[:message_sent] to true' do
+      @message.stub!(:deliver)
+      do_post @authenticity_token
+      flash[:message_sent].should be_true
+    end
+    it 'should redirect to show action' do
+      @message.stub!(:deliver)
+      do_post @authenticity_token
+      response.should redirect_to(constituency_message_url("801",@message_id))
+    end
+  end
+
   describe 'when asked to show a message' do
     def do_get token
-      @controller.should_receive(:authenticity_token).any_number_of_times.and_return token
-      @message.stub!(:sent).and_return false
-      @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
-      Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
-      Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
+      handle_authentication_filter token
       get :show, :constituency_id => @constituency_id, :id => @message_id
     end
     describe 'and authenticity_token matches' do
