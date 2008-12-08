@@ -3,6 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :constituency
 
   validates_presence_of :recipient
+  validates_presence_of :recipient_email
   validates_presence_of :sender
   validates_presence_of :sender_email
   validates_presence_of :authenticity_token
@@ -27,6 +28,7 @@ class Message < ActiveRecord::Base
   private
     def populate_defaulted_fields
       self.recipient = constituency.member_name
+      self.recipient_email = constituency.member_email
       self.sent = 0
     end
 end
