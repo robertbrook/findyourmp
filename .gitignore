@@ -5,6 +5,7 @@ coverage
 config/database.yml
 config/database.yml.bak
 config/virtualserver
+config/mailer.yml
 .DS_Store
 doc
 data
