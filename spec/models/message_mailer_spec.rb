@@ -65,7 +65,7 @@ describe MessageMailer do
       @email.to.should == [@sender_email]
     end
     it 'should set body correctly' do
-      @email.body.strip.should == "Confirmation that your message to #{@recipient_name} has been sent."
+      @email.body.strip.should == "Confirmation that your message to #{@recipient_name} has been sent with the following text:\n\n#{@contents}"
     end
   end
 end
