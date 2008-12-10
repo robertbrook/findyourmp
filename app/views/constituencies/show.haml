@@ -1,10 +1,13 @@
 - if @constituency
   = render :partial => 'constituency', :object => @constituency
-- elsif @constituencies
+- elsif @constituencies or @members
   #search= render :partial => 'layouts/search_form'
-  %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
-  = render :partial => 'constituency_match', :collection => @constituencies
-
+  - if @constituencies.size > 0
+    %p= pluralize(@constituencies.size, 'CONSTITUENCY MATCH').upcase
+    = render :partial => 'constituency_match', :collection => @constituencies
+  - if @members.size > 0
+    %p= pluralize(@members.size, 'MEMBER MATCH').upcase
+    = render :partial => 'member_match', :collection => @members
 - if @is_admin
   %p
     = link_to 'Edit', edit_constituency_path(@constituency)

@@ -15,8 +15,8 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
       else
-        constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{term.squeeze(' ')}%"|)
-
+        constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{term.squeeze(' ')}%" or member_name like "%#{term.squeeze(' ')}%"|)
+        
         if constituencies.empty?
           flash[:not_found] = "No matches found for #{search_term}." if search_term
           flash[:last_search_term] = search_term if search_term
@@ -24,7 +24,7 @@ class PostcodesController < ApplicationController
         elsif constituencies.size == 1
           redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
         else
-          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
+          redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
         end
       end
     end
