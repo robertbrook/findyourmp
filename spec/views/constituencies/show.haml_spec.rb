@@ -6,6 +6,7 @@ describe "/constituencies/show.haml" do
     @constituency = mock_model(Constituency, :member_name => 'member_name',
         :member_party => 'member_party',
         :member_biography_url => 'http://here.it.is',
+        :member_website => 'http://the.re',
         :no_sitting_member? => false
         )
     @constituency.stub!(:name).and_return("MyString")

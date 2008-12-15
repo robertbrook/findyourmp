@@ -3,6 +3,13 @@ Before do
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
 end
 
+After do
+  Constituency.delete_all
+  Postcode.delete_all
+  Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
+  Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
+end
+
 Given /^I am logged in as an admin user$/ do
   Given 'I am on the Front page'
   And 'I press "Enable ADMINISTRATOR functions"'
@@ -23,4 +30,10 @@ Then /^I should see Edit Constituency Form$/ do
   And 'I should see "Member biography url"'
   And 'I should see "Member website"'
   And 'I should see "Member visible"'
+end
+
+Given /^I am on a Edit Constituency page$/ do
+  Given 'I am logged in as an admin user'
+  And 'I am on a Constituency page'
+  When 'I follow "edit"'
 end
