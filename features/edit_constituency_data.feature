@@ -9,7 +9,7 @@ Feature: Contact MP
     When I follow "edit"
     Then I should see Edit Constituency Form
 
-  Scenario: Follow the "edit" link from constituency page
+  Scenario: Edit constituency and member details
     Given I am on a Edit Constituency page
     When I fill in "Constituency" with "Aberdeen East"
     And I fill in "Member" with "William Wallace"
