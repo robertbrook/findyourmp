@@ -21,9 +21,11 @@ describe Constituency do
       @all_matches = [@name_match_lc, @member_match_lc, @name_match, @member_match]
       Constituency.should_receive(:find).with(:all, :conditions => conditions).and_return @all_matches
     end
+
     describe 'and search term is lowercase, e.g. "mil"' do
       it 'should return all matches ignoring case' do
         term = 'mil'
+        Constituency.case_sensitive(term).should be_false
         should_find_all term
         Constituency.find_all_name_or_member_name_matches(term).should == @all_matches
       end
@@ -31,6 +33,7 @@ describe Constituency do
     describe 'and search term is capitalized, e.g. "Mil"' do
       it 'should return all matches, case-sensitive' do
         term = 'Mil'
+        Constituency.case_sensitive(term).should be_true
         should_find_all term
         Constituency.find_all_name_or_member_name_matches(term).should == [@name_match, @member_match]
       end
@@ -38,6 +41,7 @@ describe Constituency do
     describe 'and search term is mixedcase, e.g. "MiL"' do
       it 'should return all matches ignoring case' do
         term = 'MiL'
+        Constituency.case_sensitive(term).should be_false
         should_find_all term
         Constituency.find_all_name_or_member_name_matches(term).should == @all_matches
       end
