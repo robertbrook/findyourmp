@@ -3,18 +3,23 @@ class ConstituenciesController < ResourceController::Base
   before_filter :respond_not_found_if_not_admin, :except => ['show']
 
   def show
-    id = params[:id]      
+    id = params[:id]
     flash.keep(:postcode)
     @is_admin = is_admin?
     if id.include? '+'
       @search_term = params[:search_term]
       @last_search_term = @search_term
-     
+
       @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
       @members = @constituencies.sort_by(&:member_name)
 
-      @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
-      @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
+      if @search_term[/[A-Z][a-z].*/]
+        @constituencies.delete_if { |element| !(element.name.include? @search_term) }
+        @members.delete_if { |element| !(element.member_name.include? @search_term) }
+      else
+        @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
+        @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
+      end
     else
       @constituency = Constituency.find(id)
     end

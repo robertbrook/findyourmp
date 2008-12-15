@@ -16,7 +16,11 @@ class PostcodesController < ApplicationController
         redirect_to :action=>'show', :postcode => postcode.code
       else
         constituencies = Constituency.find(:all, :conditions => %Q|name like "%#{term.squeeze(' ')}%" or member_name like "%#{term.squeeze(' ')}%"|)
-        
+        if search_term[/[A-Z][a-z].*/]
+          constituencies.delete_if do |c|
+            !c.name.include?(search_term) && !c.member_name.include?(search_term)
+          end
+        end
         if constituencies.empty?
           flash[:not_found] = "No matches found for #{search_term}." if search_term
           flash[:last_search_term] = search_term if search_term
