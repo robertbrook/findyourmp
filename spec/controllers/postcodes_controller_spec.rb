@@ -103,7 +103,7 @@ describe PostcodesController do
 
     describe 'and a matching constituency is found' do
       before do
-        Constituency.should_receive(:find).with(:all, :conditions =>%Q|name like "%#{@constituency_name.upcase}%" or member_name like "%#{@constituency_name.upcase}%"|).and_return [@constituency]
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name).and_return [@constituency]
       end
       it 'should redirect to constituency view showing constituency' do
         do_get
@@ -132,7 +132,7 @@ describe PostcodesController do
       before do
         @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802)
         matching = [@constituency, @other_constituency]
-        Constituency.should_receive(:find).with(:all, :conditions => %Q|name like "%#{@constituency_name_part.upcase}%" or member_name like "%#{@constituency_name_part.upcase}%"|).and_return matching
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return matching
       end
       it 'should show list of matching constituencies' do
         do_get
