@@ -5,9 +5,14 @@ role :app, domain
 set :user, builduser
 set :password, buildpassword
 
-set :passengeruser, appuser
-
 namespace :serverbuild do
+
+  desc "Install Passenger including all prerequisites and restart Apache"
+  task :default do
+    install_prereqs
+    install_passenger
+    passenger_apache_conf
+  end
 
   desc "Install Passenger prerequisites"
   task :install_prereqs, :roles => :app do
