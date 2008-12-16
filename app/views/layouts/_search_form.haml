@@ -2,6 +2,6 @@
 
 - form_tag('/', :method => :get) do
   = text_field_tag 'search_term', search_term, :size => 24
-  = label_tag 'search_term', 'Full post code (like "SW1A 1AA") or part of constituency name (like "shire")'
+  %p Full post code (like "SW1A 1AA") or part of constituency name (like "shire")
   = submit_tag 'Search'
   
