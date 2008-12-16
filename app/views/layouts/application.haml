@@ -5,7 +5,7 @@
   %body{:id=>"findyourmp-parliament-uk"}
     #header
       %h1= @title || "Find Your MP"
-    =yield
+    #content= yield
     #footer
       #about= "The Find Your MP service recognises " + number_with_delimiter(@postcode_count.to_s) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
       #help If you have any problems using this service please <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">look at the help pages</a> or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>.
