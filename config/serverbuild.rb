@@ -5,6 +5,8 @@ role :app, domain
 set :user, builduser
 set :password, buildpassword
 
+set :passengeruser, appuser
+
 namespace :serverbuild do
 
   desc "Install Passenger prerequisites"
@@ -35,6 +37,7 @@ namespace :serverbuild do
     
     source.each { |line|
       line.gsub!("[PASSENGER-VERSION]", gemversion)
+      line.gsub!("[PASSENGER-USER]", passengeruser)
       data << line
     }
     
