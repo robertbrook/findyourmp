@@ -46,13 +46,23 @@ When /^I preview message without "(.*)"$/ do |field|
   And 'I press "Preview your message"'
 end
 
-When /^I preview message$/ do
-  When %Q|I fill in "Your email address" with "here@now.earth"|
+When /^I fill in valid message$/ do
   And %Q|I fill in "Your full name" with "Micky Muse"|
   And %Q|I fill in "Your postal address" with "1 Way Out"|
   And %Q|I fill in "Your postcode" with "AB101AA"|
   And %Q|I fill in "Your subject" with "Problem"|
   And %Q|I fill in "Your message" with "Question"|
+end
+
+When /^I preview message with an invalid sender email$/ do
+  When %Q|I fill in "Your email address" with "bad_address"|
+  And 'I fill in valid message'
+  And 'I press "Preview your message"'
+end
+
+When /^I preview message$/ do
+  When %Q|I fill in "Your email address" with "here@now.earth"|
+  When 'I fill in valid message'
   And 'I press "Preview your message"'
 end
 
