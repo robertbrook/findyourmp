@@ -37,6 +37,9 @@ namespace :deploy do
     put_data data_dir, 'ConstituencyToMember.txt'
     put_data data_dir, 'constituencies.txt'
     put_data data_dir, 'postcodes.txt'
+    
+    log_dir = "#{deploy_to}/shared/log"
+    run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
   end
 
   def put_data data_dir, file
