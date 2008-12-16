@@ -2,6 +2,13 @@
 
 - form_tag('/', :method => :get) do
   = text_field_tag 'search_term', search_term, :size => 24
-  %p Full post code (like "SW1A 1AA") or part of constituency name (like "shire")
   = submit_tag 'Search'
+  
+%p What can I search for?
+
+%ul
+  %li Use your full post code, like <code>SW1A 1AA</code>, to find your constituency and MP
+  %li Use your constituency name, like <code>Aberdeen North</code>, to find your MP
+  %li Use a part of a constituency name, like <code>shire</code>, to list constituencies and MPs with that text
+
   
