@@ -1,11 +1,52 @@
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb')
-
+  
 role :app, domain
 
 set :user, builduser
 set :password, buildpassword
 
 namespace :serverbuild do
+
+  desc "Install Passenger including all prerequisites and restart Apache"
+  task :default do
+    aptget_config
+    install_prereqs
+    install_passenger
+    passenger_apache_conf
+  end
+  
+  desc "Replace the apt-get source list file"
+  task :aptget_config, :roles => :app do
+    data = ""
+    tempfile = "config/sourcelist.tmp"
+    
+    get "/etc/apt/sources.list", tempfile
+    
+    oldfile = File.read(tempfile)
+    
+    oldfile.each { |line|
+      data << line
+    }
+    
+    File.delete(tempfile)
+    
+    data << "deb http://us.archive.ubuntu.com/ubuntu/ gutsy universe\n"
+    data << "deb-src http://us.archive.ubuntu.com/ubuntu/ gutsy universe\n"
+    
+    run "if [ -f /etc/apt/sources.list.bak ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+      if message.strip == 'exists'
+        sudo "rm /etc/apt/sources.list.bak"
+      end
+    end
+  
+    run "if [ -f /etc/apt/sources.list ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+      if message.strip == 'exists'
+        sudo "mv /etc/apt/sources.list /etc/apt/sources.list.bak"
+      end
+    end
+    
+    put data, "/etc/apt/sources.list", :mode => 0664
+  end
 
   desc "Install Passenger prerequisites"
   task :install_prereqs, :roles => :app do
@@ -35,6 +76,7 @@ namespace :serverbuild do
     
     source.each { |line|
       line.gsub!("[PASSENGER-VERSION]", gemversion)
+      line.gsub!("[PASSENGER-USER]", passengeruser)
       data << line
     }
     
@@ -58,20 +100,6 @@ namespace :serverbuild do
     end
     
     gemversion
-  end
-  
-  def put_data data_dir, file
-    data_file = "#{data_dir}/#{file}"
-
-    run "if [ -f #{data_file} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
-      if message.strip == 'not there'
-        puts "sending #{file}"
-        data = File.read("data/#{file.gsub('\\','')}")
-        put data, "#{data_file}", :mode => 0664
-      else
-        puts "#{file} #{message}"
-      end
-    end
   end
   
 end

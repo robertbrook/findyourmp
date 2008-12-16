@@ -37,6 +37,12 @@ namespace :deploy do
     put_data data_dir, 'ConstituencyToMember.txt'
     put_data data_dir, 'constituencies.txt'
     put_data data_dir, 'postcodes.txt'
+    
+    log_dir = "#{deploy_to}/shared/log"
+    run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
+    
+    rc_rake_file = "#{release_path}/vendor/plugins/resource_controller/tasks/gem.rake"
+    run "if [ -f #{rc_rake_file} ]; then mv #{rc_rake_file} #{rc_rake_file}.bak ; else echo not found ; fi"
   end
 
   def put_data data_dir, file
