@@ -3,6 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :constituency
 
   validates_presence_of :recipient
+  validates_presence_of :recipient_email
   validates_presence_of :sender
   validates_presence_of :sender_email
   validates_presence_of :authenticity_token
@@ -24,9 +25,27 @@ class Message < ActiveRecord::Base
     save!
   end
 
+  def test_from
+    "no_reply@findyourmp.parl.uk"
+  end
+
+  def test_recipient_email
+    RAILS_ENV == 'development' ? test_email : recipient_email
+  end
+
+  def test_sender_email
+    RAILS_ENV == 'development' ? test_email : sender_email
+  end
+
   private
+
+    def test_email
+      ActionMailer::Base.smtp_settings[:user_name]
+    end
+
     def populate_defaulted_fields
       self.recipient = constituency.member_name
+      self.recipient_email = constituency.member_email
       self.sent = 0
     end
 end

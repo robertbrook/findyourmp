@@ -9,7 +9,17 @@ class ConstituenciesController < ResourceController::Base
     if id.include? '+'
       @search_term = params[:search_term]
       @last_search_term = @search_term
+
       @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
+      @members = @constituencies.sort_by(&:member_name)
+
+      if @search_term[/[A-Z][a-z].*/]
+        @constituencies.delete_if { |element| !(element.name.include? @search_term) }
+        @members.delete_if { |element| !(element.member_name.include? @search_term) }
+      else
+        @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
+        @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
+      end
     else
       @constituency = Constituency.find(id)
     end

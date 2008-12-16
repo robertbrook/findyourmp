@@ -50,4 +50,3 @@ Feature: Contact MP
     Given I am on a preview Message page
     When I send message
     Then I should see "Your message has been sent."
-
