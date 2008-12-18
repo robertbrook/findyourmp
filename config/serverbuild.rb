@@ -83,7 +83,7 @@ namespace :serverbuild do
     
     run "if [ -f /etc/apache2/apache2.conf ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'exists'
-        sudo "rm /etc/apache2/apache2.conf"
+        sudo "chown #{user} /etc/apache2/apache2.conf"
       end
     end
           
