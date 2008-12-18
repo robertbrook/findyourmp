@@ -41,7 +41,8 @@ namespace :serverbuild do
   
     run "if [ -f /etc/apt/sources.list ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'exists'
-        sudo "mv /etc/apt/sources.list /etc/apt/sources.list.bak"
+        sudo "cp /etc/apt/sources.list /etc/apt/sources.list.bak"
+        sudo "chown #{user} /etc/apt/sources.list"
       end
     end
     
