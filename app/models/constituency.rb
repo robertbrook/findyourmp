@@ -2,6 +2,7 @@ class Constituency < ActiveRecord::Base
 
   has_many :postcodes
   has_many :messages
+  validate :valid_email?
 
   class << self
     def find_all_name_or_member_name_matches term
@@ -64,4 +65,17 @@ class Constituency < ActiveRecord::Base
   def no_sitting_member?
     member_name.blank? || !member_visible
   end
+
+  private
+    def valid_email?
+      unless member_email.blank?
+        begin
+          email = TMail::Address.parse(member_email)
+          raise Exception('email must have @domain') unless email.domain
+          self.member_email = email.address
+        rescue
+          errors.add_to_base("Member email must be a valid email")
+        end
+      end
+    end
 end

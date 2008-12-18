@@ -11,7 +11,7 @@ class MessageMailer < ActionMailer::Base
 
   def confirm(message, sent_at = Time.now)
     subject    "Confirmation of your message to #{message.recipient}"
-    recipients "#{message.sender} <#{message.test_sender_email}>"
+    recipients "#{message.sender} <#{message.sender_email}>"
     from       message.test_from
     sent_on    sent_at
 

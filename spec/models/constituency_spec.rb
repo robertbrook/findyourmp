@@ -48,6 +48,20 @@ describe Constituency do
     end
   end
 
+  describe 'with invalid member_email' do
+    it 'should not be valid' do
+      @constituency.member_email = 'bad_email'
+      @constituency.valid?.should be_false
+    end
+  end
+
+  describe 'with valid member_email' do
+    it 'should be valid' do
+      @constituency.member_email = 'email@example.host'
+      @constituency.valid?.should be_true
+    end
+  end
+
   describe 'with member' do
     before do
       @member_name = 'Tiberius Kirk'

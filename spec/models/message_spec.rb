@@ -17,7 +17,7 @@ describe Message do
     @valid_attributes = {
       :constituency_id => @constituency_id,
       :sender => "value for sender",
-      :sender_email => "value for sender_email",
+      :sender_email => "value.for@sender.email",
       :authenticity_token => @authenticity_token,
       :address => "value for address",
       :postcode => "value for postcode",

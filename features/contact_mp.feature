@@ -32,6 +32,12 @@ Feature: Contact MP
     | Your subject       | Subject can't be blank  |
     | Your message       | Message can't be blank  |
 
+  Scenario: Preview message with invalid email and see detailed warning
+    Given I am on a new Message page
+    When I preview message with an invalid sender email
+    Then I should see "1 error prohibited this message from being previewed"
+    And I should see "Your email must be a valid email address"
+
   Scenario: Preview message
     Given I am on a new Message page
     When I preview message

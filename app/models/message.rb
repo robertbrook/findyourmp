@@ -6,6 +6,7 @@ class Message < ActiveRecord::Base
   validates_presence_of :recipient_email
   validates_presence_of :sender
   validates_presence_of :sender_email
+  validate :valid_email?
   validates_presence_of :authenticity_token
   validates_presence_of :postcode
   validates_presence_of :subject
@@ -26,7 +27,7 @@ class Message < ActiveRecord::Base
   end
 
   def test_from
-    "no_reply@findyourmp.parl.uk"
+    test_email
   end
 
   def test_recipient_email
@@ -38,6 +39,18 @@ class Message < ActiveRecord::Base
   end
 
   private
+
+    def valid_email?
+      unless sender_email.blank?
+        begin
+          email = TMail::Address.parse(sender_email)
+          raise Exception('email must have @domain') unless email.domain
+          self.sender_email = email.address
+        rescue
+          errors.add_to_base("Your email must be a valid email address")
+        end
+      end
+    end
 
     def test_email
       ActionMailer::Base.smtp_settings[:user_name]
