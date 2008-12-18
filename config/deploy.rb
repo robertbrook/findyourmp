@@ -23,6 +23,12 @@ namespace :deploy do
     data = File.read("config/virtualserver/deployed_database.yml")
     put data, "#{release_path}/config/database.yml", :mode => 0664
   end
+  
+  desc "Upload deployed mailer.yml"
+  task :upload_deployed_mailer_yml, :roles => :app do
+    data = File.read("config/virtualserver/deployed_mailer.yml")
+    put data, "#{release_path}/config/mailer.yml", :mode => 0664
+  end
 
   task :link_to_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
@@ -32,6 +38,7 @@ namespace :deploy do
   desc 'put data to server'
   task :put_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
+        
     run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
 
     put_data data_dir, 'ConstituencyToMember.txt'
@@ -60,8 +67,70 @@ namespace :deploy do
   end
 
   desc "Restarting mod_rails with restart.txt"
-  task :restart, :roles => :app, :except => { :no_release => true } do
+  task :restart, :roles => :app do
     run "touch #{current_path}/tmp/restart.txt"
+  end
+  
+  desc "Perform non-destructive rake tasks"
+  task :rake_tasks, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
+  end
+  
+  task:check_folder_setup do
+    puts 'checking folders...'
+    run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+      if message.strip == 'not there'
+        folders = deploy_to.split("/")
+        folderpath = ""
+        folders.each do |folder|
+          if folder != ""
+            folderpath << "/" << folder
+            run "if [ -d #{folderpath} ]; then echo exists ; else sudo mkdir #{folderpath} ; fi"
+          end
+        end
+        sudo "chown #{appuser} #{folderpath}"
+        run "mkdir #{folderpath}/releases"
+      end
+    end
+    puts 'checks complete!'
+  end
+  
+  task :check_site_setup do
+    run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+      if message.strip == 'not there'
+        site_setup
+      else
+        rake_tasks
+      end
+    end
+  end
+  
+  task :site_setup do
+    puts 'entering first time only setup...'
+    
+    sudo "touch /etc/apache2/sites-available/#{application}"
+    sudo "chown #{user} /etc/apache2/sites-available/#{application}"
+        
+    source = File.read("config/findyourmp.apache.example")
+    data = ""
+    source.each { |line|
+      line.gsub!("[RELEASE-PATH]", deploy_to)
+      data << line
+    }
+    put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
+    
+    sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
+      
+    sudo "mysqladmin create #{application}_production"
+    
+    rake_tasks
+    #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
+
+    sudo "/usr/sbin/apache2ctl restart"
+    puts 'first time only setup complete!'
   end
 
   [:start, :stop].each do |t|
@@ -71,6 +140,8 @@ namespace :deploy do
 
 end
 
-after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:put_data', 'deploy:link_to_data'
+before 'deploy:update_code', 'deploy:check_folder_setup'
+after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_data', 'deploy:link_to_data'
+after 'deploy', 'deploy:check_site_setup'
 
 
