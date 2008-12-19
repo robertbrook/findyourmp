@@ -15,15 +15,22 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
       else
-        constituencies = Constituency.find_all_name_or_member_name_matches(search_term.strip)
-        if constituencies.empty?
-          flash[:not_found] = "No matches found for #{search_term}." if search_term
-          flash[:last_search_term] = search_term if search_term
-          redirect_to :action=>'index'
-        elsif constituencies.size == 1
-          redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
+        stripped_term = search_term.strip
+        if stripped_term.size > 2
+          constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
+          if constituencies.empty?
+            flash[:not_found] = "No matches found for #{search_term}."
+            flash[:last_search_term] = search_term
+            redirect_to :action=>'index'
+          elsif constituencies.size == 1
+            redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
+          else
+            redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
+          end
         else
-          redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
+          flash[:not_found] = "Search term must be three or more letters."
+          flash[:last_search_term] = search_term
+          redirect_to :action=>'index'
         end
       end
     end

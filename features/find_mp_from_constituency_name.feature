@@ -33,3 +33,24 @@ Feature: Find MP from constituency name
     And I should see "Frank Doran"
     And I should see "Send a message to Frank Doran"
     And I should not see "Edit"
+
+  Scenario: Enter a single letter search term
+    Given I am on the Front page
+    When I search for "a"
+    Then I should see "Search term must be three or more letters."
+    And I should not see "berdeen North"
+    And I should not see "berdeen South"
+
+  Scenario: Enter a single letter search term
+    Given I am on the Front page
+    When I search for "ab"
+    Then I should see "Search term must be three or more letters."
+    And I should not see "erdeen North"
+    And I should not see "erdeen South"
+
+  Scenario: Enter a single letter search term
+    Given I am on the Front page
+    When I search for "abe"
+    Then I should see "<strong class=\"highlight\">Abe</strong>rdeen North</a>"
+    And I should see "<strong class=\"highlight\">Abe</strong>rdeen South</a>"
+
