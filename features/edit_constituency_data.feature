@@ -22,4 +22,13 @@ Feature: Contact MP
     And I should see "William Wallace \(SNP\)"
     And I should see "http://the.re"
     And I should see "http://it.is"
+    And I should see "Send a message to William Wallace"
+
+  Scenario: Edit member email to be empty
+    Given I am on a Edit Constituency page
+    When I fill in "Member email" with ""
+    And I press "Update"
+    Then I should see "Frank Doran"
+    And I should see "Member has not provided contact details."
+    And I should not see "Send a message to Frank Doran"
 

@@ -20,6 +20,12 @@ Given /I am on a Constituency page/ do
   And 'I search for "Aberdeen North"'
 end
 
+Given /^I am on a Edit Constituency page$/ do
+  Given 'I am logged in as an admin user'
+  And 'I am on a Constituency page'
+  When 'I follow "edit"'
+end
+
 Then /^I should see Edit Constituency Form$/ do
   Then 'I should see "Edit constituency"'
   And 'I should see "Constituency ID"'
@@ -30,10 +36,4 @@ Then /^I should see Edit Constituency Form$/ do
   And 'I should see "Member biography url"'
   And 'I should see "Member website"'
   And 'I should see "Member visible"'
-end
-
-Given /^I am on a Edit Constituency page$/ do
-  Given 'I am logged in as an admin user'
-  And 'I am on a Constituency page'
-  When 'I follow "edit"'
 end
