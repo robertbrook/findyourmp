@@ -10,5 +10,6 @@
     = render :partial => 'member_match', :collection => @members
 - if @is_admin
   %p
-    = link_to 'Edit', edit_constituency_path(@constituency)
+    - if @constituency
+      = link_to 'Edit', edit_constituency_path(@constituency)
     = link_to 'All constituencies', constituencies_path
