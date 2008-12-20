@@ -12,7 +12,7 @@ Feature: Find MP from MP name
   Scenario: Enter an invalid MP name
     Given I am on the Front page
     When I search for "Tamaki"
-    Then I should see "No matches found for Tamaki."
+    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>Tamaki</code>."
 
   Scenario: Enter part of a valid MP name
     Given I am on the Front page

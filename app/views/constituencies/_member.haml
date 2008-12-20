@@ -7,7 +7,7 @@
   - if @constituency.member_website
     %p= "Website: #{link_to h(@constituency.member_website), @constituency.member_website }"
   - if @constituency.member_email.blank?
-    %p Member has not provided contact details.
+    %p= "Sorry: we do not have an email address for #{h @constituency.member_name}."
   - else
     %p= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
 

@@ -12,7 +12,7 @@ Feature: Find MP from constituency name
   Scenario: Enter an invalid constituency name
     Given I am on the Front page
     When I search for "Tamaki"
-    Then I should see "No matches found for Tamaki."
+    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>Tamaki</code>."
 
   Scenario: Enter part of a valid constituency name that returns multiple results
     Given I am on the Front page
@@ -37,14 +37,14 @@ Feature: Find MP from constituency name
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "a"
-    Then I should see "Search term must be three or more letters."
+    Then I should see "Sorry: we need more than two letters to search."
     And I should not see "berdeen North"
     And I should not see "berdeen South"
 
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "ab"
-    Then I should see "Search term must be three or more letters."
+    Then I should see "Sorry: we need more than two letters to search."
     And I should not see "erdeen North"
     And I should not see "erdeen South"
 

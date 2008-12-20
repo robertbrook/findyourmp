@@ -29,6 +29,6 @@ Feature: Contact MP
     When I fill in "Member email" with ""
     And I press "Update"
     Then I should see "Frank Doran"
-    And I should see "Member has not provided contact details."
+    And I should see "Sorry: we do not have an email address for Frank Doran."
     And I should not see "Send a message to Frank Doran"
 
