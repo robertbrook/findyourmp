@@ -51,6 +51,8 @@ class PostcodesController < ApplicationController
         redirect_to :action=>'index'
       end
     else
+      @show_postcode_autodiscovery_links = true
+      @url_for_this = url_for(:only_path=>false)
       respond_to do |format|
         format.html { @postcode = postcode; @constituency = postcode.constituency; flash[:postcode] = @postcode.code_with_space }
         format.xml  { @postcode = postcode; @constituency = postcode.constituency }
