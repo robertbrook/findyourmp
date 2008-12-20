@@ -1,6 +1,5 @@
 module PostcodesHelper
 
-  # this doesn't seem to be generating all the links...
   def postcode_format_links
     link_to('JSON', url_for(:action=>:show, :format=>:json))
     link_to('XML', url_for(:action=>:show, :format=>:xml))
