@@ -19,7 +19,7 @@ class PostcodesController < ApplicationController
         if stripped_term.size > 2
           constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
           if constituencies.empty?
-            flash[:not_found] = "No matches found for #{search_term}."
+            flash[:not_found] = "Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
             flash[:last_search_term] = search_term
             redirect_to :action=>'index'
           elsif constituencies.size == 1
@@ -28,7 +28,7 @@ class PostcodesController < ApplicationController
             redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
           end
         else
-          flash[:not_found] = "Search term must be three or more letters."
+          flash[:not_found] = "Sorry: we need more than two letters to search"
           flash[:last_search_term] = search_term
           redirect_to :action=>'index'
         end
@@ -45,7 +45,7 @@ class PostcodesController < ApplicationController
       if postcode
         redirect_to :action=>'show', :postcode=>postcode.code
       else
-        flash[:not_found] = "No matches found for #{code}." if code
+        flash[:not_found] = "Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP." if code
         flash[:last_search_term] = code
         params[:postcode] = nil
         redirect_to :action=>'index'
