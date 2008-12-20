@@ -4,15 +4,15 @@
   = text_field_tag 'search_term', search_term, :size => 24
   = submit_tag 'Search'
 
-- if flash[:not_found]
-  %p
-    = flash[:not_found]
+%div.flash= flash[:not_found] if flash[:not_found]
 
 %p What can I search for?
 
 %ul
   %li Use your full post code, like <code>SW1A 1AA</code>, to find your constituency and MP
   %li Use your constituency name, like <code>Kirkcaldy and Cowdenbeath</code>, to find your MP
-  %li Use a part of a constituency name, like <code>shire</code>, to list constituencies and MPs with that text
+  %li Use the name of your MP, like <code>Lyn Brown</code>, to find your MP
+  %li Use a part of your constituency name, like <code>shire</code>, to list constituencies and MPs with that text
+  %li Use a part of the name of your MP, like <code>Thorn</code>, to list constituencies and MPs with that text
 
 
