@@ -17,10 +17,10 @@ Feature: Find MP from MP name
   Scenario: Enter part of a valid MP name
     Given I am on the Front page
     When I search for "Frank"
-    Then I should see "<strong class="highlight">Frank</strong> Cook"
-    And I should see "<strong class="highlight">Frank</strong> Doran"
-    And I should see "\(Stockton East\)"
+    Then I should see "<strong class="highlight">Frank</strong> Doran"
     And I should see "\(Aberdeen North\)"
+	Then I should see "<strong class="highlight">Frank</strong> Roy"
+    And I should see "\(Motherwell and Wishaw\)"
     When I follow "<strong class="highlight">Frank</strong> Doran"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
