@@ -1,6 +1,9 @@
 Before do
   Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
+  
+  Given 'there is a postcode "ML14BW" in constituency "Motherwell and Wishaw"'
+  Given 'there is an MP "Mr Frank Roy" in constituency "Motherwell and Wishaw"'
 end
 
 Then /^I should see Message Form$/ do
@@ -14,7 +17,17 @@ Then /^I should see Message Form$/ do
 end
 
 Given /^my MP is contactable via email$/ do
-  # # puts 'set email for constituency'
+  constituency = Constituency.find_or_create_by_name("Aberdeen North")
+  if constituency.member_email.blank?
+    constituency.member_email = "frank_doran@parl.uk"
+    constituency.save
+  end
+end
+
+Given /^the MP in constituency "(.*)" is not contactable via email$/ do |constituency_name|
+  constituency = Constituency.find_or_create_by_name(constituency_name)
+  constituency.member_email = ""
+  constituency.save
 end
 
 Given /I am on my Postcode page/ do

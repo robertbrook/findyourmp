@@ -56,3 +56,10 @@ Feature: Contact MP
     Given I am on a preview Message page
     When I send message
     Then I should see "Your message has been sent."
+
+  Scenario: My MP is not contactable via email
+ 	Given I am on the Front page
+    And the MP in constituency "Motherwell and Wishaw" is not contactable via email
+    When I search for "Motherwell and Wishaw"
+	Then I should see "Mr Frank Roy"
+	And I should see "Sorry: we do not have an email address for Mr Frank Roy."
