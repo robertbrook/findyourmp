@@ -7,7 +7,8 @@ describe "/constituencies/show.haml" do
         :member_party => 'member_party',
         :member_biography_url => 'http://here.it.is',
         :member_website => 'http://the.re',
-        :no_sitting_member? => false
+        :no_sitting_member? => false,
+        :member_email => "member@email"
         )
     @constituency.stub!(:name).and_return("MyString")
 
