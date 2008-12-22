@@ -1,3 +1,10 @@
+After do
+  Constituency.delete_all
+  Postcode.delete_all
+  Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
+  Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
+end
+
 Given /^I am logged in as an admin user$/ do
   Given 'I am on the Front page'
   And 'I press "Enable ADMINISTRATOR functions"'
