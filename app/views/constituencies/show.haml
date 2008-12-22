@@ -9,7 +9,6 @@
     %p= pluralize(@members.size, 'MEMBER MATCH').upcase
     = render :partial => 'member_match', :collection => @members
 - if @is_admin
-  %p
-    - if @constituency
-      = link_to 'Edit', edit_constituency_path(@constituency)
-    = link_to 'All constituencies', constituencies_path
+  - if @constituency
+    %p= link_to 'Edit', edit_constituency_path(@constituency)
+  = link_to 'All constituencies', constituencies_path
