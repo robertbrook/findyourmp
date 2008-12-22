@@ -1,11 +1,3 @@
-Before do
-  Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
-  Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
-  
-  Given 'there is a postcode "ML14BW" in constituency "Motherwell and Wishaw"'
-  Given 'there is an MP "Mr Frank Roy" in constituency "Motherwell and Wishaw"'
-end
-
 Then /^I should see Message Form$/ do
   Then 'I should see "Your email address"'
   And 'I should see "Your full name"'

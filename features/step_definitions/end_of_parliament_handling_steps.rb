@@ -1,8 +1,3 @@
-Before do
-  Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
-  Given 'there is an MP "Miss Anne Begg" in constituency "Aberdeen South"'
-end
-
 Given /^I am on the Constituency index page$/ do
   Given 'I am on the Front page'
   And "I follow \"All constituencies\""
