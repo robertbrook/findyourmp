@@ -43,9 +43,12 @@ class Message < ActiveRecord::Base
     def valid_email?
       unless sender_email.blank?
         begin
-          email = TMail::Address.parse(sender_email)
-          raise Exception('email must have @domain') unless email.domain
-          self.sender_email = email.address
+          email = MessageMailer.parse_email(sender_email)
+          if email.domain == 'parliament.uk'
+            errors.add_to_base('Please use a non parliament.uk email address.')
+          else
+            self.sender_email = email.address
+          end
         rescue
           errors.add_to_base("Your email must be a valid email address")
         end

@@ -38,6 +38,12 @@ Feature: Contact MP
     Then I should see "1 error prohibited this message from being previewed"
     And I should see "Your email must be a valid email address"
 
+  Scenario: Preview message with invalid email and see detailed warning
+    Given I am on a new Message page
+    When I preview message with a parliament.uk sender email
+    Then I should see "1 error prohibited this message from being previewed"
+    And I should see "Please use a non parliament.uk email address."
+
   Scenario: Preview message
     Given I am on a new Message page
     When I preview message
@@ -58,8 +64,8 @@ Feature: Contact MP
     Then I should see "Your message has been sent."
 
   Scenario: My MP is not contactable via email
- 	Given I am on the Front page
+    Given I am on the Front page
     And the MP in constituency "Motherwell and Wishaw" is not contactable via email
     When I search for "Motherwell and Wishaw"
-	Then I should see "Mr Frank Roy"
-	And I should see "Sorry: we do not have an email address for Mr Frank Roy."
+    Then I should see "Mr Frank Roy"
+    And I should see "Sorry: we do not have an email address for Mr Frank Roy."

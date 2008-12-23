@@ -65,6 +65,12 @@ When /^I preview message with an invalid sender email$/ do
   And 'I press "Preview your message"'
 end
 
+When /^I preview message with a parliament.uk sender email$/ do
+  When %Q|I fill in "Your email address" with "me@parliament.uk"|
+  And 'I fill in valid message'
+  And 'I press "Preview your message"'
+end
+
 When /^I preview message$/ do
   When %Q|I fill in "Your email address" with "here@now.earth"|
   When 'I fill in valid message'

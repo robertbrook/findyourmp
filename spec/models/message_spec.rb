@@ -40,15 +40,49 @@ describe Message do
   assert_checks_presence :message
   assert_checks_presence :sent
 
-  it "should create a new instance given valid attributes" do
-    nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
-    @member_name = 'member_name'
-    @member_email = 'member_name@parl.uk'
-    constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
-    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
-    message = Message.new(@valid_attributes)
-    message.valid?.should be_true
-    message.recipient.should == @member_name
+  describe 'creating' do
+    before do
+      nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
+      @member_name = 'member_name'
+      @member_email = 'member_name@parl.uk'
+      constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
+      Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
+    end
+
+    it "should create a new instance given valid attributes" do
+      message = Message.new(@valid_attributes)
+      message.valid?.should be_true
+      message.recipient.should == @member_name
+    end
+
+    describe 'sender email is invalid' do
+      it 'should not be valid without top level domain' do
+        attributes = @valid_attributes.merge(:sender_email=>'inv@lid')
+        message = Message.new(attributes)
+        message.valid?.should be_false
+      end
+
+      it 'should not be valid with single letter top level domain' do
+        attributes = @valid_attributes.merge(:sender_email=>'inv@lid.x')
+        message = Message.new(attributes)
+        message.valid?.should be_false
+      end
+    end
+    describe 'sender email has parliament.uk domain' do
+      it 'should not be valid without' do
+        attributes = @valid_attributes.merge(:sender_email=>'me@parliament.uk')
+        message = Message.new(attributes)
+        message.valid?.should be_false
+      end
+    end
+
+    describe 'sender email is valid' do
+      it 'should be valid' do
+        attributes = @valid_attributes.merge(:sender_email=>'v@lid.com')
+        message = Message.new(attributes)
+        message.valid?.should be_true
+      end
+    end
   end
 
   describe 'when asked to authenticate authenticity_token' do

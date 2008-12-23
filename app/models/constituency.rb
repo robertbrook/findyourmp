@@ -70,9 +70,7 @@ class Constituency < ActiveRecord::Base
     def valid_email?
       unless member_email.blank?
         begin
-          email = TMail::Address.parse(member_email)
-          raise Exception('email must have @domain') unless email.domain
-          self.member_email = email.address
+          self.member_email = MessageMailer.parse_email(member_email).address
         rescue
           errors.add_to_base("Member email must be a valid email")
         end
