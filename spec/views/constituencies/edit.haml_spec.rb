@@ -6,6 +6,7 @@ describe "/constituency/edit.haml" do
     @constituency = mock_model(Constituency, :member_name => 'member_name',
         :member_party=>'',
         :member_email=>'',
+        :member_requested_contact_url=>'',
         :member_biography_url=>'',
         :member_website=>'',
         :member_visible=>false

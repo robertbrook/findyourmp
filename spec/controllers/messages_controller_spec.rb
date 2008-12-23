@@ -11,7 +11,10 @@ describe MessagesController do
     @authenticity_token = 'gattaca'
     @message = mock(Message, :to_param => @message_id, :authenticity_token => @authenticity_token)
     collection = mock('array', :build=>@message)
-    @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id, :member_name => @member_name, :messages=>collection)
+    @constituency = mock_model(Constituency, :name => @constituency_name,
+      :id => @constituency_id, :member_name => @member_name,
+      :member_requested_contact_url => nil,
+      :messages=>collection)
   end
 
   describe 'when asked for new message' do
@@ -22,15 +25,26 @@ describe MessagesController do
       Constituency.stub!(:find).and_return @constituency
     end
     describe 'and constituency has a member email' do
+      before do
+        @constituency.stub!(:member_email).and_return 'mp@parliament.uk'
+      end
       it 'should keep :postcode in flash memory' do
         flash = mock('flash')
         @controller.stub!(:flash).and_return flash
         flash.should_receive(:keep).with(:postcode)
         flash.stub!(:sweep)
-        @constituency.stub!(:member_email).and_return 'mp@parliament.uk'
         do_get
       end
+
+      describe 'and member request contact url is set' do
+        it 'should redirect to constituency page' do
+          @constituency.stub!(:member_requested_contact_url).and_return 'http://contact.me/'
+          do_get
+          response.should redirect_to("constituencies/#{@constituency_id}")
+        end
+      end
     end
+
     describe 'and constituency does not have a member email' do
       it 'should redirect to constituency page' do
         @constituency.stub!(:member_email).and_return ''

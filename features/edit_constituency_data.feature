@@ -32,3 +32,10 @@ Feature: Contact MP
     And I should see "Sorry: we do not have an email address for Frank Doran."
     And I should not see "Send a message to Frank Doran"
 
+  Scenario: Set member requested contact url
+    Given I am on a Edit Constituency page
+    When I fill in "Requested contact url" with "http://member.requested.url/"
+    And I press "Update"
+    Then I should see "Frank Doran"
+    And I should see "Contact Frank Doran"
+

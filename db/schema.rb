@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081208102059) do
+ActiveRecord::Schema.define(:version => 20081223152643) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20081208102059) do
     t.string  "member_biography_url"
     t.boolean "member_visible"
     t.string  "member_website"
+    t.string  "member_requested_contact_url"
   end
 
   create_table "messages", :force => true do |t|
