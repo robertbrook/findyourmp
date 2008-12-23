@@ -28,7 +28,13 @@ class MessagesController < ResourceController::Base
   end
 
   def new
-    super
+    if constituency = Constituency.find(params[:constituency_id])
+      if constituency.member_email.blank?
+        redirect_to :controller=>:constituencies, :action=>:show, :id=>params[:constituency_id]
+      else
+        super
+      end
+    end
     flash.keep(:postcode)
   end
 

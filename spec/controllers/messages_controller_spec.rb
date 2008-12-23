@@ -21,12 +21,22 @@ describe MessagesController do
     before do
       Constituency.stub!(:find).and_return @constituency
     end
-    it 'should keep :postcode in flash memory' do
-      flash = mock('flash')
-      @controller.stub!(:flash).and_return flash
-      flash.should_receive(:keep).with(:postcode)
-      flash.stub!(:sweep)
-      do_get
+    describe 'and constituency has a member email' do
+      it 'should keep :postcode in flash memory' do
+        flash = mock('flash')
+        @controller.stub!(:flash).and_return flash
+        flash.should_receive(:keep).with(:postcode)
+        flash.stub!(:sweep)
+        @constituency.stub!(:member_email).and_return 'mp@parliament.uk'
+        do_get
+      end
+    end
+    describe 'and constituency does not have a member email' do
+      it 'should redirect to constituency page' do
+        @constituency.stub!(:member_email).and_return ''
+        do_get
+        response.should redirect_to("constituencies/#{@constituency_id}")
+      end
     end
   end
 
