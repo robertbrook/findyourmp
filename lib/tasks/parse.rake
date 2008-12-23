@@ -1,6 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
-require File.expand_path(File.dirname(__FILE__) + '/../member_bios')
-require File.expand_path(File.dirname(__FILE__) + '/../commons_member_bios')
+require File.expand_path(File.dirname(__FILE__) + '/../commons_member_biographies')
 require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
 
 namespace :fymp do
@@ -16,7 +15,7 @@ namespace :fymp do
   desc "Populate data for members in DB"
   task :members => :environment do
     load_members
-    CommonsMemberBios.load_bios 'http://www.parliament.uk/directories/hciolists/alms.cfm'
+    CommonsMemberBiography.load_biographies
   end
 
   desc "Create cache of all postcode pages"
