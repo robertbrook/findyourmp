@@ -24,9 +24,13 @@ namespace :serverbuild do
     
     oldfile = File.read(tempfile)
     
-    oldfile.each { |line|
-      data << line
-    }
+    data << "deb ftp://ftp.us.debian.org/debian etch main\n"
+    data << "deb ftp://mirror.ox.ac.uk/debian etch main\n"
+    data << "deb ftp://ftp.uk.debian.org/debian etch main\n"
+    
+    #oldfile.each { |line|
+    #  data << line
+    #}
     
     File.delete(tempfile)
     

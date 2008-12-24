@@ -46,7 +46,7 @@ namespace :deploy do
     put_data data_dir, 'postcodes.txt'
     
     log_dir = "#{deploy_to}/shared/log"
-    run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
+    run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi" 
     
     run "if [-d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
     
@@ -80,7 +80,7 @@ namespace :deploy do
     run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
   end
   
-  task:check_folder_setup do
+  task:check_folder_setup, :roles => :app do
     puts 'checking folders...'
     run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
