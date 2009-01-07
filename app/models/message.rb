@@ -45,12 +45,12 @@ class Message < ActiveRecord::Base
         begin
           email = MessageMailer.parse_email(sender_email)
           if email.domain == 'parliament.uk'
-            errors.add_to_base('Please use a non parliament.uk email address.')
+            errors.add_to_base("Sorry, we can't send email using a parliament.uk address")
           else
             self.sender_email = email.address
           end
         rescue
-          errors.add_to_base("Your email must be a valid email address")
+          errors.add_to_base("Sorry, we can't send and email using that address")
         end
       end
     end
