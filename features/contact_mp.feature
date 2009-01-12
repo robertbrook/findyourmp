@@ -36,13 +36,13 @@ Feature: Contact MP
     Given I am on a new Message page
     When I preview message with an invalid sender email
     Then I should see "1 error prohibited this message from being previewed"
-    And I should see "Your email must be a valid email address"
+    And I should see "Sender email must be a valid email address"
 
   Scenario: Preview message with invalid email and see detailed warning
     Given I am on a new Message page
     When I preview message with a parliament.uk sender email
     Then I should see "1 error prohibited this message from being previewed"
-    And I should see "Please use a non parliament.uk email address."
+    And I should see "Sender email must be a non parliament.uk email address"
 
   Scenario: Preview message
     Given I am on a new Message page

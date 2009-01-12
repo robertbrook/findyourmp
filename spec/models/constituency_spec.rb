@@ -56,9 +56,32 @@ describe Constituency do
   end
 
   describe 'with valid member_email' do
-    it 'should be valid' do
+    before do
       @constituency.member_email = 'email@example.host'
+    end
+    it 'should be valid' do
       @constituency.valid?.should be_true
+    end
+    describe 'and with member_name' do
+      before do
+        @constituency.member_name = 'name'
+      end
+      it 'should have show_message_form? return true' do
+        @constituency.show_message_form?.should be_true
+      end
+      describe 'and with member requested contact url' do
+        before do
+          @constituency.member_requested_contact_url = 'http://here.co.uk/'
+        end
+        it 'should have show_message_form? return false' do
+          @constituency.show_message_form?.should be_false
+        end
+      end
+    end
+    describe 'and without member_name' do
+      it 'should have show_message_form? return true' do
+        @constituency.show_message_form?.should be_false
+      end
     end
   end
 

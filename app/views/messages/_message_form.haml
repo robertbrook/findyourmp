@@ -24,6 +24,7 @@
     = f.text_field(:subject)
   %p
     = label :message, :message, 'Your message (max chars including spaces 4000) *'
+    - @message.message = @message.default_message if @message.message.nil?
     = f.text_area(:message, :rows=>30)
   %p
     %em.normaltext

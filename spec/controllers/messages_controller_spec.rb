@@ -27,6 +27,7 @@ describe MessagesController do
     describe 'and constituency has a member email' do
       before do
         @constituency.stub!(:member_email).and_return 'mp@parliament.uk'
+        @constituency.stub!(:show_message_form?).and_return true
       end
       it 'should keep :postcode in flash memory' do
         flash = mock('flash')
@@ -39,6 +40,7 @@ describe MessagesController do
       describe 'and member request contact url is set' do
         it 'should redirect to constituency page' do
           @constituency.stub!(:member_requested_contact_url).and_return 'http://contact.me/'
+          @constituency.stub!(:show_message_form?).and_return false
           do_get
           response.should redirect_to("constituencies/#{@constituency_id}")
         end
@@ -48,6 +50,7 @@ describe MessagesController do
     describe 'and constituency does not have a member email' do
       it 'should redirect to constituency page' do
         @constituency.stub!(:member_email).and_return ''
+        @constituency.stub!(:show_message_form?).and_return false
         do_get
         response.should redirect_to("constituencies/#{@constituency_id}")
       end

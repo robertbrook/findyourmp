@@ -11,6 +11,7 @@ class Message < ActiveRecord::Base
   validates_presence_of :postcode
   validates_presence_of :subject
   validates_presence_of :message
+  validate :message_not_default
   validates_inclusion_of :sent, :in => [true, false]
 
   before_validation_on_create :populate_defaulted_fields
@@ -24,6 +25,10 @@ class Message < ActiveRecord::Base
     MessageMailer.deliver_confirm(self)
     self.sent = 1
     save!
+  end
+
+  def default_message
+    "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n"
   end
 
   def test_from
@@ -40,17 +45,27 @@ class Message < ActiveRecord::Base
 
   private
 
+    def message_not_default
+      if message
+        msg = String.new message
+        default_message.split.each{|w| msg.sub!(w,'')}
+        if msg.gsub(/\n|\r| |,/,'').blank?
+          errors.add('message', "can't be blank")
+        end
+      end
+    end
+
     def valid_email?
       unless sender_email.blank?
         begin
           email = MessageMailer.parse_email(sender_email)
           if email.domain == 'parliament.uk'
-            errors.add_to_base('Please use a non parliament.uk email address.')
+            errors.add('sender_email', 'must be a non parliament.uk email address')
           else
             self.sender_email = email.address
           end
         rescue
-          errors.add_to_base("Your email must be a valid email address")
+          errors.add('sender_email', "must be a valid email address")
         end
       end
     end
