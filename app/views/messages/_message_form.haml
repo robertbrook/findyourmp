@@ -3,28 +3,34 @@
 %p
   Please note that MPs will generally only deal with cases concerning their own constituents.  It is therefore important that you include your full address and postcode in this form.  This system does not permit users to send emails from @parliament.uk addresses.  Correspondence by email is forwarded once a day to MPs.  If you wish to contact your MP urgently, you should telephone the House of Commons Switchboard on 020 7219 3000 and ask for your MP's office.
 
-= error_messages_for(:message).sub('being saved','being previewed')
+= error_messages_for(:message).sub('being saved','being previewed').gsub(/<\/h2.+/,'</h2>')
 
 - postcode = flash[:postcode]
 - form_for([@constituency, @message]) do |f|
   %p
     = label :message, :sender_email, 'Your email address *'
     = f.text_field(:sender_email)
+    = error_message_on(:message, :sender_email).sub("can't be blank",'Please enter your email address')
   %p
     = label :message, :sender, 'Your full name *'
     = f.text_field(:sender)
+    = error_message_on(:message, :sender).sub("can't be blank",'Please enter your full name')
   %p
     = label :message, :address, 'Your postal address'
     = f.text_area(:address, :rows=>3)
+    = error_message_on(:message, :address)
   %p
     = label :message, :postcode, 'Your postcode *'
     = f.text_field(:postcode, :value => postcode, :size=>8)
+    = error_message_on(:message, :postcode).sub("can't be blank",'Please enter your postcode')
   %p
     = label :message, :subject, 'Your subject *'
     = f.text_field(:subject)
+    = error_message_on(:message, :subject).sub("can't be blank",'Please enter your subject')
   %p
     = label :message, :message, 'Your message (max chars including spaces 4000) *'
     - @message.message = @message.default_message if @message.message.nil?
+    = error_message_on(:message, :message).sub("can't be blank",'Please enter your message')
     = f.text_area(:message, :rows=>30)
   %p
     %em.normaltext

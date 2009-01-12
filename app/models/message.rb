@@ -50,7 +50,7 @@ class Message < ActiveRecord::Base
         msg = String.new message
         default_message.split.each{|w| msg.sub!(w,'')}
         if msg.gsub(/\n|\r| |,/,'').blank?
-          errors.add('message', "can't be blank")
+          errors.add('message', "Please enter your message")
         end
       end
     end
@@ -60,12 +60,12 @@ class Message < ActiveRecord::Base
         begin
           email = MessageMailer.parse_email(sender_email)
           if email.domain == 'parliament.uk'
-            errors.add('sender_email', 'must be a non parliament.uk email address')
+            errors.add('sender_email', 'Please enter a non parliament.uk email address')
           else
             self.sender_email = email.address
           end
         rescue
-          errors.add('sender_email', "must be a valid email address")
+          errors.add('sender_email', "Please enter a valid email address")
         end
       end
     end
