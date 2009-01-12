@@ -99,6 +99,14 @@ namespace :deploy do
     puts 'checks complete!'
   end
   
+  task :check_git do
+    run "sudo which git" do |channel, stream, message|
+      if message = ''
+        raise "You need to install git before proceeding"
+      end
+    end
+  end
+  
   task :check_site_setup do
     run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -142,7 +150,7 @@ namespace :deploy do
 
 end
 
-before 'deploy:update_code', 'deploy:check_folder_setup'
+before 'deploy:update_code', 'deploy:check_git', 'deploy:check_folder_setup'
 after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_data', 'deploy:link_to_data'
 after 'deploy', 'deploy:check_site_setup'
 
