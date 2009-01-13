@@ -135,7 +135,8 @@ namespace :deploy do
       
     sudo "mysqladmin create #{application}_production"
     
-    sudo "rake gems:install"
+    sudo "gem install hpricot"
+    sudo "gem install morph"
     
     rake_tasks
     #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
