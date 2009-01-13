@@ -99,9 +99,9 @@ namespace :deploy do
     puts 'checks complete!'
   end
   
-  task :check_git do
+  task :check_server do
     run "sudo which git" do |channel, stream, message|
-      if message = ''
+      if message == ''
         raise "You need to install git before proceeding"
       end
     end
@@ -135,6 +135,8 @@ namespace :deploy do
       
     sudo "mysqladmin create #{application}_production"
     
+    sudo "rake gems:install"
+    
     rake_tasks
     #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
@@ -150,7 +152,7 @@ namespace :deploy do
 
 end
 
-before 'deploy:update_code', 'deploy:check_git', 'deploy:check_folder_setup'
+before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
 after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_data', 'deploy:link_to_data'
 after 'deploy', 'deploy:check_site_setup'
 
