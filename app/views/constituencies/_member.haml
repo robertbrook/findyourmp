@@ -13,3 +13,4 @@
       %p= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
   - else
     %p= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
+
