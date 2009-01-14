@@ -52,6 +52,10 @@ class Constituency < ActiveRecord::Base
     end
   end
 
+  def show_message_form?
+    member_name? && member_email? && !member_requested_contact_url?
+  end
+
   def code
     if id < 10
       "00#{id}"

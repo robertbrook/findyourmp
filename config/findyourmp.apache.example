@@ -22,4 +22,9 @@ NameVirtualHost *
 
         CustomLog /var/log/apache2/access.log combined
         ServerSignature On
+
+		RewriteEngine On
+		RewriteCond [RELEASE-PATH]/shared/system/maintenance.html -f
+		RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+		RewriteRule ^.*$ /system/maintenance.html [L]
 </VirtualHost>

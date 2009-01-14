@@ -14,7 +14,11 @@
       %h1= @title || "Find Your MP"
     #content= yield
     #footer
-      %p.help If you have any problems using this service please <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">refer to the help pages</a> or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>. The Office also produces the <a href="http://www.parliament.uk/about/languages/yourmp.cfm">You and your MP leaflet</a>, which describes the role of an MP and the ways in which MPs can help their constituents. 
+      %p.help If you have any problems using this service please <a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">refer to the help pages</a> or contact the <a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a>. The Office also produces the <a href="http://www.parliament.uk/about/languages/yourmp.cfm">You and your MP leaflet</a>, which describes the role of an MP and the ways in which MPs can help their constituents.
       %span.about= "The Find Your MP service recognises " + number_with_delimiter(@postcode_count.to_s) + " UK post codes and " + @constituency_count.to_s + " Westminster constituencies."
       %span.copyright Source: NSPD 2008, National Statistics. Crown copyright material is reproduced with the permission of the Controller of HMSO and Queen’s Printer for Scotland.
       #admin-button= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
+      - if @is_admin
+        - if @constituency
+          %p= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
+        %p= link_to 'All constituencies', constituencies_path

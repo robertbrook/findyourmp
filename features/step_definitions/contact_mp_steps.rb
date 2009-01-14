@@ -6,6 +6,8 @@ Then /^I should see Message Form$/ do
   And 'I should see "Your subject"'
   And 'I should see "Your message"'
   And 'I should see "Preview your message"'
+  And 'I should see "Dear Frank Doran,"'
+  And 'I should see "Yours sincerely,"'
 end
 
 Given /^my MP is contactable via email$/ do

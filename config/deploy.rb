@@ -48,6 +48,8 @@ namespace :deploy do
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
     
+    run "if [-d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
+    
     rc_rake_file = "#{release_path}/vendor/plugins/resource_controller/tasks/gem.rake"
     run "if [ -f #{rc_rake_file} ]; then mv #{rc_rake_file} #{rc_rake_file}.bak ; else echo not found ; fi"
   end
@@ -97,6 +99,14 @@ namespace :deploy do
     puts 'checks complete!'
   end
   
+  task :check_server do
+    run "sudo which git" do |channel, stream, message|
+      if message == ''
+        raise "You need to install git before proceeding"
+      end
+    end
+  end
+  
   task :check_site_setup do
     run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -125,6 +135,9 @@ namespace :deploy do
       
     sudo "mysqladmin create #{application}_production"
     
+    sudo "gem install hpricot"
+    sudo "gem install morph"
+    
     rake_tasks
     #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
@@ -140,7 +153,7 @@ namespace :deploy do
 
 end
 
-before 'deploy:update_code', 'deploy:check_folder_setup'
+before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
 after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_data', 'deploy:link_to_data'
 after 'deploy', 'deploy:check_site_setup'
 

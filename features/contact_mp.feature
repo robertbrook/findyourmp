@@ -24,25 +24,25 @@ Feature: Contact MP
   Scenario: Preview message with compulsory field missing and see detailed warning
     Given I am on a new Message page
     When I preview message without "Your email address"
-    Then I should see "Sender email can't be blank"
+    Then I should see "Please enter your email address"
 
   More Examples:
     | field_missing      | warning_message         |
-    | Your full name     | Sender can't be blank   |
-    | Your subject       | Subject can't be blank  |
-    | Your message       | Message can't be blank  |
+    | Your full name     | Please enter your full name |
+    | Your subject       | Please enter your subject   |
+    | Your message       | Please enter your message   |
 
   Scenario: Preview message with invalid email and see detailed warning
     Given I am on a new Message page
     When I preview message with an invalid sender email
     Then I should see "1 error prohibited this message from being previewed"
-    And I should see "Sorry, we can't send and email using that address"
+    And I should see "Please enter a valid email address"
 
   Scenario: Preview message with invalid email and see detailed warning
     Given I am on a new Message page
     When I preview message with a parliament.uk sender email
     Then I should see "1 error prohibited this message from being previewed"
-    And I should see "Sorry, we can't send email using a parliament.uk address"
+    And I should see "Please enter a non parliament.uk email address"
 
   Scenario: Preview message
     Given I am on a new Message page

@@ -32,9 +32,10 @@
     = f.check_box :member_visible
 
   %p
-    = f.submit "Update "
+    = f.submit "Update data"
 
 %p
-  = link_to 'Show', constituency_path(@constituency)
+  = link_to 'Show constituency', constituency_path(@constituency)
+  |
   = link_to 'All constituencies', constituencies_path
 
