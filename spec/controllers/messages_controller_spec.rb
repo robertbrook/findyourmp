@@ -110,6 +110,64 @@ describe MessagesController do
     end
   end
 
+  describe 'when asked to edit a message' do    
+    def do_get token, message_id
+      handle_authentication_filter token
+      get :edit, :constituency_id => @constituency_id, :id => message_id, :authenticity_token => token
+    end
+
+    describe 'and authenticity_token matches' do
+      it 'should redirect to edit' do   
+        Constituency.stub!(:find).and_return @constituency
+        flash = mock('flash')
+        @controller.stub!(:flash).and_return flash
+        flash.stub!(:sweep)
+        flash.should_receive(:[]=).with("authenticity_token", @authenticity_token)
+
+        @message.should_receive(:authenticate).with(@authenticity_token).and_return true
+        do_get @authenticity_token, @message_id
+        response.should redirect_to(constituency_message_url("801",@message_id) +'/edit')
+      end
+    end
+    describe 'and message doesn\'t exist' do
+      it 'should respond with Not Found' do   
+        Constituency.stub!(:find).and_return @constituency
+        flash = mock('flash')
+        @controller.stub!(:flash).and_return flash
+        flash.stub!(:sweep)
+        
+        @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
+        @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(nil)
+        Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
+        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return nil
+        
+        get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
+        
+        response.status.should == '404 Not Found'
+      end
+    end
+    describe 'and message already sent exist' do
+      it 'should respond with Not Found' do   
+        Constituency.stub!(:find).and_return @constituency
+        flash = mock('flash')
+        @controller.stub!(:flash).and_return flash
+        flash.stub!(:sweep)
+        
+        @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
+        @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
+        @message.stub!(:sent).and_return true
+        
+        Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
+        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
+        flash.should_receive(:[]).with(:message_sent).and_return nil
+        
+        get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
+        
+        response.status.should == '404 Not Found'
+      end
+    end
+  end
+
   describe 'when asked to destroy a message' do
     it 'should respond with Not Found' do
       get :destroy, :constituency_id => @constituency_id, :id => @message_id
