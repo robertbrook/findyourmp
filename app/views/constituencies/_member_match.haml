@@ -1,6 +1,4 @@
 - constituency = member_match
 %p
-  %strong
-    = link_to "#{highlight(h(constituency.member_name), @search_term)}", constituency_path(constituency)
-  - if constituency.name
-    = "(#{constituency.name})"
+  = link_to "#{highlight(h(constituency.member_name), @search_term)}", constituency_path(constituency)
+  = "&mdash; #{constituency.name}" if constituency.name

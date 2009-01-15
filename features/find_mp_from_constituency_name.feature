@@ -19,8 +19,8 @@ Feature: Find MP from constituency name
     When I search for "Aberdeen"
     Then I should see "<strong class="highlight">Aberdeen</strong> North"
     And I should see "<strong class="highlight">Aberdeen</strong> South"
-    And I should see "\(Frank Doran\)"
-    And I should see "\(Miss Anne Begg\)"
+    And I should see "Frank Doran"
+    And I should see "Miss Anne Begg"
     When I follow "<strong class="highlight">Aberdeen</strong> South"
     Then I should see "Aberdeen South"
     And I should see "Miss Anne Begg"
@@ -54,3 +54,7 @@ Feature: Find MP from constituency name
     Then I should see "<strong class=\"highlight\">Abe</strong>rdeen North</a>"
     And I should see "<strong class=\"highlight\">Abe</strong>rdeen South</a>"
 
+  Scenario: Enter a constituency name that returns no results
+    Given I am on the Front page
+    When I search for "Isle of Wight"
+    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>Isle of Wight</code>."

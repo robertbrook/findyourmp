@@ -6,7 +6,7 @@
 = error_messages_for(:message).sub('being saved','being previewed').gsub(/<\/h2.+/,'</h2>')
 
 - postcode = flash[:postcode]
-- form_for([@constituency, @message]) do |f|
+- form_for([@constituency, @message], {:only_path => false}) do |f|
   %p
     = label :message, :sender_email, 'Your email address *'
     = f.text_field(:sender_email)
