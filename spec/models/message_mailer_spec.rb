@@ -26,6 +26,7 @@ describe MessageMailer do
       :authenticity_token => @authenticity_token,
       :address => "value for address",
       :postcode => "value for postcode",
+      :sender_is_constituent => true,
       :subject => @subject,
       :message => @contents,
       :sent => false )
@@ -46,7 +47,15 @@ describe MessageMailer do
       @email.to.should == [@recipient_email]
     end
     it 'should set body correctly' do
-      @email.body.strip.should == @contents
+      @email.body.strip.should == "Message from constituent:\n\n\n#{@contents}"
+    end
+
+    describe 'and sender is not a constituent' do
+      it 'should set body correctly' do
+        @message.stub!(:sender_is_constituent).and_return false
+        @email = MessageMailer.create_sent(@message)
+        @email.body.strip.should == "Message from non-constituent:\n\n\n#{@contents}"
+      end
     end
   end
 
