@@ -16,5 +16,8 @@ public/postcodes.bak
 db/development_structure.sql
 cucumber.yml
 cucumber_growler
+features.html
+features.txt
+features.pdf
 *~
 *#
