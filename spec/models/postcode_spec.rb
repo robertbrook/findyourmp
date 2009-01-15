@@ -9,15 +9,27 @@ describe Postcode do
     @constituency_name = 'Islington South'
     @member_name = 'Edmund Husserl'
     @constituency = mock_model(Constituency, :id => 123, :name => @constituency_name, :member_name => @member_name)
+    @other_constituency = mock_model(Constituency, :id => 124)
     @postcode.stub!(:constituency).and_return @constituency
     @postcode.stub!(:constituency_id).and_return @constituency.id
   end
 
+  describe 'when asked if in constituency' do
+    it 'should return true if in given constituency' do
+      @postcode.in_constituency?(@constituency).should be_true
+    end
+    it 'should return false if not in given constituency' do
+      @postcode.in_constituency?(@other_constituency).should be_false
+    end
+  end
   describe 'when asked to find postcode by code' do
     it 'should return match including its constituency and member' do
       code = 'N12SD'
       Postcode.should_receive(:find_by_code).with(code, :include => :constituency).and_return @postcode
       Postcode.find_postcode_by_code(code).should == @postcode
+    end
+    it 'should return nil if given nil code' do
+      Postcode.find_postcode_by_code(nil).should be_nil
     end
   end
   describe 'when asked for formatted version' do

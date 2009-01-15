@@ -6,12 +6,17 @@ class Postcode < ActiveRecord::Base
 
   class << self
     def find_postcode_by_code search_term
+      return nil unless search_term
       code = String.new search_term
       code.strip!
       code.upcase!
       code.tr!(' ','')
       find_by_code(code, :include => :constituency)
     end
+  end
+
+  def in_constituency? constituency
+    self.constituency_id == constituency.id
   end
 
   def constituency_name

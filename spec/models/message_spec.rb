@@ -48,13 +48,31 @@ describe Message do
       @member_email = 'member_name@parl.uk'
       constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
       Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
-      Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return mock('postcode', :code_with_space => @postcode)
+      @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
+      Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @post_code
     end
 
     it "should create a new instance given valid attributes" do
       message = Message.new(@valid_attributes)
       message.valid?.should be_true
       message.recipient.should == @member_name
+    end
+
+    describe "sender's postcode is in constituency" do
+      it 'should return true for sender_in_constituency' do
+        message = Message.new(@valid_attributes)
+        message.valid?.should be_true
+        message.sender_is_constituent.should be_true
+      end
+    end
+
+    describe "sender's postcode is not in constituency" do
+      it 'should return false for sender_in_constituency' do
+        @post_code.stub!(:in_constituency?).and_return false
+        message = Message.new(@valid_attributes)
+        message.valid?.should be_true
+        message.sender_is_constituent.should be_false
+      end
     end
 
     describe 'sender email is invalid' do
@@ -70,6 +88,7 @@ describe Message do
         message.valid?.should be_false
       end
     end
+
     describe 'sender email has parliament.uk domain' do
       it 'should not be valid without' do
         attributes = @valid_attributes.merge(:sender_email=>'me@parliament.uk')
