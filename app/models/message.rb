@@ -2,17 +2,19 @@ class Message < ActiveRecord::Base
 
   belongs_to :constituency
 
-  validates_presence_of :recipient
-  validates_presence_of :recipient_email
-  validates_presence_of :sender
-  validates_presence_of :sender_email
-  validate :valid_email?
+  validates_presence_of :sender, :message => 'Please enter your full name'
+  validates_presence_of :sender_email, :message => 'Please enter your email address'
+  validates_presence_of :postcode, :message => 'Please enter your postcode'
+  validates_presence_of :subject, :message => 'Please enter your subject'
+  validates_presence_of :message, :message => 'Please enter your message'
   validates_presence_of :authenticity_token
-  validates_presence_of :postcode
-  validates_presence_of :subject
-  validates_presence_of :message
-  validate :message_not_default
+  validates_presence_of :recipient_email
+  validates_presence_of :recipient
   validates_inclusion_of :sent, :in => [true, false]
+
+  validate :email_valid
+  validate :postcode_valid
+  validate :message_not_default
 
   before_validation_on_create :populate_defaulted_fields
 
@@ -55,7 +57,18 @@ class Message < ActiveRecord::Base
       end
     end
 
-    def valid_email?
+    def postcode_valid
+      unless postcode.blank?
+        post_code = Postcode.find_postcode_by_code(postcode)
+        if post_code
+          self.postcode = post_code.code_with_space
+        else
+          errors.add('postcode', 'Please enter a valid postcode')
+        end
+      end
+    end
+
+    def email_valid
       unless sender_email.blank?
         begin
           email = MessageMailer.parse_email(sender_email)

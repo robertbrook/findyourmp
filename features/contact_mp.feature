@@ -44,6 +44,12 @@ Feature: Contact MP
     Then I should see "1 error prohibited this message from being previewed"
     And I should see "Please enter a non parliament.uk email address"
 
+  Scenario: Preview message with invalid postcode and see detailed warning
+    Given I am on a new Message page
+    When I preview message with an invalid postcode
+    Then I should see "1 error prohibited this message from being previewed"
+    And I should see "Please enter a valid postcode"
+
   Scenario: Preview message
     Given I am on a new Message page
     When I preview message

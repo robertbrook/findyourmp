@@ -7,10 +7,7 @@ class PostcodesController < ApplicationController
     @last_search_term = flash[:last_search_term]
 
     unless search_term.blank?
-      term = String.new search_term
-      term.strip!
-      term.upcase!
-      postcode = Postcode.find_by_code(term.tr(' ',''))
+      postcode = Postcode.find_postcode_by_code(search_term)
 
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code

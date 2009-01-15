@@ -5,7 +5,11 @@ class Postcode < ActiveRecord::Base
   delegate :member_name, :to => :constituency
 
   class << self
-    def find_postcode_by_code code
+    def find_postcode_by_code search_term
+      code = String.new search_term
+      code.strip!
+      code.upcase!
+      code.tr!(' ','')
       find_by_code(code, :include => :constituency)
     end
   end

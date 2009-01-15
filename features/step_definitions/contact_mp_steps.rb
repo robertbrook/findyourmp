@@ -61,21 +61,29 @@ When /^I fill in valid message$/ do
   And %Q|I fill in "Your message" with "Question"|
 end
 
-When /^I preview message with an invalid sender email$/ do
-  When %Q|I fill in "Your email address" with "bad_address"|
+When /^I fill in valid message with email address "(.*)"$/ do |address|
+  When %Q|I fill in "Your email address" with "#{address}"|
   And 'I fill in valid message'
+end
+
+When /^I preview message with an invalid sender email$/ do
+  When 'I fill in valid message with email address "bad_address"'
   And 'I press "Preview your message"'
 end
 
 When /^I preview message with a parliament.uk sender email$/ do
-  When %Q|I fill in "Your email address" with "me@parliament.uk"|
-  And 'I fill in valid message'
+  When 'I fill in valid message with email address "me@parliament.uk"'
+  And 'I press "Preview your message"'
+end
+
+When /^I preview message with an invalid postcode$/ do
+  When 'I fill in valid message with email address "me@example.com"'
+  And %Q|I fill in "Your postcode" with "AB1"|
   And 'I press "Preview your message"'
 end
 
 When /^I preview message$/ do
-  When %Q|I fill in "Your email address" with "here@now.earth"|
-  When 'I fill in valid message'
+  When 'I fill in valid message with email address "me@example.com"'
   And 'I press "Preview your message"'
 end
 

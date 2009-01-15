@@ -10,11 +10,11 @@
   %p
     = label :message, :sender_email, 'Your email address *'
     = f.text_field(:sender_email)
-    = error_message_on(:message, :sender_email).sub("can't be blank",'Please enter your email address')
+    = error_message_on(:message, :sender_email)
   %p
     = label :message, :sender, 'Your full name *'
     = f.text_field(:sender)
-    = error_message_on(:message, :sender).sub("can't be blank",'Please enter your full name')
+    = error_message_on(:message, :sender)
   %p
     = label :message, :address, 'Your postal address'
     = f.text_area(:address, :rows=>3)
@@ -22,15 +22,15 @@
   %p
     = label :message, :postcode, 'Your postcode *'
     = f.text_field(:postcode, :value => postcode, :size=>8)
-    = error_message_on(:message, :postcode).sub("can't be blank",'Please enter your postcode')
+    = error_message_on(:message, :postcode)
   %p
     = label :message, :subject, 'Your subject *'
     = f.text_field(:subject)
-    = error_message_on(:message, :subject).sub("can't be blank",'Please enter your subject')
+    = error_message_on(:message, :subject)
   %p
     = label :message, :message, 'Your message (max chars including spaces 4000) *'
     - @message.message = @message.default_message if @message.message.nil?
-    = error_message_on(:message, :message).sub("can't be blank",'Please enter your message')
+    = error_message_on(:message, :message)
     = f.text_area(:message, :rows=>30)
   %p
     %em.normaltext

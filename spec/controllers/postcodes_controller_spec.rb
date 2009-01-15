@@ -19,7 +19,7 @@ describe PostcodesController do
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
-    Postcode.stub!(:find_by_code).and_return nil
+    Postcode.stub!(:find_postcode_by_code).and_return nil
   end
 
   def self.get_request_should_be_successful
@@ -91,7 +91,7 @@ describe PostcodesController do
     end
 
     before do
-      Postcode.should_receive(:find_by_code).with(@constituency_name.upcase.tr(' ','')).and_return nil
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name).and_return nil
     end
 
     describe 'and a matching constituency is not found' do
@@ -118,7 +118,7 @@ describe PostcodesController do
     end
 
     before do
-      Postcode.should_receive(:find_by_code).with(@constituency_name_part.upcase.tr(' ','')).and_return nil
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_part).and_return nil
     end
 
     describe 'and a matching constituency is not found' do
@@ -159,7 +159,7 @@ describe PostcodesController do
 
     describe 'and a matching postcode is found' do
       before do
-        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @postcode_record
       end
       it 'should redirect to postcode view showing constituency' do
         do_get
