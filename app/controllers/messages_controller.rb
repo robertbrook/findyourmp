@@ -27,6 +27,14 @@ class MessagesController < ResourceController::Base
     end
   end
 
+  def index
+    if request.get?
+      redirect_to :controller=>'constituencies', :action=>'show', :id=>params[:constituency_id]
+    else
+      super
+    end
+  end
+
   def new
     if constituency = Constituency.find(params[:constituency_id])
       if constituency.show_message_form?

@@ -17,6 +17,13 @@ describe MessagesController do
       :messages=>collection)
   end
 
+  describe 'when asked for messages index' do
+    it 'should redirect to constituency view' do
+      get :index, :constituency_id => @constituency_id
+      response.should redirect_to("constituencies/#{@constituency_id}")
+    end
+  end
+
   describe 'when asked for new message' do
     def do_get
       get :new, :constituency_id => @constituency_id
