@@ -4,11 +4,11 @@
   = text_field_tag 'search_term', search_term, :size => 24
   = submit_tag 'Search'
 
-%div.flash= flash[:not_found] if flash[:not_found]
+%div.text.flash= flash[:not_found] if flash[:not_found]
 
-%p What can I search for?
+%p.text What can I search for?
 
-%ul.search-tips
+%ul.search-tips.text
   %li Your full post code, like <strong>SW1A 1AA</strong>, to find your constituency and MP
   %li Your constituency name, like <strong>Kirkcaldy and Cowdenbeath</strong>, to find your MP
   %li Your MP's full name, like <strong>Lyn Brown</strong>, to find your MP

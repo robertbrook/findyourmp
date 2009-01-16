@@ -3,38 +3,38 @@
 = error_messages_for :constituency
 
 -form_for(@constituency) do |f|
-  %p
+  %p.text
     = label :constituency, :id, 'Constituency ID'
     %span.constituency_id= @constituency.id
-  %p
+  %p.text
     = label :constituency, :name, 'Constituency'
     = f.text_field :name
-  %p
+  %p.text
     = label :constituency, :member_name, 'Member'
     = f.text_field :member_name
-  %p
+  %p.text
     = label :constituency, :member_party, 'Member party'
     = f.text_field :member_party
-  %p
+  %p.text
     = label :constituency, :member_email, 'Member email'
     = f.text_field :member_email
-  %p
+  %p.text
     = label :constituency, :member_requested_contact_url, 'Requested contact url'
     = f.text_field :member_requested_contact_url
-  %p
+  %p.text
     = label :constituency, :member_biography_url, 'Member biography url'
     = f.text_field :member_biography_url
-  %p
+  %p.text
     = label :constituency, :member_website, 'Member website'
     = f.text_field :member_website
-  %p
+  %p.text
     = label :constituency, :member_visible, 'Member visible'
     = f.check_box :member_visible
 
-  %p
+  %p.text
     = f.submit "Update data"
 
-%p
+%p.text
   = link_to 'Show constituency', constituency_path(@constituency)
   |
   = link_to 'All constituencies', constituencies_path

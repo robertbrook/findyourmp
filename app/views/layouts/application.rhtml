@@ -14,6 +14,9 @@
 		@import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/grid.css");
 		@import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/main.css");
 	</style>
+	<style type="text/css" media="screen, projection">
+		.text code { font-size: 1.3em;}
+	</style>
         
                 <script language="JavaScript1.1" type="text/javascript">
 	<!--
@@ -117,7 +120,7 @@
 		<div class="spacer9">&nbsp;</div>
 		<div class="column-460">
 			<h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></h2>
-									 <div class="text"><%= yield %></div>
+									 <div><%= yield %></div>
 </div>
 			<div class="spacer9">&nbsp;</div>
 		</div>
