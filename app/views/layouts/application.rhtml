@@ -103,7 +103,7 @@
 	You are here: 
 	<a href="http://www.parliament.uk/">Parliament Home</a> &gt;
 	<a href="http://www.parliament.uk/people/">Members &amp; Staff</a> &gt;
-	Find Your MP
+	<%= @crumbtrail ? "<a href="'/'">Find Your MP</a> &gt; #{@crumbtrail}" : "Find Your MP" %>
 </div>
 
 <div id="page_content">
@@ -119,7 +119,7 @@
 	<div class="column_wrapper">
 		<div class="spacer9">&nbsp;</div>
 		<div class="column-460">
-			<h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></h2>
+			<h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
 									 <div><%= yield %></div>
 </div>
 			<div class="spacer9">&nbsp;</div>
