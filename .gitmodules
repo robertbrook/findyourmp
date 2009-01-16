@@ -19,3 +19,6 @@
 [submodule "vendor/plugins/webrat"]
 	path = vendor/plugins/webrat
 	url = git://github.com/brynary/webrat.git
+[submodule "vendor/plugins/friendly_id"]
+	path = vendor/plugins/friendly_id
+	url = git://github.com/norman/friendly_id.git

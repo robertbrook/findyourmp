@@ -6,16 +6,19 @@ describe MessagesController do
     @constituency_id = 801
     @constituency_name_part = 'Islington'
     @constituency_name = 'Islington South'
+    @friendly_constituency_id = 'islington-south'
     @member_name = 'Hon Biggens'
     @message_id = "12"
     @authenticity_token = 'gattaca'
     @message = mock(Message, :to_param => @message_id, :authenticity_token => @authenticity_token)
     collection = mock('array', :build=>@message)
     @constituency = mock_model(Constituency, :name => @constituency_name,
-      :id => @constituency_id, :member_name => @member_name,
-      :member_requested_contact_url => nil,
-      :messages=>collection,
-      :show_message_form? => true)
+        :id => @constituency_id, :member_name => @member_name,
+        :member_requested_contact_url => nil,
+        :messages=>collection,
+        :show_message_form? => true,
+        :friendly_id => @friendly_constituency_id,
+        :has_better_id? => false)
     Constituency.stub!(:find).with(@constituency_id.to_s).and_return @constituency
   end
 
@@ -110,14 +113,14 @@ describe MessagesController do
     end
   end
 
-  describe 'when asked to edit a message' do    
+  describe 'when asked to edit a message' do
     def do_get token, message_id
       handle_authentication_filter token
       get :edit, :constituency_id => @constituency_id, :id => message_id, :authenticity_token => token
     end
 
     describe 'and authenticity_token matches' do
-      it 'should redirect to edit' do   
+      it 'should redirect to edit' do
         Constituency.stub!(:find).and_return @constituency
         flash = mock('flash')
         @controller.stub!(:flash).and_return flash
@@ -130,39 +133,39 @@ describe MessagesController do
       end
     end
     describe 'and message doesn\'t exist' do
-      it 'should respond with Not Found' do   
+      it 'should respond with Not Found' do
         Constituency.stub!(:find).and_return @constituency
         flash = mock('flash')
         @controller.stub!(:flash).and_return flash
         flash.stub!(:sweep)
-        
+
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
         @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(nil)
         Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
         Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return nil
-        
+
         get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
-        
+
         response.status.should == '404 Not Found'
       end
     end
     describe 'and message already sent exist' do
-      it 'should respond with Not Found' do   
+      it 'should respond with Not Found' do
         Constituency.stub!(:find).and_return @constituency
         flash = mock('flash')
         @controller.stub!(:flash).and_return flash
         flash.stub!(:sweep)
-        
+
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
         @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
         @message.stub!(:sent).and_return true
-        
+
         Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
         Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
         flash.should_receive(:[]).with(:message_sent).and_return nil
-        
+
         get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
-        
+
         response.status.should == '404 Not Found'
       end
     end

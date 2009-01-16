@@ -23,7 +23,7 @@ namespace :deploy do
     data = File.read("config/virtualserver/deployed_database.yml")
     put data, "#{release_path}/config/database.yml", :mode => 0664
   end
-  
+
   desc "Upload deployed mailer.yml"
   task :upload_deployed_mailer_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_mailer.yml")
@@ -38,18 +38,18 @@ namespace :deploy do
   desc 'put data to server'
   task :put_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
-        
+
     run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
 
     put_data data_dir, 'ConstituencyToMember.txt'
     put_data data_dir, 'constituencies.txt'
     put_data data_dir, 'postcodes.txt'
-    
+
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
-    
+
     run "if [-d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
-    
+
     rc_rake_file = "#{release_path}/vendor/plugins/resource_controller/tasks/gem.rake"
     run "if [ -f #{rc_rake_file} ]; then mv #{rc_rake_file} #{rc_rake_file}.bak ; else echo not found ; fi"
   end
@@ -72,14 +72,14 @@ namespace :deploy do
   task :restart, :roles => :app do
     run "touch #{current_path}/tmp/restart.txt"
   end
-  
+
   desc "Perform non-destructive rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
   end
-  
+
   task:check_folder_setup do
     puts 'checking folders...'
     run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
@@ -98,7 +98,7 @@ namespace :deploy do
     end
     puts 'checks complete!'
   end
-  
+
   task :check_server do
     run "sudo which git" do |channel, stream, message|
       if message == ''
@@ -106,7 +106,7 @@ namespace :deploy do
       end
     end
   end
-  
+
   task :check_site_setup do
     run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -116,13 +116,13 @@ namespace :deploy do
       end
     end
   end
-  
+
   task :site_setup do
     puts 'entering first time only setup...'
-    
+
     sudo "touch /etc/apache2/sites-available/#{application}"
     sudo "chown #{user} /etc/apache2/sites-available/#{application}"
-        
+
     source = File.read("config/findyourmp.apache.example")
     data = ""
     source.each { |line|
@@ -130,14 +130,15 @@ namespace :deploy do
       data << line
     }
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
-    
+
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-      
+
     sudo "mysqladmin create #{application}_production"
-    
+
     sudo "gem install hpricot"
     sudo "gem install morph"
-    
+    sudo "gem install unicode"
+
     rake_tasks
     #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
