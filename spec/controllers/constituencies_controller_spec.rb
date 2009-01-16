@@ -160,6 +160,35 @@ describe ConstituenciesController do
       assigns[:last_search_term].should == @search_term
     end
   end
+  
+  describe "when on the edit screen" do
+    before do
+       @controller.stub!(:is_admin?).and_return true
+       request.env["HTTP_REFERER"] = "/index"
+    end
+    
+    describe "and asked to hide_members" do
+      it 'should hide the members and return to the previous page' do
+        Constituency.should_receive(:all).and_return [ @constituency ]
+        @constituency.should_receive(:member_visible).and_return true
+        @constituency.should_receive(:member_visible=).with(false)
+        @constituency.stub!(:save)
+        post :hide_members
+        response.should redirect_to("/index")
+      end
+    end
+    
+    describe "and asked to unhide_members" do
+      it 'should hide the members and return to the previous page' do
+        Constituency.should_receive(:all).and_return [ @constituency ]
+        @constituency.should_receive(:member_visible).and_return false
+        @constituency.should_receive(:member_visible=).with(true)
+        @constituency.stub!(:save)
+        post :unhide_members
+        response.should redirect_to("/index")
+      end
+    end
+  end
 
   # describe "when asked for 'mail to constituency MP' page" do
     # def do_get
