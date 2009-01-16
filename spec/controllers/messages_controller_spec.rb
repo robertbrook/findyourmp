@@ -78,7 +78,7 @@ describe MessagesController do
       Message.stub!(:new).and_return @message
       @message.should_receive(:save).and_return true
       do_post
-      response.should redirect_to(constituency_message_url("801",@message_id))
+      response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
     end
   end
 
@@ -86,8 +86,7 @@ describe MessagesController do
     @controller.should_receive(:authenticity_token).any_number_of_times.and_return token
     @message.stub!(:sent).and_return false
     @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
-    Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
-    Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
+    Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
   end
 
   describe 'when posted message sent set to true' do
@@ -109,7 +108,7 @@ describe MessagesController do
     it 'should redirect to show action' do
       @message.stub!(:deliver)
       do_post @authenticity_token
-      response.should redirect_to(constituency_message_url("801",@message_id))
+      response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
     end
   end
 
@@ -129,7 +128,7 @@ describe MessagesController do
 
         @message.should_receive(:authenticate).with(@authenticity_token).and_return true
         do_get @authenticity_token, @message_id
-        response.should redirect_to(constituency_message_url("801",@message_id) +'/edit')
+        response.should redirect_to(constituency_message_url(@constituency_id,@message_id) +'/edit')
       end
     end
     describe 'and message doesn\'t exist' do
@@ -141,8 +140,7 @@ describe MessagesController do
 
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
         @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(nil)
-        Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
-        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return nil
+        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return nil
 
         get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
 
@@ -160,8 +158,7 @@ describe MessagesController do
         @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
         @message.stub!(:sent).and_return true
 
-        Constituency.should_receive(:exists?).with(@constituency_id.to_s).and_return true
-        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id.to_s, @message_id).and_return @message
+        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
         flash.should_receive(:[]).with(:message_sent).and_return nil
 
         get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token

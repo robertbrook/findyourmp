@@ -3,8 +3,7 @@ class MessagesController < ResourceController::Base
   belongs_to :constituency
 
   before_filter :redirect_when_not_appropriate_to_show_message_form
-  before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new']
-
+  before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new','create']
   before_filter :ensure_current_constituency_url, :only => [:new, :index]
 
   def index
@@ -77,8 +76,8 @@ class MessagesController < ResourceController::Base
     end
 
     def respond_not_found_if_message_sent_or_bad_authenticity_token
-      if Constituency.exists?(params[:constituency_id]) && params[:id]
-        @message = Message.find_by_constituency_id_and_id(params[:constituency_id], params[:id])
+      if (constituency = Constituency.find(params[:constituency_id])) && params[:id]
+        @message = Message.find_by_constituency_id_and_id(constituency.id, params[:id])
 
         if @message.nil?
           render_not_found
