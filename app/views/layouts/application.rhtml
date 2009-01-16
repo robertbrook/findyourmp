@@ -14,6 +14,9 @@
 		@import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/grid.css");
 		@import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/main.css");
 	</style>
+	<style type="text/css" media="screen, projection">
+		.text code { font-size: 1.3em;}
+	</style>
         
                 <script language="JavaScript1.1" type="text/javascript">
 	<!--
@@ -72,8 +75,8 @@
 					<ul>		
 						<li class="first"><a href="http://www.parliament.uk/about/">About</a></li>
 
-						<li><a href="http://www.parliament.uk/people/">Members &amp; Staff</a></li>
-						<li class="selected"><a href="http://www.parliament.uk/business/">Business</a></li>
+						<li class="selected"><a href="http://www.parliament.uk/people/">Members &amp; Staff</a></li>
+						<li><a href="http://www.parliament.uk/business/">Business</a></li>
 						<li><a href="http://www.parliament.uk/publications/">Publications</a></li>
 						<li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
 						<li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
@@ -94,13 +97,13 @@
 				</div>
 			</div>
 
-<h1>News</h1>
+<h1>Find Your MP</h1>
 
 <div id="breadcrumb">
 	You are here: 
 	<a href="http://www.parliament.uk/">Parliament Home</a> &gt;
-	<a href="http://www.parliament.uk/business/">Parliamentary Business</a> &gt;
-	News
+	<a href="http://www.parliament.uk/people/">Members &amp; Staff</a> &gt;
+	Find Your MP
 </div>
 
 <div id="page_content">
@@ -117,7 +120,7 @@
 		<div class="spacer9">&nbsp;</div>
 		<div class="column-460">
 			<h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></h2>
-									 <div class="text"><%= yield %></div>
+									 <div><%= yield %></div>
 </div>
 			<div class="spacer9">&nbsp;</div>
 		</div>

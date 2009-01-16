@@ -1,3 +1,3 @@
-%p
+%p.text
   = link_to("#{highlight(h(constituency_match.name), @search_term)}", constituency_path(constituency_match))
   = "&mdash; #{constituency_match.member_name}" if constituency_match.member_name

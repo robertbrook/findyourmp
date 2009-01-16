@@ -2,7 +2,7 @@
 
 - if @constituency
   - name = @postcode ? link_to(h(@constituency.name), :controller => "constituencies", :action => "show", :only_path => false, :id => @constituency) : h(@constituency.name)
-  %p= "The postcode <strong>#{@postcode.code_with_space}</strong> is in the Westminster constituency of #{name}."
+  %p.text= "The postcode <strong>#{@postcode.code_with_space}</strong> is in the Westminster constituency of #{name}."
   = render :partial => 'constituencies/member'
 - else
-  %p No constituency found.
+  %p.text No constituency found.
