@@ -5,6 +5,8 @@ class MessagesController < ResourceController::Base
   before_filter :redirect_when_not_appropriate_to_show_message_form
   before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new']
 
+  before_filter :ensure_current_constituency_url, :only => [:new, :index]
+
   def index
     if request.get?
       redirect_to_constituency_view
@@ -63,10 +65,14 @@ class MessagesController < ResourceController::Base
     end
 
     def redirect_when_not_appropriate_to_show_message_form
-      if constituency = Constituency.find(params[:constituency_id])
-        if !constituency.show_message_form?
-          redirect_to_constituency_view
+      begin
+        if constituency = Constituency.find(params[:constituency_id])
+          if !constituency.show_message_form?
+            redirect_to_constituency_view
+          end
         end
+      rescue
+        render_not_found
       end
     end
 
@@ -84,6 +90,15 @@ class MessagesController < ResourceController::Base
         elsif !@message.authenticate(authenticity_token)
           render_not_found
         end
+      end
+    end
+
+    def ensure_current_constituency_url
+      begin
+        constituency = Constituency.find(params[:constituency_id])
+        redirect_to constituency, :status => :moved_permanently if constituency.has_better_id?
+      rescue
+        render_not_found
       end
     end
 end

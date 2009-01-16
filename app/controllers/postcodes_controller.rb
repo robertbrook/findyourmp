@@ -20,7 +20,7 @@ class PostcodesController < ApplicationController
             flash[:last_search_term] = search_term
             redirect_to :action=>'index'
           elsif constituencies.size == 1
-            redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
+            redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.friendly_id
           else
             redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
           end

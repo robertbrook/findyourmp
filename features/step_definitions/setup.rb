@@ -1,4 +1,10 @@
 Before do
+  begin
+    Postcode.delete_all
+    Constituency.delete_all
+    Constituency.find_by_sql('delete from slugs;')
+  rescue Exception => e
+  end
   Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
 

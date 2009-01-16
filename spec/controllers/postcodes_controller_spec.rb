@@ -9,7 +9,11 @@ describe PostcodesController do
     @constituency_id = 801
     @constituency_name_part = 'Islington'
     @constituency_name = 'Islington South'
-    @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id)
+    @friendly_constituency_id = 'islington-south'
+    @constituency = mock_model(Constituency, :name => @constituency_name,
+        :id => @constituency_id,
+        :friendly_id => @friendly_constituency_id,
+        :has_better_id? => false)
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -107,7 +111,7 @@ describe PostcodesController do
       end
       it 'should redirect to constituency view showing constituency' do
         do_get
-        response.should redirect_to("constituencies/#{@constituency.id}")
+        response.should redirect_to("constituencies/#{@friendly_constituency_id}")
       end
     end
   end
