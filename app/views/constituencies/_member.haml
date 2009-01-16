@@ -1,7 +1,7 @@
 - if @constituency.no_sitting_member?
   %p.text No sitting member.
 - else
-  %p.text= "The sitting Member of Parliament is #{h @constituency.member_name} (#{@constituency.member_party})."
+  %p.text= "The sitting Member of Parliament for #{@constituency.name} is #{h @constituency.member_name} (#{@constituency.member_party})."
   - unless @constituency.member_biography_url.blank?
     %p.text= "Biography: #{link_to h(@constituency.member_biography_url), @constituency.member_biography_url }"
   - unless @constituency.member_website.blank?
