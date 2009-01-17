@@ -8,6 +8,7 @@ describe PostcodesController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name_part = 'Islington'
+    @constituency_name_short = 'sl'
     @constituency_name = 'Islington South'
     @friendly_constituency_id = 'islington-south'
     @constituency = mock_model(Constituency, :name => @constituency_name,
@@ -142,6 +143,31 @@ describe PostcodesController do
         do_get
         response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}?search_term=#{@constituency_name_part}")
       end
+    end
+  end
+  
+  describe "when asked to search for a term of 2 letters" do
+    before do
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_short).and_return nil
+    end
+    
+    def do_get
+      get :index, :search_term => @constituency_name_short
+    end
+      
+    it 'should store "Sorry: we need more than two letters to search" in flash memory' do
+      do_get
+      flash[:not_found].should == "Sorry: we need more than two letters to search" 
+    end
+    
+    it 'should redirect to root page' do
+      do_get
+      response.should redirect_to("")
+    end
+      
+    it 'should set last_search_term in flash memory' do
+      do_get
+      flash[:last_search_term].should == @constituency_name_short
     end
   end
 
