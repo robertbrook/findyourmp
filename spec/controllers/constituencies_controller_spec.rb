@@ -164,7 +164,7 @@ describe ConstituenciesController do
   describe "when on the edit screen" do
     before do
        @controller.stub!(:is_admin?).and_return true
-       request.env["HTTP_REFERER"] = "/index"
+       request.env["HTTP_REFERER"] = "/previous/url"
     end
     
     describe "and asked to hide_members" do
@@ -174,7 +174,7 @@ describe ConstituenciesController do
         @constituency.should_receive(:member_visible=).with(false)
         @constituency.stub!(:save)
         post :hide_members
-        response.should redirect_to("/index")
+        response.should redirect_to('http://test.host/previous/url')
       end
     end
     
@@ -185,7 +185,7 @@ describe ConstituenciesController do
         @constituency.should_receive(:member_visible=).with(true)
         @constituency.stub!(:save)
         post :unhide_members
-        response.should redirect_to("/index")
+        response.should redirect_to('http://test.host/previous/url')
       end
     end
   end
