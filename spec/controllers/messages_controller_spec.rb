@@ -170,10 +170,18 @@ describe MessagesController do
 
   describe 'when asked to destroy a message' do
     it 'should respond with Not Found' do
+      Constituency.stub!(:find).and_return @constituency
+      @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
+      @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
+      @message.stub!(:sent).and_return false
+      Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
+      @message.should_receive(:authenticate).with(@authenticity_token).and_return true
+      
       get :destroy, :constituency_id => @constituency_id, :id => @message_id
       response.status.should == '404 Not Found'
     end
   end
+  
   describe 'when asked to show a message' do
     def do_get token
       handle_authentication_filter token
