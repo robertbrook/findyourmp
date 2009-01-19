@@ -79,7 +79,32 @@ describe MessagesController do
       @message.should_receive(:save).and_return true
       do_post
       response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
+    end 
+    
+    describe 'with an authenticity_token and a message parameter' do
+      before do
+        @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
+        Message.stub!(:new).and_return @message
+        @message.should_receive(:save).and_return true
+        @message.should_receive(:[]=).with("authenticity_token", @authenticity_token)
+      end
+      def do_post
+        post :create, :constituency_id => @constituency_id, :authenticity_token => @authenticity_token, :message => @message, :model => {}
+      end    
+      it 'should redirect to show view' do
+        do_post
+        response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
+      end
+      it 'should copy the authenticity_token to flash memory' do
+        flash = mock('flash')
+        @controller.stub!(:flash).and_return flash
+        flash.should_receive(:[]=).with('authenticity_token', @authenticity_token)
+        flash.should_receive(:[]=).with(:notice, "Successfully created!")
+        flash.stub!(:sweep)
+        do_post
+      end
     end
+    
   end
 
   def handle_authentication_filter token
