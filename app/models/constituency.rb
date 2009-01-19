@@ -1,5 +1,7 @@
 class Constituency < ActiveRecord::Base
 
+  has_friendly_id :name, :use_slug => true, :strip_diacritics => true
+
   has_many :postcodes
   has_many :messages
   validate :valid_email?
@@ -50,6 +52,10 @@ class Constituency < ActiveRecord::Base
 
       constituency
     end
+  end
+
+  def show_message_form?
+    member_name? && member_email? && !member_requested_contact_url?
   end
 
   def code

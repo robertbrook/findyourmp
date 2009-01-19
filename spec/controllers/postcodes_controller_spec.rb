@@ -8,8 +8,13 @@ describe PostcodesController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name_part = 'Islington'
+    @constituency_name_short = 'sl'
     @constituency_name = 'Islington South'
-    @constituency = mock_model(Constituency, :name => @constituency_name, :id => @constituency_id)
+    @friendly_constituency_id = 'islington-south'
+    @constituency = mock_model(Constituency, :name => @constituency_name,
+        :id => @constituency_id,
+        :friendly_id => @friendly_constituency_id,
+        :has_better_id? => false)
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -19,7 +24,7 @@ describe PostcodesController do
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
-    Postcode.stub!(:find_by_code).and_return nil
+    Postcode.stub!(:find_postcode_by_code).and_return nil
   end
 
   def self.get_request_should_be_successful
@@ -91,7 +96,7 @@ describe PostcodesController do
     end
 
     before do
-      Postcode.should_receive(:find_by_code).with(@constituency_name.upcase.tr(' ','')).and_return nil
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name).and_return nil
     end
 
     describe 'and a matching constituency is not found' do
@@ -107,7 +112,7 @@ describe PostcodesController do
       end
       it 'should redirect to constituency view showing constituency' do
         do_get
-        response.should redirect_to("constituencies/#{@constituency.id}")
+        response.should redirect_to("constituencies/#{@friendly_constituency_id}")
       end
     end
   end
@@ -118,7 +123,7 @@ describe PostcodesController do
     end
 
     before do
-      Postcode.should_receive(:find_by_code).with(@constituency_name_part.upcase.tr(' ','')).and_return nil
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_part).and_return nil
     end
 
     describe 'and a matching constituency is not found' do
@@ -140,6 +145,31 @@ describe PostcodesController do
       end
     end
   end
+  
+  describe "when asked to search for a term of 2 letters" do
+    before do
+      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_short).and_return nil
+    end
+    
+    def do_get
+      get :index, :search_term => @constituency_name_short
+    end
+      
+    it 'should store "Sorry: we need more than two letters to search" in flash memory' do
+      do_get
+      flash[:not_found].should == "Sorry: we need more than two letters to search" 
+    end
+    
+    it 'should redirect to root page' do
+      do_get
+      response.should redirect_to("")
+    end
+      
+    it 'should set last_search_term in flash memory' do
+      do_get
+      flash[:last_search_term].should == @constituency_name_short
+    end
+  end
 
   describe "when asked for constituency given a postcode" do
     def do_get
@@ -159,7 +189,7 @@ describe PostcodesController do
 
     describe 'and a matching postcode is found' do
       before do
-        Postcode.should_receive(:find_by_code).with(@canonical_postcode).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @postcode_record
       end
       it 'should redirect to postcode view showing constituency' do
         do_get

@@ -1,4 +1,8 @@
 Before do
+  Postcode.delete_all
+  Constituency.delete_all
+  Constituency.connection.execute('delete from slugs;')
+
   Given 'there is a postcode "AB101AA" in constituency "Aberdeen North"'
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
 

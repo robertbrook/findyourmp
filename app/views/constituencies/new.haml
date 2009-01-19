@@ -4,11 +4,11 @@
 = error_messages_for :constituency 
 
 -form_for(@constituency) do |f| 
-  %p
+  %p.text
     %b Name
     %br
     = f.text_field :name 
 
-  %p
+  %p.text
     = f.submit "Create"
 = link_to 'Back', constituencies_path 

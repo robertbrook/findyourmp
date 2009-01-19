@@ -1,15 +1,16 @@
 - if @constituency.no_sitting_member?
-  %p No sitting member.
+  %p.text No sitting member.
 - else
-  %p= "The sitting Member of Parliament is #{h @constituency.member_name} (#{@constituency.member_party})."
+  %p.text= "The sitting Member of Parliament for #{@constituency.name} is #{h @constituency.member_name} (#{@constituency.member_party})."
   - unless @constituency.member_biography_url.blank?
-    %p= "Biography: #{link_to h(@constituency.member_biography_url), @constituency.member_biography_url }"
+    %p.text= "Biography: #{link_to h(@constituency.member_biography_url), @constituency.member_biography_url }"
   - unless @constituency.member_website.blank?
-    %p= "Website: #{link_to h(@constituency.member_website), @constituency.member_website }"
+    %p.text= "Website: #{link_to h(@constituency.member_website), @constituency.member_website }"
   - if @constituency.member_requested_contact_url.blank?
     - if @constituency.member_email.blank?
-      %p= "Sorry: we do not have an email address for #{h @constituency.member_name}."
+      %p.text= "Sorry: we do not have an email address for #{h @constituency.member_name}."
     - else
-      %p= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
+      %p.text= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
   - else
-    %p= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
+    %p.text= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
+

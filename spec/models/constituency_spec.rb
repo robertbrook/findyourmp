@@ -48,6 +48,62 @@ describe Constituency do
     end
   end
 
+  describe 'when asked for find_by_constituency_name' do
+    before do
+      @match_name = mock(Constituency, :name => 'Aberdeen South', :member_name => 'Miss Anne Begg')
+      @match_st = mock(Constituency, :name => 'St. Ives')
+      @match_city = mock(Constituency, :name => 'City of York')
+      @match_north = mock(Constituency, :name => "Regent's Park and North Kensington")
+      @match_the = mock(Constituency, :name => "The Wrekin")
+    end
+    
+    describe 'and search term is valid' do
+      it 'should return a valid constituency' do
+        term = 'Aberdeen South'
+        Constituency.should_receive(:find_by_name).with(term).and_return @match_name
+        Constituency.find_by_constituency_name(term).should == @match_name
+      end
+    end
+    
+    describe 'and search term is St Ives' do
+      it 'should search for St. Ives' do
+        term = 'St Ives'
+        expected = 'St. Ives'
+        Constituency.should_receive(:find_by_name).with(expected).and_return @match_st
+        Constituency.find_by_constituency_name(term).name.should == expected
+      end
+    end
+    
+    describe 'and search term is York, City of' do
+      it 'should return City of York' do
+        term = 'York, City of'
+        expected = 'City of York'
+        Constituency.should_receive(:find_by_name).with(expected).and_return @match_city
+        Constituency.find_by_constituency_name(term).name.should == expected
+      end
+    end
+    
+    describe "and search term is Regent's Park & Kensington North" do
+      it "should return Regent's Park and North Kensington" do
+        term = "Regent's Park & Kensington North"
+        expected = "Regent's Park and North Kensington"
+        Constituency.should_receive(:find_by_name).with(term).and_return nil
+        Constituency.should_receive(:find_by_name).with(expected).and_return @match_north
+        Constituency.find_by_constituency_name(term).name.should == expected
+      end
+    end
+    
+    describe "and search term is Wrekin, The" do
+      it "should return The Wrekin" do
+        term = "Wrekin, The"
+        expected = "The Wrekin"
+        Constituency.should_receive(:find_by_name).with(term).and_return nil
+        Constituency.should_receive(:find_by_name).with(expected).and_return @match_the
+        Constituency.find_by_constituency_name(term).name.should == expected
+      end
+    end
+  end
+
   describe 'with invalid member_email' do
     it 'should not be valid' do
       @constituency.member_email = 'bad_email'
@@ -56,9 +112,32 @@ describe Constituency do
   end
 
   describe 'with valid member_email' do
-    it 'should be valid' do
+    before do
       @constituency.member_email = 'email@example.host'
+    end
+    it 'should be valid' do
       @constituency.valid?.should be_true
+    end
+    describe 'and with member_name' do
+      before do
+        @constituency.member_name = 'name'
+      end
+      it 'should have show_message_form? return true' do
+        @constituency.show_message_form?.should be_true
+      end
+      describe 'and with member requested contact url' do
+        before do
+          @constituency.member_requested_contact_url = 'http://here.co.uk/'
+        end
+        it 'should have show_message_form? return false' do
+          @constituency.show_message_form?.should be_false
+        end
+      end
+    end
+    describe 'and without member_name' do
+      it 'should have show_message_form? return true' do
+        @constituency.show_message_form?.should be_false
+      end
     end
   end
 
@@ -66,10 +145,14 @@ describe Constituency do
     before do
       @member_name = 'Tiberius Kirk'
       @constituency.stub!(:member_name).and_return @member_name
+      @constituency.member_visible = true
     end
     describe 'when asked for member name' do
       it 'should return member\'s name' do
         @constituency.member_name.should == @member_name
+      end
+      it 'should have no_sitting_member? return false' do
+        @constituency.no_sitting_member?.should be_false
       end
     end
   end
@@ -78,6 +161,9 @@ describe Constituency do
     describe 'when asked for member name' do
       it 'should return nil' do
         @constituency.member_name.should be_nil
+      end
+      it 'should have no_sitting_member? return true' do
+         @constituency.no_sitting_member?.should be_true
       end
     end
   end

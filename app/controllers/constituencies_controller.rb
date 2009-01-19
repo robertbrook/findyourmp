@@ -2,6 +2,8 @@ class ConstituenciesController < ResourceController::Base
 
   before_filter :respond_not_found_if_not_admin, :except => ['show']
 
+  before_filter :ensure_current_constituency_url, :only => :show
+
   def show
     id = params[:id]
     flash.keep(:postcode)
@@ -43,6 +45,17 @@ class ConstituenciesController < ResourceController::Base
           end
         end
         redirect_to :back
+      end
+    end
+
+    def ensure_current_constituency_url
+      begin
+        unless params[:id].include? '+'
+          constituency = Constituency.find(params[:id])
+          redirect_to constituency, :status => :moved_permanently if constituency.has_better_id?
+        end
+      rescue
+        render_not_found
       end
     end
 end

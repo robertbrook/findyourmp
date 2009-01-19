@@ -1,3 +1,4 @@
 - name = @postcode ? link_to(h(constituency.name), constituency_path(constituency)) : h(constituency.name)
-%h2= name
+- @title = name
+- @crumbtrail = @title
 = render :partial => 'member'

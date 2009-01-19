@@ -7,10 +7,7 @@ class PostcodesController < ApplicationController
     @last_search_term = flash[:last_search_term]
 
     unless search_term.blank?
-      term = String.new search_term
-      term.strip!
-      term.upcase!
-      postcode = Postcode.find_by_code(term.tr(' ',''))
+      postcode = Postcode.find_postcode_by_code(search_term)
 
       if postcode
         redirect_to :action=>'show', :postcode => postcode.code
@@ -23,7 +20,7 @@ class PostcodesController < ApplicationController
             flash[:last_search_term] = search_term
             redirect_to :action=>'index'
           elsif constituencies.size == 1
-            redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.id
+            redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.friendly_id
           else
             redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term
           end
