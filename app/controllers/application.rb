@@ -14,9 +14,14 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   before_filter :set_is_admin
+  before_filter :respond_not_found_if_not_admin, :only => ['messages']
 
-  def render_not_found
-    render :text => 'not found or expired page', :status => :not_found
+  def messages
+    @messages = Message.all
+  end
+
+  def render_not_found message='Page not found.'
+    render :text => message, :status => :not_found
   end
 
   def respond_not_found_if_not_admin
