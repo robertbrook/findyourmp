@@ -46,6 +46,9 @@ describe ConstituenciesController do
     it 'should find show action' do
       route_for(:controller => "constituencies", :action => "show", :id=>@constituency_id).should == "/constituencies/#{@constituency_id}"
       params_from(:get, "/constituencies/#{@constituency_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}"}
+
+      route_for(:controller => "constituencies", :action => "show", :id=>@friendly_id).should == "/constituencies/#{@friendly_id}"
+      params_from(:get, "/constituencies/#{@friendly_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}"}
     end
     it 'should find show action' do
       route_for(:controller => "constituencies", :action => "show", :id=>@two_constituency_ids).should == "/constituencies/#{@two_constituency_ids}"
@@ -57,7 +60,20 @@ describe ConstituenciesController do
     # end
   end
 
-  describe "when asked for one constituency by id along with search term" do
+  describe "when asked for one constituency by wrong id" do
+    before do
+      Constituency.stub!(:find).and_raise ActiveRecord::RecordNotFound.new("Couldn't find Constituency")
+    end
+    def do_get
+      get :show, :id => @friendly_id
+    end
+    it 'should respond with file not found' do
+      do_get
+      response.status.should == '404 Not Found'
+    end
+  end
+
+  describe "when asked for one constituency by friendly_id along with search term" do
     before do
       Constituency.stub!(:find).and_return @constituency
     end
@@ -160,13 +176,13 @@ describe ConstituenciesController do
       assigns[:last_search_term].should == @search_term
     end
   end
-  
+
   describe "when on the edit screen" do
     before do
        @controller.stub!(:is_admin?).and_return true
        request.env["HTTP_REFERER"] = "/previous/url"
     end
-    
+
     describe "and asked to hide_members" do
       it 'should hide the members and return to the previous page' do
         Constituency.should_receive(:all).and_return [ @constituency ]
@@ -177,7 +193,7 @@ describe ConstituenciesController do
         response.should redirect_to('http://test.host/previous/url')
       end
     end
-    
+
     describe "and asked to unhide_members" do
       it 'should hide the members and return to the previous page' do
         Constituency.should_receive(:all).and_return [ @constituency ]
