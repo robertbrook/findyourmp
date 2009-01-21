@@ -14,4 +14,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect '/toggle_admin', :controller => "application", :action => 'toggle_admin'
   # See how all your routes lay out with "rake routes"
+
+  map.connect '/messages', :controller => 'application', :action => 'messages'
+
+  map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

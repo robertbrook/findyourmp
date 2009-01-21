@@ -81,7 +81,7 @@ class MessagesController < ResourceController::Base
 
         elsif @message.sent
           show_sent_message = (flash[:message_sent] && params[:action] == 'show')
-          render_not_found unless show_sent_message
+          render_not_found('Not found or expired page.') unless show_sent_message
 
         else
           bad_authenticity_token = !@message.authenticate(authenticity_token)
