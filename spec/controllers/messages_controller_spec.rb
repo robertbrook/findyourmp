@@ -20,22 +20,33 @@ describe MessagesController do
         :friendly_id => @friendly_constituency_id,
         :has_better_id? => false)
     Constituency.stub!(:find).with(@constituency_id.to_s).and_return @constituency
+    Constituency.stub!(:find).with(@friendly_constituency_id).and_return @constituency
   end
 
-  def redirect_to_show_constituency_view
-    redirect_to("constituencies/#{@constituency_id}")
+  def redirect_to_show_constituency_view id=@friendly_constituency_id
+    redirect_to("constituencies/#{id}")
   end
 
   describe 'when asked for messages index' do
     it 'should redirect to constituency view' do
-      get :index, :constituency_id => @constituency_id
+      get :index, :constituency_id => @friendly_constituency_id
       response.should redirect_to_show_constituency_view
+    end
+  end
+
+  describe 'when asked for new message for non-existant constituency' do
+    def do_get
+      get :new, :constituency_id => 'bad_id'
+    end
+    it 'should return file not found' do
+      do_get
+      response.status.should == '404 Not Found'
     end
   end
 
   describe 'when asked for new message' do
     def do_get
-      get :new, :constituency_id => @constituency_id
+      get :new, :constituency_id => @friendly_constituency_id
     end
     describe 'and constituency has a member email' do
       before do
@@ -79,8 +90,8 @@ describe MessagesController do
       @message.should_receive(:save).and_return true
       do_post
       response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
-    end 
-    
+    end
+
     describe 'with an authenticity_token and a message parameter' do
       before do
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
@@ -90,7 +101,7 @@ describe MessagesController do
       end
       def do_post
         post :create, :constituency_id => @constituency_id, :authenticity_token => @authenticity_token, :message => @message, :model => {}
-      end    
+      end
       it 'should redirect to show view' do
         do_post
         response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
@@ -104,7 +115,7 @@ describe MessagesController do
         do_post
       end
     end
-    
+
   end
 
   def handle_authentication_filter token
@@ -145,7 +156,7 @@ describe MessagesController do
       @flash.stub!(:sweep)
       @flash.stub!(:keep)
     end
-    
+
     def do_get token, message_id
       handle_authentication_filter token
       get :edit, :constituency_id => @constituency_id, :id => message_id, :authenticity_token => token
@@ -155,23 +166,23 @@ describe MessagesController do
       it 'should redirect to edit' do
         @flash.should_receive(:[]=).with("authenticity_token", @authenticity_token)
         @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-        
+
         do_get @authenticity_token, @message_id
         response.should redirect_to(constituency_message_url(@constituency_id,@message_id) +'/edit')
       end
     end
-    
+
     describe 'without an authenticity_token being passed' do
       it 'should keep "authenticity_token" in flash memory' do
         handle_authentication_filter @authenticity_token
         @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-                
+
          @flash.should_receive(:keep).with('authenticity_token')
-        
+
         get :edit, :constituency_id => @constituency_id, :id => @message_id
       end
     end
-    
+
     describe 'and message doesn\'t exist' do
       it 'should respond with Not Found' do
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
@@ -183,7 +194,7 @@ describe MessagesController do
         response.status.should == '404 Not Found'
       end
     end
-    
+
     describe 'and message already sent' do
       it 'should respond with Not Found' do
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
@@ -208,12 +219,12 @@ describe MessagesController do
       @message.stub!(:sent).and_return false
       Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
       @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-      
+
       get :destroy, :constituency_id => @constituency_id, :id => @message_id
       response.status.should == '404 Not Found'
     end
   end
-  
+
   describe 'when asked to show a message' do
     def do_get token
       handle_authentication_filter token
