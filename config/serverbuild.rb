@@ -2,10 +2,11 @@ load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb
   
 role :app, domain
 
-set :user, builduser
-set :password, buildpassword
-
 namespace :serverbuild do
+  set :user, deployuser
+  set :password, deploypassword
+  
+  set :use_sudo, false
 
   desc "Install Passenger including all prerequisites and restart Apache"
   task :default do
@@ -20,22 +21,27 @@ namespace :serverbuild do
     data = ""
     tempfile = "config/sourcelist.tmp"
     
+    sudo "chown #{user} /etc/apt/sources.list"
     get "/etc/apt/sources.list", tempfile
     
     oldfile = File.read(tempfile)
     
-    data << "deb ftp://ftp.us.debian.org/debian etch main\n"
-    data << "deb ftp://mirror.ox.ac.uk/debian etch main\n"
-    data << "deb ftp://ftp.uk.debian.org/debian etch main\n"
-    
+    # this code has been removed so that the original sources.list
+    # entries are no longer used as the ones found in 
+    # elasticserver's original file tend to be problematic
     #oldfile.each { |line|
     #  data << line
     #}
     
     File.delete(tempfile)
+        
+    data << "deb http://us.archive.ubuntu.com/ubuntu intrepid universe\n"
+    data << "deb-src http://us.archive.ubuntu.com/ubuntu intrepid universe\n"
+    data << "deb-src http://us.archive.ubuntu.com/ubuntu intrepid main\n"
+
+    data << "deb http://fr.archive.ubuntu.com/ubuntu intrepid main\n"
+    data << "deb http://nl.archive.ubuntu.com/ubuntu intrepid main\n"
     
-    data << "deb http://us.archive.ubuntu.com/ubuntu/ gutsy universe\n"
-    data << "deb-src http://us.archive.ubuntu.com/ubuntu/ gutsy universe\n"
     
     run "if [ -f /etc/apt/sources.list.bak ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'exists'
@@ -56,20 +62,20 @@ namespace :serverbuild do
   desc "Install Passenger prerequisites"
   task :install_prereqs, :roles => :app do
     sudo "apt-get update -y"
-    sudo "apt-get install build-essential -y --force-yes"
+    sudo "apt-get install build-essential -y --force-yes"   
+    sudo "apt-get install libpq5=8.3.4-2.2 -y --force-yes"
+    sudo "apt-get install libpq-dev -y --force-yes"
+    sudo "apt-get install libaprutil1-dev -y --force-yes"
     sudo "apt-get install apache2-prefork-dev -y --force-yes"
   end
 
   desc "Install Passenger"
   task :install_passenger, :roles => :app  do
-    #install the latest version of the gem
     sudo "gem install passenger"
 
-    #go to the the gem directory and run the rake task to build and install passenger
-    run <<-EOB
-       cd /var/lib/gems/1.8/gems/passenger-#{get_passenger_version} &&
-       sudo rake clean apache2
-    EOB
+    sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}"
+    
+    run "cd /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}; sudo rake clean apache2"
   end
   
   desc "Add Passenger stuff to apache config and restart apache"
@@ -106,5 +112,5 @@ namespace :serverbuild do
     
     gemversion
   end
-  
+
 end
