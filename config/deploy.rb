@@ -92,7 +92,7 @@ namespace :deploy do
             run "if [ -d #{folderpath} ]; then echo exists ; else sudo mkdir #{folderpath} ; fi"
           end
         end
-        sudo "chown #{appuser} #{folderpath}"
+        sudo "chown #{user} #{folderpath}"
         run "mkdir #{folderpath}/releases"
       end
     end
@@ -140,6 +140,7 @@ namespace :deploy do
     sudo "gem install unicode"
 
     rake_tasks
+    # uncomment the line below to run a full parse - removed for testing (takes too long)
     #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
 
