@@ -1,3 +1,0 @@
-module PostcodesHelper
-  
-end
