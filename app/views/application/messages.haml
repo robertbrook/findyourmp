@@ -1,11 +1,14 @@
 %h2 Message Audit
 
 %p
-  Draft messages:
-  = @draft_message_count
-%p
   Sent messages:
   = @sent_message_count
+%p
+  Attempted to send messages:
+  = @attempted_send_message_count
+%p
+  Draft messages:
+  = @draft_message_count
 
 - unless @messages.empty?
   %table

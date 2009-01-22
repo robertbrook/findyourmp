@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
 
   def messages
     @sent_message_count = Message.sent_message_count
+    @attempted_send_message_count = Message.attempted_send_message_count
     @draft_message_count = Message.draft_message_count
     @messages = [] # Message.all
   end

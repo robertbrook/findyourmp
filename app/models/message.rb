@@ -14,6 +14,7 @@ class Message < ActiveRecord::Base
   validates_presence_of :recipient_email
   validates_presence_of :recipient
   validates_inclusion_of :sent, :in => [true, false]
+  validates_inclusion_of :attempted_send, :in => [true, false]
 
   validate :email_valid
   validate :postcode_valid
@@ -25,7 +26,11 @@ class Message < ActiveRecord::Base
     end
 
     def draft_message_count
-      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 0')
+      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 0 AND attempted_send = 0')
+    end
+
+    def attempted_send_message_count
+      count_by_sql('SELECT COUNT(*) FROM messages WHERE attempted_send = 1')
     end
   end
 
@@ -34,10 +39,14 @@ class Message < ActiveRecord::Base
   end
 
   def deliver
-    MessageMailer.deliver_sent(self)
-    MessageMailer.deliver_confirm(self)
-    self.sent = 1
-    save!
+    begin
+      MessageMailer.deliver_sent(self)
+      MessageMailer.deliver_confirm(self)
+      self.sent = 1
+      save!
+    rescue Exception => e
+      raise e
+    end
   end
 
   def default_message
@@ -62,6 +71,7 @@ class Message < ActiveRecord::Base
       self.recipient = constituency.member_name
       self.recipient_email = constituency.member_email
       self.sent = 0
+      self.attempted_send = 0
     end
 
     def populate_postcode_and_sender_is_constituent
