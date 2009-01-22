@@ -143,4 +143,18 @@ describe Message do
       @message.sent.should be_true
     end
   end
+
+  describe 'when asked for count of sent messages' do
+    it 'should count sent messages and return result' do
+      Message.should_receive(:count_by_sql).and_return 2
+      Message.sent_message_count.should == 2
+    end
+  end
+
+  describe 'when asked for count of draft messages' do
+    it 'should count draft messages and return result' do
+      Message.should_receive(:count_by_sql).and_return 5
+      Message.draft_message_count.should == 5
+    end
+  end
 end

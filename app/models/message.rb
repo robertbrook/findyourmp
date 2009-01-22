@@ -19,6 +19,16 @@ class Message < ActiveRecord::Base
   validate :postcode_valid
   validate :message_not_default
 
+  class << self
+    def sent_message_count
+      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 1')
+    end
+
+    def draft_message_count
+      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 0')
+    end
+  end
+
   def authenticate authenticity_token
     authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
   end
