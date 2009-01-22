@@ -1,27 +1,27 @@
 
- sudo mysqladmin create findyourmp_test
- sudo mysqladmin create findyourmp_development
- sudo mysqladmin create findyourmp_production
+sudo mysqladmin create findyourmp_test
+sudo mysqladmin create findyourmp_development
+sudo mysqladmin create findyourmp_production
 
- git pull
+git pull
 
- git submodule init
+git submodule init
 
- git submodule update
+git submodule update
 
- mv config/database.yml.example config/database.yml
+mv config/database.yml.example config/database.yml
 
- sudo gem install unicode
+sudo gem install unicode
 
- rake db:migrate:reset
+rake db:migrate:reset
 
- # the steps below requires data which is not in git repository
- # files need to end up in the /data directory
+# the steps below requires data which is not in git repository
+# files need to end up in the /data directory
 
- rake fymp:constituencies
- rake fymp:members
+rake fymp:constituencies
+rake fymp:members
 
- rake fymp:parse
- rake fymp:populate
+rake fymp:parse
+rake fymp:populate
 
- rake friendly_id:make_slugs MODEL=Constituency
+rake friendly_id:make_slugs MODEL=Constituency

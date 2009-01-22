@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(:version => 20090116114540) do
     t.string  "member_requested_contact_url"
   end
 
+  create_table "members", :force => true do |t|
+    t.string  "name"
+    t.integer "constituency_id"
+  end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
+
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"
     t.string   "sender_email"
