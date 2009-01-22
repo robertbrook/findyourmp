@@ -17,7 +17,9 @@ class ApplicationController < ActionController::Base
   before_filter :respond_not_found_if_not_admin, :only => ['messages']
 
   def messages
-    @messages = Message.all
+    @sent_message_count = Message.sent_message_count
+    @draft_message_count = Message.draft_message_count
+    @messages = [] # Message.all
   end
 
   def render_not_found message='Page not found.'

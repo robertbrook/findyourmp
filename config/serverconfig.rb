@@ -17,11 +17,11 @@ namespace :serverconfig do
     change_cftuser_password
   end
   
-  task :create_deploy_user do
+  def create_deploy_user
     create_user deployuser, deploygroup, deploypassword
   end
   
-  task :create_passenger_user do
+  def create_passenger_user
     create_user passengeruser, passengergroup, passengerpassword
   end
   

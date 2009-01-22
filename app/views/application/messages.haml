@@ -1,11 +1,21 @@
-%table
-  %tr
-    - @messages.first.attributes.each do |name,value|
-      - unless name[/message|authenticity_token/]
-        %th=name
+%h2 Message Audit
 
-  - @messages.each do |message|
+%p
+  Draft messages:
+  = @draft_message_count
+%p
+  Sent messages:
+  = @sent_message_count
+
+- unless @messages.empty?
+  %table
     %tr
-      - message.attributes.each do |name, value|
+      - @messages.first.attributes.each do |name,value|
         - unless name[/message|authenticity_token/]
-          %td=value
+          %th=name
+
+    - @messages.each do |message|
+      %tr
+        - message.attributes.each do |name, value|
+          - unless name[/message|authenticity_token/]
+            %td=value
