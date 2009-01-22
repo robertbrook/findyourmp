@@ -4,10 +4,12 @@ describe Message do
 
   def self.assert_checks_presence attribute
     eval %Q|it 'should be invalid when #{attribute} is missing' do
+      Postcode.stub!(:find_postcode_by_code).and_return mock('postcode', :code_with_space => 'N1 2SD', :in_constituency? => true) unless "#{attribute}" == 'postcode'
       @valid_attributes.delete(attribute)
       message = Message.new(@valid_attributes)
       message.stub!(:constituency).and_return mock('constituency', :member_name=>nil, :member_email => nil)
       message.valid?.should be_false
+      message.errors[:#{attribute}].should_not be_nil
     end|
   end
 
@@ -24,7 +26,6 @@ describe Message do
       :postcode => @postcode,
       :subject => "value for subject",
       :message => "value for message",
-      :sent => false,
       :sent_on => Time.now
     }
   end
@@ -39,17 +40,20 @@ describe Message do
   assert_checks_presence :postcode
   assert_checks_presence :subject
   assert_checks_presence :message
-  assert_checks_presence :sent
+
+  def mock_message_setup
+    nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
+    @member_name = 'member_name'
+    @member_email = 'member_name@parl.uk'
+    constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
+    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
+    @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
+    Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @post_code
+  end
 
   describe 'creating' do
     before do
-      nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
-      @member_name = 'member_name'
-      @member_email = 'member_name@parl.uk'
-      constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
-      Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
-      @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
-      Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @post_code
+      mock_message_setup
     end
 
     it "should create a new instance given valid attributes" do
@@ -123,7 +127,9 @@ describe Message do
 
   describe 'when asked to deliver message' do
     before do
+      mock_message_setup
       @message = Message.new(@valid_attributes)
+      @message.valid?.should be_true
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
       @message.stub!(:save!)
@@ -141,6 +147,13 @@ describe Message do
       @message.should_receive(:save!)
       @message.deliver
       @message.sent.should be_true
+    end
+  end
+
+  describe 'when asked for count of attempted send messages' do
+    it 'should count attempted send messages and return result' do
+      Message.should_receive(:count_by_sql).and_return 4
+      Message.attempted_send_message_count.should == 4
     end
   end
 
