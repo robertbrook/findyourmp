@@ -152,22 +152,22 @@ describe Message do
 
   describe 'when asked for count of attempted send messages' do
     it 'should count attempted send messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 4
-      Message.attempted_send_message_count.should == 4
+      Message.delete_all
+      Message.attempted_send.count.should == 0
     end
   end
 
   describe 'when asked for count of sent messages' do
     it 'should count sent messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 2
-      Message.sent_message_count.should == 2
+      Message.delete_all
+      Message.sent.count.should == 0
     end
   end
 
   describe 'when asked for count of draft messages' do
     it 'should count draft messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 5
-      Message.draft_message_count.should == 5
+      Message.delete_all
+      Message.draft.count.should == 0
     end
   end
 end

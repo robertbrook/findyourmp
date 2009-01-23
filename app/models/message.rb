@@ -20,19 +20,9 @@ class Message < ActiveRecord::Base
   validate :postcode_valid
   validate :message_not_default
 
-  class << self
-    def sent_message_count
-      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 1')
-    end
-
-    def draft_message_count
-      count_by_sql('SELECT COUNT(*) FROM messages WHERE sent = 0 AND attempted_send = 0')
-    end
-
-    def attempted_send_message_count
-      count_by_sql('SELECT COUNT(*) FROM messages WHERE attempted_send = 1')
-    end
-  end
+  named_scope :sent, :conditions => {:sent => true}
+  named_scope :draft, :conditions => {:sent => false, :attempted_send => false}
+  named_scope :attempted_send, :conditions => {:attempted_send => true}
 
   def authenticate authenticity_token
     authenticity_token && (authenticity_token == self.authenticity_token) ? true : false

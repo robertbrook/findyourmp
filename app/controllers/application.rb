@@ -17,9 +17,9 @@ class ApplicationController < ActionController::Base
   before_filter :respond_not_found_if_not_admin, :only => ['messages']
 
   def messages
-    @sent_message_count = Message.sent_message_count
-    @attempted_send_message_count = Message.attempted_send_message_count
-    @draft_message_count = Message.draft_message_count
+    @sent_message_count = Message.sent.count
+    @attempted_send_message_count = Message.attempted_send.count
+    @draft_message_count = Message.draft.count
     @messages = [] # Message.all
   end
 

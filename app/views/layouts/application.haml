@@ -14,7 +14,8 @@
       %h1= @title || "Find Your MP"
     #content= yield
     #footer
-      #admin-button= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
+      - unless params[:controller] == 'messages'
+        #admin-button= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
       - if @is_admin
         - if @constituency && params[:action] != 'edit'
           %p= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
