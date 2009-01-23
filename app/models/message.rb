@@ -42,11 +42,15 @@ class Message < ActiveRecord::Base
     begin
       MessageMailer.deliver_sent(self)
       MessageMailer.deliver_confirm(self)
+      self.attempted_send = 0
       self.sent = 1
-      save!
     rescue Exception => e
-      raise e
+      self.attempted_send = 1
+      self.mailer_error = e.message + "\n" + e.backtrace.join("\n")
+      logger.error e
     end
+    save!
+    return self.sent
   end
 
   def default_message
