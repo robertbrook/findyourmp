@@ -14,14 +14,6 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   before_filter :set_is_admin
-  before_filter :respond_not_found_if_not_admin, :only => ['messages']
-
-  def messages
-    @sent_message_count = Message.sent.count
-    @attempted_send_message_count = Message.attempted_send.count
-    @draft_message_count = Message.draft.count
-    @messages = [] # Message.all
-  end
 
   def render_not_found message='Page not found.'
     render :text => message, :status => :not_found
