@@ -138,6 +138,8 @@ namespace :deploy do
     sudo "gem install hpricot"
     sudo "gem install morph"
     sudo "gem install unicode"
+    sudo "gem install treetop"
+    sudo "gem install term-ansicolor"
 
     rake_tasks
     # uncomment the line below to run a full parse - removed for testing (takes too long)
