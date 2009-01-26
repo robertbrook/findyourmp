@@ -46,9 +46,9 @@ describe Message do
     @member_name = 'member_name'
     @member_email = 'member_name@parl.uk'
     constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
-    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
+    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).any_number_of_times.and_return constituency
     @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
-    Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @post_code
+    Postcode.should_receive(:find_postcode_by_code).with(@postcode).any_number_of_times.and_return @post_code
   end
 
   describe 'creating' do
@@ -198,7 +198,7 @@ describe Message do
       Message.attempted_send.count.should == 0
     end
     describe 'by month' do
-      it 'should count attempted_sends by month' do
+      it 'should call count_by_month for attempted_sends' do
         results = mock('hash')
         Message.should_receive(:count_by_month).with(:attempted_send).and_return results
         Message.attempted_send_by_month.should == results
@@ -207,14 +207,25 @@ describe Message do
   end
 
   describe 'when asked for count of sent messages' do
+    before do
+      mock_message_setup
+      @month = Date.new(2009,1,1).to_time
+      @month1 = Date.new(2009,2,1).to_time
+      @month2 = Date.new(2009,3,1).to_time
+      @message =Message.new(@valid_attributes.merge(:sent_at=>@month))
+      @message.save
+      @message2 =Message.new(@valid_attributes.merge(:sent_at=>@month2))
+      @message2.save
+      mock_message_setup
+      @message.sent = true; @message.save
+      @message2.sent = true; @message2.save
+    end
     it 'should count sent messages and return result' do
-      Message.sent.count.should == 0
+      Message.sent.count.should == 2
     end
     describe 'by month' do
       it 'should count sents by month' do
-        results = mock('hash')
-        Message.should_receive(:count_by_month).with(:sent).and_return results
-        Message.sent_by_month.should == results
+        Message.sent_by_month.to_a.should == [[@month,1],[@month1,0],[@month2,1]]
       end
     end
   end
@@ -225,7 +236,7 @@ describe Message do
     end
 
     describe 'by month' do
-      it 'should count drafts by month' do
+      it 'should call count_by_month for drafts' do
         results = mock('hash')
         Message.should_receive(:count_by_month).with(:draft).and_return results
         Message.draft_by_month.should == results

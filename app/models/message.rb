@@ -34,7 +34,7 @@ class Message < ActiveRecord::Base
     def attempted_send_by_month
       count_by_month(:attempted_send)
     end
-    private
+    protected
       def count_by_month type
         first_month = send(type).minimum(:sent_at).at_beginning_of_month
         last_month = send(type).maximum(:sent_at).at_beginning_of_month
