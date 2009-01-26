@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
 
-  before_filter :respond_not_found_if_not_admin
+  before_filter :respond_unauthorized_if_not_admin
 
   def index
     @sent_message_count = Message.sent.count

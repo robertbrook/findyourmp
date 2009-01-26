@@ -1,6 +1,6 @@
 class ConstituenciesController < ResourceController::Base
 
-  before_filter :respond_not_found_if_not_admin, :except => ['show']
+  before_filter :respond_unauthorized_if_not_admin, :except => ['show']
 
   before_filter :ensure_current_constituency_url, :only => :show
 

@@ -1,8 +1,7 @@
 %h2 Message Audit
 
 %p
-  Sent messages:
-  = @sent_message_count
+  = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
 %p
   Attempted to send messages:
   = @attempted_send_message_count

@@ -19,8 +19,12 @@ class ApplicationController < ActionController::Base
     render :text => message, :status => :not_found
   end
 
-  def respond_not_found_if_not_admin
-    render_not_found unless is_admin?
+  def render_unauthorized
+    render :text => 'Unauthorized', :status => 401
+  end
+
+  def respond_unauthorized_if_not_admin
+    render_unauthorized unless is_admin?
   end
 
   def is_admin?

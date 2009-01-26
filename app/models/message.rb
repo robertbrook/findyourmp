@@ -28,12 +28,17 @@ class Message < ActiveRecord::Base
     authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
   end
 
+  def sent_by_month
+    Month.sent
+  end
+
   def deliver
     begin
       MessageMailer.deliver_sent(self)
       MessageMailer.deliver_confirm(self)
       self.attempted_send = 0
       self.sent = 1
+      self.sent_on = Time.now.utc
     rescue Exception => e
       self.attempted_send = 1
       self.mailer_error = e.message + "\n" + e.backtrace.join("\n")

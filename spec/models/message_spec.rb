@@ -25,8 +25,7 @@ describe Message do
       :address => "value for address",
       :postcode => @postcode,
       :subject => "value for subject",
-      :message => "value for message",
-      :sent_on => Time.now
+      :message => "value for message"
     }
   end
 
@@ -132,21 +131,62 @@ describe Message do
       @message.valid?.should be_true
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
+      @now = mock('utc-time')
+      Time.stub!(:now).and_return mock('time', :utc=>@now)
       @message.stub!(:save!)
     end
-    it 'should deliver sent message' do
-      MessageMailer.should_receive(:deliver_sent).with(@message)
-      @message.deliver
+    describe 'and sending is successful' do
+      it 'should deliver sent message' do
+        MessageMailer.should_receive(:deliver_sent).with(@message)
+        @message.deliver
+      end
+      it 'should deliver confirm message' do
+        MessageMailer.should_receive(:deliver_confirm).with(@message)
+        @message.deliver
+      end
+      it 'should set sent to true' do
+        @message.sent.should be_false
+        @message.deliver
+        @message.sent.should be_true
+      end
+      it 'should set sent_on to current time' do
+        @message.sent_on.should be_nil
+        @message.deliver
+        @message.sent_on.should == @now
+      end
+      it 'should leave attempted_send as false' do
+        @message.attempted_send.should be_false
+        @message.deliver
+        @message.attempted_send.should be_false
+      end
+      it 'should save message state after sending' do
+        @message.should_receive(:save!)
+        @message.deliver
+      end
     end
-    it 'should deliver confirm message' do
-      MessageMailer.should_receive(:deliver_confirm).with(@message)
-      @message.deliver
-    end
-    it 'should set sent to true' do
-      @message.sent.should be_false
-      @message.should_receive(:save!)
-      @message.deliver
-      @message.sent.should be_true
+    describe 'and exception occurs when sending' do
+      before do
+        MessageMailer.should_receive(:deliver_sent).with(@message).and_raise mock(Exception)
+      end
+      it 'should leave sent as false' do
+        @message.sent.should be_false
+        @message.deliver
+        @message.sent.should be_false
+      end
+      it 'should leave sent_on as nil' do
+        @message.sent_on.should be_nil
+        @message.deliver
+        @message.sent_on.should be_nil
+      end
+      it 'should set attempted_send to true' do
+        @message.attempted_send.should be_false
+        @message.deliver
+        @message.attempted_send.should be_true
+      end
+      it 'should save message state after sending' do
+        @message.should_receive(:save!)
+        @message.deliver
+      end
     end
   end
 
