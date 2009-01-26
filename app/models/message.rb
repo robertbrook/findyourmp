@@ -24,12 +24,37 @@ class Message < ActiveRecord::Base
   named_scope :draft, :conditions => {:sent => false, :attempted_send => false}
   named_scope :attempted_send, :conditions => {:attempted_send => true}
 
-  def authenticate authenticity_token
-    authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
+  class << self
+    def sent_by_month
+      count_by_month(:sent)
+    end
+    def draft_by_month
+      count_by_month(:draft)
+    end
+    def attempted_send_by_month
+      count_by_month(:attempted_send)
+    end
+    private
+      def count_by_month type
+        first_month = send(type).minimum(:sent_at).at_beginning_of_month
+        last_month = send(type).maximum(:sent_at).at_beginning_of_month
+        months = [first_month]
+        next_month = first_month.next_month
+        while (next_month <= last_month)
+          months << next_month
+          next_month = next_month.next_month
+        end
+        count_by_month = ActiveSupport::OrderedHash.new
+        months.each do |month|
+          conditions = "MONTH(sent_at) = #{month.month} AND YEAR(sent_at) = #{month.year}"
+          count_by_month[month] = sent.count(:conditions => conditions)
+        end
+        count_by_month
+      end
   end
 
-  def sent_by_month
-    Month.sent
+  def authenticate authenticity_token
+    authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
   end
 
   def deliver
@@ -38,7 +63,7 @@ class Message < ActiveRecord::Base
       MessageMailer.deliver_confirm(self)
       self.attempted_send = 0
       self.sent = 1
-      self.sent_on = Time.now.utc
+      self.sent_at = Time.now.utc
     rescue Exception => e
       self.attempted_send = 1
       self.mailer_error = e.message + "\n" + e.backtrace.join("\n")

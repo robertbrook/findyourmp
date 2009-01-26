@@ -27,6 +27,7 @@ describe Message do
       :subject => "value for subject",
       :message => "value for message"
     }
+    Message.delete_all
   end
 
   assert_model_belongs_to :constituency
@@ -131,7 +132,7 @@ describe Message do
       @message.valid?.should be_true
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
-      @now = mock('utc-time')
+      @now = Time.now.utc
       Time.stub!(:now).and_return mock('time', :utc=>@now)
       @message.stub!(:save!)
     end
@@ -149,10 +150,12 @@ describe Message do
         @message.deliver
         @message.sent.should be_true
       end
-      it 'should set sent_on to current time' do
-        @message.sent_on.should be_nil
+      it 'should set sent_at to current time' do
+        @message.sent_at.should be_nil
         @message.deliver
-        @message.sent_on.should == @now
+        @message.sent_at.year.should == @now.year
+        @message.sent_at.month.should == @now.month
+        @message.sent_at.day.should == @now.day
       end
       it 'should leave attempted_send as false' do
         @message.attempted_send.should be_false
@@ -173,10 +176,10 @@ describe Message do
         @message.deliver
         @message.sent.should be_false
       end
-      it 'should leave sent_on as nil' do
-        @message.sent_on.should be_nil
+      it 'should leave sent_at as nil' do
+        @message.sent_at.should be_nil
         @message.deliver
-        @message.sent_on.should be_nil
+        @message.sent_at.should be_nil
       end
       it 'should set attempted_send to true' do
         @message.attempted_send.should be_false
@@ -192,22 +195,42 @@ describe Message do
 
   describe 'when asked for count of attempted send messages' do
     it 'should count attempted send messages and return result' do
-      Message.delete_all
       Message.attempted_send.count.should == 0
+    end
+    describe 'by month' do
+      it 'should count attempted_sends by month' do
+        results = mock('hash')
+        Message.should_receive(:count_by_month).with(:attempted_send).and_return results
+        Message.attempted_send_by_month.should == results
+      end
     end
   end
 
   describe 'when asked for count of sent messages' do
     it 'should count sent messages and return result' do
-      Message.delete_all
       Message.sent.count.should == 0
+    end
+    describe 'by month' do
+      it 'should count sents by month' do
+        results = mock('hash')
+        Message.should_receive(:count_by_month).with(:sent).and_return results
+        Message.sent_by_month.should == results
+      end
     end
   end
 
   describe 'when asked for count of draft messages' do
     it 'should count draft messages and return result' do
-      Message.delete_all
       Message.draft.count.should == 0
     end
+
+    describe 'by month' do
+      it 'should count drafts by month' do
+        results = mock('hash')
+        Message.should_receive(:count_by_month).with(:draft).and_return results
+        Message.draft_by_month.should == results
+      end
+    end
   end
+
 end
