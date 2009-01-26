@@ -16,7 +16,9 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
 
   map.connect '/admin', :controller => 'admin', :action => 'index'
-  map.connect '/admin/', :controller => 'admin', :action => 'sent'
+  map.connect '/admin/sent', :controller => 'admin', :action => 'sent'
+  map.connect '/admin/draft', :controller => 'admin', :action => 'draft'
+  map.connect '/admin/attempted_send', :controller => 'admin', :action => 'attempted_send'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

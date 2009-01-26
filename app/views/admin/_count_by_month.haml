@@ -1,0 +1,8 @@
+%table
+  %tr
+    %th Month
+    %th Messages
+  - count_by_month.reverse.each do |month, count|
+    %tr
+      %td= month.to_s(:month_year)
+      %td= count

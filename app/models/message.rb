@@ -47,7 +47,7 @@ class Message < ActiveRecord::Base
         count_by_month = ActiveSupport::OrderedHash.new
         months.each do |month|
           conditions = "MONTH(sent_at) = #{month.month} AND YEAR(sent_at) = #{month.year}"
-          count_by_month[month] = sent.count(:conditions => conditions)
+          count_by_month[month] = send(type).count(:conditions => conditions)
         end
         count_by_month
       end

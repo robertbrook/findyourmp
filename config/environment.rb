@@ -68,3 +68,7 @@ Rails::Initializer.run do |config|
 end
 
 Haml::Template.options[:format] = :html5
+
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
+  :month_year => "%B %Y"
+)
