@@ -35,12 +35,13 @@ class MessagesController < ResourceController::Base
   end
 
   def update
+    flash['authenticity_token'] = params[:authenticity_token]
     flash.keep('authenticity_token')
     send_message = params['message'] && params['message']['sent'] == '1'
 
     if send_message
-      @message.deliver
-      flash[:message_sent] = true
+      successful = @message.deliver
+      flash[:message_just_sent] = successful
       redirect_to :action => 'show'
     else
       super
@@ -80,7 +81,7 @@ class MessagesController < ResourceController::Base
           render_not_found
 
         elsif @message.sent
-          show_sent_message = (flash[:message_sent] && params[:action] == 'show')
+          show_sent_message = (flash[:message_just_sent] && params[:action] == 'show')
           render_not_found('Not found or expired page.') unless show_sent_message
 
         else

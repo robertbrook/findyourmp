@@ -133,16 +133,16 @@ describe MessagesController do
     end
 
     it 'should set deliver message' do
-      @message.should_receive(:deliver)
+      @message.should_receive(:deliver).and_return true
       do_post @authenticity_token
     end
-    it 'should set flash[:message_sent] to true' do
-      @message.stub!(:deliver)
+    it 'should set flash[:message_just_sent] to true' do
+      @message.stub!(:deliver).and_return true
       do_post @authenticity_token
-      flash[:message_sent].should be_true
+      flash[:message_just_sent].should be_true
     end
     it 'should redirect to show action' do
-      @message.stub!(:deliver)
+      @message.stub!(:deliver).and_return true
       do_post @authenticity_token
       response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
     end
@@ -202,7 +202,7 @@ describe MessagesController do
         @message.stub!(:sent).and_return true
 
         Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
-        @flash.should_receive(:[]).with(:message_sent).and_return nil
+        @flash.should_receive(:[]).with(:message_just_sent).and_return nil
 
         get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
 

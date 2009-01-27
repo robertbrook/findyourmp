@@ -14,21 +14,17 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   before_filter :set_is_admin
-  before_filter :respond_not_found_if_not_admin, :only => ['messages']
-
-  def messages
-    @sent_message_count = Message.sent_message_count
-    @attempted_send_message_count = Message.attempted_send_message_count
-    @draft_message_count = Message.draft_message_count
-    @messages = [] # Message.all
-  end
 
   def render_not_found message='Page not found.'
     render :text => message, :status => :not_found
   end
 
-  def respond_not_found_if_not_admin
-    render_not_found unless is_admin?
+  def render_unauthorized
+    render :text => 'Unauthorized', :status => 401
+  end
+
+  def respond_unauthorized_if_not_admin
+    render_unauthorized unless is_admin?
   end
 
   def is_admin?

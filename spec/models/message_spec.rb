@@ -25,9 +25,9 @@ describe Message do
       :address => "value for address",
       :postcode => @postcode,
       :subject => "value for subject",
-      :message => "value for message",
-      :sent_on => Time.now
+      :message => "value for message"
     }
+    Message.delete_all
   end
 
   assert_model_belongs_to :constituency
@@ -46,9 +46,9 @@ describe Message do
     @member_name = 'member_name'
     @member_email = 'member_name@parl.uk'
     constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
-    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).and_return constituency
+    Constituency.should_receive(:find).with(@constituency_id, nil_conditions).any_number_of_times.and_return constituency
     @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
-    Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @post_code
+    Postcode.should_receive(:find_postcode_by_code).with(@postcode).any_number_of_times.and_return @post_code
   end
 
   describe 'creating' do
@@ -132,42 +132,116 @@ describe Message do
       @message.valid?.should be_true
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
+      @now = Time.now.utc
+      Time.stub!(:now).and_return mock('time', :utc=>@now)
       @message.stub!(:save!)
     end
-    it 'should deliver sent message' do
-      MessageMailer.should_receive(:deliver_sent).with(@message)
-      @message.deliver
+    describe 'and sending is successful' do
+      it 'should deliver sent message' do
+        MessageMailer.should_receive(:deliver_sent).with(@message)
+        @message.deliver
+      end
+      it 'should deliver confirm message' do
+        MessageMailer.should_receive(:deliver_confirm).with(@message)
+        @message.deliver
+      end
+      it 'should set sent to true' do
+        @message.sent.should be_false
+        @message.deliver
+        @message.sent.should be_true
+      end
+      it 'should set sent_at to current time' do
+        @message.sent_at.should be_nil
+        @message.deliver
+        @message.sent_at.year.should == @now.year
+        @message.sent_at.month.should == @now.month
+        @message.sent_at.day.should == @now.day
+      end
+      it 'should leave attempted_send as false' do
+        @message.attempted_send.should be_false
+        @message.deliver
+        @message.attempted_send.should be_false
+      end
+      it 'should save message state after sending' do
+        @message.should_receive(:save!)
+        @message.deliver
+      end
     end
-    it 'should deliver confirm message' do
-      MessageMailer.should_receive(:deliver_confirm).with(@message)
-      @message.deliver
-    end
-    it 'should set sent to true' do
-      @message.sent.should be_false
-      @message.should_receive(:save!)
-      @message.deliver
-      @message.sent.should be_true
+    describe 'and exception occurs when sending' do
+      before do
+        MessageMailer.should_receive(:deliver_sent).with(@message).and_raise mock(Exception)
+      end
+      it 'should leave sent as false' do
+        @message.sent.should be_false
+        @message.deliver
+        @message.sent.should be_false
+      end
+      it 'should leave sent_at as nil' do
+        @message.sent_at.should be_nil
+        @message.deliver
+        @message.sent_at.should be_nil
+      end
+      it 'should set attempted_send to true' do
+        @message.attempted_send.should be_false
+        @message.deliver
+        @message.attempted_send.should be_true
+      end
+      it 'should save message state after sending' do
+        @message.should_receive(:save!)
+        @message.deliver
+      end
     end
   end
 
   describe 'when asked for count of attempted send messages' do
     it 'should count attempted send messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 4
-      Message.attempted_send_message_count.should == 4
+      Message.attempted_send.count.should == 0
+    end
+    describe 'by month' do
+      it 'should call count_by_month for attempted_sends' do
+        results = mock('hash')
+        Message.should_receive(:count_by_month).with(:attempted_send).and_return results
+        Message.attempted_send_by_month.should == results
+      end
     end
   end
 
   describe 'when asked for count of sent messages' do
+    before do
+      mock_message_setup
+      @month = Date.new(2009,1,1).to_time
+      @month1 = Date.new(2009,2,1).to_time
+      @month2 = Date.new(2009,3,1).to_time
+      @message =Message.new(@valid_attributes.merge(:sent_at=>@month))
+      @message.save
+      @message2 =Message.new(@valid_attributes.merge(:sent_at=>@month2))
+      @message2.save
+      mock_message_setup
+      @message.sent = true; @message.save
+      @message2.sent = true; @message2.save
+    end
     it 'should count sent messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 2
-      Message.sent_message_count.should == 2
+      Message.sent.count.should == 2
+    end
+    describe 'by month' do
+      it 'should count sents by month' do
+        Message.sent_by_month.to_a.should == [[@month,1],[@month1,0],[@month2,1]]
+      end
     end
   end
 
   describe 'when asked for count of draft messages' do
     it 'should count draft messages and return result' do
-      Message.should_receive(:count_by_sql).and_return 5
-      Message.draft_message_count.should == 5
+      Message.draft.count.should == 0
+    end
+
+    describe 'by month' do
+      it 'should call count_by_month for drafts' do
+        results = mock('hash')
+        Message.should_receive(:count_by_month).with(:draft).and_return results
+        Message.draft_by_month.should == results
+      end
     end
   end
+
 end

@@ -6,10 +6,6 @@ describe ApplicationController do
     it 'should display page not found for unknown routes' do
       params_from(:get, "/bad_url").should == {:controller => "application", :action => "render_not_found", :bad_route=>['bad_url']}
     end
-
-    it 'should display messages' do
-      params_from(:get, "/messages").should == {:controller => "application", :action => "messages"}
-    end
   end
 
   describe "when posted to toggle admin action" do
