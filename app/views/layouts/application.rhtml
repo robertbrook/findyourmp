@@ -199,6 +199,18 @@
     <li><a href="http://www.parliament.uk/site_information/privacy_policy.cfm">Privacy Policy</a></li>
     <li><a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">Copyright</a></li>
   </ul>
+  <div id="admin-button">
+    <%= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application' %>
+  </div>
+<%  if @is_admin %>
+  <br/>
+  <ul>
+<%    if @constituency %>
+        <li><%= link_to 'Edit constituency and member data', edit_constituency_path(@constituency) %></li>
+<%    end %>
+      <li><%= link_to 'All constituencies', constituencies_path %></li>
+<%  end %>
+   </ul>
 </div>
 <div class="hspacer">&nbsp;</div>
 </div>
