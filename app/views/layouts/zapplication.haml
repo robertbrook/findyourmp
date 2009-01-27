@@ -20,4 +20,5 @@
         - if @constituency
           %p= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
         %p= link_to 'All constituencies', constituencies_path
+        %p= link_to 'Show message audit', url_for(:controller=>'admin',:action=>'index')
       #admin-button= button_to "Enable #{@is_admin ? 'STANDARD USER functions' : 'ADMINISTRATOR functions'}" , :action => :toggle_admin, :controller => 'application'
