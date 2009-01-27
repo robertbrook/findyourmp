@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../commons_member_biographie
 require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
 
 namespace :fymp do
-
   include FindYourMP::DataLoader
   include FindYourMP::CacheWriter
 
@@ -32,5 +31,4 @@ namespace :fymp do
   task :populate => :environment do
     load_postcodes
   end
-
 end

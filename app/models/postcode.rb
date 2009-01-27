@@ -1,5 +1,10 @@
 class Postcode < ActiveRecord::Base
 
+  before_validation_on_create :populate_constituency_id
+
+  # validates_presence_of :constituency_id
+  validates_presence_of :ons_id
+
   belongs_to :constituency
 
   delegate :member_name, :to => :constituency
@@ -59,4 +64,16 @@ class Postcode < ActiveRecord::Base
   def to_output_yaml
     "---\n#{to_text}"
   end
+
+  private
+
+    def populate_constituency_id
+      if ons_id
+        if constituency = Constituency.find_by_ons_id(ons_id)
+          self.constituency_id = constituency.id
+        # else
+          # errors.add('constituency_id', "Can't find a constituency corresponding to ONS ID: #{ons_id}")
+        end
+      end
+    end
 end

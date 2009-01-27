@@ -46,13 +46,12 @@ module FindYourMP::DataLoader
   def load_constituencies
     return if file_not_found(CONSTITUENCY_FILE)
     Constituency.delete_all
+    Slug.delete_all
 
     IO.foreach(CONSTITUENCY_FILE) do |line|
       constituency_id = line[0..2]
       constituency_name = line[3..(line.length-1)].strip
-      constituency = Constituency.new :name=>constituency_name
-      constituency.id = constituency_id
-      constituency.save!
+      Constituency.create :name=>constituency_name, :ons_id=>constituency_id
     end
   end
 
@@ -124,7 +123,7 @@ module FindYourMP::DataLoader
 
     def load_codes(post_codes)
       post_codes.each do |codes|
-        Postcode.create :code => codes[0], :constituency_id => codes[1]
+        Postcode.create :code => codes[0], :ons_id => codes[1]
       end
     end
 

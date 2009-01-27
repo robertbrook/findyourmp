@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090126154059) do
+ActiveRecord::Schema.define(:version => 20090127104355) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -20,7 +20,10 @@ ActiveRecord::Schema.define(:version => 20090126154059) do
     t.boolean "member_visible"
     t.string  "member_website"
     t.string  "member_requested_contact_url"
+    t.integer "ons_id"
   end
+
+  add_index "constituencies", ["ons_id"], :name => "index_constituencies_on_ons_id"
 
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"
@@ -50,9 +53,11 @@ ActiveRecord::Schema.define(:version => 20090126154059) do
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
     t.integer "constituency_id"
+    t.integer "ons_id"
   end
 
   add_index "postcodes", ["constituency_id"], :name => "index_postcodes_on_constituency_id"
+  add_index "postcodes", ["ons_id"], :name => "index_postcodes_on_ons_id"
 
   create_table "slugs", :force => true do |t|
     t.string   "name"
