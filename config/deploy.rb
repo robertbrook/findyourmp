@@ -43,7 +43,7 @@ namespace :deploy do
 
     put_data data_dir, 'ConstituencyToMember.txt'
     put_data data_dir, 'constituencies.txt'
-    put_data data_dir, 'postcodes.txt'
+    # put_data data_dir, 'postcodes.txt'
 
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
@@ -143,7 +143,7 @@ namespace :deploy do
 
     rake_tasks
     # uncomment the line below to run a full parse - removed for testing (takes too long)
-    #run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
 
     sudo "/usr/sbin/apache2ctl restart"
