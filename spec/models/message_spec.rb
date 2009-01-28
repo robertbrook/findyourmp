@@ -228,7 +228,7 @@ describe Message do
       Message.count.should == 1
       Message.attempted_send.count.should == 1
     end
-    it 'should count sent by month correclty' do
+    it 'should count sent by month correctly' do
       @message.deliver
       Message.attempted_send_by_month.should == [[Date.today.at_beginning_of_month, 1]]
     end

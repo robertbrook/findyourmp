@@ -104,7 +104,7 @@ class Message < ActiveRecord::Base
       if @post_code = Postcode.find_postcode_by_code(postcode)
         self.postcode = @post_code.code_with_space
 
-        if constituency && @post_code.in_constituency?(constituency)
+        if @post_code.in_constituency?(constituency)
           self.sender_is_constituent = 1
         end
       end
@@ -115,7 +115,7 @@ class Message < ActiveRecord::Base
     end
 
     def message_not_default
-      if message && constituency
+      if message
         msg = String.new message
         default_message.split.each{|word| msg.sub!(word,'')}
         if msg.gsub(/\n|\r| |,/,'').blank?
