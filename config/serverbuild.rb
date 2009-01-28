@@ -10,6 +10,7 @@ namespace :serverbuild do
 
   desc "Install Passenger including all prerequisites and restart Apache"
   task :default do
+    setup_users
     aptget_config
     install_prereqs
     install_passenger
@@ -57,6 +58,16 @@ namespace :serverbuild do
     end
     
     put data, "/etc/apt/sources.list", :mode => 0664
+  end
+  
+  desc "Sort out the user credentials"
+  task :setup_users, :roles => :app do
+    set :user, firsttimeuser
+    set :password, firsttimepassword
+    
+    create_deploy_user
+    create_passenger_user
+    change_cftuser_password
   end
 
   desc "Install Passenger prerequisites"
@@ -111,6 +122,51 @@ namespace :serverbuild do
     end
     
     gemversion
+  end
+  
+  def create_deploy_user
+    create_user deployuser, deploygroup, deploypassword
+  end
+  
+  def create_passenger_user
+    create_user passengeruser, passengergroup, passengerpassword
+  end
+  
+  def change_cftuser_password
+    change_password 'cftuser', randompassword
+  end
+  
+  def create_user username, group, newpassword    
+    run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
+      if data =~ /not found/
+        sudo "mkdir /home/#{username}"
+      end
+    end
+    
+    begin
+      sudo "grep '^#{group}:' /etc/group"
+    rescue 
+      sudo "groupadd #{group}"
+    end
+    
+    begin
+      sudo "grep '^#{username}:' /etc/passwd"
+    rescue 
+      sudo "useradd -g #{group} -s /bin/bash #{username}"
+    end
+    
+    change_password username, newpassword
+  end
+    
+  def change_password username, newpassword    
+    run "sudo passwd #{username}", :pty => true do |ch, stream, data|
+      puts data
+      if data =~ /Enter new UNIX password:/ or data =~ /Retype new UNIX password:/
+        ch.send_data(newpassword + "\n")
+      else
+        Capistrano::Configuration.default_io_proc.call(ch, stream, data)
+      end
+    end
   end
 
 end
