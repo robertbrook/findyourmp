@@ -2,7 +2,7 @@ class MessagesController < ResourceController::Base
 
   belongs_to :constituency
 
-  before_filter :respond_not_found_if_consistency_doesnt_exist
+  before_filter :respond_not_found_if_constituency_doesnt_exist
   before_filter :ensure_current_constituency_url, :only => ['new', 'index']
   before_filter :redirect_when_not_appropriate_to_show_message_form
   before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new','create']
@@ -12,8 +12,8 @@ class MessagesController < ResourceController::Base
   end
 
   def new
-    super
     flash.keep(:postcode)
+    super
   end
 
   def edit
@@ -24,6 +24,11 @@ class MessagesController < ResourceController::Base
       flash.keep('authenticity_token')
       super
     end
+  end
+
+  def show
+    flash.keep('authenticity_token')
+    super
   end
 
   def create
@@ -57,7 +62,7 @@ class MessagesController < ResourceController::Base
       redirect_to :controller => :constituencies, :action => :show, :id => params[:constituency_id]
     end
 
-    def respond_not_found_if_consistency_doesnt_exist
+    def respond_not_found_if_constituency_doesnt_exist
       begin
         @constituency = Constituency.find(params[:constituency_id])
       rescue
@@ -82,6 +87,7 @@ class MessagesController < ResourceController::Base
 
         elsif @message.sent
           show_sent_message = (flash[:message_just_sent] && params[:action] == 'show')
+          flash.keep(:message_just_sent)
           render_not_found('Not found or expired page.') unless show_sent_message
 
         else

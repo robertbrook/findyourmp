@@ -3,34 +3,34 @@
 - else
   - @title = "Preview the Message You've Written"
 
-  #message
-    %p.text
-      = label :message, :sender_email, 'Your email address: '
-      .message_sender_email
-        = @message.sender_email
-    %p.text
-      = label :message, :sender, 'Your full name: '
-      .message_sender
-        = @message.sender
-    %p.text
-      = label :message, :address, 'Your postal address:'
-      .message_address
-        = @message.address.blank? ? 'not given' : @message.address
-    %p.text
-      = label :message, :postcode, 'Your postcode: '
-      .message_postcode
-        = @message.postcode
-    %p.text
-      = label :message, :subject, 'Your subject: '
-      .message_subject
-        = @message.subject
-    %p.text
-      = label :message, :message, 'Your message: '
-      .message_message
-        = @message.message
+  .text
+    #message
+      .form_field
+        = label :message, :sender_email, 'Your email address: '
+        %span.message_sender_email
+          = @message.sender_email
+      .form_field
+        = label :message, :sender, 'Your full name: '
+        %span.message_sender
+          = @message.sender
+      .form_field
+        = label :message, :address, 'Your postal address:'
+        %span.message_address
+          = @message.address.blank? ? 'not given' : @message.address
+      .form_field
+        = label :message, :postcode, 'Your postcode: '
+        %span.message_postcode
+          = @message.postcode
+      .form_field
+        = label :message, :subject, 'Your subject: '
+        %span.message_subject
+          = @message.subject
+      .form_field
+        = label :message, :message, 'Your message: '
+        %span.message_message
+          = @message.message
 
-    %p.text
-      = button_to("Re-edit your message", :action => 'edit').sub('"post"','"get"')
-      - form_for([@constituency, @message]) do |f|
+      = button_to("Re-edit your message", {:action => 'edit'}, {:method=>'get', :style => 'float:left;margin-right:1em;'})
+      - form_for([@constituency, @message], :html => {:style => 'float:left;'}) do |f|
         = f.hidden_field(:sent, :value=>'1')
         = f.submit "Send message"
