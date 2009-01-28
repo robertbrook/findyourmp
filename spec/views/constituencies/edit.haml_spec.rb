@@ -4,6 +4,7 @@ describe "/constituency/edit.haml" do
 
   before do
     @constituency = mock_model(Constituency, :member_name => 'member_name',
+        :ons_id=>300,
         :member_party=>'',
         :member_email=>'',
         :member_requested_contact_url=>'',

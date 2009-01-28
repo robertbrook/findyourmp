@@ -56,7 +56,7 @@ describe Constituency do
       @match_north = mock(Constituency, :name => "Regent's Park and North Kensington")
       @match_the = mock(Constituency, :name => "The Wrekin")
     end
-    
+
     describe 'and search term is valid' do
       it 'should return a valid constituency' do
         term = 'Aberdeen South'
@@ -64,7 +64,7 @@ describe Constituency do
         Constituency.find_by_constituency_name(term).should == @match_name
       end
     end
-    
+
     describe 'and search term is St Ives' do
       it 'should search for St. Ives' do
         term = 'St Ives'
@@ -73,7 +73,7 @@ describe Constituency do
         Constituency.find_by_constituency_name(term).name.should == expected
       end
     end
-    
+
     describe 'and search term is York, City of' do
       it 'should return City of York' do
         term = 'York, City of'
@@ -82,7 +82,7 @@ describe Constituency do
         Constituency.find_by_constituency_name(term).name.should == expected
       end
     end
-    
+
     describe "and search term is Regent's Park & Kensington North" do
       it "should return Regent's Park and North Kensington" do
         term = "Regent's Park & Kensington North"
@@ -92,7 +92,7 @@ describe Constituency do
         Constituency.find_by_constituency_name(term).name.should == expected
       end
     end
-    
+
     describe "and search term is Wrekin, The" do
       it "should return The Wrekin" do
         term = "Wrekin, The"
@@ -169,7 +169,7 @@ describe Constituency do
   end
 
   describe 'id is 1' do
-    before do; @constituency.stub!(:id).and_return 1; end
+    before do; @constituency.stub!(:ons_id).and_return 1; end
     describe 'when asked for code' do
       it 'should return 001' do
         @constituency.code.should == '001'
@@ -178,7 +178,7 @@ describe Constituency do
   end
 
   describe 'id is 10' do
-    before do; @constituency.stub!(:id).and_return 10; end
+    before do; @constituency.stub!(:ons_id).and_return 10; end
     describe 'when asked for code' do
       it 'should return 010' do
         @constituency.code.should == '010'
@@ -187,7 +187,7 @@ describe Constituency do
   end
 
   describe 'id is 100' do
-    before do; @constituency.stub!(:id).and_return 100; end
+    before do; @constituency.stub!(:ons_id).and_return 100; end
     describe 'when asked for code' do
       it 'should return 100' do
         @constituency.code.should == '100'

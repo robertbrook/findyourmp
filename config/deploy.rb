@@ -100,8 +100,8 @@ namespace :deploy do
   end
 
   task :check_server do
-    run "sudo which git" do |channel, stream, message|
-      if message == ''
+    run "git --help" do |channel, stream, message|
+      if message =~ /No such file or directory/
         raise "You need to install git before proceeding"
       end
     end

@@ -1,11 +1,11 @@
-%h1
-  Edit constituency
+-@title = 'Edit constituency | Admin'
+
 = error_messages_for :constituency
 
 -form_for(@constituency) do |f|
   %p.text
-    = label :constituency, :id, 'Constituency ID'
-    %span.constituency_id= @constituency.id
+    = label :constituency, :ons_id, 'ONS Constituency ID'
+    %span.constituency_id= @constituency.ons_id
   %p.text
     = label :constituency, :name, 'Constituency'
     = f.text_field :name

@@ -36,8 +36,8 @@ class Message < ActiveRecord::Base
     end
     protected
       def count_by_month type
-        first_month = send(type).minimum(:sent_at).at_beginning_of_month
-        last_month = send(type).maximum(:sent_at).at_beginning_of_month
+        first_month = send(type).minimum(:created_at).at_beginning_of_month
+        last_month = send(type).maximum(:created_at).at_beginning_of_month
         months = [first_month]
         next_month = first_month.next_month
         while (next_month <= last_month)
@@ -46,7 +46,7 @@ class Message < ActiveRecord::Base
         end
         count_by_month = ActiveSupport::OrderedHash.new
         months.each do |month|
-          conditions = "MONTH(sent_at) = #{month.month} AND YEAR(sent_at) = #{month.year}"
+          conditions = "MONTH(created_at) = #{month.month} AND YEAR(created_at) = #{month.year}"
           count_by_month[month] = send(type).count(:conditions => conditions)
         end
         count_by_month
@@ -62,7 +62,7 @@ class Message < ActiveRecord::Base
       MessageMailer.deliver_sent(self)
       MessageMailer.deliver_confirm(self)
       self.attempted_send = 0
-      self.sent = 1
+      self.sent = true
       self.sent_at = Time.now.utc
     rescue Exception => e
       self.attempted_send = 1
@@ -104,7 +104,7 @@ class Message < ActiveRecord::Base
       if @post_code = Postcode.find_postcode_by_code(postcode)
         self.postcode = @post_code.code_with_space
 
-        if @post_code.in_constituency? constituency
+        if @post_code.in_constituency?(constituency)
           self.sender_is_constituent = 1
         end
       end

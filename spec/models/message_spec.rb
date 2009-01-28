@@ -130,11 +130,11 @@ describe Message do
       mock_message_setup
       @message = Message.new(@valid_attributes)
       @message.valid?.should be_true
+      @message.stub!(:save!)
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
       @now = Time.now.utc
       Time.stub!(:now).and_return mock('time', :utc=>@now)
-      @message.stub!(:save!)
     end
     describe 'and sending is successful' do
       it 'should deliver sent message' do
@@ -147,7 +147,7 @@ describe Message do
       end
       it 'should set sent to true' do
         @message.sent.should be_false
-        @message.deliver
+        @message.deliver.should be_true
         @message.sent.should be_true
       end
       it 'should set sent_at to current time' do
@@ -173,7 +173,7 @@ describe Message do
       end
       it 'should leave sent as false' do
         @message.sent.should be_false
-        @message.deliver
+        @message.deliver.should be_false
         @message.sent.should be_false
       end
       it 'should leave sent_at as nil' do
@@ -190,6 +190,47 @@ describe Message do
         @message.should_receive(:save!)
         @message.deliver
       end
+    end
+  end
+
+  describe 'after successfully delivering message' do
+    before do
+      mock_message_setup
+      @message = Message.create(@valid_attributes)
+      MessageMailer.stub!(:deliver_sent)
+      MessageMailer.stub!(:deliver_confirm)
+    end
+    after do
+      Message.delete_all
+    end
+    it 'should count sent correctly' do
+      @message.deliver
+      Message.count.should == 1
+      Message.sent.count.should == 1
+    end
+    it 'should count sent by month correctly' do
+      @message.deliver
+      Message.sent_by_month.should == [[Date.today.at_beginning_of_month, 1]]
+    end
+  end
+
+  describe 'after attempted send of message' do
+    before do
+      mock_message_setup
+      @message = Message.create(@valid_attributes)
+      MessageMailer.should_receive(:deliver_sent).with(@message).and_raise mock(Exception)
+    end
+    after do
+      Message.delete_all
+    end
+    it 'should count sent correctly' do
+      @message.deliver
+      Message.count.should == 1
+      Message.attempted_send.count.should == 1
+    end
+    it 'should count sent by month correctly' do
+      @message.deliver
+      Message.attempted_send_by_month.should == [[Date.today.at_beginning_of_month, 1]]
     end
   end
 
@@ -213,8 +254,10 @@ describe Message do
       @month1 = Date.new(2009,2,1).to_time
       @month2 = Date.new(2009,3,1).to_time
       @message =Message.new(@valid_attributes.merge(:sent_at=>@month))
+      @message.created_at = @month
       @message.save
       @message2 =Message.new(@valid_attributes.merge(:sent_at=>@month2))
+      @message2.created_at = @month2
       @message2.save
       mock_message_setup
       @message.sent = true; @message.save

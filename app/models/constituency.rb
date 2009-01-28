@@ -59,12 +59,12 @@ class Constituency < ActiveRecord::Base
   end
 
   def code
-    if id < 10
-      "00#{id}"
-    elsif id < 100
-      "0#{id}"
+    if ons_id < 10
+      "00#{ons_id}"
+    elsif ons_id < 100
+      "0#{ons_id}"
     else
-      id.to_s
+      ons_id.to_s
     end
   end
 

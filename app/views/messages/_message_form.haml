@@ -1,44 +1,45 @@
-%h1= "Send a message to #{@constituency.member_name}"
+-@title= "Send a message to #{@constituency.member_name}"
 
-%p.text
-  Please note that MPs will generally only deal with cases concerning their own constituents.  It is therefore important that you include your full address and postcode in this form.  This system does not permit users to send emails from @parliament.uk addresses.  Correspondence by email is forwarded once a day to MPs.  If you wish to contact your MP urgently, you should telephone the House of Commons Switchboard on 020 7219 3000 and ask for your MP's office.
+.text
+  %p
+    Please note that MPs will generally only deal with cases concerning their own constituents.  It is therefore important that you include your full address and postcode in this form.  This system does not permit users to send emails from @parliament.uk addresses.  Correspondence by email is forwarded once a day to MPs.  If you wish to contact your MP urgently, you should telephone the House of Commons Switchboard on 020 7219 3000 and ask for your MP's office.
 
-= error_messages_for(:message).sub('being saved','being previewed').gsub(/<\/h2.+/,'</h2>')
+  = error_messages_for(:message).sub('being saved','being previewed').gsub(/<\/h2.+/,'</h2>')
 
-- postcode = flash[:postcode]
-- form_for([@constituency, @message], {:only_path => false}) do |f|
-  %p.text
-    = label :message, :sender_email, 'Your email address *'
-    = f.text_field(:sender_email)
-    = error_message_on(:message, :sender_email)
-  %p.text
-    = label :message, :sender, 'Your full name *'
-    = f.text_field(:sender)
-    = error_message_on(:message, :sender)
-  %p.text
-    = label :message, :address, 'Your postal address'
-    = f.text_area(:address, :rows=>3)
-    = error_message_on(:message, :address)
-  %p.text
-    = label :message, :postcode, 'Your postcode *'
-    = f.text_field(:postcode, :value => postcode, :size=>8)
-    = error_message_on(:message, :postcode)
-  %p.text
-    = label :message, :subject, 'Your subject *'
-    = f.text_field(:subject)
-    = error_message_on(:message, :subject)
-  %p.text
-    = label :message, :message, 'Your message (max chars including spaces 4000) *'
-    - @message.message = @message.default_message if @message.message.nil?
-    = error_message_on(:message, :message)
-    = f.text_area(:message, :rows=>30)
-  %p.text
-    %em.normaltext
-      * denotes required text
+  - postcode = flash[:postcode]
+  - form_for([@constituency, @message], {:only_path => false}) do |f|
+    .form_field
+      = label :message, :sender_email, 'Your email address *'
+      = f.text_field(:sender_email)
+      = error_message_on(:message, :sender_email)
+    .form_field
+      = label :message, :sender, 'Your full name *'
+      = f.text_field(:sender)
+      = error_message_on(:message, :sender)
+    .form_field
+      = label :message, :address, 'Your postal address'
+      = f.text_area(:address, :rows=>3)
+      = error_message_on(:message, :address)
+    .form_field
+      = label :message, :postcode, 'Your postcode *'
+      = f.text_field(:postcode, :value => postcode, :size=>8)
+      = error_message_on(:message, :postcode)
+    .form_field
+      = label :message, :subject, 'Your subject *'
+      = f.text_field(:subject)
+      = error_message_on(:message, :subject)
+    .form_field
+      = label :message, :message, 'Your message (max chars including spaces 4000) *'
+      - @message.message = @message.default_message if @message.message.nil?
+      = error_message_on(:message, :message)
+      = f.text_area(:message, :rows=>30)
+    .form_field
+      %em.normaltext
+        * denotes required text
 
-  %p.text
-    = f.submit "Preview your message"
-    %span{:style=>'margin-left: 22em'}= link_to 'Cancel', constituency_path(@message.constituency)
-  %p.text
-    If you do not include a full address and postcode you may not receive a reply. Please note the following
-    = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
+    %p
+      = f.submit "Preview your message"
+      %span{:style=>'margin-left: 22em'}= link_to 'Cancel', constituency_path(@message.constituency)
+    %p
+      If you do not include a full address and postcode you may not receive a reply. Please note the following
+      = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'

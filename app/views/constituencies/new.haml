@@ -1,14 +1,13 @@
-%h1
-  New constituency
+-@title = 'New constituency | Admin'
 
-= error_messages_for :constituency 
+= error_messages_for :constituency
 
--form_for(@constituency) do |f| 
+-form_for(@constituency) do |f|
   %p.text
     %b Name
     %br
-    = f.text_field :name 
+    = f.text_field :name
 
   %p.text
     = f.submit "Create"
-= link_to 'Back', constituencies_path 
+= link_to 'Back', constituencies_path

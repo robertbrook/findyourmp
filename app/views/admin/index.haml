@@ -1,10 +1,10 @@
-%h2 Message Audit
+-@title = 'Message Audit | Admin'
 
-%p
+%p.text
   = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
-%p
+%p.text
   = link_to "Attempted to send messages: #{@attempted_send_message_count}", url_for(:controller=>'admin',:action=>'attempted_send')
-%p
+%p.text
   = link_to "Draft messages: #{@draft_message_count}", url_for(:controller=>'admin',:action=>'draft')
 
 - unless @messages.empty?
