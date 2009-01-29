@@ -134,6 +134,7 @@ namespace :deploy do
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
 
     sudo "mysqladmin create #{application}_production"
+    sudo "mysqladmin -u root password \"#{sql_server_password}\""
 
     sudo "gem install hpricot"
     sudo "gem install morph"
