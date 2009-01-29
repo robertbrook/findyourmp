@@ -133,8 +133,17 @@ namespace :deploy do
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
 
-    sudo "mysqladmin create #{application}_production"
-    sudo "mysqladmin -u root password \"#{sql_server_password}\""
+    # sudo "mysqladmin -u root password \"#{sql_server_password}\""
+    
+    run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
+      # puts data
+      if data =~ /Enter password:/
+        ch.send_data(sql_server_password + "\n")
+      else
+        ch.send_data("create database #{application}_production CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
+        ch.send_data("exit \n")
+      end
+    end    
 
     sudo "gem install hpricot"
     sudo "gem install morph"
