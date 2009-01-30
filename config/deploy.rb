@@ -16,6 +16,8 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
+set :test_deploy, false
+
 namespace :deploy do
 
   desc "Upload deployed database.yml"
@@ -43,7 +45,12 @@ namespace :deploy do
 
     put_data data_dir, 'ConstituencyToMember.txt'
     put_data data_dir, 'constituencies.txt'
-    # put_data data_dir, 'postcodes.txt'
+    
+    if test_deploy
+      put_data data_dir, 'postcodes.txt'
+    else
+      put_data data_dir, 'NSPDC_AUG_2008_UK_100M.txt'
+    end
 
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
@@ -133,7 +140,7 @@ namespace :deploy do
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
 
-    # sudo "mysqladmin -u root password \"#{sql_server_password}\""
+    sudo "mysqladmin -u root password \"#{sql_server_password}\""
     
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
@@ -152,8 +159,8 @@ namespace :deploy do
     sudo "gem install term-ansicolor"
 
     rake_tasks
-    # uncomment the line below to run a full parse - removed for testing (takes too long)
-    run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'"
+
+    run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
 
     sudo "/usr/sbin/apache2ctl restart"
