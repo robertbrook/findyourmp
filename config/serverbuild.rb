@@ -68,6 +68,8 @@ namespace :serverbuild do
     create_deploy_user
     create_passenger_user
     change_cftuser_password
+    
+    sudo "mysqladmin -u root password \"#{sql_server_password}\""
   end
 
   desc "Install Passenger prerequisites"

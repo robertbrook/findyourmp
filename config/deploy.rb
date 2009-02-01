@@ -16,7 +16,7 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-set :test_deploy, false
+set :test_deploy, true
 
 namespace :deploy do
   
@@ -146,8 +146,6 @@ namespace :deploy do
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-
-    sudo "mysqladmin -u root password \"#{sql_server_password}\""
     
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
