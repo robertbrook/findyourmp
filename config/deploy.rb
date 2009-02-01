@@ -19,7 +19,10 @@ role :db,  domain, :primary => true
 set :test_deploy, false
 
 namespace :deploy do
-
+  
+  set :user, deployuser
+  set :password, deploypassword
+  
   desc "Upload deployed database.yml"
   task :upload_deployed_database_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_database.yml")
@@ -96,7 +99,11 @@ namespace :deploy do
         folders.each do |folder|
           if folder != ""
             folderpath << "/" << folder
-            run "if [ -d #{folderpath} ]; then echo exists ; else sudo mkdir #{folderpath} ; fi"
+            run "if [ -d #{folderpath} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+              if message.strip == 'not there'
+                sudo "mkdir #{folderpath}"
+              end
+            end
           end
         end
         sudo "chown #{user} #{folderpath}"
