@@ -155,9 +155,9 @@ describe PostcodesController do
       get :index, :search_term => @constituency_name_short
     end
 
-    it 'should store "Sorry: we need more than two letters to search" in flash memory' do
+    it 'should store "<p>Sorry: we need more than two letters to search" in flash memory</p>' do
       do_get
-      flash[:not_found].should == "Sorry: we need more than two letters to search"
+      flash[:not_found].should == "<p>Sorry: we need more than two letters to search</p>"
     end
 
     it 'should redirect to root page' do
