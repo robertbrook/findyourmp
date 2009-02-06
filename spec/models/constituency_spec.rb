@@ -104,6 +104,39 @@ describe Constituency do
     end
   end
 
+  describe 'when asked for formatted version' do
+    before do
+      @constituency.stub!(:no_sitting_member?).and_return false
+      @constituency.name = "Islington West"
+      @constituency.id = 999
+      @constituency.member_name = "Donal Duck"
+      @constituency.member_party = "SDP"
+      @constituency.member_biography_url = "http://en.wikipedia.org"
+      @constituency.member_website = "http://www.parliament.uk"
+    end
+
+    describe 'in json' do
+      it 'should create json correctly' do
+        @constituency.to_json.should == %Q|{"constituency": {"constituency_name": "Islington West", "constituency_id": 999, "member_name": "Donal Duck", "member_party": "SDP", "member_biography_url": "http://en.wikipedia.org", "member_website": "http://www.parliament.uk" } }|
+      end
+    end
+    describe 'in text' do
+      it 'should create text correctly' do
+        @constituency.to_text.should == %Q|constituency: Islington West\nconstituency_id: 999\nmember_name: Donal Duck\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk|
+      end
+    end
+    describe 'in csv' do
+      it 'should create csv correctly' do
+        @constituency.to_csv.should == %Q|constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website\n"Islington West",999,"Donal Duck","SDP","http://en.wikipedia.org","http://www.parliament.uk"\n|
+      end
+    end
+    describe 'in yaml' do
+      it 'should create yaml correctly' do
+        @constituency.to_output_yaml.should == %Q|---\nconstituency: Islington West\nconstituency_id: 999\nmember_name: Donal Duck\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk|
+      end
+    end
+  end
+
   describe 'with invalid member_email' do
     it 'should not be valid' do
       @constituency.member_email = 'bad_email'

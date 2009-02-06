@@ -24,6 +24,18 @@ class ConstituenciesController < ResourceController::Base
       end
     else
       @constituency = Constituency.find(id)
+      
+      @show_postcode_autodiscovery_links = true
+      @url_for_this = url_for(:only_path=>false)
+      respond_to do |format|
+        format.html { @constituency }
+        format.xml  { @constituency }
+        format.json { render :json => @constituency.to_json }
+        format.js   { render :json => @constituency.to_json }
+        format.text { render :text => @constituency.to_text }
+        format.csv  { render :text => @constituency.to_csv }
+        format.yaml { render :text => @constituency.to_output_yaml }
+      end
     end
   end
 
