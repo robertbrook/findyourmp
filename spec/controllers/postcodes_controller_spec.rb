@@ -91,8 +91,12 @@ describe PostcodesController do
   end
 
   describe "when asked for constituency given an exact constituency name" do
-    def do_get
-      get :index, :search_term => @constituency_name
+    def do_get format=nil
+      if format
+        get :index, :search_term => @constituency_name, :format => format
+      else
+        get :index, :search_term => @constituency_name
+      end
     end
 
     before do
@@ -104,6 +108,14 @@ describe PostcodesController do
         do_get
         response.should redirect_to("")
       end
+      it 'should return html format' do
+        do_get
+        response.content_type.should == "text/html"
+      end
+      it 'should redirect to error page when passed a format' do
+        do_get 'xml'
+        response.should redirect_to(:action=>'error')
+      end
     end
 
     describe 'and a matching constituency is found' do
@@ -114,6 +126,41 @@ describe PostcodesController do
         do_get
         response.should redirect_to("constituencies/#{@friendly_constituency_id}")
       end
+    end
+  end
+
+  describe "when an error is found" do
+    def do_get format
+      get :error, :format => format
+    end
+    
+    it 'should return xml format' do
+      do_get 'xml'
+      response.content_type.should == "application/xml"
+    end
+    it 'should return json format' do
+      do_get 'json'
+      response.content_type.should == "application/json"
+    end
+    it 'should return js format' do
+      do_get 'js'
+      response.content_type.should == "text/javascript"
+    end
+    it 'should return text format' do
+      do_get 'text'
+      response.content_type.should == "text/plain"
+    end
+    it 'should return txt format' do
+      do_get 'txt'
+      response.content_type.should == "text/plain"
+    end
+    it 'should return csv format' do
+      do_get 'csv'
+      response.content_type.should == "text/csv"
+    end
+    it 'should return yaml format' do
+      do_get 'yaml'
+      response.content_type.should == "application/x-yaml"
     end
   end
 
@@ -151,8 +198,12 @@ describe PostcodesController do
       Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_short).and_return nil
     end
 
-    def do_get
-      get :index, :search_term => @constituency_name_short
+    def do_get format=nil
+      if format
+        get :index, :search_term => @constituency_name_short, :format => format
+      else
+        get :index, :search_term => @constituency_name_short
+      end
     end
 
     it 'should store "<p>Sorry: we need more than two letters to search" in flash memory</p>' do
@@ -164,6 +215,11 @@ describe PostcodesController do
       do_get
       response.should redirect_to("")
     end
+    
+    it 'should redirect to error page when passed a format' do
+      do_get 'xml'
+      response.should redirect_to(:action=>'error')
+    end
 
     it 'should set last_search_term in flash memory' do
       do_get
@@ -172,14 +228,22 @@ describe PostcodesController do
   end
 
   describe "when asked for constituency given a postcode" do
-    def do_get
-      get :index, :search_term => @postcode
+    def do_get format=nil
+      if format
+        get :index, :search_term => @postcode, :format => format
+      else
+        get :index, :search_term => @postcode
+      end
     end
 
     describe 'and no matching postcode is found' do
       it 'should redirect to root page' do
         do_get
         response.should redirect_to("")
+      end
+      it 'should redirect to error page if passed a format' do
+        do_get 'xml'
+        response.should redirect_to(:action=>'error')
       end
       it 'should set last_search_term in flash memory' do
         do_get
@@ -278,6 +342,10 @@ describe PostcodesController do
       it 'should redirect to index search form' do
         do_get
         response.should redirect_to(:action=>'index')
+      end
+      it 'should redirect to error page if passed a format' do
+        do_get 'xml'
+        response.should redirect_to(:action=>'error')
       end
       it 'should set non-matching postcode text as last_search_term in flash memory' do
         do_get
