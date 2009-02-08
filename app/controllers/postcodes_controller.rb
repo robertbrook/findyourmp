@@ -81,6 +81,7 @@ class PostcodesController < ApplicationController
     @error_message = flash[:not_found]
     
     respond_to do |format|
+      format.html
       format.xml
       format.json { render :json => message_to_json("error", @error_message) }
       format.js   { render :json => message_to_json("error", @error_message) }
