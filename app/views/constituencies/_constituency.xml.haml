@@ -1,0 +1,13 @@
+%constituency
+  %constituency-name= constituency.name
+  %constituency-id= constituency.id
+  - if constituency.no_sitting_member?
+    %member-name= 'No sitting member'
+    %member-party
+    %member-biography
+    %member-website
+  - else
+    %member-name= constituency.member_name
+    %member-party= constituency.member_party
+    %member-biography-url= constituency.member_biography_url
+    %member-website= constituency.member_website
