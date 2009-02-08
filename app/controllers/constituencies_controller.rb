@@ -13,7 +13,7 @@ class ConstituenciesController < ResourceController::Base
       @last_search_term = @search_term
 
       @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
-      @members = @constituencies.sort_by(&:member_name)
+      @members = Constituency.find_all_by_id(id.split('+'), :conditions => "member_name is not null").sort_by(&:member_name)
 
       if @search_term[/[A-Z][a-z].*/]
         @constituencies.delete_if { |element| !(element.name.include? @search_term) }
@@ -21,6 +21,18 @@ class ConstituenciesController < ResourceController::Base
       else
         @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
         @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
+      end
+      
+      if params[:format]
+        respond_to do |format|
+          format.html
+          format.xml
+          format.json { render :json => results_to_json(@constituencies, @members) }
+          format.js   { render :json => results_to_json(@constituencies, @members) }
+          format.text { render :text => results_to_text(@constituencies, @members) }
+          format.csv  { render :text => results_to_csv(@constituencies, @members) }
+          format.yaml { render :text => results_to_yaml(@constituencies, @members) }
+        end
       end
     else
       @constituency = Constituency.find(id)
@@ -69,5 +81,56 @@ class ConstituenciesController < ResourceController::Base
       rescue
         render_not_found
       end
+    end
+    
+    def results_to_json constituencies, members
+      constituencies_json = ""
+      constituencies.each do |constituency|
+        constituencies_json += ", " unless constituencies_json == ""
+        constituencies_json += constituency.to_json[1..-2]
+      end
+      
+      members_json = ""
+      members.each do |member|
+        members_json += ", " unless members_json == ""
+        members_json += member.to_json[1..-2]
+      end
+      
+      constituencies_results = %Q|"constituencies": {#{constituencies_json}}|
+      members_results = %Q|"members": {#{members_json}}|
+      
+      %Q|{"results": { #{constituencies_results}, #{members_results} }} |
+    end
+    
+    def results_to_text constituencies, members
+      results = ""
+      constituencies.each do |constituency|
+        results += "\n\n"
+        results += "  - " + constituency.to_text.gsub("\n", "\n\    ")
+      end
+      members.each do |member|
+        results += "\n\n"
+        results += "  - " + member.to_text.gsub("\n", "\n    ")
+      end
+      "constituencies:" + results
+    end
+    
+    def results_to_yaml constituencies, members
+      "---\n#{results_to_text(constituencies, members)}"
+    end
+    
+    def results_to_csv constituencies, members
+      headers = 'constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website'
+      values = ""
+      
+      constituencies.each do |constituency|
+        values += constituency.to_csv_value + "\n"
+      end
+      
+      members.each do |constituency|
+        values += constituency.to_csv_value + "\n"
+      end
+      
+      "#{headers}\n#{values}\n"
     end
 end

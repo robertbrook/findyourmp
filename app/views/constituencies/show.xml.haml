@@ -1,13 +1,11 @@
-%constituency
-  %constituency-name= @constituency.name
-  %constituency-id= @constituency.id
-  - if @constituency.no_sitting_member?
-    %member-name= 'No sitting member'
-    %member-party= '--'
-    %member-biography= '--'
-    %member-website= '--'
+%results
+  - if @constituency
+    = render :partial => 'constituency', :object => @constituency
   - else
-    %member-name= @constituency.member_name
-    %member-party= @constituency.member_party
-    %member-biography-url= @constituency.member_biography_url
-    %member-website= @constituency.member_website
+    - if @constituencies
+      %constituency-matches
+        = render :partial => 'constituency', :collection => @constituencies
+    - if @members
+      %member-matches
+        = render :partial => 'constituency', :collection => @members
+      

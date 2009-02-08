@@ -103,8 +103,12 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
     end
-    def do_get
-      get :show, :id => @two_constituency_ids, :search_term => @constituency_name_part
+    def do_get format=nil
+      if format
+        get :show, :id => @two_constituency_ids, :search_term => @constituency_name_part, :format => format
+      else
+        get :show, :id => @two_constituency_ids, :search_term => @constituency_name_part
+      end
     end
     it 'should assign is_admin to view' do
       @controller.stub!(:is_admin?).and_return false
@@ -121,14 +125,46 @@ describe ConstituenciesController do
       do_get
       assigns[:last_search_term].should == @constituency_name_part
     end
+    it 'should return xml if the requested format is xml' do
+      do_get 'xml'
+      response.content_type.should == "application/xml"
+    end
+    it 'should return text if the requested format is text' do
+      @other_constituency.should_receive(:to_text).and_return('text')
+      @constituency.should_receive(:to_text).and_return('text')
+      do_get 'text'
+      response.content_type.should == "text/plain"
+    end
+    it 'should return yaml if the requested format is yaml' do
+      @other_constituency.should_receive(:to_text).and_return('text')
+      @constituency.should_receive(:to_text).and_return('text')
+      do_get 'yaml'
+      response.content_type.should == "application/x-yaml"
+    end
+    it 'should return csv if the requested format is csv' do
+      @other_constituency.should_receive(:to_csv_value).and_return('text')
+      @constituency.should_receive(:to_csv_value).and_return('text')
+      do_get 'csv'
+      response.content_type.should == "text/csv"
+    end
+    it 'should return json if the requested format is json' do
+      @other_constituency.should_receive(:to_json).and_return('text')
+      @constituency.should_receive(:to_json).and_return('text')
+      do_get 'json'
+      response.content_type.should == "application/json"
+    end
   end
 
   describe "when asked for several constituencies by ids along with search term that matches member names" do
     before do
       Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
     end
-    def do_get
-      get :show, :id => @two_constituency_ids, :search_term => @member_name_part
+    def do_get format=nil
+      if format
+        get :show, :id => @two_constituency_ids, :search_term => @member_name_part, :format => format
+      else
+        get :show, :id => @two_constituency_ids, :search_term => @member_name_part
+      end
     end
     it 'should assign is_admin to view' do
       @controller.stub!(:is_admin?).and_return false
@@ -144,6 +180,34 @@ describe ConstituenciesController do
     it 'should assign search term to view' do
       do_get
       assigns[:last_search_term].should == @member_name_part
+    end
+    it 'should return xml if the requested format is xml' do
+      do_get 'xml'
+      response.content_type.should == "application/xml"
+    end
+    it 'should return text if the requested format is text' do
+      @other_constituency.should_receive(:to_text).and_return('text')
+      @constituency.should_receive(:to_text).and_return('text')
+      do_get 'text'
+      response.content_type.should == "text/plain"
+    end
+    it 'should return yaml if the requested format is yaml' do
+      @other_constituency.should_receive(:to_text).and_return('text')
+      @constituency.should_receive(:to_text).and_return('text')
+      do_get 'yaml'
+      response.content_type.should == "application/x-yaml"
+    end
+    it 'should return csv if the requested format is csv' do
+      @other_constituency.should_receive(:to_csv_value).and_return('text')
+      @constituency.should_receive(:to_csv_value).and_return('text')
+      do_get 'csv'
+      response.content_type.should == "text/csv"
+    end
+    it 'should return json if the requested format is json' do
+      @other_constituency.should_receive(:to_json).and_return('text')
+      @constituency.should_receive(:to_json).and_return('text')
+      do_get 'json'
+      response.content_type.should == "application/json"
     end
   end
 
