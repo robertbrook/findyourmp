@@ -58,7 +58,7 @@ namespace :deploy do
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
 
-    run "if [-d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
+    run "if [ -d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
 
     rc_rake_file = "#{release_path}/vendor/plugins/resource_controller/tasks/gem.rake"
     run "if [ -f #{rc_rake_file} ]; then mv #{rc_rake_file} #{rc_rake_file}.bak ; else echo not found ; fi"
