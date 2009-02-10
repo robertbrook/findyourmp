@@ -16,6 +16,11 @@ Before do
   Given 'there is no MP in constituency "Glenrothes"'
 
   Given 'there is a postcode "GY1 1AB" with no constituency'
+
+  unless User.find_by_login('admin')
+    user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin')
+    user.save!
+  end
 end
 
 Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|

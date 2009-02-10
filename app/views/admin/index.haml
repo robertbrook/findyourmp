@@ -1,4 +1,5 @@
--@title = 'Message Audit | Admin'
+-@title = 'Admin'
+%h3= 'Message Audit'
 
 %p.text
   = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
@@ -7,15 +8,6 @@
 %p.text
   = link_to "Draft messages: #{@draft_message_count}", url_for(:controller=>'admin',:action=>'draft')
 
-- unless @messages.empty?
-  %table
-    %tr
-      - @messages.first.attributes.each do |name,value|
-        - unless name[/message|authenticity_token/]
-          %th=name
-
-    - @messages.each do |message|
-      %tr
-        - message.attributes.each do |name, value|
-          - unless name[/message|authenticity_token/]
-            %td=value
+%h3= 'Data maintenance'
+%p.text
+  = link_to 'All constituencies', constituencies_path

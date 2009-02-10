@@ -9,9 +9,9 @@ describe AdminController do
   end
 
   describe 'when not logged in as admin' do
-    it 'should return 401 Unauthorized for all requests' do
+    it 'should redirect to login page' do
       get :index
-      response.status.should == '401 Unauthorized'
+      response.should redirect_to(new_user_session_url)
     end
   end
 

@@ -21,7 +21,9 @@ describe "/constituencies/show.haml" do
         :member_email => "member@email",
         :member_requested_contact_url => nil
         )
-      @other_constituency.stub!(:name).and_return("MyString")
+    @other_constituency.stub!(:name).and_return("MyString")
+
+    @controller.stub!(:current_user).and_return nil
   end
 
   it "should render attributes in <p>" do

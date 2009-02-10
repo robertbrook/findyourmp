@@ -7,6 +7,7 @@ describe "/postcodes/show.haml" do
     @layout = 'application'
     assigns[:postcode] = mock_model(Postcode, :code_with_space=>'GY1 1AA')
     assigns[:constituency] = nil
+    @controller.stub!(:current_user).and_return nil
     template.stub!(:postcode_format_links).and_return ''
   end
 

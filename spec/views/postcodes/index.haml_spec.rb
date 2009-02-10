@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/search_spec_helper'
 
 describe "/postcodes/index.haml" do
   before do
+    @controller.stub!(:current_user).and_return nil
     @template = 'postcodes/index.haml'
     @layout = 'application'
     assigns[:postcode_count] = 1000000

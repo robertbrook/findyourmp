@@ -176,8 +176,7 @@ describe MessagesController do
       it 'should keep "authenticity_token" in flash memory' do
         handle_authentication_filter @authenticity_token
         @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-
-         @flash.should_receive(:keep).with('authenticity_token')
+        @flash.should_receive(:keep).with('authenticity_token')
 
         get :edit, :constituency_id => @constituency_id, :id => @message_id
       end
