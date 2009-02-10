@@ -3,10 +3,6 @@
 <head profile="http://gmpg.org/xfn/11">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
-  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://news.parliament.uk/feed/" />
-  <link rel="alternate" type="text/xml" title="RSS .92" href="http://news.parliament.uk/feed/rss/" />
-  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://news.parliament.uk/feed/atom/" />
-  <link rel="pingback" href="http://news.parliament.uk/xmlrpc.php" />
   <style type="text/css" media="screen, projection">
     @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/news_and_issues.css");
     @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/homepage.css");
@@ -22,6 +18,14 @@
       background-color: #ffcccc;
     }
   </style>
+<% if @show_postcode_autodiscovery_links %>
+  <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
+  <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
+  <%= auto_discovery_link_tag(:js, @url_for_this + ".js") %>
+  <%= auto_discovery_link_tag(:text, @url_for_this + ".text") %>
+  <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
+  <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
+<% end %>
 <% if RAILS_ENV == 'production' %>
   <script language="JavaScript1.1" type="text/javascript">
     <!--
@@ -192,6 +196,8 @@
 <%   end %>
           </ul>
 <% end %>
+          <div>	Source: NSPD 2008, National Statistics Crown copyright material is reproduced with the permission of the Controller of HMSO and Queen’s Printer for Scotland
+		  </div>
         </div>
         <div class="hspacer">&nbsp;</div>
       </div>

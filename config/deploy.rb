@@ -58,7 +58,7 @@ namespace :deploy do
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
 
-    run "if [-d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
+    run "if [ -d #{deploy_to}/shared/system ]; then echo exists ; else mkdir #{deploy_to}/shared/system ; fi"
 
     rc_rake_file = "#{release_path}/vendor/plugins/resource_controller/tasks/gem.rake"
     run "if [ -f #{rc_rake_file} ]; then mv #{rc_rake_file} #{rc_rake_file}.bak ; else echo not found ; fi"
@@ -86,8 +86,6 @@ namespace :deploy do
   desc "Perform non-destructive rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
-    run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
-    run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
   end
 
   task:check_folder_setup do
@@ -164,6 +162,9 @@ namespace :deploy do
     sudo "gem install term-ansicolor"
 
     rake_tasks
+    
+    run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
 
     run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"

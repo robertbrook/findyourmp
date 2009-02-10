@@ -72,6 +72,41 @@ class Constituency < ActiveRecord::Base
     member_name.blank? || !member_visible
   end
 
+
+  def to_json
+    if no_sitting_member?
+      %Q|{"constituency": {"constituency_name": "#{name}", "constituency_id": #{id}, "member_name": "No sitting member", "member_party": "", "member_biography_url": "", "member_website": "" } }|
+    else
+      %Q|{"constituency": {"constituency_name": "#{name}", "constituency_id": #{id}, "member_name": "#{member_name}", "member_party": "#{member_party}", "member_biography_url": "#{member_biography_url}", "member_website": "#{member_website}" } }|
+    end
+  end
+
+  def to_text
+    if no_sitting_member?
+      %Q|constituency: #{name}\nconstituency_id: #{id}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: |
+    else
+      %Q|constituency: #{name}\nconstituency_id: #{id}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}|
+    end
+  end
+
+  def to_csv
+    headers = 'constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website'
+    values = to_csv_value
+    "#{headers}\n#{values}\n"
+  end
+  
+  def to_csv_value
+    if no_sitting_member?
+      %Q|"#{name}",#{id},"No sitting member","","",""|
+    else
+      %Q|"#{name}",#{id},"#{member_name}","#{member_party}","#{member_biography_url}","#{member_website}"|
+    end
+  end
+
+  def to_output_yaml
+    "---\n#{to_text}"
+  end
+
   private
     def valid_email?
       unless member_email.blank?

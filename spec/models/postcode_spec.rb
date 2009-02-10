@@ -39,7 +39,7 @@ describe Postcode do
 
     describe 'in json' do
       it 'should create json correctly' do
-        @postcode.to_json.should == %Q|{"postcode": {"code": "N1 2SD", "constituency_id": 123, "constituency_name": "Islington South", "member_name": "Edmund Husserl"}|
+        @postcode.to_json.should == %Q|{"postcode": {"code": "N1 2SD", "constituency_id": 123, "constituency_name": "Islington South", "member_name": "Edmund Husserl"} }|
       end
     end
     describe 'in text' do

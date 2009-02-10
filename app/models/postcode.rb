@@ -43,7 +43,7 @@ class Postcode < ActiveRecord::Base
 
   def to_json
     member = member_name ? %Q|, "member_name": "#{member_name.strip}"| : ''
-    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_id": #{constituency_id}, "constituency_name": "#{constituency_name}"#{member}}|
+    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_id": #{constituency_id}, "constituency_name": "#{constituency_name}"#{member}} }|
   end
 
   def to_text
