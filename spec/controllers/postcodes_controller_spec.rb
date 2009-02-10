@@ -79,15 +79,6 @@ describe PostcodesController do
     end
     get_request_should_be_successful
     should_render_template 'index'
-
-    it 'should assign postcode count to view' do
-      do_get
-      assigns[:postcode_count].should == @postcode_count
-    end
-    it 'should assign constituency count to view' do
-      do_get
-      assigns[:constituency_count].should == @constituency_count
-    end
   end
 
   describe "when asked for constituency given an exact constituency name" do

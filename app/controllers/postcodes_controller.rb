@@ -4,8 +4,6 @@ class PostcodesController < ApplicationController
     search_term = params[:search_term]
     search_format = params[:format]
 
-    @postcode_count = Postcode.count
-    @constituency_count = Constituency.count
     @last_search_term = flash[:last_search_term]
     
     unless search_term.blank?
