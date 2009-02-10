@@ -1,0 +1,43 @@
+-@title = 'Listing users'
+
+%table.text.table-300
+  %tr
+    %th
+      Login
+    %th
+      Login count
+    %th
+      Last request at
+    %th
+      Last login at
+    %th
+      Current login at
+    %th
+      Last login ip
+    %th
+      Current login ip
+  - for user in @users
+    %tr
+      %td
+        = h user.login
+      %td
+        = h user.login_count
+      %td
+        = h user.last_request_at
+      %td
+        = h user.last_login_at
+      %td
+        = h user.current_login_at
+      %td
+        = h user.last_login_ip
+      %td
+        = h user.current_login_ip
+      %td
+        = link_to 'Show', user
+      %td
+        = link_to 'Edit', edit_user_path(user)
+      - if user != @users.first
+        %td
+          = link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete
+%br
+= link_to 'New user', new_user_path
