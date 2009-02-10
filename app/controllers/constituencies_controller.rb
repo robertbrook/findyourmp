@@ -7,7 +7,7 @@ class ConstituenciesController < ResourceController::Base
   def show
     id = params[:id]
     flash.keep(:postcode)
-    @is_admin = is_admin?
+
     if id.include? '+'
       @search_term = params[:search_term]
       @last_search_term = @search_term
@@ -22,7 +22,7 @@ class ConstituenciesController < ResourceController::Base
         @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
         @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
       end
-      
+
       if params[:format]
         respond_to do |format|
           format.html
@@ -36,7 +36,7 @@ class ConstituenciesController < ResourceController::Base
       end
     else
       @constituency = Constituency.find(id)
-      
+
       @show_postcode_autodiscovery_links = true
       @url_for_this = url_for(:only_path=>false)
       respond_to do |format|
@@ -82,26 +82,26 @@ class ConstituenciesController < ResourceController::Base
         render_not_found
       end
     end
-    
+
     def results_to_json constituencies, members
       constituencies_json = ""
       constituencies.each do |constituency|
         constituencies_json += ", " unless constituencies_json == ""
         constituencies_json += constituency.to_json[1..-2]
       end
-      
+
       members_json = ""
       members.each do |member|
         members_json += ", " unless members_json == ""
         members_json += member.to_json[1..-2]
       end
-      
+
       constituencies_results = %Q|"constituencies": {#{constituencies_json}}|
       members_results = %Q|"members": {#{members_json}}|
-      
+
       %Q|{"results": { #{constituencies_results}, #{members_results} }} |
     end
-    
+
     def results_to_text constituencies, members
       results = ""
       constituencies.each do |constituency|
@@ -114,23 +114,23 @@ class ConstituenciesController < ResourceController::Base
       end
       "constituencies:" + results
     end
-    
+
     def results_to_yaml constituencies, members
       "---\n#{results_to_text(constituencies, members)}"
     end
-    
+
     def results_to_csv constituencies, members
       headers = 'constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website'
       values = ""
-      
+
       constituencies.each do |constituency|
         values += constituency.to_csv_value + "\n"
       end
-      
+
       members.each do |constituency|
         values += constituency.to_csv_value + "\n"
       end
-      
+
       "#{headers}\n#{values}\n"
     end
 end

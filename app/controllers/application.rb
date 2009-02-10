@@ -9,20 +9,7 @@ class ApplicationController < ActionController::Base
 
   filter_parameter_logging :password, :password_confirmation
 
-  helper_method :current_user_session, :current_user
-
-  before_filter :set_is_admin
-
-  def toggle_admin
-    if request.post?
-      session[:is_admin] = !session[:is_admin]
-    end
-    if session[:is_admin]
-      redirect_to :back
-    else
-      redirect_to :controller=>'postcodes',:action=>'index'
-    end
-  end
+  helper_method :current_user_session, :current_user, :is_admin?
 
   def render_not_found message='Page not found.'
     render :text => message, :status => :not_found
@@ -39,10 +26,6 @@ class ApplicationController < ActionController::Base
 
     def is_admin?
       current_user
-    end
-
-    def set_is_admin
-      @is_admin = is_admin?
     end
 
     def current_user_session

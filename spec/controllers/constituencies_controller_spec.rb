@@ -80,11 +80,6 @@ describe ConstituenciesController do
     def do_get
       get :show, :id => @friendly_id
     end
-    it 'should assign is_admin to view' do
-      @controller.stub!(:is_admin?).and_return false
-      do_get
-      assigns[:is_admin].should be_false
-    end
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@friendly_id).and_return @constituency
       do_get
@@ -109,11 +104,6 @@ describe ConstituenciesController do
       else
         get :show, :id => @two_constituency_ids, :search_term => @constituency_name_part
       end
-    end
-    it 'should assign is_admin to view' do
-      @controller.stub!(:is_admin?).and_return false
-      do_get
-      assigns[:is_admin].should be_false
     end
     it 'should assign constituencies to view ordered by name' do
       Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@constituency, @other_constituency]
@@ -166,11 +156,6 @@ describe ConstituenciesController do
         get :show, :id => @two_constituency_ids, :search_term => @member_name_part
       end
     end
-    it 'should assign is_admin to view' do
-      @controller.stub!(:is_admin?).and_return false
-      do_get
-      assigns[:is_admin].should be_false
-    end
     it 'should assign members to view ordered by member_name' do
       Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@constituency, @other_constituency]
       do_get
@@ -217,11 +202,6 @@ describe ConstituenciesController do
     end
     def do_get
       get :show, :id => @two_constituency_ids, :search_term => @search_term
-    end
-    it 'should assign is_admin to view' do
-      @controller.stub!(:is_admin?).and_return false
-      do_get
-      assigns[:is_admin].should be_false
     end
     it 'should assign constituencies to view ordered by name' do
       Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@constituency]
