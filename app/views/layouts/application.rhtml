@@ -180,13 +180,13 @@
             <li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
             <li><a href="http://www.parliament.uk/site_information/privacy_policy.cfm">Privacy Policy</a></li>
             <li><a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">Copyright</a></li>
-            <% if !current_user %>
-              <li><%= link_to "Log In", new_user_session_path %></li>
-            <% else %>
+            <% if is_admin? %>
               <li><%= link_to "Logout", user_session_path, :method => :delete, :confirm => "Are you sure you want to logout?" %></li>
+            <% else %>
+              <li><%= link_to "Log In", new_user_session_path %></li>
             <% end %>
           </ul>
-<% if current_user %>
+<% if is_admin? %>
           <br/>
           <ul>
             <li class="first"><%= link_to 'All constituencies', constituencies_path %></li>
@@ -197,7 +197,7 @@
           </ul>
 <% end %>
           <div>	Source: NSPD 2008, National Statistics Crown copyright material is reproduced with the permission of the Controller of HMSO and Queen’s Printer for Scotland
-		  </div>
+      </div>
         </div>
         <div class="hspacer">&nbsp;</div>
       </div>

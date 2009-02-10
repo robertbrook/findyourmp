@@ -1,6 +1,6 @@
 - if @constituency
   = render :partial => 'constituency', :object => @constituency
-  - if current_user
+  - if is_admin?
     %ul.text
       %li{ :class=>"first"}= link_to 'All constituencies', constituencies_path
       %li= link_to 'Show message audit', url_for(:controller=>'admin',:action=>'index')

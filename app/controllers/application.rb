@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   filter_parameter_logging :password, :password_confirmation
 
-  helper_method :current_user_session, :current_user, :is_admin?
+  helper_method :current_user_session, :is_admin?
 
   def render_not_found message='Page not found.'
     render :text => message, :status => :not_found
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     end
 
     def is_admin?
-      current_user
+      current_user ? true : false
     end
 
     def current_user_session
