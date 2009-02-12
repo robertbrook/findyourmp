@@ -17,7 +17,7 @@ class PostcodesController < ApplicationController
     
     if postcode
       if postcode.code != code
-        redirect_to :action=>'show', :postcode=>postcode.code
+        redirect_to :action=>'show', :postcode=>postcode.code, :format => params[:format]
       else
         @show_postcode_autodiscovery_links = true
         @url_for_this = url_for(:only_path=>false)

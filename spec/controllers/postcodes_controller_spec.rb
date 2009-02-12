@@ -326,6 +326,14 @@ describe PostcodesController do
         get :show, :postcode => @postcode_with_space
         response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode)
       end
+      
+      describe 'and format requested is js' do
+        it 'should redirect to canoncial postcode url with format js' do
+          Postcode.should_receive(:find_postcode_by_code).with(@postcode_with_space).and_return @postcode_record
+          get :show, :postcode => @postcode_with_space, :format => 'js'
+          response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode, :format => 'js')
+        end
+      end
     end
 
     describe 'and a matching postcode is not found' do
