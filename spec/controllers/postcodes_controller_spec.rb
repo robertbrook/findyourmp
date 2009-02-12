@@ -322,8 +322,7 @@ describe PostcodesController do
 
     describe 'and postcode matches if space removed' do
       it 'should redirect to canoncial postcode url' do
-        Postcode.should_receive(:find_postcode_by_code).with(@postcode_with_space).and_return nil
-        Postcode.should_receive(:find_postcode_by_code).with(@canonical_postcode).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode_with_space).and_return @postcode_record
         get :show, :postcode => @postcode_with_space
         response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode)
       end
