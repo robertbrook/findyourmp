@@ -1,11 +1,11 @@
 %results
   - if @constituency
-    = render :partial => 'constituency', :object => @constituency
+    = render :partial => 'constituencies/constituency', :object => @constituency
   - else
     - if @constituencies
       %constituency-matches
-        = render :partial => 'constituency', :collection => @constituencies
+        = render :partial => 'constituencies/constituency', :collection => @constituencies
     - if @members
       %member-matches
-        = render :partial => 'constituency', :collection => @members
+        = render :partial => 'constituencies/constituency', :collection => @members
       

@@ -1,5 +1,5 @@
 - if @constituency
-  = render :partial => 'constituency', :object => @constituency
+  = render :partial => 'constituencies/constituency', :object => @constituency
   - if is_admin?
     %ul.text
       %li{ :class=>"first"}= link_to 'All constituencies', constituencies_path
@@ -9,7 +9,7 @@
   #search= render :partial => 'layouts/search_form'
   - if @constituencies.size > 0
     %h4= pluralize(@constituencies.size, 'Consituency')
-    = render :partial => 'constituency_match', :collection => @constituencies
+    = render :partial => 'constituencies/constituency_match', :collection => @constituencies
   - if @members.size > 0
     %h4= pluralize(@members.size, 'Member')
-    = render :partial => 'member_match', :collection => @members
+    = render :partial => 'constituencies/member_match', :collection => @members
