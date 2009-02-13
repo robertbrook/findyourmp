@@ -103,9 +103,25 @@ describe PostcodesController do
         do_get
         response.content_type.should == "text/html"
       end
-      it 'should redirect to error page when passed a format' do
+      it 'should return xml if passed format "xml"' do
         do_get 'xml'
-        response.should redirect_to(:action=>'error')
+        response.content_type.should == "application/xml"
+      end
+      it 'should return json format if passed format "json"' do
+        do_get 'json'
+        response.content_type.should == "application/json"
+      end
+      it 'should return txt format if passed format "txt"' do
+        do_get 'txt'
+        response.content_type.should == "text/plain"
+      end
+      it 'should return csv format if passed format "csv"' do
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+      end
+      it 'should return yaml format if passed format "yaml"' do
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
       end
     end
 
@@ -117,41 +133,6 @@ describe PostcodesController do
         do_get
         response.should redirect_to("constituencies/#{@friendly_constituency_id}")
       end
-    end
-  end
-
-  describe "when an error is found" do
-    def do_get format
-      get :error, :format => format
-    end
-    
-    it 'should return xml format' do
-      do_get 'xml'
-      response.content_type.should == "application/xml"
-    end
-    it 'should return json format' do
-      do_get 'json'
-      response.content_type.should == "application/json"
-    end
-    it 'should return js format' do
-      do_get 'js'
-      response.content_type.should == "text/javascript"
-    end
-    it 'should return text format' do
-      do_get 'text'
-      response.content_type.should == "text/plain"
-    end
-    it 'should return txt format' do
-      do_get 'txt'
-      response.content_type.should == "text/plain"
-    end
-    it 'should return csv format' do
-      do_get 'csv'
-      response.content_type.should == "text/csv"
-    end
-    it 'should return yaml format' do
-      do_get 'yaml'
-      response.content_type.should == "application/x-yaml"
     end
   end
 
@@ -207,9 +188,9 @@ describe PostcodesController do
       response.should redirect_to("")
     end
     
-    it 'should redirect to error page when passed a format' do
+    it 'should return xml page when passed of format "xml"' do
       do_get 'xml'
-      response.should redirect_to(:action=>'error')
+      response.content_type.should == "application/xml"
     end
 
     it 'should set last_search_term in flash memory' do
@@ -232,9 +213,9 @@ describe PostcodesController do
         do_get
         response.should redirect_to("")
       end
-      it 'should redirect to error page if passed a format' do
+      it 'should return xml if passed format "xml"' do
         do_get 'xml'
-        response.should redirect_to(:action=>'error')
+        response.content_type.should == "application/xml"
       end
       it 'should set last_search_term in flash memory' do
         do_get
@@ -341,9 +322,9 @@ describe PostcodesController do
         do_get
         response.should redirect_to(:action=>'index')
       end
-      it 'should redirect to error page if passed a format' do
+      it 'should return xml if passed format "xml"' do
         do_get 'xml'
-        response.should redirect_to(:action=>'error')
+        response.content_type.should == "application/xml"
       end
       it 'should set non-matching postcode text as last_search_term in flash memory' do
         do_get

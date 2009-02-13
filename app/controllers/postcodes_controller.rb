@@ -37,7 +37,7 @@ class PostcodesController < ApplicationController
       params[:postcode] = nil
       search_format = params[:format]
       if search_format
-        redirect_to :action=>'error', :format=>search_format
+        show_error(search_format)
       else
         redirect_to :action=>'index'
       end
