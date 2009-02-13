@@ -20,7 +20,14 @@ describe ConstituenciesController do
 
     @other_constituency_id = 802
     @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802, :member_name => 'A Biggens-South')
-
+    @constituency_without_mp = mock_model(Constituency, 
+        :name => 'Glenrothes', 
+        :id => 835,  
+        :friendly_id => 'glenrothes',
+        :has_better_id? => false,
+        :member_visible => false)
+    @constituency_without_mp_id = 835
+    @constituency_without_mp_friendly_id = 'glenrothes'
     @two_constituency_ids = "#{@constituency_id}+#{@other_constituency_id}"
   end
 
@@ -94,6 +101,29 @@ describe ConstituenciesController do
     end
   end
 
+  describe "when asked for a constituency by friendly_id which does not have a sitting MP" do
+    before do
+      Constituency.stub!(:find).and_return @constituency_without_mp
+    end
+    def do_get format=nil
+      if format
+        get :show, :id => @constituency_without_mp_friendly_id, :format => format
+      else
+        get :show, :id => @constituency_without_mp_friendly_id
+      end
+    end
+    it 'should assign constituency to view' do
+      Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
+      do_get
+      assigns[:constituency].should == @constituency_without_mp
+    end
+    it 'should return xml when asked for format XML' do
+      Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
+      do_get 'xml'
+      response.content_type.should == 'application/xml'
+    end
+  end
+
   describe "when asked for several constituencies by ids along with search term that matches constituency names" do
     before do
       Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
@@ -144,7 +174,7 @@ describe ConstituenciesController do
       response.content_type.should == "application/json"
     end
   end
-
+  
   describe "when asked for several constituencies by ids along with search term that matches member names" do
     before do
       Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
