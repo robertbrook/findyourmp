@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :constituency
 
   before_validation_on_create :populate_defaulted_fields
-  before_validation :populate_postcode_and_sender_is_constituent
+  before_validation :populate_postcode_and_sender_is_constituent, :clean_message_whitespace
 
   validates_presence_of :sender, :message => 'Please enter your full name'
   validates_presence_of :sender_email, :message => 'Please enter your email address'
@@ -89,6 +89,14 @@ class Message < ActiveRecord::Base
     RAILS_ENV == 'development' ? test_email : sender_email
   end
 
+  def clean_message_whitespace
+    if self.message
+      text = []
+      self.message.each_line { |line| text << line.strip }
+      self.message = text.join("\n")
+    end
+  end
+
   private
 
     def populate_defaulted_fields
@@ -97,7 +105,7 @@ class Message < ActiveRecord::Base
       self.sent = 0
       self.attempted_send = 0
     end
-
+    
     def populate_postcode_and_sender_is_constituent
       self.sender_is_constituent = 0
 

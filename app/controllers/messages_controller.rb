@@ -35,8 +35,28 @@ class MessagesController < ResourceController::Base
     if params['message']
       params['message']['authenticity_token'] = params[:authenticity_token]
       flash['authenticity_token'] = params[:authenticity_token]
+      send_message = (params['message']['sent'] == '1')
+      params['message'].delete('sent')
     end
-    super
+
+    build_object
+    load_object
+    before :create
+    if send_message && @message.save
+      after :create
+      set_flash :create
+      successful = @message.deliver
+      flash[:message_just_sent] = successful
+      render :template => 'messages/show'
+    elsif !send_message && @message.valid?
+      after :create
+      set_flash :create
+      render :template => 'messages/show'
+    else
+      after :create_fails
+      set_flash :create_fails
+      response_for :create_fails
+    end
   end
 
   def update

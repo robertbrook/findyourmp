@@ -30,7 +30,13 @@
         %span.message_message
           = @message.message
 
-      = button_to("Re-edit your message", {:action => 'edit'}, {:method=>'get', :style => 'float:left;margin-right:1em;'})
-      - form_for([@constituency, @message], :html => {:style => 'float:left;'}) do |f|
+      - form_for([@constituency, @message], :url => { :action => 'new' }, :html => {:style => 'float:left;margin-right:1em;'}) do |f|
+        - [:sender_email, :sender, :address, :postcode, :subject, :message].each do |attribute|
+          = f.hidden_field(attribute)
+        = f.submit "Re-edit your message"
+
+      - form_for([@constituency, @message], :url => { :action => 'create' }, :html => {:style => 'float:left;'}) do |f|
+        - [:sender_email, :sender, :address, :postcode, :subject, :message].each do |attribute|
+          = f.hidden_field(attribute)
         = f.hidden_field(:sent, :value=>'1')
         = f.submit "Send message"
