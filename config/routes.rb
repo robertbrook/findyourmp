@@ -9,7 +9,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :user_session
 
   map.root :controller => "postcodes"
-  map.connect '/postcodes/error.:format', :controller => "postcodes", :action => 'error'
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
   map.connect '/search/:search_term.:format', :controller => "postcodes", :action => 'index'

@@ -43,21 +43,7 @@ class PostcodesController < ApplicationController
       end
     end
   end
-  
-  def error
-    @error_message = flash[:not_found]
-    
-    respond_to do |format|
-      format.html
-      format.xml
-      format.json { render :json => message_to_json("error", @error_message) }
-      format.js   { render :json => message_to_json("error", @error_message) }
-      format.text { render :text => message_to_text("error", @error_message) }
-      format.csv  { render :text => message_to_csv("error", @error_message, "message", "content") }
-      format.yaml { render :text => message_to_yaml("error", @error_message) }
-    end
-  end
-  
+
   private
   
     def do_search search_term, search_format
@@ -73,7 +59,7 @@ class PostcodesController < ApplicationController
             flash[:not_found] = "<p>Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
             flash[:last_search_term] = search_term
             if search_format
-              redirect_to :action=>'error', :format=>search_format
+              show_error(search_format)
             else
               redirect_to :action=>'index'
             end
@@ -86,11 +72,25 @@ class PostcodesController < ApplicationController
           flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
           flash[:last_search_term] = search_term
           if search_format
-            redirect_to :action=>'error', :format=>search_format
+            show_error(search_format)
           else
             redirect_to :action=>'index'
           end
         end
+      end
+    end
+
+    def show_error format
+      @error_message = flash[:not_found]
+
+      respond_to do |format|
+        format.html
+        format.xml  { render :action => 'error' }
+        format.json { render :json => message_to_json("error", @error_message) }
+        format.js   { render :json => message_to_json("error", @error_message) }
+        format.text { render :text => message_to_text("error", @error_message) }
+        format.csv  { render :text => message_to_csv("error", @error_message, "message", "content") }
+        format.yaml { render :text => message_to_yaml("error", @error_message) }
       end
     end
 
