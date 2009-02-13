@@ -34,6 +34,12 @@ Feature: Find MP from constituency name
     And I should see "Send a message to Frank Doran"
     And I should not see "Edit"
 
+  Scenario: Enter a valid constituency with no sitting MP
+    Given I am on the Front page
+    When I search for "Glenrothes"
+    Then I should see "Glenrothes"
+    And I should see "No sitting member"
+
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "a"
