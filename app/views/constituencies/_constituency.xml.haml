@@ -1,6 +1,6 @@
 %constituency
   %constituency-name= constituency.name.gsub('&','&amp;')
-  %constituency-id= constituency.id
+  %ons-id= constituency.ons_id
   - if constituency.no_sitting_member?
     %member-name= 'No sitting member'
     %member-party
