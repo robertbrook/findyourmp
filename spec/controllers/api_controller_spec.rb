@@ -19,7 +19,7 @@ describe ApiController do
         :has_better_id? => false)
 
     @other_constituency_id = 802
-    @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802, :member_name => 'A Biggens-South')
+    @other_constituency = mock_model(Constituency, :name => 'Islington & North', :id => 802, :member_name => 'A Biggens-South')
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
@@ -148,13 +148,14 @@ describe ApiController do
     end
     
     it 'should return xml when passed format=xml' do
-      do_get 'xml'  
+      do_get 'xml'
       response.content_type.should == "application/xml"
     end
     
     it 'should return yaml when passed format=yaml' do
-      @matches.should_receive(:to_output_yaml).and_return "---"
-      do_get 'yaml'  
+      @constituency.should_receive(:to_text).and_return "text"
+      @other_constituency.should_receive(:to_text).and_return "other text"
+      do_get 'yaml'
       response.content_type.should == "application/x-yaml"
     end
   end
