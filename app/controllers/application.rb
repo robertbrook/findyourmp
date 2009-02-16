@@ -64,4 +64,74 @@ class ApplicationController < ActionController::Base
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
     end
+    
+     def results_to_json constituencies, members
+        constituencies_json = ""
+        constituencies.each do |constituency|
+          constituencies_json += ", " unless constituencies_json == ""
+          constituencies_json += constituency.to_json[1..-2]
+        end
+
+        members_json = ""
+        members.each do |member|
+          members_json += ", " unless members_json == ""
+          members_json += member.to_json[1..-2]
+        end
+
+        constituencies_results = %Q|"constituencies": {#{constituencies_json}}|
+        members_results = %Q|"members": {#{members_json}}|
+
+        %Q|{"results": { #{constituencies_results}, #{members_results} }} |
+      end
+
+      def results_to_text constituencies, members
+        results = ""
+        constituencies.each do |constituency|
+          results += "\n\n"
+          results += "  - " + constituency.to_text.gsub("\n", "\n\    ")
+        end
+        members.each do |member|
+          results += "\n\n"
+          results += "  - " + member.to_text.gsub("\n", "\n    ")
+        end
+        "constituencies:" + results
+      end
+
+      def results_to_yaml constituencies, members
+        "---\n#{results_to_text(constituencies, members)}"
+      end
+    
+    def results_to_csv constituencies, members
+      headers = 'constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website'
+      values = ""
+
+      constituencies.each do |constituency|
+        values += constituency.to_csv_value + "\n"
+      end
+
+      members.each do |constituency|
+        values += constituency.to_csv_value + "\n"
+      end
+
+      "#{headers}\n#{values}\n"
+    end
+    
+    def message_to_json root, message
+      %Q|{"#{root}": "#{message}"}|
+    end
+
+    def message_to_text root, message
+      %Q|#{root}: #{message}\n|
+    end
+
+    def message_to_csv root, message, root_header, message_header
+      headers = %Q|"#{root_header}","#{message_header}"|
+      values = %Q|"#{root}","#{message}"|
+      "#{headers}\n#{values}\n"
+    end
+
+    def message_to_yaml root, message
+      "---\n#{message_to_text(root, message)}"
+    end
+    
 end

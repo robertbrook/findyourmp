@@ -93,23 +93,5 @@ class PostcodesController < ApplicationController
         format.yaml { render :text => message_to_yaml("error", @error_message) }
       end
     end
-
-    def message_to_json root, message
-      %Q|{"#{root}": "#{message}"}|
-    end
-
-    def message_to_text root, message
-      %Q|#{root}: #{message}\n|
-    end
-
-    def message_to_csv root, message, root_header, message_header
-      headers = %Q|"#{root_header}","#{message_header}"|
-      values = %Q|"#{root}","#{message}"|
-      "#{headers}\n#{values}\n"
-    end
-
-    def message_to_yaml root, message
-      "---\n#{message_to_text(root, message)}"
-    end
   
 end
