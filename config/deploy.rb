@@ -19,7 +19,6 @@ role :db,  domain, :primary => true
 set :test_deploy, true
 
 namespace :deploy do
-  
   set :user, deployuser
   set :password, deploypassword
   
@@ -44,15 +43,17 @@ namespace :deploy do
   task :put_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
 
-    run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
+    if overwrite
+      run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
 
-    put_data data_dir, 'ConstituencyToMember.txt'
-    put_data data_dir, 'constituencies.txt'
+      put_data data_dir, 'ConstituencyToMember.txt'
+      put_data data_dir, 'constituencies.txt'
     
-    if test_deploy
-      put_data data_dir, 'postcodes.txt'
-    else
-      put_data data_dir, 'NSPDC_AUG_2008_UK_100M.txt'
+      if test_deploy
+        put_data data_dir, 'postcodes.txt'
+      else
+        put_data data_dir, 'NSPDC_AUG_2008_UK_100M.txt'
+      end
     end
 
     log_dir = "#{deploy_to}/shared/log"
@@ -78,6 +79,19 @@ namespace :deploy do
     end
   end
 
+  def prompt_for_value(var)
+    puts ""
+    puts "*************************************"
+    answer = ""
+    message = "Do you want to overwrite the data?\n\nIf yes, type: YES, OVERWRITE!!"
+    answer = Capistrano::CLI.ui.ask(message)
+    if answer == "YES, OVERWRITE!!"
+      set var, true
+    else
+      set var, false
+    end
+  end
+
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app do
     run "touch #{current_path}/tmp/restart.txt"
@@ -86,9 +100,20 @@ namespace :deploy do
   desc "Perform non-destructive rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
+    
+    if overwrite
+      run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
+      run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
+    end
   end
 
   task:check_folder_setup do
+    if is_first_run?
+      set :overwrite, true
+    else
+      prompt_for_value(:overwrite)
+    end
+    
     puts 'checking folders...'
     run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -120,12 +145,10 @@ namespace :deploy do
   end
 
   task :check_site_setup do
-    run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
-      if message.strip == 'not there'
-        site_setup
-      else
-        rake_tasks
-      end
+    if is_first_run?
+      site_setup
+    else
+      rake_tasks
     end
   end
 
@@ -162,10 +185,7 @@ namespace :deploy do
     sudo "gem install term-ansicolor"
 
     rake_tasks
-    
-    run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
-    run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
-
+  
     run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
 
@@ -177,7 +197,17 @@ namespace :deploy do
     desc "#{t} task is not used with mod_rails"
     task t, :roles => :app do ; end
   end
-
+  
+  def is_first_run?
+    run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
+      if message.strip == 'not there'
+        true
+      else
+        false
+      end
+    end
+  end
+  
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
