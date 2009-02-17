@@ -3,7 +3,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :constituencies do |constituency|
     constituency.resources :messages, :only => [:new, :create, :index]
   end
-
   map.connect '/constituencies/:constituency_id/messages/new', :conditions => { :method => :post }, :controller => 'messages', :action => 'new'
   
   map.resource :account, :controller => "users"
@@ -22,6 +21,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.admin '/admin', :controller => 'admin', :action => 'index'
   map.connect '/admin/sent', :controller => 'admin', :action => 'sent'
+  map.connect '/admin/sent/:yyyy_mm', :controller => 'admin', :action => 'sent_by_month'
   map.connect '/admin/attempted_send', :controller => 'admin', :action => 'attempted_send'
   
   map.api '/api', :controller => 'api', :action => 'index'

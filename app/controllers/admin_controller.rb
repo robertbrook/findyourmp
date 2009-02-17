@@ -8,6 +8,11 @@ class AdminController < ApplicationController
     @messages = [] # Message.all
   end
 
+  def sent_by_month
+    month = Date.parse(params[:yyyy_mm].sub('_','-') + '-01')
+    @sent_by_constituency = Message.sent_by_constituency(month)
+  end
+
   def sent
     @sent_by_month_count = Message.sent_by_month
   end

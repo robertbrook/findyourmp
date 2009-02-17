@@ -7,7 +7,7 @@ describe Message do
       Postcode.stub!(:find_postcode_by_code).and_return mock('postcode', :code_with_space => 'N1 2SD', :in_constituency? => true) unless "#{attribute}" == 'postcode'
       @valid_attributes.delete(attribute)
       message = Message.new(@valid_attributes)
-      message.stub!(:constituency).and_return mock('constituency', :member_name=>nil, :member_email => nil)
+      message.stub!(:constituency).and_return mock('constituency', :member_name=>nil, :member_email => nil, :name => nil)
       message.valid?.should be_false
       message.errors[:#{attribute}].should_not be_nil
     end|
@@ -32,6 +32,7 @@ describe Message do
 
   assert_checks_presence :sender
   assert_checks_presence :sender_email
+  assert_checks_presence :constituency_name
   assert_checks_presence :recipient
   assert_checks_presence :recipient_email
   assert_checks_presence :postcode
@@ -40,9 +41,10 @@ describe Message do
 
   def mock_message_setup
     nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
+    @constituency_name = 'constituency_name'
     @member_name = 'member_name'
     @member_email = 'member_name@parl.uk'
-    constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id)
+    constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id, :name => @constituency_name)
     Constituency.should_receive(:find).with(@constituency_id, nil_conditions).any_number_of_times.and_return constituency
     @post_code = mock('postcode', :code_with_space => @postcode, :in_constituency? => true)
     Postcode.should_receive(:find_postcode_by_code).with(@postcode).any_number_of_times.and_return @post_code

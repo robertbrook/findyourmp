@@ -1,0 +1,15 @@
+-@title = 'Attempted to Send Messages | Admin'
+
+%table.text.column_content
+  %tr
+    %th Constituency
+    %th Message count
+  - @sent_by_constituency.each do |constituency_name, messages|
+    %tr
+      %td= constituency_name
+      %td= messages.size
+
+%p.text
+  = '&nbsp;'
+%p.text
+  = link_to 'Back', admin_url

@@ -4,7 +4,7 @@
     %th Message count
   - count_by_month.reverse.each do |month, count|
     %tr
-      %td= month.to_s(:month_year)
+      %td= link_to month.to_s(:month_year), url_for(:action=>'sent_by_month',:yyyy_mm=>month.strftime('%Y-%m') )
       %td= count
 
 %p.text

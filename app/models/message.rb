@@ -12,6 +12,7 @@ class Message < ActiveRecord::Base
   validates_presence_of :message, :message => 'Please enter your message'
   validates_presence_of :recipient_email
   validates_presence_of :recipient
+  validates_presence_of :constituency_name
   validates_inclusion_of :sent, :in => [true, false]
   validates_inclusion_of :attempted_send, :in => [true, false]
 
@@ -20,9 +21,21 @@ class Message < ActiveRecord::Base
   validate :message_not_default
 
   named_scope :sent, :conditions => {:sent => true}
+  named_scope :sent_in_month, lambda { |date| {:conditions => ["sent = 1 AND MONTH(created_at) = ? AND YEAR(created_at) = ?" , date.month, date.year]} }
   named_scope :attempted_send, :conditions => {:attempted_send => true}
 
   class << self
+    
+    def sent_by_constituency date
+      messages = sent_in_month(date)
+      sent = ActiveSupport::OrderedHash.new
+      groups = messages.group_by(&:constituency_name)
+      groups.keys.compact.sort.each do |constituency|
+        sent[constituency] = groups[constituency]
+      end
+      sent
+    end
+    
     def sent_by_month
       count_by_month(:sent, false)
     end
@@ -97,6 +110,7 @@ class Message < ActiveRecord::Base
     def populate_defaulted_fields
       self.recipient = constituency.member_name
       self.recipient_email = constituency.member_email
+      self.constituency_name = constituency.name      
       self.sent = 0
       self.attempted_send = 0
     end
