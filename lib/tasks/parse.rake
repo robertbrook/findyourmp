@@ -31,4 +31,9 @@ namespace :fymp do
   task :populate => :environment do
     load_postcodes
   end
+  
+  desc "Populate the postcode prefix table"
+  task :load_prefixes => :environment do
+    load_postcode_prefixes
+  end
 end
