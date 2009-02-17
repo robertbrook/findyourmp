@@ -20,15 +20,11 @@ class Message < ActiveRecord::Base
   validate :message_not_default
 
   named_scope :sent, :conditions => {:sent => true}
-  named_scope :draft, :conditions => {:sent => false, :attempted_send => false}
   named_scope :attempted_send, :conditions => {:attempted_send => true}
 
   class << self
     def sent_by_month
       count_by_month(:sent)
-    end
-    def draft_by_month
-      count_by_month(:draft)
     end
     def attempted_send_by_month
       count_by_month(:attempted_send)

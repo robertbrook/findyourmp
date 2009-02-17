@@ -5,8 +5,6 @@
   = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
 %p.text
   = link_to "Attempted to send messages: #{@attempted_send_message_count}", url_for(:controller=>'admin',:action=>'attempted_send')
-%p.text
-  = link_to "Draft messages: #{@draft_message_count}", url_for(:controller=>'admin',:action=>'draft')
 
 %h3= 'Data maintenance'
 %p.text

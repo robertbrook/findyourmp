@@ -255,18 +255,4 @@ describe Message do
     end
   end
 
-  describe 'when asked for count of draft messages' do
-    it 'should count draft messages and return result' do
-      Message.draft.count.should == 0
-    end
-
-    describe 'by month' do
-      it 'should call count_by_month for drafts' do
-        results = mock('hash')
-        Message.should_receive(:count_by_month).with(:draft).and_return results
-        Message.draft_by_month.should == results
-      end
-    end
-  end
-
 end

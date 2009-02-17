@@ -9,7 +9,6 @@ Feature: View message audit
     When I follow "Show message audit"
     Then I should see "Sent messages"
     And I should see "Attempted to send messages"
-    And I should see "Draft messages"
 
   Scenario: Look at message audit details
     Given I am on the Message Audit Page
