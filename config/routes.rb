@@ -1,6 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :constituencies, :has_many => :messages
+  map.resources :constituencies do |constituency|
+    constituency.resources :messages, :only => [:new, :create, :index]
+  end
 
   map.connect '/constituencies/:constituency_id/messages/new', :conditions => { :method => :post }, :controller => 'messages', :action => 'new'
   

@@ -15,13 +15,11 @@ describe Message do
 
   before(:each) do
     @constituency_id = "value for constituency_id"
-    @authenticity_token = "054e4e1d3d5bd8e9e446490734ce6d1bbc65cfea"
     @postcode = "N1 2SD"
     @valid_attributes = {
       :constituency_id => @constituency_id,
       :sender => "value for sender",
       :sender_email => "value.for@sender.email",
-      :authenticity_token => @authenticity_token,
       :address => "value for address",
       :postcode => @postcode,
       :subject => "value for subject",
@@ -34,7 +32,6 @@ describe Message do
 
   assert_checks_presence :sender
   assert_checks_presence :sender_email
-  assert_checks_presence :authenticity_token
   assert_checks_presence :recipient
   assert_checks_presence :recipient_email
   assert_checks_presence :postcode
@@ -107,21 +104,6 @@ describe Message do
         message = Message.new(attributes)
         message.valid?.should be_true
       end
-    end
-  end
-
-  describe 'when asked to authenticate authenticity_token' do
-    before do
-      @message = Message.new(@valid_attributes)
-    end
-    it 'should return false if given token is nil' do
-      @message.authenticate(nil).should be_false
-    end
-    it 'should return false if given token does not match own authenticity_token' do
-      @message.authenticate('bad_token').should be_false
-    end
-    it 'should return false if given token matches own authenticity_token' do
-      @message.authenticate(@authenticity_token).should be_true
     end
   end
 

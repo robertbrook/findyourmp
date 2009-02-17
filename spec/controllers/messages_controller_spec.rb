@@ -120,131 +120,54 @@ describe MessagesController do
 
   end
 
-  def handle_authentication_filter token
-    @controller.should_receive(:authenticity_token).any_number_of_times.and_return token
-    @message.stub!(:sent).and_return false
-    @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
-    Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
-  end
-
   describe 'when posted message sent set to true' do
-    def do_post token
-      handle_authentication_filter token
-      @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-      post :update, {:constituency_id => @constituency_id, :id => @message_id, :message => {:sent => '1'}}
+    def do_post
+      @message.should_receive(:save).and_return true
+      post :create, {:constituency_id => @constituency_id, :id => @message_id, :message => {:sent => '1'}}
     end
 
     it 'should set deliver message' do
       @message.should_receive(:deliver).and_return true
-      do_post @authenticity_token
+      do_post
     end
     it 'should set flash[:message_just_sent] to true' do
       @message.stub!(:deliver).and_return true
-      do_post @authenticity_token
+      do_post
       flash[:message_just_sent].should be_true
     end
     it 'should redirect to show action' do
       @message.stub!(:deliver).and_return true
-      do_post @authenticity_token
-      response.should redirect_to(constituency_message_url(@constituency_id,@message_id))
+      do_post
+      response.should render_template 'messages/show'
     end
   end
 
   describe 'when asked to edit a message' do
-    before do
-      Constituency.stub!(:find).and_return @constituency
-      @flash = mock('flash')
-      @controller.stub!(:flash).and_return @flash
-      @flash.stub!(:sweep)
-      @flash.stub!(:keep)
-    end
-
-    def do_get token, message_id
-      handle_authentication_filter token
-      get :edit, :constituency_id => @constituency_id, :id => message_id, :authenticity_token => token
-    end
-
-    describe 'and authenticity_token matches' do
-      it 'should redirect to edit' do
-        @flash.should_receive(:[]=).with("authenticity_token", @authenticity_token)
-        @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-
-        do_get @authenticity_token, @message_id
-        response.should redirect_to(constituency_message_url(@constituency_id,@message_id) +'/edit')
-      end
-    end
-
-    describe 'without an authenticity_token being passed' do
-      it 'should keep "authenticity_token" in flash memory' do
-        handle_authentication_filter @authenticity_token
-        @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-        @flash.should_receive(:keep).with('authenticity_token')
-
+    it 'should not be able to route request' do
+      begin
         get :edit, :constituency_id => @constituency_id, :id => @message_id
-      end
-    end
-
-    describe 'and message doesn\'t exist' do
-      it 'should respond with Not Found' do
-        @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
-        @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(nil)
-        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return nil
-
-        get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
-
-        response.status.should == '404 Not Found'
-      end
-    end
-
-    describe 'and message already sent' do
-      it 'should respond with Not Found' do
-        @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
-        @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
-        @message.stub!(:sent).and_return true
-
-        Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
-        @flash.should_receive(:[]).with(:message_just_sent).and_return nil
-
-        get :edit, :constituency_id => @constituency_id, :id => @message_id, :authenticity_token => @authenticity_token
-
-        response.status.should == '404 Not Found'
+      rescue Exception => e
+        e.should be_an_instance_of(ActionController::RoutingError)
       end
     end
   end
 
   describe 'when asked to destroy a message' do
-    it 'should respond with Not Found' do
-      Constituency.stub!(:find).and_return @constituency
-      @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
-      @constituency.messages.should_receive(:find).with(@message_id).any_number_of_times.and_return(@message)
-      @message.stub!(:sent).and_return false
-      Message.should_receive(:find_by_constituency_id_and_id).with(@constituency_id, @message_id).and_return @message
-      @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-
-      get :destroy, :constituency_id => @constituency_id, :id => @message_id
-      response.status.should == '404 Not Found'
+    it 'should not be able to route request' do
+      begin
+        get :destroy, :constituency_id => @constituency_id, :id => @message_id
+      rescue Exception => e
+        e.should be_an_instance_of(ActionController::RoutingError)
+      end
     end
   end
 
   describe 'when asked to show a message' do
-    def do_get token
-      handle_authentication_filter token
-      get :show, :constituency_id => @constituency_id, :id => @message_id
-    end
-    describe 'and authenticity_token matches' do
-      it 'should show view' do
-        @message.stub!(:sent).and_return false
-        @message.should_receive(:authenticate).with(@authenticity_token).and_return true
-        do_get @authenticity_token
-        response.should be_success
-      end
-    end
-    describe 'and authenticity_token doesn\'t match' do
-      it 'should redirect to index' do
-        bad_token = 'bad_token'
-        @message.should_receive(:authenticate).with(bad_token).and_return false
-        do_get bad_token
-        response.status.should == '404 Not Found'
+    it 'should not be able to route request' do
+      begin
+        get :show, :constituency_id => @constituency_id, :id => @message_id
+      rescue Exception => e
+        e.should be_an_instance_of(ActionController::RoutingError)
       end
     end
   end

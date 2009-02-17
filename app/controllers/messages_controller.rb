@@ -7,27 +7,8 @@ class MessagesController < ResourceController::Base
   before_filter :redirect_when_not_appropriate_to_show_message_form
   before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new','create']
 
-  def index
-    redirect_to_constituency_view
-  end
-
   def new
     flash.keep(:postcode)
-    super
-  end
-
-  def edit
-    if params[:authenticity_token]
-      flash['authenticity_token'] = params[:authenticity_token]
-      redirect_to :action => 'edit'
-    else
-      flash.keep('authenticity_token')
-      super
-    end
-  end
-
-  def show
-    flash.keep('authenticity_token')
     super
   end
 
@@ -59,18 +40,20 @@ class MessagesController < ResourceController::Base
     end
   end
 
-  def update
-    flash['authenticity_token'] = params[:authenticity_token]
-    flash.keep('authenticity_token')
-    send_message = params['message'] && params['message']['sent'] == '1'
+  def index
+    redirect_to_constituency_view
+  end
 
-    if send_message
-      successful = @message.deliver
-      flash[:message_just_sent] = successful
-      redirect_to :action => 'show'
-    else
-      super
-    end
+  def edit
+    redirect_to_constituency_view
+  end
+
+  def show
+    redirect_to_constituency_view
+  end
+
+  def update
+    redirect_to_constituency_view
   end
 
   def destroy

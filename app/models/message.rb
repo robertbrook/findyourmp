@@ -10,7 +10,6 @@ class Message < ActiveRecord::Base
   validates_presence_of :postcode, :message => 'Please enter your postcode'
   validates_presence_of :subject, :message => 'Please enter your subject'
   validates_presence_of :message, :message => 'Please enter your message'
-  validates_presence_of :authenticity_token
   validates_presence_of :recipient_email
   validates_presence_of :recipient
   validates_inclusion_of :sent, :in => [true, false]
@@ -51,10 +50,6 @@ class Message < ActiveRecord::Base
         end
         count_by_month
       end
-  end
-
-  def authenticate authenticity_token
-    authenticity_token && (authenticity_token == self.authenticity_token) ? true : false
   end
 
   def deliver
