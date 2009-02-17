@@ -1,7 +1,6 @@
 class ApiController < ApplicationController
   
   def index
-    # help text goes here
   end
   
   def search
@@ -33,9 +32,20 @@ class ApiController < ApplicationController
     end
   end
   
-  # def postcode
-  # end
-  # 
+  def postcodes
+    code = params[:code]
+    search_format = params[:format]
+    
+    postcode = Postcode.find_postcode_by_code(code)
+    
+    if postcode
+      show_postcode(postcode, search_format)
+    else
+      flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      show_error(search_format)
+    end
+  end
+   
   # def constituency
   # end
   

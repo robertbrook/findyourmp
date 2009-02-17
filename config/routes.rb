@@ -25,6 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.api '/api', :controller => 'api', :action => 'index'
   map.connect 'api/search', :controller => 'api', :action => 'search'
+  map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

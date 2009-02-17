@@ -259,4 +259,34 @@ describe ApiController do
     end
   end
 
+  describe "when passed a valid postcode" do
+    before do
+      Postcode.stub!(:find_postcode_by_code).and_return @postcode_record
+      Postcode.should_receive(:find_postcode_by_code).with(@postcode_no_space).and_return @postcode_record
+    end
+    
+    def do_get format=nil
+      if format
+        get :postcodes, :code => @postcode_no_space, :format => format
+      else
+        get :postcodes, :code => @postcode_no_space
+      end
+    end
+    
+    it 'should not redirect' do
+      do_get
+      response.redirect?.should be_false
+    end
+    
+    it 'should assign postcode to view' do
+      do_get
+      assigns[:postcode].should == @postcode_record
+    end
+    
+    it 'should return xml when passed format=xml' do
+      do_get 'xml'
+      response.content_type.should == 'application/xml'
+    end
+  end
+  
 end
