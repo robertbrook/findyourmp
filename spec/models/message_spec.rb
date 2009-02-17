@@ -212,7 +212,7 @@ describe Message do
     end
     it 'should count sent by month correctly' do
       @message.deliver
-      Message.attempted_send_by_month.should == [[Date.today.at_beginning_of_month, 1]]
+      Message.attempted_send_by_month.should == [[Date.today.at_beginning_of_month, [@message] ]]
     end
   end
 
@@ -223,7 +223,7 @@ describe Message do
     describe 'by month' do
       it 'should call count_by_month for attempted_sends' do
         results = mock('hash')
-        Message.should_receive(:count_by_month).with(:attempted_send).and_return results
+        Message.should_receive(:count_by_month).with(:attempted_send, true).and_return results
         Message.attempted_send_by_month.should == results
       end
     end

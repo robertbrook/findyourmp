@@ -24,13 +24,13 @@ class Message < ActiveRecord::Base
 
   class << self
     def sent_by_month
-      count_by_month(:sent)
+      count_by_month(:sent, false)
     end
     def attempted_send_by_month
-      count_by_month(:attempted_send)
+      count_by_month(:attempted_send, true)
     end
     protected
-      def count_by_month type
+      def count_by_month type, include_messages
         first_month = send(type).minimum(:created_at).at_beginning_of_month
         last_month = send(type).maximum(:created_at).at_beginning_of_month
         months = [first_month]
@@ -42,7 +42,11 @@ class Message < ActiveRecord::Base
         count_by_month = ActiveSupport::OrderedHash.new
         months.each do |month|
           conditions = "MONTH(created_at) = #{month.month} AND YEAR(created_at) = #{month.year}"
-          count_by_month[month] = send(type).count(:conditions => conditions)
+          if include_messages
+            count_by_month[month] = send(type, :conditions => conditions)
+          else
+            count_by_month[month] = send(type).count(:conditions => conditions)
+          end
         end
         count_by_month
       end

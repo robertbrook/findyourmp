@@ -1,12 +1,11 @@
 %table.text.column_content
   %tr
     %th Month
-    %th Messages
+    %th Message count
   - count_by_month.reverse.each do |month, count|
     %tr
       %td= month.to_s(:month_year)
       %td= count
-
 
 %p.text
   = '&nbsp;'

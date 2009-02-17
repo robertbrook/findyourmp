@@ -1,4 +1,17 @@
 -@title = 'Attempted to Send Messages | Admin'
 
-= render :partial=>'count_by_month', :object =>@attempted_send_by_month_count
+%table.text.column_content
+  %tr
+    %th Month
+    %th Message count
+    %td Errors
+  - @attempted_send_by_month_count.reverse.each do |month, messages|
+    %tr
+      %td= month.to_s(:month_year)
+      %td= messages.size
+      %td= messages.collect(&:mailer_error).uniq.join("\n").gsub("\n","<br/>")
 
+%p.text
+  = '&nbsp;'
+%p.text
+  = link_to 'Back', admin_url

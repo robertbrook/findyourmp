@@ -10,7 +10,16 @@ Feature: View message audit
     Then I should see "Sent messages"
     And I should see "Attempted to send messages"
 
-  Scenario: Look at message audit details
+  Scenario: Look at message audit errors
+    Given I am on the Message Audit Page
+    When I follow "Attempted to send messages"
+    Then I should see "January 2009"
+    And I should see "1"
+    And I should see "535 5.7.8 Error: authentication failed: authentication failure"
+
+  Scenario: Look at messages by constituency
     Given I am on the Message Audit Page
     When I follow "Sent messages"
+    Then I should see "February 2009"
+    And I should see "1"
 

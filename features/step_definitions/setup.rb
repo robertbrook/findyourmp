@@ -21,6 +21,36 @@ Before do
     user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin')
     user.save!
   end
+  
+  Message.delete_all
+  message = Message.new({
+      :message => 'test',
+      :sender_email => 'x@y.co.uk',
+      :postcode => 'AB101AA',
+      :constituency_id => Constituency.find('aberdeen-north').id,
+      :sender_is_constituent => '1',
+      :sender => 'x',
+      :subject => 'test'
+  })
+  message.save!
+  message.mailer_error = "535 5.7.8 Error: authentication failed: authentication failure" 
+  message.attempted_send = true
+  message.created_at = Date.new(2009,1,1)
+  message.save!
+
+  message = Message.new({
+      :message => 'test',
+      :sender_email => 'x@y.co.uk',
+      :postcode => 'AB101AA',
+      :constituency_id => Constituency.find('aberdeen-north').id,
+      :sender_is_constituent => '1',
+      :sender => 'x',
+      :subject => 'test'
+  })
+  message.save!
+  message.sent = true
+  message.created_at = Date.new(2009,2,1)
+  message.save!
 end
 
 Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|
