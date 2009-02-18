@@ -12,15 +12,25 @@ class PostcodePrefix < ActiveRecord::Base
       prefix.strip!
       prefix.upcase!
       prefix.tr!(' ','')
-      find(:all, :conditions => %Q|prefix = "#{search_term}"|, :include => :constituency)
+      matches = find(:all, :conditions => %Q|prefix = "#{search_term}"|, :include => :constituency)
+      
+      if matches.empty?
+        nil
+      else
+        matches
+      end
+    end
+  end
+  
+  def id
+    if constituency
+      constituency.friendly_id
     end
   end
   
   def constituency_name
     if constituency
       constituency.name
-    else
-      raise "constituency not found for constituency_id: #{constituency_id}, postcode_prefix: #{prefix}"
     end
   end
 end
