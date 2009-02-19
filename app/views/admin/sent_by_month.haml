@@ -1,4 +1,4 @@
--@title = 'Attempted to Send Messages | Admin'
+- @title = "#{@month.to_s(:month_year)} Sent Messages | Admin"
 
 %table.text.column_content
   %tr
@@ -6,10 +6,10 @@
     %th Message count
   - @sent_by_constituency.each do |constituency_name, messages|
     %tr
-      %td= constituency_name
+      %td= link_to_constituency constituency_name
       %td= messages.size
 
 %p.text
   = '&nbsp;'
 %p.text
-  = link_to 'Back', admin_url
+  = link_to 'Back', url_for(:controller=>'admin',:action=>'sent')
