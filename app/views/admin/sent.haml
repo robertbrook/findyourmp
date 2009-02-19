@@ -1,4 +1,15 @@
 -@title = 'Sent Messages | Admin'
 
-= render :partial=>'count_by_month', :object =>@sent_by_month_count
+%table.text.column_content
+  %tr
+    %th Month
+    %th Message count
+  - @sent_by_month_count.reverse.each do |month, count|
+    %tr
+      %td= link_to month.to_s(:month_year), url_for(:action=>'sent_by_month',:yyyy_mm=>month.strftime('%Y-%m') )
+      %td= count
 
+%p.text
+  = '&nbsp;'
+%p.text
+  = link_to 'Admin home', admin_url

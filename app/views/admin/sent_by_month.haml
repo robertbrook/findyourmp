@@ -6,10 +6,10 @@
     %th Message count
   - @sent_by_constituency.each do |constituency_name, messages|
     %tr
-      %td= link_to_constituency constituency_name
+      %td= link_to_edit_constituency constituency_name
       %td= messages.size
 
 %p.text
   = '&nbsp;'
 %p.text
-  = link_to 'Back', url_for(:controller=>'admin',:action=>'sent')
+  = link_to 'Sent messages', url_for(:controller=>'admin',:action=>'sent')
