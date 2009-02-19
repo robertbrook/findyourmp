@@ -6,6 +6,7 @@ describe ApiController do
     @postcode_no_space = 'N11AA'
     @postcode = ' N1  1aA '
     @postcode_with_space = 'N1 1AA'
+    @postcode_prefix = 'N1'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name_part = 'Islington'
@@ -32,261 +33,326 @@ describe ApiController do
     end
   end
   
-  describe "when passed a search_term which matches a postcode" do
-    before do
-      Postcode.stub!(:find_postcode_by_code).and_return @postcode_record
-      Postcode.should_receive(:find_postcode_by_code).with(@postcode_no_space).and_return @postcode_record
-    end
+  describe "the search api" do
+    describe "when passed a search_term which matches a postcode" do
+      before do
+        Postcode.stub!(:find_postcode_by_code).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode_no_space).and_return @postcode_record
+      end
     
-    def do_get format=nil
-      if format
-        get :search, :search_term => @postcode_no_space, :format => format
-      else
-        get :search, :search_term => @postcode_no_space
+      def do_get format=nil
+        if format
+          get :search, :search_term => @postcode_no_space, :format => format
+        else
+          get :search, :search_term => @postcode_no_space
+        end
+      end
+    
+      it 'should assign postcode to view' do  
+        do_get
+        assigns[:postcode].should == @postcode_record
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'  
+        response.content_type.should == "application/xml"
+      end
+    
+      it 'should return text when passed format=text' do
+        do_get 'text'  
+        response.content_type.should == "text/plain"
+      end
+    
+      it 'should return csv when passed format=csv' do
+        do_get 'csv'
+        response.content_type.should =='text/csv'
+      end
+    
+      it 'should return csv when passed format=yaml' do
+        do_get 'yaml'
+        response.content_type.should =='application/x-yaml'
       end
     end
-    
-    it 'should assign postcode to view' do  
-      do_get
-      assigns[:postcode].should == @postcode_record
-    end
-    
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-      response.content_type.should == "text/html"
-    end
-    
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'  
-      response.content_type.should == "application/xml"
-    end
-    
-    it 'should return text when passed format=text' do
-      do_get 'text'  
-      response.content_type.should == "text/plain"
-    end
-    
-    it 'should return csv when passed format=csv' do
-      do_get 'csv'
-      response.content_type.should =='text/csv'
-    end
-    
-    it 'should return csv when passed format=yaml' do
-      do_get 'yaml'
-      response.content_type.should =='application/x-yaml'
-    end
-  end
   
-  describe "when passed a search term which matches a single constituency" do
-    before do
-      Postcode.stub!(:find_postcode_by_code)
-      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name).and_return nil
-      Constituency.stub!(:find_all_name_or_member_name_matches)
-      Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name).and_return [ @constituency ]
-    end
+    describe "when passed a search term which matches a single constituency" do
+      before do
+        Postcode.stub!(:find_postcode_by_code)
+        Postcode.should_receive(:find_postcode_by_code).with(@constituency_name).and_return nil
+        Constituency.stub!(:find_all_name_or_member_name_matches)
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name).and_return [ @constituency ]
+      end
     
-    def do_get format=nil
-      if format
-        get :search, :search_term => @constituency_name, :format => format
-      else
-        get :search, :search_term => @constituency_name
+      def do_get format=nil
+        if format
+          get :search, :search_term => @constituency_name, :format => format
+        else
+          get :search, :search_term => @constituency_name
+        end
+      end
+    
+      it 'should assign constituency to view' do  
+        do_get
+        assigns[:constituency].should == @constituency
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'  
+        response.content_type.should == "application/xml"
+      end
+    
+      it 'should return yaml when passed format=yaml' do
+        @constituency.should_receive(:to_output_yaml).and_return "---"
+        do_get 'yaml'  
+        response.content_type.should == "application/x-yaml"
       end
     end
+
+    describe "when passed a search term which matches 2 constituencies" do
+      before do
+        @matches = [ @constituency, @other_constituency ]
+        Postcode.stub!(:find_postcode_by_code)
+        Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_part).and_return nil
+        Constituency.stub!(:find_all_name_or_member_name_matches)
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matches
+        @constituency.should_receive(:member_name).and_return('asdf')
+        @other_constituency.should_receive(:member_name).and_return('qweq')
+      end
     
-    it 'should assign constituency to view' do  
-      do_get
-      assigns[:constituency].should == @constituency
+      def do_get format=nil
+        if format
+          get :search, :search_term => @constituency_name_part, :format => format
+        else
+          get :search, :search_term => @constituency_name_part
+        end
+      end
+    
+      it 'should assign constituency to view' do  
+        do_get
+        assigns[:constituencies].should == @matches
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+      end
+    
+      it 'should return yaml when passed format=yaml' do
+        @constituency.should_receive(:to_text).and_return "text"
+        @other_constituency.should_receive(:to_text).and_return "other text"
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+      end
     end
+
+    describe "when passed a search term which returns no results" do
+      before do
+        Postcode.stub!(:find_postcode_by_code)
+        Postcode.should_receive(:find_postcode_by_code).and_return nil
+        Constituency.stub!(:find_all_name_or_member_name_matches)
+        Constituency.should_receive(:find_all_name_or_member_name_matches).and_return [ ]
+      end
     
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-      response.content_type.should == "text/html"
+      def do_get format=nil
+        if format
+          get :search, :search_term => 'invalid', :format => format
+        else
+          get :search, :search_term => 'invalid'
+        end
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'  
+        response.content_type.should == "application/xml"
+      end
+
+      it 'should return json when passed format=json' do
+        do_get 'json'  
+        response.content_type.should == "application/json"
+      end
+    
+      it 'should return csv when passed format=csv' do
+        do_get 'csv'  
+        response.content_type.should == "text/csv"
+      end
+
+      it 'should return yaml when passed format=yaml' do
+        do_get 'yaml'  
+        response.content_type.should == "application/x-yaml"
+      end
+    
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency when we searched for <code>invalid</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      end
+    
+      it 'should store the search term in flash memory' do
+        do_get
+        flash[:last_search_term].should == 'invalid'
+      end
     end
+
+    describe "when passed a search term of 2 characters" do    
+      def do_get format=nil
+        if format
+          get :search, :search_term => @constituency_name_short, :format => format
+        else
+          get :search, :search_term => @constituency_name_short
+        end
+      end
     
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'  
-      response.content_type.should == "application/xml"
-    end
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
     
-    it 'should return yaml when passed format=yaml' do
-      @constituency.should_receive(:to_output_yaml).and_return "---"
-      do_get 'yaml'  
-      response.content_type.should == "application/x-yaml"
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'  
+        response.content_type.should == "application/xml"
+      end
+
+      it 'should return json when passed format=json' do
+        do_get 'json'  
+        response.content_type.should == "application/json"
+      end
+    
+      it 'should return csv when passed format=csv' do
+        do_get 'csv'  
+        response.content_type.should == "text/csv"
+      end
+
+      it 'should return yaml when passed format=yaml' do
+        do_get 'yaml'  
+        response.content_type.should == "application/x-yaml"
+      end
+    
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we need more than two letters to search</p>"
+      end
+    
+      it 'should store the search term in flash memory' do
+        do_get
+        flash[:last_search_term].should == @constituency_name_short
+      end
     end
   end
 
-  describe "when passed a search term which matches a 2 constituencies" do
-    before do
-      @matches = [ @constituency, @other_constituency ]
-      Postcode.stub!(:find_postcode_by_code)
-      Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_part).and_return nil
-      Constituency.stub!(:find_all_name_or_member_name_matches)
-      Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matches
-      @constituency.should_receive(:member_name).and_return('asdf')
-      @other_constituency.should_receive(:member_name).and_return('qweq')
-    end
+  describe "the postcodes api" do
+    describe "when passed a valid postcode" do
+      before do
+        Postcode.stub!(:find_postcode_by_code).and_return @postcode_record
+        Postcode.should_receive(:find_postcode_by_code).with(@postcode_no_space).and_return @postcode_record
+      end
     
-    def do_get format=nil
-      if format
-        get :search, :search_term => @constituency_name_part, :format => format
-      else
-        get :search, :search_term => @constituency_name_part
+      def do_get format=nil
+        if format
+          get :postcodes, :code => @postcode_no_space, :format => format
+        else
+          get :postcodes, :code => @postcode_no_space
+        end
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+    
+      it 'should assign postcode to view' do
+        do_get
+        assigns[:postcode].should == @postcode_record
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
       end
     end
-    
-    it 'should assign constituency to view' do  
-      do_get
-      assigns[:constituencies].should == @matches
-    end
-    
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-      response.content_type.should == "text/html"
-    end
-    
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'
-      response.content_type.should == "application/xml"
-    end
-    
-    it 'should return yaml when passed format=yaml' do
-      @constituency.should_receive(:to_text).and_return "text"
-      @other_constituency.should_receive(:to_text).and_return "other text"
-      do_get 'yaml'
-      response.content_type.should == "application/x-yaml"
-    end
-  end
-
-  describe "when passed a search term which returns no results" do
-    before do
-      Postcode.stub!(:find_postcode_by_code)
-      Postcode.should_receive(:find_postcode_by_code).and_return nil
-      Constituency.stub!(:find_all_name_or_member_name_matches)
-      Constituency.should_receive(:find_all_name_or_member_name_matches).and_return [ ]
-    end
-    
-    def do_get format=nil
-      if format
-        get :search, :search_term => 'invalid', :format => format
-      else
-        get :search, :search_term => 'invalid'
-      end
-    end
-    
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-      response.content_type.should == "text/html"
-    end
-    
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'  
-      response.content_type.should == "application/xml"
-    end
-
-    it 'should return json when passed format=json' do
-      do_get 'json'  
-      response.content_type.should == "application/json"
-    end
-    
-    it 'should return csv when passed format=csv' do
-      do_get 'csv'  
-      response.content_type.should == "text/csv"
-    end
-
-    it 'should return yaml when passed format=yaml' do
-      do_get 'yaml'  
-      response.content_type.should == "application/x-yaml"
-    end
-    
-    it 'should store the error message in flash memory' do
-      do_get
-      flash[:not_found].should == "<p>Sorry: we couldn't find a constituency when we searched for <code>invalid</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
-    end
-    
-    it 'should store the search term in flash memory' do
-      do_get
-      flash[:last_search_term].should == 'invalid'
-    end
-  end
-
-  describe "when passed a search term of 2 characters" do    
-    def do_get format=nil
-      if format
-        get :search, :search_term => @constituency_name_short, :format => format
-      else
-        get :search, :search_term => @constituency_name_short
-      end
-    end
-    
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-      response.content_type.should == "text/html"
-    end
-    
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'  
-      response.content_type.should == "application/xml"
-    end
-
-    it 'should return json when passed format=json' do
-      do_get 'json'  
-      response.content_type.should == "application/json"
-    end
-    
-    it 'should return csv when passed format=csv' do
-      do_get 'csv'  
-      response.content_type.should == "text/csv"
-    end
-
-    it 'should return yaml when passed format=yaml' do
-      do_get 'yaml'  
-      response.content_type.should == "application/x-yaml"
-    end
-    
-    it 'should store the error message in flash memory' do
-      do_get
-      flash[:not_found].should == "<p>Sorry: we need more than two letters to search</p>"
-    end
-    
-    it 'should store the search term in flash memory' do
-      do_get
-      flash[:last_search_term].should == @constituency_name_short
-    end
-  end
-
-  describe "when passed a valid postcode" do
-    before do
-      Postcode.stub!(:find_postcode_by_code).and_return @postcode_record
-      Postcode.should_receive(:find_postcode_by_code).with(@postcode_no_space).and_return @postcode_record
-    end
-    
-    def do_get format=nil
-      if format
-        get :postcodes, :code => @postcode_no_space, :format => format
-      else
-        get :postcodes, :code => @postcode_no_space
-      end
-    end
-    
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-    end
-    
-    it 'should assign postcode to view' do
-      do_get
-      assigns[:postcode].should == @postcode_record
-    end
-    
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'
-      response.content_type.should == 'application/xml'
-    end
-  end
   
+    describe "when passed an invalid postcode" do
+      before do
+        Postcode.stub!(:find_postcode_by_code).and_return nil
+        Postcode.should_receive(:find_postcode_by_code).with('invalid').and_return nil
+      end
+      
+      def do_get format=nil
+        get :postcodes, :code => 'invalid', :format => format
+      end
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+      
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a postcode when we searched for <code>invalid</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      end
+    end
+  
+    describe "when passed a valid postcode_prefix" do
+      before do
+        @matches = [ @postcode_record ]
+        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return(@matches)
+      end
+    
+      def do_get format=nil
+        get :postcodes, :prefix => @postcode_prefix, :format => format
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
+      end
+    end
+    
+    describe "when passed an invalid postcode_prefix" do
+      before do
+        PostcodePrefix.should_receive(:find_all_by_prefix).with('invalid').and_return(nil)
+      end
+      
+      def do_get
+        get :postcodes, :prefix => 'invalid'
+      end
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+      
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a postcode when we search for <code>invalid</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      end
+    end
+  end
 end

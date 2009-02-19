@@ -2,6 +2,8 @@ class PostcodePrefix < ActiveRecord::Base
   belongs_to :constituency
   
   delegate :member_name, :to => :constituency
+  delegate :member_website, :to => :constituency
+  delegate :member_biography_link, :to => :constituency
   delegate :ons_id, :to => :constituency
   delegate :name, :to => :constituency
   
@@ -12,15 +14,25 @@ class PostcodePrefix < ActiveRecord::Base
       prefix.strip!
       prefix.upcase!
       prefix.tr!(' ','')
-      find(:all, :conditions => %Q|prefix = "#{search_term}"|, :include => :constituency)
+      matches = find(:all, :conditions => %Q|prefix = "#{search_term}"|, :include => :constituency)
+      
+      if matches.empty?
+        nil
+      else
+        matches
+      end
+    end
+  end
+  
+  def id
+    if constituency
+      constituency.friendly_id
     end
   end
   
   def constituency_name
     if constituency
       constituency.name
-    else
-      raise "constituency not found for constituency_id: #{constituency_id}, postcode_prefix: #{prefix}"
     end
   end
 end

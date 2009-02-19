@@ -34,15 +34,26 @@ class ApiController < ApplicationController
   
   def postcodes
     code = params[:code]
+    prefix = params[:prefix]
     search_format = params[:format]
     
-    postcode = Postcode.find_postcode_by_code(code)
+    if prefix
+      postcodes = PostcodePrefix.find_all_by_prefix(prefix)
+      if postcodes
+        show_postcodes(postcodes, search_format)
+      else
+        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{prefix}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        show_error(search_format)
+      end
+    else    
+      postcode = Postcode.find_postcode_by_code(code)
     
-    if postcode
-      show_postcode(postcode, search_format)
-    else
-      flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
-      show_error(search_format)
+      if postcode
+        show_postcode(postcode, search_format)
+      else
+        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        show_error(search_format)
+      end
     end
   end
    
@@ -63,6 +74,21 @@ class ApiController < ApplicationController
         format.text { render :text => postcode.to_text }
         format.csv  { render :text => postcode.to_csv }
         format.yaml { render :text => postcode.to_output_yaml }
+      end
+    end
+    
+    def show_postcodes postcodes, format
+      @search_term = ""
+      respond_to do |format|
+        @postcodes = postcodes
+        @constituencies = postcodes.collect { |postcode| postcode.constituency }
+        format.html { render :template => '/postcodes/show' }
+        format.xml  { render :template => '/constituencies/show' }
+        format.json { render :json => results_to_json(@constituencies, []) }
+        format.js   { render :json => results_to_json(@constituencies, []) }
+        format.text { render :text => results_to_text(@constituencies, []) }
+        format.csv  { render :text => results_to_csv(@constituencies, []) }
+        format.yaml { render :text => results_to_yaml(@constituencies, []) }
       end
     end
     
