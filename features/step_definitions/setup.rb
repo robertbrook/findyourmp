@@ -18,7 +18,7 @@ Before do
   Given 'there is a postcode "GY1 1AB" with no constituency'
 
   unless User.find_by_login('admin')
-    user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin')
+    user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'example@bogus.com')
     user.save!
   end
   
