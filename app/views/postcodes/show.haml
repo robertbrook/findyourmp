@@ -1,8 +1,13 @@
-- @title= @postcode.code_with_space
-
-- if @constituency
-  - name = @postcode ? link_to(h(@constituency.name), :controller => "constituencies", :action => "show", :only_path => false, :id => @constituency) : h(@constituency.name)
-  %p.text= "The postcode <strong>#{@postcode.code_with_space}</strong> is in the Westminster constituency of #{name}."
-  = render :partial => 'constituencies/member'
-- else
-  %p.text No constituency found.
+- if @postcode
+  - @title = @postcode.code_with_space
+  - if @constituency
+    - name = @postcode ? link_to(h(@constituency.name), :controller => "constituencies", :action => "show", :only_path => false, :id => @constituency) : h(@constituency.name)
+    %p.text= "The postcode <strong>#{@postcode.code_with_space}</strong> is in the Westminster constituency of #{name}."
+    = render :partial => 'constituencies/member'
+  - else
+    %p.text No constituency found.
+- elsif @postcodes
+  - @title = @search_term.upcase
+  %h4= pluralize(@postcodes.size, 'Constituencies')
+  = render :partial => 'constituencies/constituency_match', :collection => @postcodes
+- @crumbtrail = @title
