@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users
   map.resource :user_session
 
+  map.resources :password_resets
+
   map.root :controller => "postcodes"
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'

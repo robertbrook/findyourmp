@@ -1,11 +1,16 @@
 -@title = 'Admin'
-%h3= 'Message Audit'
+%h3 Message Audit
 
 %p.text
   = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
 %p.text
   = link_to "Attempted to send messages: #{@attempted_send_message_count}", url_for(:controller=>'admin',:action=>'attempted_send')
 
-%h3= 'Data maintenance'
+%h3 Data maintenance
 %p.text
   = link_to 'All constituencies', constituencies_path
+  
+%h3 User account
+%p.text
+  = link_to 'Edit settings', edit_user_path(@current_user)
+

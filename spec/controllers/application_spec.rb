@@ -8,4 +8,14 @@ describe ApplicationController do
     end
   end
 
+  describe 'converting date to month year string' do
+    it 'should render correctly' do
+      Date.new(2009,2,14).to_s(:month_year).should == 'February 2009'
+    end
+  end
+  describe 'converting time to month year string' do
+    it 'should render correctly' do
+      Date.new(2009,2,14).to_time.to_s(:month_year).should == 'February 2009'      
+    end
+  end
 end

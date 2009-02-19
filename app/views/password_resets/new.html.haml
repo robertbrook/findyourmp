@@ -1,0 +1,10 @@
+-@title = 'Forgot your password?'
+ 
+%p Instructions to reset your password will be emailed to you:
+ 
+- form_tag password_resets_path do
+  %label Email:
+  = text_field_tag "email", nil, :size=>40
+  %br
+  %br
+  = submit_tag "Reset my password"

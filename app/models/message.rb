@@ -85,16 +85,8 @@ class Message < ActiveRecord::Base
     "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n"
   end
 
-  def test_from
-    test_email
-  end
-
   def test_recipient_email
-    RAILS_ENV == 'development' ? test_email : recipient_email
-  end
-
-  def test_sender_email
-    RAILS_ENV == 'development' ? test_email : sender_email
+    RAILS_ENV == 'development' ? ActionMailer::Base.smtp_settings[:user_name] : recipient_email
   end
 
   def clean_message_whitespace
@@ -154,9 +146,5 @@ class Message < ActiveRecord::Base
           errors.add('sender_email', "Please enter a valid email address")
         end
       end
-    end
-
-    def test_email
-      ActionMailer::Base.smtp_settings[:user_name]
     end
 end
