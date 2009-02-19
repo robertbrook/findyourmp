@@ -4,6 +4,7 @@ describe PostcodesController do
 
   before do
     @postcode = ' N1  1aA '
+    @postcode_prefix = 'N1'
     @postcode_with_space = 'N1 1AA'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
@@ -15,6 +16,10 @@ describe PostcodesController do
         :id => @constituency_id,
         :friendly_id => @friendly_constituency_id,
         :has_better_id? => false)
+    @other_constituency = mock_model(Constituency, :name => 'Islington East',
+        :id => 802,
+        :friendly_id => 'islington-east',
+        :has_better_id? => false)    
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -24,6 +29,12 @@ describe PostcodesController do
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
+        
+    @prefix_record = mock_model(PostcodePrefix, :id => @friendly_constituency_id, :constituency => @constituency,
+        :constituency_name => @constituency_name, :member_name => @member_name)
+    @other_prefix_record = mock_model(PostcodePrefix, :id => 'islington-east',  :constituency => @other_constituency,
+        :constituency_name => 'Islington East', :member_name => 'Donal Duck')
+    
     Postcode.stub!(:find_postcode_by_code).and_return nil
   end
 
@@ -230,6 +241,81 @@ describe PostcodesController do
       it 'should redirect to postcode view showing constituency' do
         do_get
         response.should redirect_to("postcodes/#{@canonical_postcode}")
+      end
+    end
+  end
+
+  describe "when asked to search for a partial postcode" do
+    def do_get format=nil
+      get :index, :search_term => @postcode_prefix, :format => format
+    end
+    
+    before do
+      @matches = [ @prefix_record ]
+      PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+    end
+    
+    it 'should redirect to show with the postcode prefix' do
+      do_get
+      response.should redirect_to(:action => 'show', :postcode => @postcode_prefix)
+    end
+  end
+  
+  describe "when asked to show a postcode prefix" do
+    def do_get format=nil
+      get :show, :postcode => @postcode_prefix, :format => format
+    end
+      
+    describe 'and a single constituency is found' do
+      before do
+        @matches = [ @prefix_record ]
+        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+      end
+
+      it 'should redirect to the page for the constituency' do
+        do_get
+        response.should redirect_to(:action=>'show', :controller=>'constituencies', :id=> @friendly_constituency_id)
+      end
+    end
+    
+    describe 'and more than one constituency is found' do
+      before do
+        @matches = [ @prefix_record, @other_prefix_record ]
+        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+      end
+
+      it 'should assign postcodes to the view' do
+        do_get
+        assigns[:postcodes].should == @matches
+      end
+
+      it 'should return xml format' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+      end
+      it 'should return json format' do
+        @constituency.should_receive(:to_json).and_return "stuff"
+        @other_constituency.should_receive(:to_json).and_return "stuff"
+        do_get 'json'
+        response.content_type.should == "application/json"
+      end
+      it 'should return text format' do
+        @constituency.should_receive(:to_text).and_return "stuff"
+        @other_constituency.should_receive(:to_text).and_return "stuff"
+        do_get 'text'
+        response.content_type.should == "text/plain"
+      end
+      it 'should return csv format' do
+        @constituency.should_receive(:to_csv_value).and_return "stuff"
+        @other_constituency.should_receive(:to_csv_value).and_return "stuff"
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+      end
+      it 'should return yaml format' do
+        @constituency.should_receive(:to_text).and_return "stuff"
+        @other_constituency.should_receive(:to_text).and_return "stuff"
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
       end
     end
   end
