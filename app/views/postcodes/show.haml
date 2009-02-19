@@ -10,3 +10,4 @@
   - @title = @search_term.upcase
   %h4= pluralize(@postcodes.size, 'Constituencies')
   = render :partial => 'constituencies/constituency_match', :collection => @postcodes
+- @crumbtrail = @title
