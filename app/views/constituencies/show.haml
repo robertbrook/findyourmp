@@ -7,6 +7,8 @@
       %li= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
 - elsif @constituencies or @members
   #search= render :partial => 'layouts/search_form'
+  %h3.subheading Search Results
+  %p.text Your search term matched more than one constituency - for a more accurate result, please enter your full postcode
   - if @constituencies.size > 0
     %h4= pluralize(@constituencies.size, 'Consituency')
     = render :partial => 'constituencies/constituency_match', :collection => @constituencies
