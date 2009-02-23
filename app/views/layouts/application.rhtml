@@ -4,20 +4,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
   <style type="text/css" media="screen, projection">
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/news_and_issues.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/homepage.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/grid.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/main.css");
-  </style>
-  <style type="text/css" media="screen, projection">
-    .text code { font-size: 1.3em;}
-    .flash { color: red; }
-    .hidden_member { color: grey; font-style: italic }
-    .form_field { margin: 1em 0 }
-    .fieldWithErrors input, .fieldWithErrors textarea {
-      border: solid 1px #cc0000;
-      background-color: #ffcccc;
-    }
+    @import url("/stylesheets/fymp.css");
+    @import url("/stylesheets/homepage.css");
+    @import url("/stylesheets/grid.css");
+    @import url("/stylesheets/main.css");
   </style>
 <% if @show_postcode_autodiscovery_links %>
   <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>

@@ -1,0 +1,38 @@
+#secondary_breadcrumb {
+	float: left;
+	width: 460px;
+	clear: both;
+	font-size: 0.7em;
+	padding-bottom: 10px;
+	border: 0;
+	margin: 0 0 10px 0;
+}
+
+.column_solid_top {
+	border-top: 1px solid #EDEDED;
+	float: left;
+	width: 100%;
+}
+
+.text code {
+	font-size: 1.3em;
+}
+
+.flash {
+	color: red;
+}
+
+.hidden_member {
+	color: grey;
+	font-style: italic
+}
+
+.form_field {
+	margin: 1em 0
+}
+
+.fieldWithErrors input,
+.fieldWithErrors textarea {
+	border: solid 1px #cc0000;
+	background-color: #ffcccc;
+}
