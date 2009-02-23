@@ -105,6 +105,8 @@ namespace :deploy do
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
     end
+    
+    run "cd #{current_path}; rake fymp:load_prefixes RAILS_ENV='production'"
   end
 
   task:check_folder_setup do

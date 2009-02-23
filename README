@@ -1,4 +1,3 @@
-
 sudo mysqladmin create findyourmp_test
 sudo mysqladmin create findyourmp_development
 sudo mysqladmin create findyourmp_production
@@ -23,5 +22,7 @@ rake fymp:members
 
 rake fymp:parse
 rake fymp:populate
+
+rake fymp:load_prefixes
 
 rake friendly_id:make_slugs MODEL=Constituency
