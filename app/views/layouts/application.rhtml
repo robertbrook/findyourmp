@@ -118,6 +118,11 @@
           <div class="spacer9">&nbsp;</div>
           <div class="column-460">
             <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
+            <% if flash[:notice] %>
+              <div class="text flash">
+                <%= flash[:notice] %>
+              </div>
+            <% end %>
             <div><%= yield %></div>
           </div>
           <div class="spacer9">&nbsp;</div>
