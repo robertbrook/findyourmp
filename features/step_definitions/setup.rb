@@ -16,6 +16,12 @@ Before do
   Given 'there is no MP in constituency "Glenrothes"'
 
   Given 'there is a postcode "GY1 1AB" with no constituency'
+  
+  Given 'there is a postcode "BT35 8DL" in constituency "Newry & Armagh", ons id "711"'
+  Given 'there is an MP "Conor Murphy" in constituency "Newry & Armagh"'
+  
+  Given 'there is a postcode "BT35 6QY" in constituency "Upper Bann", ons id "717"'
+  Given 'there is an MP "David Simpson" in constituency "Upper Bann"'
 
   unless User.find_by_login('admin')
     user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'example@bogus.com')
