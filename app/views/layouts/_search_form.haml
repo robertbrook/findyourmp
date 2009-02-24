@@ -1,11 +1,8 @@
-- search_term = @last_search_term ? @last_search_term : ''
-
 - form_tag(root_url, :method => :get) do
-  = text_field_tag 'search_term', search_term, :size => 24
-  = submit_tag 'Search'
+  = text_field_tag 'search_term', (@last_search_term ? @last_search_term : ''), :size => 24
+  = submit_tag 'Find MP'
 
-- if flash[:not_found]
-  %div.text.flash= flash[:not_found]
+%div.text.flash= flash[:not_found] if flash[:not_found]
 
 %p What can I search for?
 
