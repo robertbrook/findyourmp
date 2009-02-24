@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
       end
     
     def results_to_csv constituencies, members
-      headers = 'constituency_name,constituency_id,member_name,member_party,member_biography_url,member_website'
+      headers = 'constituency_name,member_name,member_party,member_biography_url,member_website'
       values = ""
 
       constituencies.each do |constituency|

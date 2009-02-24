@@ -8,5 +8,8 @@
     %p.text No constituency found.
 - elsif @postcodes
   - @title = @search_term.upcase
+  %h3.subheading Search Results
+  %p.text You appear to have entered a partial postcode which covers more than one constituency - for a more accurate result, please enter your full postcode
   %h4= pluralize(@postcodes.size, 'Constituencies')
   = render :partial => 'constituencies/constituency_match', :collection => @postcodes
+- @crumbtrail = @title

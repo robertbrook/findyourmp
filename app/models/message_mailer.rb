@@ -1,6 +1,11 @@
 class MessageMailer < ActionMailer::Base
 
   class << self
+    
+    def noreply_email
+      ActionMailer::Base.smtp_settings[:user_name]
+    end
+    
     def parse_email text
       email = TMail::Address.parse(text)
       domain = email.domain
@@ -19,7 +24,7 @@ class MessageMailer < ActionMailer::Base
   def sent(message, sent_at = Time.now)
     subject    message.subject
     recipients "#{message.recipient} <#{message.test_recipient_email}>"
-    from       message.test_from
+    from       MessageMailer.noreply_email
     sent_on    sent_at
 
     body       :message => message
@@ -28,7 +33,7 @@ class MessageMailer < ActionMailer::Base
   def confirm(message, sent_at = Time.now)
     subject    "Confirmation of your message to #{message.recipient}"
     recipients "#{message.sender} <#{message.sender_email}>"
-    from       message.test_from
+    from       MessageMailer.noreply_email
     sent_on    sent_at
 
     body       :message => message

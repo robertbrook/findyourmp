@@ -1,0 +1,162 @@
+#main_nav.homepage {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #EDEDED;
+}
+
+#homepage_banner {
+	float: left;
+	width: 960px;
+	padding: 0;
+	margin: 15px 0;
+}
+
+#homepage_banner_promo {
+	float: left;
+	width: 940px;
+	padding: 0;
+	margin: 0;
+	background-color: #336AA0;
+	color: #FFFFFF;
+	clear: both;
+}
+
+#homepage_banner_image {
+	width: 460px;
+	margin-top: -70px;
+	float: right;
+	border-left: 6px solid #FFFFFF;
+}
+
+#homepage_banner_promo .content {
+	padding: 10px 0 10px 10px;	
+}
+
+#homepage_banner_promo a,
+#homepage_banner_promo a:visited {
+	color: #E9E31D;
+}
+
+#homepage_banner_text {
+	float: left;
+	width: 290px;
+	height: auto;
+}
+
+#homepage_banner_text_spacer {
+	width: 13px;
+	font-size: 1pt;
+	float: left;
+}
+
+#homepage_banner_thumbs {
+	width: 156px;
+	float: left;
+	margin-right: 5px;
+}
+
+#homepage_banner_thumbs img {
+	border: 2px solid #336AA0;
+}
+
+#homepage_banner_thumbs img.selected {
+	border: 2px solid #EAC054;
+}
+
+#homepage_banner_thumbs img.left {
+	float: left;
+}
+
+#homepage_banner_thumbs img.right {
+	float: right;
+}
+
+#homepage_banner_thumbs .hspacer {
+	display: block;
+	width: 100%;
+	font-size: 1pt;
+	float: left;
+	margin: 0 0 4px 0;
+	padding: 0;
+}
+
+.home_tab_bar {
+	float: left;
+	width: 100%;
+	background-color: #395F84;
+	background-image:url(../images/tab_bg.gif);
+	background-position:left top;
+	background-repeat:repeat-x;
+	padding: 0;
+	margin: 0;
+}
+
+.home_tab_bar h2 {
+	width: auto;
+	background: url(../images/tab_sel_bg.gif) left top repeat-x;
+	height: 46px;
+	font-weight: normal;
+	display: block;
+	float: left;
+	font-size: 0.8em;
+	padding: 0;
+	margin: 0;
+	color: #333333;
+	clear: none;
+}
+
+.home_tab_bar h2 .text_align,
+.home_tab_bar div .text_align {
+	display: block;
+	margin: 14px 0 0 0;
+	padding: 0 1em;
+}
+
+.home_tab_bar div {
+	padding: 0;
+	margin: 0;
+	font-size: 0.8em;
+	height: 46px;
+	float: left;
+	border-right: 1px solid #EDEDED;
+}
+
+.home_tab_bar div a,
+.home_tab_bar div a:visited {
+	color: #FFFFFF;
+}
+
+.tab_content-598 {
+	float: left; 
+	width: 598px;
+	padding: 0;
+}
+
+.filter_bar {
+	width: 100%;
+	float: left;
+	background: #F5F3E7;
+}
+
+.filter_bar h5 {
+	width: auto;
+	font-weight: bold;
+	display: block;
+	float: left;
+	font-size: 0.7em;
+	padding: 0.5em;
+	margin: 0;
+	color: #333333;
+	clear: none;
+}
+
+.filter_bar div {
+	width: auto;
+	font-weight: bold;
+	display: block;
+	float: left;
+	font-size: 0.7em;
+	padding: 0.5em;
+	margin: 0;
+	color: #333333;
+	clear: none;
+}

@@ -4,19 +4,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
   <style type="text/css" media="screen, projection">
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/news_and_issues.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/homepage.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/grid.css");
-    @import url("http://news.parliament.uk/wp-content/themes/ukparlnews/styles/main.css");
-  </style>
-  <style type="text/css" media="screen, projection">
-    .text code { font-size: 1.3em;}
-    .hidden_member { color: grey; font-style: italic }
-    .form_field { margin: 1em 0 }
-    .fieldWithErrors input, .fieldWithErrors textarea {
-      border: solid 1px #cc0000;
-      background-color: #ffcccc;
-    }
+    @import url("/stylesheets/fymp.css");
+    @import url("/stylesheets/homepage.css");
+    @import url("/stylesheets/grid.css");
+    @import url("/stylesheets/main.css");
   </style>
 <% if @show_postcode_autodiscovery_links %>
   <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
@@ -82,11 +73,10 @@
         </div>
         <div id="secondary_nav">
           <ul>
-            <li><a href="http://www.parliament.uk/business/what_s_on.cfm">What's On</a></li>
-            <li><a href="http://www.parliament.uk/business/committees.cfm">Committees</a></li>
-            <li><a href="http://www.parliament.uk/business/bills_and_legislation.cfm">Bills &amp; Legislation</a></li>
-            <li><a href="http://www.parliament.uk/business/judicial_work.cfm">Judicial Work</a></li>
-            <li class="selected"><a href="http://news.parliament.uk">News</a></li>
+            <li class="selected"><a href="http://www.parliament.uk/people/mps_and_lords.cfm">MPs and Lords</a></li>
+            <li><a href="http://www.parliament.uk/people/government_and_opposition.cfm">Government and Opposition</a></li>
+            <li><a href="http://www.parliament.uk/site_information/allowances.cfm">Allowances and Interests</a></li>
+            <li><a href="http://www.parliament.uk/directories/directories31.cfm">Parliamentary Offices</a></li>
           </ul>
         </div>
       </div>
@@ -96,7 +86,7 @@
         You are here:
         <a href="http://www.parliament.uk/">Parliament Home</a> &gt;
         <a href="http://www.parliament.uk/people/">Members &amp; Staff</a> &gt;
-        <%= @crumbtrail ? "<a href="'/'">Find Your MP</a> &gt; #{@crumbtrail}" : "Find Your MP" %>
+        <%= @crumbtrail ? "<a href=\"/\">Find Your MP</a> &gt; #{@crumbtrail}" : "Find Your MP" %>
       </div>
 
       <div id="page_content">
@@ -105,11 +95,11 @@
             <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
             <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
             <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
-			<li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
-			<li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
-			<li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
-			<li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
-			<li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
+      <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
+      <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
+      <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
+      <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
+      <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
           </ul>
         </div>
 
@@ -118,6 +108,11 @@
           <div class="spacer9">&nbsp;</div>
           <div class="column-460">
             <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
+            <% if flash[:notice] %>
+              <div class="text flash">
+                <%= flash[:notice] %>
+              </div>
+            <% end %>
             <div><%= yield %></div>
           </div>
           <div class="spacer9">&nbsp;</div>

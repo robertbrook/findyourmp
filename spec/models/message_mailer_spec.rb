@@ -15,6 +15,8 @@ describe MessageMailer do
 
     @no_reply_email = "no_reply@findyourmp.parliament.uk"
 
+    MessageMailer.stub!(:noreply_email).and_return @no_reply_email
+    
     @message = mock(Message, :constituency_id => @constituency_id,
       :sender => @sender_name,
       :sender_email => @sender_email,
