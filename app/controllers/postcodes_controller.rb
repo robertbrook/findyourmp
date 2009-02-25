@@ -113,7 +113,7 @@ class PostcodesController < ApplicationController
 
       respond_to do |format|
         format.html
-        format.xml  { render :action => 'error' }
+        format.xml  { render :template => '/postcodes/error' }
         format.json { render :json => message_to_json("error", @error_message) }
         format.js   { render :json => message_to_json("error", @error_message) }
         format.text { render :text => message_to_text("error", @error_message) }

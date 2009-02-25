@@ -22,17 +22,14 @@ class ConstituenciesController < ResourceController::Base
         @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
         @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
       end
-
-      if params[:format]
-        respond_to do |format|
-          format.html
-          format.xml
-          format.json { render :json => results_to_json(@constituencies, @members) }
-          format.js   { render :json => results_to_json(@constituencies, @members) }
-          format.text { render :text => results_to_text(@constituencies, @members) }
-          format.csv  { render :text => results_to_csv(@constituencies, @members) }
-          format.yaml { render :text => results_to_yaml(@constituencies, @members) }
-        end
+      respond_to do |format|
+        format.html
+        format.xml
+        format.json { render :json => results_to_json(@constituencies, @members) }
+        format.js   { render :json => results_to_json(@constituencies, @members) }
+        format.text { render :text => results_to_text(@constituencies, @members) }
+        format.csv  { render :text => results_to_csv(@constituencies, @members) }
+        format.yaml { render :text => results_to_yaml(@constituencies, @members) }
       end
     else
       @constituency = Constituency.find(id)

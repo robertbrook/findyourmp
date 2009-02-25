@@ -138,7 +138,7 @@ describe MessagesController do
     it 'should redirect to show action' do
       @message.stub!(:deliver).and_return true
       do_post
-      response.should render_template 'messages/show'
+      response.should render_template('messages/show')
     end
   end
 

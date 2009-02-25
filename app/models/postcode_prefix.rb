@@ -4,7 +4,6 @@ class PostcodePrefix < ActiveRecord::Base
   delegate :member_name, :to => :constituency
   delegate :member_website, :to => :constituency
   delegate :member_biography_link, :to => :constituency
-  delegate :ons_id, :to => :constituency
   delegate :name, :to => :constituency
   
   class << self

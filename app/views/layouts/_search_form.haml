@@ -1,18 +1,17 @@
-- search_term = @last_search_term ? @last_search_term : ''
-
 - form_tag(root_url, :method => :get) do
-  = text_field_tag 'search_term', search_term, :size => 24
+  = text_field_tag 'search_term', (@last_search_term ? @last_search_term : ''), :size => 24
   = submit_tag 'Find MP'
 
-- if flash[:not_found]
-  %div.text.flash= flash[:not_found]
+%div.text.flash= flash[:not_found] if flash[:not_found]
 
-%p <strong>What can I search for?</strong>
+%p What can I search for?
 
-%p.text Your full post code, like <strong>SW1A 1AA</strong>, to find your constituency and MP
-%p.text Your constituency name, like <strong>Kirkcaldy and Cowdenbeath</strong>, to find your MP
-%p.text Your MP's full name, like <strong>Lyn Brown</strong>, to find your MP
-%p.text Part of your constituency name, like <strong>shire</strong>, to list constituencies and MPs with that text
-%p.text Part of your MP's name, like <strong>Thorn</strong>, to list constituencies and MPs with that text
+%p.text Your full post code, like <u>SW1A 1AA</u>, to find your constituency and MP
+%p.text Your constituency name, like <u>Kirkcaldy and Cowdenbeath</u>, to find your MP
+%p.text Your MP's full name, like <u>Lyn Brown</u>, to find your MP
+%p.text Part of your constituency name, like <u>shire</u>, to list constituencies and MPs with that text
+%p.text Part of your MP's name, like <u>Thorn</u>, to list constituencies and MPs with that text
+%p.text The first part of your post code, like <u>N1</u>, to list constituencies and MPs within that area
+
 
 
