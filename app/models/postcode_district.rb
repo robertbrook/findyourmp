@@ -1,4 +1,4 @@
-class PostcodePrefix < ActiveRecord::Base
+class PostcodeDistrict < ActiveRecord::Base
   belongs_to :constituency
   
   delegate :member_name, :to => :constituency
@@ -7,13 +7,13 @@ class PostcodePrefix < ActiveRecord::Base
   delegate :name, :to => :constituency
   
   class << self
-    def find_all_by_prefix search_term
+    def find_all_by_district search_term
       return nil unless search_term
-      prefix = String.new search_term
-      prefix.strip!
-      prefix.upcase!
-      prefix.tr!(' ','')
-      matches = find(:all, :conditions => %Q|prefix = "#{search_term}"|, :include => :constituency)
+      district = String.new search_term
+      district.strip!
+      district.upcase!
+      district.tr!(' ','')
+      matches = find(:all, :conditions => %Q|district = "#{search_term}"|, :include => :constituency)
       
       if matches.empty?
         nil

@@ -13,7 +13,7 @@ class PostcodesController < ApplicationController
 
   def show
     code = params[:postcode]
-    postcodes = PostcodePrefix.find_all_by_prefix(code)
+    postcodes = PostcodeDistrict.find_all_by_district(code)
     
     if postcodes
       if postcodes.size == 1
@@ -69,7 +69,7 @@ class PostcodesController < ApplicationController
   private
   
     def do_search search_term, search_format
-      postcodes = PostcodePrefix.find_all_by_prefix(search_term)
+      postcodes = PostcodeDistrict.find_all_by_district(search_term)
       
       if postcodes
         redirect_to :action => 'show', :postcode => search_term, :format => search_format

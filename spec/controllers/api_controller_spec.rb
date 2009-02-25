@@ -6,7 +6,7 @@ describe ApiController do
     @postcode_no_space = 'N11AA'
     @postcode = ' N1  1aA '
     @postcode_with_space = 'N1 1AA'
-    @postcode_prefix = 'N1'
+    @postcode_district = 'N1'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name_part = 'Islington'
@@ -314,14 +314,14 @@ describe ApiController do
       end
     end
   
-    describe "when passed a valid postcode_prefix" do
+    describe "when passed a valid postcode_district" do
       before do
         @matches = [ @postcode_record ]
-        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return(@matches)
+        PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return(@matches)
       end
     
       def do_get format=nil
-        get :postcodes, :prefix => @postcode_prefix, :format => format
+        get :postcodes, :district => @postcode_district, :format => format
       end
     
       it 'should not redirect' do
@@ -335,13 +335,13 @@ describe ApiController do
       end
     end
     
-    describe "when passed an invalid postcode_prefix" do
+    describe "when passed an invalid postcode_district" do
       before do
-        PostcodePrefix.should_receive(:find_all_by_prefix).with('invalid').and_return(nil)
+        PostcodeDistrict.should_receive(:find_all_by_district).with('invalid').and_return(nil)
       end
       
       def do_get
-        get :postcodes, :prefix => 'invalid'
+        get :postcodes, :district => 'invalid'
       end
       
       it 'should not redirect' do

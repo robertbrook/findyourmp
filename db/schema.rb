@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090223162104) do
+ActiveRecord::Schema.define(:version => 20090225113926) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -24,13 +24,6 @@ ActiveRecord::Schema.define(:version => 20090223162104) do
   end
 
   add_index "constituencies", ["ons_id"], :name => "index_constituencies_on_ons_id"
-
-  create_table "members", :force => true do |t|
-    t.string  "name"
-    t.integer "constituency_id"
-  end
-
-  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"
@@ -57,12 +50,12 @@ ActiveRecord::Schema.define(:version => 20090223162104) do
   add_index "messages", ["sent"], :name => "index_messages_on_sent"
   add_index "messages", ["sent_at"], :name => "index_messages_on_sent_at"
 
-  create_table "postcode_prefixes", :id => false, :force => true do |t|
-    t.string  "prefix",          :limit => 4
+  create_table "postcode_districts", :id => false, :force => true do |t|
+    t.string  "district",        :limit => 4
     t.integer "constituency_id"
   end
 
-  add_index "postcode_prefixes", ["prefix"], :name => "index_postcode_prefixes_on_prefix"
+  add_index "postcode_districts", ["district"], :name => "index_postcode_districts_on_district"
 
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
