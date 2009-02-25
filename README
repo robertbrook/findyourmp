@@ -23,6 +23,6 @@ rake fymp:members
 rake fymp:parse
 rake fymp:populate
 
-rake fymp:load_prefixes
+rake fymp:load_postcode_districts
 
 rake friendly_id:make_slugs MODEL=Constituency

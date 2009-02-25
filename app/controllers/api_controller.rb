@@ -7,7 +7,7 @@ class ApiController < ApplicationController
     search_term = params[:search_term]
     search_format = params[:format]
     
-    postcodes = PostcodePrefix.find_all_by_prefix(search_term)
+    postcodes = PostcodeDistrict.find_all_by_district(search_term)
     
     if postcodes
       show_postcodes(postcodes, search_format)
@@ -40,15 +40,15 @@ class ApiController < ApplicationController
   
   def postcodes
     code = params[:code]
-    prefix = params[:prefix]
+    district = params[:district]
     search_format = params[:format]
     
-    if prefix
-      postcodes = PostcodePrefix.find_all_by_prefix(prefix)
+    if district
+      postcodes = PostcodeDistrict.find_all_by_district(district)
       if postcodes
         show_postcodes(postcodes, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{prefix}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{district}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
         show_error(search_format)
       end
     else    

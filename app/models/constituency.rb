@@ -3,7 +3,7 @@ class Constituency < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true, :strip_diacritics => true
 
   has_many :postcodes
-  has_many :postcode_prefixes
+  has_many :postcode_districts
   has_many :messages
   validate :valid_email?
 

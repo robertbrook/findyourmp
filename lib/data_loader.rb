@@ -119,9 +119,9 @@ module FindYourMP::DataLoader
     log_duration 1.0
   end
 
-  def load_postcode_prefixes
-    ActiveRecord::Base.connection.execute("TRUNCATE TABLE postcode_prefixes")
-    ActiveRecord::Base.connection.execute("INSERT INTO postcode_prefixes SELECT SUBSTRING(code, 1, LENGTH(code)-3) AS prefix, constituency_id FROM postcodes GROUP BY prefix, constituency_id;")
+  def load_postcode_districts
+    ActiveRecord::Base.connection.execute("TRUNCATE TABLE postcode_districts")
+    ActiveRecord::Base.connection.execute("INSERT INTO postcode_districts SELECT SUBSTRING(code, 1, LENGTH(code)-3) AS district, constituency_id FROM postcodes GROUP BY district, constituency_id;")
   end
 
   private
