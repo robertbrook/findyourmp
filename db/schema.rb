@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090219151832) do
+ActiveRecord::Schema.define(:version => 20090223162104) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -91,8 +91,9 @@ ActiveRecord::Schema.define(:version => 20090219151832) do
     t.string   "current_login_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "perishable_token",  :default => "", :null => false
-    t.string   "email",             :default => "", :null => false
+    t.string   "perishable_token",  :default => "",    :null => false
+    t.string   "email",             :default => "",    :null => false
+    t.boolean  "admin",             :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
