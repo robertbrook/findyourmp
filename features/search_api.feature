@@ -1,7 +1,7 @@
 Feature: Search API
   In order to search using the API
   as a constituent
-  I want to get data via the API
+  I want to get data via the search API
 
   Scenario: Call search API with valid postcode, requesting XML
     Given I call the search API searching for "AB101AA" and requesting "xml"
@@ -9,6 +9,21 @@ Feature: Search API
     And I should see "<code>AB10 1AA</code>"
     And I should see "<constituency-name>Aberdeen North</constituency-name>"
     And I should see "<member>Frank Doran</member>"
+
+  Scenario: Call search API with valid postcode, requesting plain text
+    Given I call the search API searching for "AB101AA" and requesting "text"
+    Then I should see "postcode: AB10 1AA"
+    And I should see "constituency_name: Aberdeen North"
+    And I should see "member_name: Frank Doran"
+
+  Scenario: Call search API with valid postcode, requesting JSON
+    Given I call the search API searching for "AB101AA" and requesting "json"
+    Then I should see "\{\"postcode\": \{\"code\": \"AB10 1AA\", \"constituency_name\": \"Aberdeen North\", \"member_name\": \"Frank Doran\""
+
+  Scenario: Call search API with valid postcode, requesting CSV
+    Given I call the search API searching for "AB101AA" and requesting "csv"
+    Then I should see "postcode,constituency_name,member_name\n"
+    And I should see "\"AB10 1AA\",\"Aberdeen North\",\"Frank Doran\"\n"
 
   Scenario: Call search API with valid constituency name, requesting XML
     Given I call the search API searching for "Aberdeen South" and requesting "xml"
@@ -18,6 +33,15 @@ Feature: Search API
     And I should see "<member-party></member-party>"
     And I should see "<member-biography-url></member-biography-url>"
     And I should see "<member-website></member-website>"
+
+  Scenario: Call search API with valid constituency name, requesting JSON
+    Given I call the search API searching for "Aberdeen South" and requesting "json"
+    Then I should see "\{\"constituency\": \{"
+    And I should see "\"constituency_name\": \"Aberdeen South\""
+    And I should see "\"member_name\": \"Miss Anne Begg\""
+    And I should see "\"member_party\": \"\""
+    And I should see "\"member_biography_url\": \"\""
+    And I should see "\"member_website\": \"\""
 
   Scenario: Call search API with valid constituency name (but no MP), requesting XML
     Given I call the search API searching for "Glenrothes" and requesting "xml"
