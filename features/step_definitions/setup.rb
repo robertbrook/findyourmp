@@ -26,11 +26,21 @@ Before do
   
   Given 'there is a postcode district "BT35" that links to constituencies "upper-bann" and "newry-armagh"'
 
-  unless User.find_by_login('admin')
-    user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'example@bogus.com')
+  if user = User.find_by_login('admin')
+    unless user.admin?
+      user.admin = true
+      user.save!
+    end
+  else
+    user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'admin@parliament.uk', :admin=>true)
     user.save!
   end
   
+  unless User.find_by_login('editor')
+    user = User.new(:login => 'editor', :password => 'editor', :password_confirmation => 'editor', :email=>'editor@parliament.uk', :admin=>false)
+    user.save!
+  end
+
   Message.delete_all
   message = Message.new({
       :message => 'test',

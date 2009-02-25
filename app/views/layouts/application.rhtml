@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://gmpg.org/xfn/11">
+<% if RAILS_ENV != 'test' %>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
   <style type="text/css" media="screen, projection">
@@ -9,13 +10,14 @@
     @import url("/stylesheets/grid.css");
     @import url("/stylesheets/main.css");
   </style>
-<% if @show_postcode_autodiscovery_links %>
+  <% if @show_postcode_autodiscovery_links %>
   <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
   <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
   <%= auto_discovery_link_tag(:js, @url_for_this + ".js") %>
   <%= auto_discovery_link_tag(:text, @url_for_this + ".text") %>
   <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
   <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
+  <% end %>
 <% end %>
 <% if RAILS_ENV == 'production' %>
   <script language="JavaScript1.1" type="text/javascript">
@@ -36,6 +38,7 @@
 <body>
   <div id="outer_container">
     <div id="inner_container">
+<% if RAILS_ENV != 'test' %>
       <span class="hidden"><a href="#maincontent">Skip to main content</a></span>
       <div id="banner">
         <div id="banner_top">
@@ -88,8 +91,10 @@
         <a href="http://www.parliament.uk/people/">Members &amp; Staff</a> &gt;
         <%= @crumbtrail ? "<a href=\"/\">Find Your MP</a> &gt; #{@crumbtrail}" : "Find Your MP" %>
       </div>
+<% end %>
 
       <div id="page_content">
+<% if RAILS_ENV != 'test' %>
         <div id="leftnav">
           <ul id="sidebarleft">
             <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
@@ -102,6 +107,7 @@
       <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
           </ul>
         </div>
+<% end %>
 
         <div class="spacer">&nbsp;</div>
         <div class="column_wrapper">
@@ -119,7 +125,7 @@
         </div>
         <div class="spacer">&nbsp;</div>
 
-<% if !is_admin? %>
+<% if !is_admin? && RAILS_ENV != 'test' %>
         <div class="column-300">
           <div class="column-300">
             <div class="column_content">
@@ -183,7 +189,7 @@
           <br/>
           <ul>
             <li class="first"><%= link_to 'All constituencies', constituencies_path %></li>
-            <li><%= link_to 'Show message audit', url_for(:controller=>'admin',:action=>'index') %></li>
+            <li><%= link_to 'Show admin home', admin_path %></li>
 <%   if @constituency %>
             <li><%= link_to 'Edit constituency and member data', edit_constituency_path(@constituency) %></li>
 <%   end %>

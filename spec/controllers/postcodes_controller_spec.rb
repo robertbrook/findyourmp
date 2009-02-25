@@ -4,7 +4,7 @@ describe PostcodesController do
 
   before do
     @postcode = ' N1  1aA '
-    @postcode_prefix = 'N1'
+    @postcode_district = 'N1'
     @postcode_with_space = 'N1 1AA'
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
@@ -30,9 +30,9 @@ describe PostcodesController do
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
         
-    @prefix_record = mock_model(PostcodePrefix, :id => @friendly_constituency_id, :constituency => @constituency,
+    @district_record = mock_model(PostcodeDistrict, :id => @friendly_constituency_id, :constituency => @constituency,
         :constituency_name => @constituency_name, :member_name => @member_name)
-    @other_prefix_record = mock_model(PostcodePrefix, :id => 'islington-east',  :constituency => @other_constituency,
+    @other_district_record = mock_model(PostcodeDistrict, :id => 'islington-east',  :constituency => @other_constituency,
         :constituency_name => 'Islington East', :member_name => 'Donal Duck')
     
     Postcode.stub!(:find_postcode_by_code).and_return nil
@@ -247,29 +247,29 @@ describe PostcodesController do
 
   describe "when asked to search for a partial postcode" do
     def do_get format=nil
-      get :index, :search_term => @postcode_prefix, :format => format
+      get :index, :search_term => @postcode_district, :format => format
     end
     
     before do
-      @matches = [ @prefix_record ]
-      PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+      @matches = [ @district_record ]
+      PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
     end
     
-    it 'should redirect to show with the postcode prefix' do
+    it 'should redirect to show with the postcode district' do
       do_get
-      response.should redirect_to(:action => 'show', :postcode => @postcode_prefix)
+      response.should redirect_to(:action => 'show', :postcode => @postcode_district)
     end
   end
   
-  describe "when asked to show a postcode prefix" do
+  describe "when asked to show a postcode district" do
     def do_get format=nil
-      get :show, :postcode => @postcode_prefix, :format => format
+      get :show, :postcode => @postcode_district, :format => format
     end
       
     describe 'and a single constituency is found' do
       before do
-        @matches = [ @prefix_record ]
-        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+        @matches = [ @district_record ]
+        PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
       end
 
       it 'should redirect to the page for the constituency' do
@@ -280,8 +280,8 @@ describe PostcodesController do
     
     describe 'and more than one constituency is found' do
       before do
-        @matches = [ @prefix_record, @other_prefix_record ]
-        PostcodePrefix.should_receive(:find_all_by_prefix).with(@postcode_prefix).and_return @matches
+        @matches = [ @district_record, @other_district_record ]
+        PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
       end
 
       it 'should assign postcodes to the view' do

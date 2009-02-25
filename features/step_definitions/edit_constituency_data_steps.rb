@@ -1,3 +1,11 @@
+Given /^I am logged in as an editing user$/ do
+  Given 'I am on the Front page'
+  And 'I follow "Log In"'
+  And 'I fill in "User name" with "editor"'
+  And 'I fill in "Password" with "editor"'
+  And 'I press "Login"'
+end
+
 Given /^I am logged in as an admin user$/ do
   Given 'I am on the Front page'
   And 'I follow "Log In"'
