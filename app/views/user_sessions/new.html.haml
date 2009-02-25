@@ -10,7 +10,7 @@
     = f.password_field :password
   .form_field
     = f.check_box :remember_me
-    = f.label :remember_me
+    = f.label :remember_me, "Remember me", {:class=>'checkbox_label'}
   %p
     = f.submit "Login"
     
