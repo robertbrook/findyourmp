@@ -2,6 +2,7 @@ Before do
   Postcode.delete_all
   Constituency.delete_all
   Constituency.connection.execute('delete from slugs;')
+  PostcodePrefix.delete_all
 
   Given 'there is a postcode "AB101AA" in constituency "Aberdeen North", ons id "801"'
   Given 'there is an MP "Frank Doran" in constituency "Aberdeen North"'
@@ -22,6 +23,8 @@ Before do
   
   Given 'there is a postcode "BT35 6QY" in constituency "Upper Bann", ons id "717"'
   Given 'there is an MP "David Simpson" in constituency "Upper Bann"'
+  
+  Given 'there is a postcode prefix "BT35" that links to constituencies "upper-bann" and "newry-armagh"'
 
   unless User.find_by_login('admin')
     user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'example@bogus.com')
@@ -66,6 +69,13 @@ end
 Given /^there is a postcode "(.*)" in constituency "(.*)", ons id "(.*)"$/ do |postcode_code, constituency_name, ons_id|
   constituency = Constituency.find_or_create_by_name_and_ons_id(constituency_name, ons_id)
   postcode = Postcode.find_or_create_by_code_and_constituency_id_and_ons_id(postcode_code.gsub(' ','').strip, constituency.id, ons_id)
+end
+
+Given /^there is a postcode prefix "(.*)" that links to constituencies "(.*)" and "(.*)"$/ do |prefix, constituency1, constituency2|
+  constituency_id = Constituency.find(constituency1).id
+  PostcodePrefix.find_or_create_by_prefix_and_constituency_id(prefix, constituency_id)
+  constituency_id = Constituency.find(constituency2).id
+  PostcodePrefix.find_or_create_by_prefix_and_constituency_id(prefix, constituency_id)
 end
 
 Given /^there is an MP "(.*)" in constituency "(.*)"$/ do |member_name, constituency_name|

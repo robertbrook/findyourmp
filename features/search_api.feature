@@ -44,3 +44,10 @@ Feature: Search API
     Given I call the search API searching for "Newry" and requesting "xml"
     Then I should see "<constituency>"
     And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"
+
+  Scenario: Call search API with postcode prefix, requesting XML
+    Given I call the search API searching for "BT35" and requesting "xml"
+    Then I should see "<results>"
+    And I should see "<constituency-matches>"
+    And I should see "<constituency-name>Upper Bann</constituency-name>"
+    And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"

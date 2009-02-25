@@ -7,27 +7,33 @@ class ApiController < ApplicationController
     search_term = params[:search_term]
     search_format = params[:format]
     
-    postcode = Postcode.find_postcode_by_code(search_term)
+    postcodes = PostcodePrefix.find_all_by_prefix(search_term)
     
-    if postcode
-      show_postcode(postcode, search_format)
+    if postcodes
+      show_postcodes(postcodes, search_format)
     else
-      stripped_term = search_term.strip
-      if stripped_term.size > 2
-        constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
-        if constituencies.empty?
-          flash[:not_found] = "<p>Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      postcode = Postcode.find_postcode_by_code(search_term)
+    
+      if postcode
+        show_postcode(postcode, search_format)
+      else
+        stripped_term = search_term.strip
+        if stripped_term.size > 2
+          constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
+          if constituencies.empty?
+            flash[:not_found] = "<p>Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+            flash[:last_search_term] = search_term
+            show_error(search_format)
+          elsif constituencies.size == 1
+            show_constituency(constituencies.first, search_format)
+          else
+            show_constituencies(constituencies, search_term, search_format)
+          end
+        else
+          flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
           flash[:last_search_term] = search_term
           show_error(search_format)
-        elsif constituencies.size == 1
-          show_constituency(constituencies.first, search_format)
-        else
-          show_constituencies(constituencies, search_term, search_format)
         end
-      else
-        flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
-        flash[:last_search_term] = search_term
-        show_error(search_format)
       end
     end
   end
