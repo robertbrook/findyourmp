@@ -25,13 +25,11 @@ class MessagesController < ResourceController::Base
     before :create
     if send_message && @message.save
       after :create
-      set_flash :create
       successful = @message.deliver
       flash[:message_just_sent] = successful
       render :template => 'messages/show'
     elsif !send_message && @message.valid?
       after :create
-      set_flash :create
       render :template => 'messages/show'
     else
       after :create_fails
