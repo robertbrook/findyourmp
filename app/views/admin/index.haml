@@ -14,7 +14,9 @@
 - if @current_user.admin?
   %p.text
     = link_to 'Add new user', new_user_path
+  %p.text
+    = link_to 'Edit users', users_path
 %p.text
-  = link_to 'Edit account settings', edit_user_path(@current_user)
+  = link_to 'Edit your account settings', edit_user_path(@current_user)
 
 

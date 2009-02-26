@@ -1,9 +1,34 @@
--@title = 'Editing user'
-- form_for @user, :url => account_path do |f|
+- if @own_account
+  - @title = "Editing your settings"
+- else
+  - @title = "Editing \"#{@user.login}\""
+
+- form_for @user do |f|
   = f.error_messages
-  = render :partial => "form", :object => f
+  .form_field
+    = f.label :login
+    %span.text= @user.login
+  .form_field
+    = f.label :email
+    = f.text_field :email
+  - if @own_account
+    .form_field
+      = f.label :password, f.object.new_record? ? nil : "Change password"
+      = f.password_field :password
+    .form_field
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation
+    %p.text{:style=>'margin-left: 12em;'}
+      %small Leave blank to keep old password 
+  - else
+    .form_field
+      = f.label :admin, "Admin privileges"
+      = f.check_box :admin
   %p
     = f.submit "Update"
 
+- if @current_user.admin?
+  %p.text
+    = link_to 'Edit users', users_path
 %p.text
   = link_to 'Admin home', admin_path

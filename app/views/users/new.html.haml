@@ -5,4 +5,8 @@
   = render :partial => "form", :object => f
   %p
     = f.submit "Create user"
-= link_to 'Admin home', admin_path
+
+%p.text
+  = link_to 'Edit users', users_path
+%p.text
+  = link_to 'Admin home', admin_path
