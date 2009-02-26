@@ -1,5 +1,7 @@
 - if @message.sent
   - @title = "Your message has been sent."
+  %p.text
+    = link_to "Return to MP search", root_url
 - else
   - @title = "Preview the Message You've Written"
 

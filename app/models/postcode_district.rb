@@ -9,17 +9,11 @@ class PostcodeDistrict < ActiveRecord::Base
   class << self
     def find_all_by_district search_term
       return nil unless search_term
-      district = String.new search_term
-      district.strip!
-      district.upcase!
-      district.tr!(' ','')
-      matches = find(:all, :conditions => %Q|district = "#{search_term}"|, :include => :constituency)
-      
-      if matches.empty?
-        nil
-      else
-        matches
-      end
+      code = String.new search_term
+      code.strip!
+      code.upcase!
+      code.tr!(' ','')
+      find(:all, :conditions => %Q|district = "#{code}"|, :include => :constituency)
     end
   end
   

@@ -31,9 +31,9 @@ describe PostcodesController do
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
         
     @district_record = mock_model(PostcodeDistrict, :id => @friendly_constituency_id, :constituency => @constituency,
-        :constituency_name => @constituency_name, :member_name => @member_name)
+        :constituency_name => @constituency_name, :member_name => @member_name, :district => 'N1')
     @other_district_record = mock_model(PostcodeDistrict, :id => 'islington-east',  :constituency => @other_constituency,
-        :constituency_name => 'Islington East', :member_name => 'Donal Duck')
+        :constituency_name => 'Islington East', :member_name => 'Donal Duck', :district => 'E1')
     
     Postcode.stub!(:find_postcode_by_code).and_return nil
   end
@@ -102,6 +102,7 @@ describe PostcodesController do
     end
 
     before do
+      PostcodeDistrict.should_receive(:find_all_by_district).with(@constituency_name).and_return []
       Postcode.should_receive(:find_postcode_by_code).with(@constituency_name).and_return nil
     end
 
@@ -286,7 +287,7 @@ describe PostcodesController do
 
       it 'should assign postcodes to the view' do
         do_get
-        assigns[:postcodes].should == @matches
+        assigns[:postcode_districts].should == @matches
       end
 
       it 'should return xml format' do

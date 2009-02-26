@@ -337,7 +337,7 @@ describe ApiController do
     
     describe "when passed an invalid postcode_district" do
       before do
-        PostcodeDistrict.should_receive(:find_all_by_district).with('invalid').and_return(nil)
+        PostcodeDistrict.should_receive(:find_all_by_district).with('invalid').and_return([])
       end
       
       def do_get

@@ -26,7 +26,7 @@ describe PostcodeDistrict do
     it 'should return nil if given non-matching code' do
       district = 'invalid'
       PostcodeDistrict.should_receive(:find).and_return []
-      PostcodeDistrict.find_all_by_district(district).should be_nil
+      PostcodeDistrict.find_all_by_district(district).should == []
     end
   end
   
