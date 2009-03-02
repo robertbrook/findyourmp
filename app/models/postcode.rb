@@ -1,4 +1,5 @@
 class Postcode < ActiveRecord::Base
+  include ActionController::UrlWriter
 
   before_validation_on_create :populate_constituency_id
 
@@ -43,12 +44,12 @@ class Postcode < ActiveRecord::Base
 
   def to_json
     member = member_name ? %Q|, "member_name": "#{member_name.strip}"| : ''
-    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_name": "#{constituency_name}"#{member}} }|
+    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_name": "#{constituency_name}"#{member}, "uri": "#{object_url("json")}"} }|
   end
 
-  def to_text
+  def to_text(format="txt")
     member = member_name ? %Q|\nmember_name: #{member_name.strip}| : ''
-    %Q|postcode: #{code_with_space}\nconstituency_name: #{constituency_name}#{member}\n|
+    %Q|postcode: #{code_with_space}\nconstituency_name: #{constituency_name}#{member}\nuri: #{object_url(format)}\n|
   end
 
   def to_csv
@@ -58,11 +59,13 @@ class Postcode < ActiveRecord::Base
       headers += ',member_name'
       values += %Q|,"#{member_name.strip}"|
     end
+    headers += ",uri"
+    values += %Q|,"#{object_url("csv")}"|
     "#{headers}\n#{values}\n"
   end
 
   def to_output_yaml
-    "---\n#{to_text}"
+    "---\n#{to_text("yaml")}"
   end
 
   private
@@ -75,5 +78,9 @@ class Postcode < ActiveRecord::Base
           # errors.add('constituency_id', "Can't find a constituency corresponding to ONS ID: #{ons_id}")
         end
       end
+    end
+    
+    def object_url format=nil
+      url_for :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
     end
 end

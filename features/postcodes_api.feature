@@ -1,4 +1,4 @@
-Feature: Search API
+Feature: Postcodes API
   In order to retrieve postcode data using the API
   as a constituent
   I want to get data via the postcodes API
@@ -9,6 +9,7 @@ Feature: Search API
     And I should see "<code>AB10 1AA</code>"
     And I should see "<constituency-name>Aberdeen North</constituency-name>"
     And I should see "<member>Frank Doran</member>"
+    And I should see "/postcodes/AB101AA.xml</uri>"
 
   Scenario: Call postcodes API with valid postcode district, requesting XML
     Given I call the postcodes API with district "BT35", requesting "xml"
@@ -16,3 +17,5 @@ Feature: Search API
     And I should see "<constituency-matches>"
     And I should see "<constituency-name>Upper Bann</constituency-name>"
     And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"
+    And I should see "/constituencies/upper-bann.xml</uri>"
+    And I should see "/constituencies/newry-armagh.xml</uri>"

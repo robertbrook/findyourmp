@@ -13,3 +13,4 @@
       %member-website= constituency.member_website.gsub('&','&amp;')
     -else
       %member-website
+  %uri= url_for :controller=>"constituencies", :action=>"show", :id => constituency.friendly_id, :format => "xml", :only_path => false
