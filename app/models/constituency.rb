@@ -9,6 +9,21 @@ class Constituency < ActiveRecord::Base
   validate :valid_email?
 
   class << self
+
+    def load_tsv_line line
+      parts = line.split("\t")
+      constituency_name = parts.first.strip
+      constituency = Constituency.find_by_constituency_name(constituency_name)
+
+      if constituency
+        constituency.member_name = parts[1].strip
+        constituency.member_party = parts[2].strip[/\((.+)\)/,1]
+      else
+      end
+
+      constituency
+    end
+
     def find_all_name_or_member_name_matches term
       matches_name_or_member_name = %Q|name like "%#{term.squeeze(' ')}%" or | +
           %Q|member_name like "%#{term.squeeze(' ')}%"|
@@ -75,6 +90,9 @@ class Constituency < ActiveRecord::Base
     member_name.blank? || !member_visible
   end
 
+  def to_tsv_line
+    "#{name}\t#{member_name}\t(#{member_party})"
+  end
 
   def to_json
     if no_sitting_member?
@@ -97,7 +115,7 @@ class Constituency < ActiveRecord::Base
     values = to_csv_value
     "#{headers}\n#{values}\n"
   end
-  
+
   def to_csv_value
     if no_sitting_member?
       %Q|"#{name}","No sitting member","","","","#{object_url("csv")}"|
@@ -120,8 +138,8 @@ class Constituency < ActiveRecord::Base
         end
       end
     end
-    
+
     def object_url format=nil
       url_for :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
-    end  
+    end
 end
