@@ -35,7 +35,6 @@ class Constituency < ActiveRecord::Base
       constituency = find_by_name(name)
 
       unless constituency
-        name.gsub!('&#244;', 'o')
         name.gsub!('&', 'and')
         if name == "Regent's Park and Kensington North"
           name = "Regent's Park and North Kensington"
@@ -45,6 +44,7 @@ class Constituency < ActiveRecord::Base
         end
         name.tr!('-', ' ')
         name.gsub!('ô','o')
+        name.gsub!('and#244;', 'o')
         constituency = find_by_name(name)
       end
 
