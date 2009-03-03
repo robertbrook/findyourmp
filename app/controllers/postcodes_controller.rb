@@ -13,18 +13,19 @@ class PostcodesController < ApplicationController
 
   def show
     code = params[:postcode]
-    postcodes = PostcodeDistrict.find_all_by_district(code)
+    postcode_districts = PostcodeDistrict.find_all_by_district(code)
     
-    if postcodes
-      if postcodes.size == 1
-        redirect_to :action=>'show', :controller=>'constituencies', :id=>postcodes.first.id, :format=>params[:format]
+    unless postcode_districts.empty?
+      flash[:postcode] = postcode_districts.first.district
+      if postcode_districts.size == 1
+        redirect_to :action=>'show', :controller=>'constituencies', :id=>postcode_districts.first.id, :format=>params[:format]
       else
         @search_term = code
         @show_postcode_autodiscovery_links = true
         @url_for_this = url_for(:only_path=>false)
         respond_to do |format|
-          @constituencies = postcodes.collect { |postcode| postcode.constituency }
-          format.html { @postcodes = postcodes }
+          @constituencies = postcode_districts.collect { |postcode| postcode.constituency }
+          format.html { @postcode_districts = postcode_districts }
           format.xml  { render :template => '/constituencies/show' }
           format.json { render :json => results_to_json(@constituencies, []) }
           format.js   { render :json => results_to_json(@constituencies, []) }
@@ -69,9 +70,9 @@ class PostcodesController < ApplicationController
   private
   
     def do_search search_term, search_format
-      postcodes = PostcodeDistrict.find_all_by_district(search_term)
+      postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
       
-      if postcodes
+      unless postcode_districts.empty?
         redirect_to :action => 'show', :postcode => search_term, :format => search_format
       else
         postcode = Postcode.find_postcode_by_code(search_term)

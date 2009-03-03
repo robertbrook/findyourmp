@@ -112,7 +112,7 @@ describe MessagesController do
         flash = mock('flash')
         @controller.stub!(:flash).and_return flash
         flash.should_receive(:[]=).with('authenticity_token', @authenticity_token)
-        flash.should_receive(:[]=).with(:notice, "Successfully created!")
+        flash.should_not_receive(:[]=).with(:notice, "Successfully created!")
         flash.stub!(:sweep)
         do_post
       end

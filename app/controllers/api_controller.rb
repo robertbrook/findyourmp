@@ -7,10 +7,10 @@ class ApiController < ApplicationController
     search_term = params[:search_term]
     search_format = params[:format]
     
-    postcodes = PostcodeDistrict.find_all_by_district(search_term)
+    postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
     
-    if postcodes
-      show_postcodes(postcodes, search_format)
+    unless postcode_districts.empty?
+      show_postcode_districts(postcode_districts, search_format)
     else
       postcode = Postcode.find_postcode_by_code(search_term)
     
@@ -44,9 +44,9 @@ class ApiController < ApplicationController
     search_format = params[:format]
     
     if district
-      postcodes = PostcodeDistrict.find_all_by_district(district)
-      if postcodes
-        show_postcodes(postcodes, search_format)
+      postcode_districts = PostcodeDistrict.find_all_by_district(district)
+      unless postcode_districts.empty?
+        show_postcode_districts(postcode_districts, search_format)
       else
         flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{district}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
         show_error(search_format)
@@ -83,11 +83,11 @@ class ApiController < ApplicationController
       end
     end
     
-    def show_postcodes postcodes, format
+    def show_postcode_districts postcode_districts, format
       @search_term = ""
       respond_to do |format|
-        @postcodes = postcodes
-        @constituencies = postcodes.collect { |postcode| postcode.constituency }
+        @postcode_districts = postcode_districts
+        @constituencies = postcode_districts.collect { |postcode| postcode.constituency }
         format.html { render :template => '/postcodes/show' }
         format.xml  { render :template => '/constituencies/show' }
         format.json { render :json => results_to_json(@constituencies, []) }

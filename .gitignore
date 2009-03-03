@@ -21,3 +21,5 @@ features.txt
 features.pdf
 *~
 *#
+config/newrelic.yml
+vendor/plugins/newrelic_rpm/*

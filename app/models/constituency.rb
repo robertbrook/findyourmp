@@ -1,4 +1,5 @@
 class Constituency < ActiveRecord::Base
+  include ActionController::UrlWriter
 
   has_friendly_id :name, :use_slug => true, :strip_diacritics => true
 
@@ -76,36 +77,36 @@ class Constituency < ActiveRecord::Base
 
   def to_json
     if no_sitting_member?
-      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "No sitting member", "member_party": "", "member_biography_url": "", "member_website": "" } }|
+      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "No sitting member", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "#{object_url("json")}" } }|
     else
-      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "#{member_name}", "member_party": "#{member_party}", "member_biography_url": "#{member_biography_url}", "member_website": "#{member_website}" } }|
+      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "#{member_name}", "member_party": "#{member_party}", "member_biography_url": "#{member_biography_url}", "member_website": "#{member_website}", "uri": "#{object_url("json")}" } }|
     end
   end
 
-  def to_text
+  def to_text(format="txt")
     if no_sitting_member?
-      %Q|constituency: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: |
+      %Q|constituency: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: \nuri: #{object_url(format)}|
     else
-      %Q|constituency: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}|
+      %Q|constituency: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}\nuri: #{object_url(format)}|
     end
   end
 
   def to_csv
-    headers = 'constituency_name,member_name,member_party,member_biography_url,member_website'
+    headers = 'constituency_name,member_name,member_party,member_biography_url,member_website,uri'
     values = to_csv_value
     "#{headers}\n#{values}\n"
   end
   
   def to_csv_value
     if no_sitting_member?
-      %Q|"#{name}","No sitting member","","",""|
+      %Q|"#{name}","No sitting member","","","","#{object_url("csv")}"|
     else
-      %Q|"#{name}","#{member_name}","#{member_party}","#{member_biography_url}","#{member_website}"|
+      %Q|"#{name}","#{member_name}","#{member_party}","#{member_biography_url}","#{member_website}","#{object_url("csv")}"|
     end
   end
 
   def to_output_yaml
-    "---\n#{to_text}"
+    "---\n#{to_text("yaml")}"
   end
 
   private
@@ -118,4 +119,8 @@ class Constituency < ActiveRecord::Base
         end
       end
     end
+    
+    def object_url format=nil
+      url_for :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+    end  
 end

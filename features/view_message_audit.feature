@@ -3,13 +3,15 @@ Feature: View message audit
   as an editing user
   want to view the message audit
 
-  Scenario: Look at message audit summary
+  Scenario: Look at admin home page
     Given I am logged in as an editing user
     And I am on the Front page
     When I follow "Show admin home"
     Then I should see "Sent messages"
     And I should see "Attempted to send messages"
+    And I should see "Edit your account settings"
     And I should not see "Add new user"
+    And I should not see "Edit users"
 
   Scenario: Look at message audit errors
     Given I am on the Admin Home Page as an editing user
