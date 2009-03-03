@@ -203,9 +203,9 @@ namespace :deploy do
   def is_first_run?
     run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
-        true
+        return true
       else
-        false
+        return false
       end
     end
   end
