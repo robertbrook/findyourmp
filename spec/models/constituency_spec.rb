@@ -104,6 +104,25 @@ describe Constituency do
     end
   end
 
+  describe 'when asked to load tsv line' do
+    before do
+      @tsv_line = %Q|Islington West\tDuncan McCloud\t(SDP)|
+    end
+    describe 'and constituency exists' do
+      it 'should update constituency' do
+        Constituency.should_receive(:find_by_constituency_name).with('Islington West').and_return @constituency
+        @constituency.should_receive(:member_name=).with('Duncan McCloud')
+        @constituency.should_receive(:member_party=).with('SDP')
+        Constituency.load_tsv_line(@tsv_line).should == @constituency
+      end
+    end
+    describe 'and constituency doesn\'t already exist' do
+      it 'should create new constituency?' do
+        Constituency.load_tsv_line @tsv_line
+      end
+    end
+  end
+
   describe 'when asked for formatted version' do
     before do
       @constituency.stub!(:no_sitting_member?).and_return false
@@ -111,30 +130,35 @@ describe Constituency do
       @constituency.name = "Islington West"
       @constituency.id = 999
       @constituency.ons_id = 999
-      @constituency.member_name = "Donal Duck"
+      @constituency.member_name = "Duncan McCloud"
       @constituency.member_party = "SDP"
       @constituency.member_biography_url = "http://en.wikipedia.org"
       @constituency.member_website = "http://www.parliament.uk"
     end
 
+    describe 'as tab separated value line' do
+      it 'should return tsv line' do
+        @constituency.to_tsv_line.should == %Q|Islington West\tDuncan McCloud\t(SDP)|
+      end
+    end
     describe 'in json' do
       it 'should create json correctly' do
-        @constituency.to_json.should == %Q|{"constituency": {"constituency_name": "Islington West", "member_name": "Donal Duck", "member_party": "SDP", "member_biography_url": "http://en.wikipedia.org", "member_website": "http://www.parliament.uk", "uri": "http://localhost:3000/constituencies/islington-west.json" } }|
+        @constituency.to_json.should == %Q|{"constituency": {"constituency_name": "Islington West", "member_name": "Duncan McCloud", "member_party": "SDP", "member_biography_url": "http://en.wikipedia.org", "member_website": "http://www.parliament.uk", "uri": "http://localhost:3000/constituencies/islington-west.json" } }|
       end
     end
     describe 'in text' do
       it 'should create text correctly' do
-        @constituency.to_text.should == %Q|constituency: Islington West\nmember_name: Donal Duck\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
+        @constituency.to_text.should == %Q|constituency: Islington West\nmember_name: Duncan McCloud\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
       end
     end
     describe 'in csv' do
       it 'should create csv correctly' do
-        @constituency.to_csv.should == %Q|constituency_name,member_name,member_party,member_biography_url,member_website,uri\n"Islington West","Donal Duck","SDP","http://en.wikipedia.org","http://www.parliament.uk","http://localhost:3000/constituencies/islington-west.csv"\n|
+        @constituency.to_csv.should == %Q|constituency_name,member_name,member_party,member_biography_url,member_website,uri\n"Islington West","Duncan McCloud","SDP","http://en.wikipedia.org","http://www.parliament.uk","http://localhost:3000/constituencies/islington-west.csv"\n|
       end
     end
     describe 'in yaml' do
       it 'should create yaml correctly' do
-        @constituency.to_output_yaml.should == %Q|---\nconstituency: Islington West\nmember_name: Donal Duck\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
+        @constituency.to_output_yaml.should == %Q|---\nconstituency: Islington West\nmember_name: Duncan McCloud\nmember_party: SDP\nmember_biography_url: http://en.wikipedia.org\nmember_website: http://www.parliament.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
       end
     end
   end
