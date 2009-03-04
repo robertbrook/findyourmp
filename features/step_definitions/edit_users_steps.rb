@@ -2,7 +2,7 @@
 Given /^I am on the Admin Home page as an admin user$/ do
   Given 'I am logged in as an admin user'
   And 'I am on the Front page'
-  And 'I follow "Show admin home"'
+  And 'I follow "Admin home"'
 end
 
 Given /^I am on a new User page$/ do
