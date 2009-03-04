@@ -181,22 +181,11 @@
             <li><a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">Copyright</a></li>
             <% if is_admin? %>
               <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
+              <li><%= link_to 'Admin home', admin_path %></li>
             <% else %>
               <li><%= link_to "Log In", new_user_session_path %></li>
             <% end %>
           </ul>
-<% if is_admin? %>
-          <br/>
-          <ul>
-            <li class="first"><%= link_to 'All constituencies', constituencies_path %></li>
-            <li><%= link_to 'Show admin home', admin_path %></li>
-<%   if @constituency %>
-            <li><%= link_to 'Edit constituency and member data', edit_constituency_path(@constituency) %></li>
-<%   end %>
-          </ul>
-<% end %>
-          <div>	
-      </div>
         </div>
         <div class="hspacer">&nbsp;</div>
       </div>
