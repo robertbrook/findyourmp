@@ -106,7 +106,7 @@ describe Constituency do
 
   describe 'when asked to load tsv line' do
     before do
-      @tsv_line = %Q|Islington West\tDuncan McCloud\t(SDP)|
+      @tsv_line = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"|
     end
     describe 'and constituency exists' do
       it 'should update constituency' do

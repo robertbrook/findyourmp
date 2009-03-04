@@ -12,11 +12,11 @@ class Constituency < ActiveRecord::Base
 
     def load_tsv_line line
       parts = line.split("\t")
-      constituency_name = parts.first.strip
+      constituency_name = parts.first.strip[/^"?([^"]+)"?$/,1]
       constituency = Constituency.find_by_constituency_name(constituency_name)
 
       if constituency
-        constituency.member_name = parts[1].strip
+        constituency.member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
         constituency.member_party = parts[2].strip[/\((.+)\)/,1]
       else
       end
