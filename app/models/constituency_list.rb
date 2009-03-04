@@ -7,7 +7,10 @@ class ConstituencyList
   def items= text
     @constituencies = {}
     text.each_line do |line|
-      @constituencies[line] = Constituency.load_tsv_line(line)
+      line.strip!
+      unless line.blank? || line[/Constituency/]
+        @constituencies[line] = Constituency.load_tsv_line(line)
+      end
     end
     @constituencies
   end
