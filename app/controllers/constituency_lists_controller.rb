@@ -8,6 +8,8 @@ class ConstituencyListsController < ApplicationController
     items = params['constituency_list']['items']
     @constituency_list = ConstituencyList.new
     @constituency_list.items = items
-    @constituency_list.constituencies
+
+    @changed_constituencies = @constituency_list.changed_constituencies
+    @unchanged_constituencies = @constituency_list.unchanged_constituencies
   end
 end

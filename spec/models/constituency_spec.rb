@@ -111,9 +111,11 @@ describe Constituency do
     describe 'and constituency exists' do
       it 'should update constituency' do
         Constituency.should_receive(:find_by_constituency_name).with('Islington West').and_return @constituency
-        @constituency.should_receive(:member_name=).with('Duncan McCloud')
-        @constituency.should_receive(:member_party=).with('SDP')
-        Constituency.load_tsv_line(@tsv_line).should == @constituency
+        @new_constituency = Constituency.new
+        Constituency.should_receive(:new).with(@constituency.attributes).and_return @new_constituency
+        @new_constituency.should_receive(:member_name=).with('Duncan McCloud')
+        @new_constituency.should_receive(:member_party=).with('SDP')
+        Constituency.load_tsv_line(@tsv_line).should == [@constituency, @new_constituency]
       end
     end
     describe 'and constituency doesn\'t already exist' do
@@ -138,7 +140,7 @@ describe Constituency do
 
     describe 'as tab separated value line' do
       it 'should return tsv line' do
-        @constituency.to_tsv_line.should == %Q|Islington West\tDuncan McCloud\t(SDP)|
+        @constituency.to_tsv_line.should == %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"|
       end
     end
     describe 'in json' do

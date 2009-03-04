@@ -27,6 +27,8 @@ describe ConstituencyList do
       list.constituencies.should have_key(@line_2)
       list.constituencies[@line_1].should == @constituency_1
       list.constituencies[@line_2].should == @constituency_2
+
+      list.constituencies.first.should == [@line_2,@constituency_2]
     end
   end
 end
