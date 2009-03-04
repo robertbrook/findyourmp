@@ -1,4 +1,4 @@
-Feature: Contact MP
+Feature: Edit constituency data
   In order to have correct information on website
   as a admin user
   want to edit constituency and member data

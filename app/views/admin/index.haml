@@ -8,8 +8,10 @@
 
 %h3 Data maintenance
 %p.text
+  = link_to 'Load constituencies', edit_constituency_list_path
+%p.text
   = link_to 'All constituencies', constituencies_path
-  
+
 %h3 User account
 - if @current_user.admin?
   %p.text
