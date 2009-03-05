@@ -12,16 +12,24 @@ class Constituency < ActiveRecord::Base
 
     def load_tsv_line line
       parts = line.split("\t")
-      constituency_name = parts.first.strip
-      constituency = Constituency.find_by_constituency_name(constituency_name)
 
-      if constituency
-        constituency.member_name = parts[1].strip
-        constituency.member_party = parts[2].strip[/\((.+)\)/,1]
+      constituency_name = parts.first.strip[/^"?([^"]+)"?$/,1]
+      member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
+      member_party = parts[2].strip[/\((.+)\)/,1]
+
+      existing = Constituency.find_by_constituency_name(constituency_name)
+      new_constituency = nil
+
+      if existing
+        if existing.member_name != member_name || existing.member_party != member_party
+          new_constituency = Constituency.new(existing.attributes)
+          new_constituency.member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
+          new_constituency.member_party = parts[2].strip[/\((.+)\)/,1]
+        end
       else
       end
 
-      constituency
+      [existing, new_constituency]
     end
 
     def find_all_name_or_member_name_matches term
@@ -91,7 +99,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def to_tsv_line
-    "#{name}\t#{member_name}\t(#{member_party})"
+    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"|
   end
 
   def to_json

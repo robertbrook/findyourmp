@@ -3,7 +3,6 @@ class Postcode < ActiveRecord::Base
 
   before_validation_on_create :populate_constituency_id
 
-  # validates_presence_of :constituency_id
   validates_presence_of :ons_id
 
   belongs_to :constituency
@@ -79,7 +78,7 @@ class Postcode < ActiveRecord::Base
         end
       end
     end
-    
+
     def object_url format=nil
       url_for :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
     end

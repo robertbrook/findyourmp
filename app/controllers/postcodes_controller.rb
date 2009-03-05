@@ -5,7 +5,7 @@ class PostcodesController < ApplicationController
     search_format = params[:format]
 
     @last_search_term = flash[:last_search_term]
-    
+
     unless search_term.blank?
       do_search search_term, search_format
     end
@@ -14,8 +14,23 @@ class PostcodesController < ApplicationController
   def show
     code = params[:postcode]
     postcode_districts = PostcodeDistrict.find_all_by_district(code)
-    
+
     unless postcode_districts.empty?
+      render_postcode_districts code, postcode_districts
+    else
+      postcode = Postcode.find_postcode_by_code(code)
+
+      if postcode
+        render_postcode code, postcode
+      else
+        render_no_search_matches code
+      end
+    end
+  end
+
+  private
+
+    def render_postcode_districts code, postcode_districts
       flash[:postcode] = postcode_districts.first.district
       if postcode_districts.size == 1
         redirect_to :action=>'show', :controller=>'constituencies', :id=>postcode_districts.first.id, :format=>params[:format]
@@ -34,44 +49,41 @@ class PostcodesController < ApplicationController
           format.yaml { render :text => results_to_yaml(@constituencies, []) }
         end
       end
-    else
-      postcode = Postcode.find_postcode_by_code(code)
-    
-      if postcode
-        if postcode.code != code
-          redirect_to :action=>'show', :postcode=>postcode.code, :format => params[:format]
-        else
-          @show_postcode_autodiscovery_links = true
-          @url_for_this = url_for(:only_path=>false)
-          respond_to do |format|
-            format.html { @postcode = postcode; @constituency = postcode.constituency; flash[:postcode] = @postcode.code_with_space }
-            format.xml  { @postcode = postcode; @constituency = postcode.constituency }
-            format.json { render :json => postcode.to_json }
-            format.js   { render :json => postcode.to_json }
-            format.text { render :text => postcode.to_text }
-            format.csv  { render :text => postcode.to_csv }
-            format.yaml { render :text => postcode.to_output_yaml }
-          end
-        end
+    end
+
+    def render_postcode code, postcode
+      if postcode.code != code
+        redirect_to :action=>'show', :postcode=>postcode.code, :format => params[:format]
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>" if code
-        flash[:last_search_term] = code
-        params[:postcode] = nil
-        search_format = params[:format]
-        if search_format
-          show_error(search_format)
-        else
-          redirect_to :action=>'index'
+        @show_postcode_autodiscovery_links = true
+        @url_for_this = url_for(:only_path=>false)
+        respond_to do |format|
+          format.html { @postcode = postcode; @constituency = postcode.constituency; flash[:postcode] = @postcode.code_with_space }
+          format.xml  { @postcode = postcode; @constituency = postcode.constituency }
+          format.json { render :json => postcode.to_json }
+          format.js   { render :json => postcode.to_json }
+          format.text { render :text => postcode.to_text }
+          format.csv  { render :text => postcode.to_csv }
+          format.yaml { render :text => postcode.to_output_yaml }
         end
       end
     end
-  end
 
-  private
-  
+    def render_no_search_matches code
+      flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>" if code
+      flash[:last_search_term] = code
+      params[:postcode] = nil
+      search_format = params[:format]
+      if search_format
+        show_error(search_format)
+      else
+        redirect_to :action=>'index'
+      end
+    end
+
     def do_search search_term, search_format
       postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
-      
+
       unless postcode_districts.empty?
         redirect_to :action => 'show', :postcode => search_term, :format => search_format
       else
@@ -122,5 +134,5 @@ class PostcodesController < ApplicationController
         format.yaml { render :text => message_to_yaml("error", @error_message) }
       end
     end
-  
+
 end

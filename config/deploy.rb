@@ -21,7 +21,7 @@ set :test_deploy, true
 namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
-  
+
   desc "Upload deployed database.yml"
   task :upload_deployed_database_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_database.yml")
@@ -48,7 +48,7 @@ namespace :deploy do
 
       put_data data_dir, 'ConstituencyToMember.txt'
       put_data data_dir, 'constituencies.txt'
-    
+
       if test_deploy
         put_data data_dir, 'postcodes.txt'
       else
@@ -100,12 +100,12 @@ namespace :deploy do
   desc "Perform non-destructive rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
-    
+
     if overwrite
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
     end
-    
+
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
   end
 
@@ -115,7 +115,7 @@ namespace :deploy do
     else
       prompt_for_value(:overwrite)
     end
-    
+
     puts 'checking folders...'
     run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -169,7 +169,7 @@ namespace :deploy do
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-    
+
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
       if data =~ /Enter password:/
@@ -178,7 +178,7 @@ namespace :deploy do
         ch.send_data("create database #{application}_production CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
         ch.send_data("exit \n")
       end
-    end    
+    end
 
     sudo "gem install hpricot"
     sudo "gem install morph"
@@ -187,7 +187,7 @@ namespace :deploy do
     sudo "gem install term-ansicolor"
 
     rake_tasks
-  
+
     run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
 
@@ -199,7 +199,7 @@ namespace :deploy do
     desc "#{t} task is not used with mod_rails"
     task t, :roles => :app do ; end
   end
-  
+
   def is_first_run?
     run "if [ -f /etc/apache2/sites-available/#{application} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
       if message.strip == 'not there'
@@ -209,7 +209,7 @@ namespace :deploy do
       end
     end
   end
-  
+
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'

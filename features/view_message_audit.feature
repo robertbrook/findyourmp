@@ -6,7 +6,7 @@ Feature: View message audit
   Scenario: Look at admin home page
     Given I am logged in as an editing user
     And I am on the Front page
-    When I follow "Show admin home"
+    When I follow "Admin home"
     Then I should see "Sent messages"
     And I should see "Attempted to send messages"
     And I should see "Edit your account settings"
