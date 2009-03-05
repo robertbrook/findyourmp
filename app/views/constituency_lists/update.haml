@@ -1,10 +1,5 @@
 -@title= 'Constituencies'
 
-%h2 Unchanged constituencies
-%p.text
-  - @unchanged_constituencies.each do |line, constituencies|
-    = constituencies[0].name
-    %br
 
 %h2 Changed constituencies
 - @changed_constituencies.each do |line, constituencies|
@@ -16,4 +11,10 @@
     %br
     - if constituencies[0].member_party != constituencies[1].member_party
       = "#{constituencies[0].member_party} -> #{constituencies[1].member_party}"
+
+%h2 Unchanged constituencies
+%p.text
+  - @unchanged_constituencies.each do |line, constituencies|
+    = constituencies[0].name
+    %br
 
