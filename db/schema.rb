@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090303111632) do
+ActiveRecord::Schema.define(:version => 20090305112105) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20090303111632) do
   add_index "messages", ["sent"], :name => "index_messages_on_sent"
   add_index "messages", ["sent_at"], :name => "index_messages_on_sent_at"
 
-  create_table "postcode_districts", :id => false, :force => true do |t|
+  create_table "postcode_districts", :force => true do |t|
     t.string  "district",        :limit => 4
     t.integer "constituency_id"
   end
