@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PostcodeDistrict do
 
   assert_model_belongs_to :constituency
-  
+
   before do
      @postcode = PostcodeDistrict.new
      @constituency_name = 'Islington South'
@@ -13,21 +13,31 @@ describe PostcodeDistrict do
      @postcode.stub!(:constituency).and_return @constituency
      @matches = [ @postcode ]
    end
-  
+
   describe 'when asked to find postcode by district' do
     it 'should return match including its constituency' do
       district = 'N1'
       PostcodeDistrict.should_receive(:find).and_return @matches
       PostcodeDistrict.find_all_by_district(district).should == @matches
-      
+
       @matches.first.id.should == @constituency.friendly_id
       @matches.first.constituency_name.should == @constituency.name
     end
-    it 'should return nil if given non-matching code' do
-      district = 'invalid'
-      PostcodeDistrict.should_receive(:find).and_return []
+    it 'should return empty array if given non-matching code' do
+      district = 'EC2Z'
+      PostcodeDistrict.should_receive(:find, :conditions => %Q|district = "EC2Z"|, :include => :constituency).and_return []
+      PostcodeDistrict.find_all_by_district(district).should == []
+    end
+    it 'should return empty array if given code longer than 4 chars' do
+      district = 'ECVVED'
+      PostcodeDistrict.should_not_receive(:find)
+      PostcodeDistrict.find_all_by_district(district).should == []
+    end
+    it 'should return empty array if given nil code' do
+      district = nil
+      PostcodeDistrict.should_not_receive(:find)
       PostcodeDistrict.find_all_by_district(district).should == []
     end
   end
-  
+
 end
