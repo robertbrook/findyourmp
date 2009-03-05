@@ -145,6 +145,7 @@ namespace :serverbuild do
     run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
       if data =~ /not found/
         sudo "mkdir /home/#{username}"
+        sudo "chown #{username} /home/#{username}"
       end
     end
     

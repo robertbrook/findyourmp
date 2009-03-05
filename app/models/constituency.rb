@@ -67,6 +67,7 @@ class Constituency < ActiveRecord::Base
         end
         name.tr!('-', ' ')
         name.gsub!('ô','o')
+        name.gsub!('and#244;', 'o')
         constituency = find_by_name(name)
       end
 
