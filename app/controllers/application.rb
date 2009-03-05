@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
     def render_unauthorized
       render :text => 'Unauthorized', :status => 401
     end
@@ -72,7 +73,7 @@ class ApplicationController < ActionController::Base
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
     end
-    
+
      def results_to_json constituencies, members
         constituencies_json = ""
         constituencies.each do |constituency|
@@ -108,7 +109,7 @@ class ApplicationController < ActionController::Base
       def results_to_yaml constituencies, members
         "---\n#{results_to_text(constituencies, members)}"
       end
-    
+
     def results_to_csv constituencies, members
       headers = 'constituency_name,member_name,member_party,member_biography_url,member_website'
       values = ""
@@ -123,7 +124,7 @@ class ApplicationController < ActionController::Base
 
       "#{headers}\n#{values}\n"
     end
-    
+
     def message_to_json root, message
       %Q|{"#{root}": "#{message}"}|
     end
@@ -141,5 +142,5 @@ class ApplicationController < ActionController::Base
     def message_to_yaml root, message
       "---\n#{message_to_text(root, message)}"
     end
-    
+
 end
