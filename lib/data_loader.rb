@@ -120,8 +120,15 @@ module FindYourMP::DataLoader
   end
 
   def load_postcode_districts
-    ActiveRecord::Base.connection.execute("TRUNCATE TABLE postcode_districts")
-    ActiveRecord::Base.connection.execute("INSERT INTO postcode_districts SELECT SUBSTRING(code, 1, LENGTH(code)-3) AS district, constituency_id FROM postcodes GROUP BY district, constituency_id;")
+    PostcodeDistrict.delete_all
+    sql = "SELECT SUBSTRING(code, 1, LENGTH(code)-3) " +
+        "AS district, constituency_id " +
+        "FROM postcodes " +
+        "GROUP BY district, constituency_id;"
+    districts =  PostcodeDistrict.find_by_sql(sql)
+    districts.each do |district|
+      PostcodeDistrict.create!(district.attributes)
+    end
   end
 
   private

@@ -20,12 +20,6 @@ class PostcodeDistrict < ActiveRecord::Base
     end
   end
 
-  def id
-    if constituency
-      constituency.friendly_id
-    end
-  end
-
   def constituency_name
     if constituency
       constituency.name
