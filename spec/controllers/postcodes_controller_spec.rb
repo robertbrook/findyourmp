@@ -19,7 +19,7 @@ describe PostcodesController do
     @other_constituency = mock_model(Constituency, :name => 'Islington East',
         :id => 802,
         :friendly_id => 'islington-east',
-        :has_better_id? => false)    
+        :has_better_id? => false)
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -29,12 +29,12 @@ describe PostcodesController do
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
-        
+
     @district_record = mock_model(PostcodeDistrict, :id => @friendly_constituency_id, :constituency => @constituency,
         :constituency_name => @constituency_name, :member_name => @member_name, :district => 'N1')
     @other_district_record = mock_model(PostcodeDistrict, :id => 'islington-east',  :constituency => @other_constituency,
         :constituency_name => 'Islington East', :member_name => 'Donal Duck', :district => 'E1')
-    
+
     Postcode.stub!(:find_postcode_by_code).and_return nil
   end
 
@@ -199,7 +199,7 @@ describe PostcodesController do
       do_get
       response.should redirect_to("")
     end
-    
+
     it 'should return xml page when passed of format "xml"' do
       do_get 'xml'
       response.content_type.should == "application/xml"
@@ -250,23 +250,23 @@ describe PostcodesController do
     def do_get format=nil
       get :index, :search_term => @postcode_district, :format => format
     end
-    
+
     before do
       @matches = [ @district_record ]
       PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
     end
-    
+
     it 'should redirect to show with the postcode district' do
       do_get
       response.should redirect_to(:action => 'show', :postcode => @postcode_district)
     end
   end
-  
+
   describe "when asked to show a postcode district" do
     def do_get format=nil
       get :show, :postcode => @postcode_district, :format => format
     end
-      
+
     describe 'and a single constituency is found' do
       before do
         @matches = [ @district_record ]
@@ -278,7 +278,7 @@ describe PostcodesController do
         response.should redirect_to(:action=>'show', :controller=>'constituencies', :id=> @friendly_constituency_id)
       end
     end
-    
+
     describe 'and more than one constituency is found' do
       before do
         @matches = [ @district_record, @other_district_record ]
@@ -334,7 +334,11 @@ describe PostcodesController do
       before do
         Postcode.should_receive(:find_postcode_by_code).with(@canonical_postcode).and_return @postcode_record
       end
-      should_render_template 'show'
+
+      it 'should render constituency view if there is a constituency for postcode' do
+        do_get
+        response.should redirect_to "/constituencies/#{@friendly_constituency_id}"
+      end
 
       it 'should assign postcode to view' do
         do_get
@@ -394,7 +398,7 @@ describe PostcodesController do
         get :show, :postcode => @postcode_with_space
         response.should redirect_to(:action=>'show', :postcode=> @canonical_postcode)
       end
-      
+
       describe 'and format requested is js' do
         it 'should redirect to canoncial postcode url with format js' do
           Postcode.should_receive(:find_postcode_by_code).with(@postcode_with_space).and_return @postcode_record

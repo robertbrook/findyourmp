@@ -58,7 +58,14 @@ class PostcodesController < ApplicationController
         @show_postcode_autodiscovery_links = true
         @url_for_this = url_for(:only_path=>false)
         respond_to do |format|
-          format.html { @postcode = postcode; @constituency = postcode.constituency; flash[:postcode] = @postcode.code_with_space }
+          format.html do ||
+            @postcode = postcode
+            @constituency = postcode.constituency
+            flash[:postcode] = @postcode.code_with_space
+            if @constituency
+              redirect_to constituency_path(:id=>@constituency.friendly_id)
+            end
+          end
           format.xml  { @postcode = postcode; @constituency = postcode.constituency }
           format.json { render :json => postcode.to_json }
           format.js   { render :json => postcode.to_json }
