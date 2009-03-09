@@ -337,7 +337,7 @@ describe PostcodesController do
 
       it 'should render constituency view if there is a constituency for postcode' do
         do_get
-        response.should redirect_to("/constituencies/#{@friendly_constituency_id}")
+        response.should redirect_to "/constituencies/#{@friendly_constituency_id}"
       end
 
       it 'should assign postcode to view' do
