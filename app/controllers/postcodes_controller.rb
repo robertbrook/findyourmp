@@ -1,4 +1,6 @@
 class PostcodesController < ApplicationController
+  
+  caches_page :show
 
   def index
     search_term = params[:search_term]
