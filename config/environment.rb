@@ -76,4 +76,4 @@ ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
   :month_year => "%B %Y"
 )
 
-# require 'action_mailer/ar_mailer'
+require 'action_mailer/ar_mailer'
