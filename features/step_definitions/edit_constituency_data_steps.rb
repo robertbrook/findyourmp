@@ -32,7 +32,7 @@ Then /^I should see Edit Constituency Form$/ do
   And 'I should see "Member"'
   And 'I should see "Member party"'
   And 'I should see "Member email"'
-  And 'I should see "Member biography url"'
+  And 'I should see "Member biography URL"'
   And 'I should see "Member website"'
   And 'I should see "Member visible"'
 end

@@ -5,31 +5,31 @@
 
 -form_for(@constituency) do |f|
   %p.text
-    = label :constituency, :ons_id, 'ONS Constituency ID'
+    = f.label :ons_id, 'ONS Constituency ID'
     %span.constituency_id= @constituency.ons_id
   %p.text
-    = label :constituency, :name, 'Constituency'
+    = f.label :name, 'Constituency'
     = f.text_field :name
   %p.text
-    = label :constituency, :member_name, 'Member'
+    = f.label :member_name, 'Member'
     = f.text_field :member_name
   %p.text
-    = label :constituency, :member_party, 'Member party'
+    = f.label :member_party
     = f.text_field :member_party
   %p.text
-    = label :constituency, :member_email, 'Member email'
+    = f.label :member_email
     = f.text_field :member_email
   %p.text
-    = label :constituency, :member_requested_contact_url, 'Requested contact url'
-    = f.text_field :member_requested_contact_url
+    = f.label :member_requested_contact_url, 'Requested contact URL'
+    = f.text_field :member_requested_contact_url, :size=>40
   %p.text
-    = label :constituency, :member_biography_url, 'Member biography url'
-    = f.text_field :member_biography_url
+    = f.label :member_biography_url, 'Member biography URL'
+    = f.text_field :member_biography_url, :size=>40
   %p.text
-    = label :constituency, :member_website, 'Member website'
-    = f.text_field :member_website
+    = f.label :member_website
+    = f.text_field :member_website, :size=>40
   %p.text
-    = label :constituency, :member_visible, 'Member visible'
+    = f.label :member_visible
     = f.check_box :member_visible
 
   %p.text
@@ -39,4 +39,3 @@
   = link_to 'Show constituency', constituency_path(@constituency)
   |
   = link_to 'All constituencies', constituencies_path
-
