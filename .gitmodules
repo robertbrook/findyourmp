@@ -25,3 +25,6 @@
 [submodule "vendor/plugins/authlogic"]
 	path = vendor/plugins/authlogic
 	url = git://github.com/binarylogic/authlogic.git
+[submodule "vendor/plugins/ar_mailer"]
+	path = vendor/plugins/ar_mailer
+	url = git://github.com/adzap/ar_mailer.git
