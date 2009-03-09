@@ -1,7 +1,5 @@
 class ConstituenciesController < ResourceController::Base
 
-  caches_page :show
-
   before_filter :respond_unauthorized_if_not_admin, :except => ['show']
 
   before_filter :ensure_current_constituency_url, :only => :show
