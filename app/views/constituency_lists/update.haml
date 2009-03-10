@@ -1,3 +1,5 @@
+= javascript_include_tag :defaults
+
 - @crumbtrail = link_to_admin_home
 - @title= 'Constituencies'
 
@@ -6,19 +8,21 @@
   - @changed_constituencies.each do |line, constituencies|
     - old = constituencies[0]
     - new = constituencies[1]
-    - form_for(old) do |f|
-      %p
-        %h4= old.name
-        %br
-        - if old.member_name != new.member_name
-          = f.label :member_name, "#{old.member_name} -> "
-          = f.text_field :member_name, :value => "#{new.member_name}"
-        %br
-        - if old.member_party != new.member_party
-          = f.label :member_party, "#{old.member_party} -> "
-          = f.text_field :member_party, :value => "#{new.member_party}"
-        %br
-          = f.submit "Update #{old.name}"
+    - id = "constituency#{old.id}"
+    %div{:id=>id}
+      - remote_form_for(old, :update => id) do |f|
+        %p
+          %h4= old.name
+          %br
+          - if old.member_name != new.member_name
+            = f.label :member_name, "#{old.member_name} -> "
+            = f.text_field :member_name, :value => "#{new.member_name}"
+          %br
+          - if old.member_party != new.member_party
+            = f.label :member_party, "#{old.member_party} -> "
+            = f.text_field :member_party, :value => "#{new.member_party}"
+          %br
+            = f.submit "Update #{old.name}"
 %br
 
 %h3 Unchanged constituencies

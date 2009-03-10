@@ -7,6 +7,32 @@ class ConstituenciesController < ResourceController::Base
 
   before_filter :ensure_current_constituency_url, :only => :show
 
+  def update
+    load_object
+    is_remote = (params[:commit]=="Update #{object.name}")
+
+    before :update
+    if object.update_attributes object_params
+      after :update
+      set_flash :update
+      if is_remote
+        @message = flash[:notice]
+        flash[:notice] = nil
+      else
+        response_for(:update)
+      end
+    else
+      after :update_fails
+      set_flash :update_fails
+      if is_remote
+        @message = flash[:notice]
+        flash[:notice] = nil
+      else
+        response_for(:update_fails)
+      end
+    end
+  end
+
   def show
     id = params[:id]
     flash.keep(:postcode)
