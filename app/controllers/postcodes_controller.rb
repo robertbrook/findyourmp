@@ -116,7 +116,7 @@ class PostcodesController < ApplicationController
             elsif constituencies.size == 1
               redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.friendly_id, :format => search_format
             else
-              redirect_to :controller=> 'constituencies', :action=>'show', :id => constituencies.collect(&:id).join('+'), :search_term => search_term, :format => search_format
+              redirect_to :controller=> 'constituencies', :action=>'show_list', :id => constituencies.collect(&:id).join('+'), :search_term => search_term, :format => search_format
             end
           else
             flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
