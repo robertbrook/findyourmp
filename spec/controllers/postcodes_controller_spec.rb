@@ -172,7 +172,7 @@ describe PostcodesController do
       end
       it 'should show list of matching constituencies' do
         do_get
-        response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}?search_term=#{@constituency_name_part}")
+        response.should redirect_to("constituencies/#{@constituency.id}+#{@other_constituency.id}/#{@constituency_name_part}")
       end
     end
   end
