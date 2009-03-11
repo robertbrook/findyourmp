@@ -7,6 +7,33 @@ describe Constituency do
 
   before do
     @constituency = Constituency.new
+    @constituency2 = Constituency.new
+  end
+
+  describe 'when asked if member name has changed' do
+    it 'should return true if it has' do
+      @constituency.member_name = 'old'
+      @constituency2.member_name = 'new'
+      @constituency.member_name_changed?(@constituency2).should be_true
+    end
+    it 'should return false if it hasn\'t' do
+      @constituency.member_name = 'old'
+      @constituency2.member_name = 'old'
+      @constituency.member_name_changed?(@constituency2).should be_false
+    end
+  end
+
+  describe 'when asked if member party has changed' do
+    it 'should return true if it has' do
+      @constituency.member_party = 'old'
+      @constituency2.member_party = 'new'
+      @constituency.member_party_changed?(@constituency2).should be_true
+    end
+    it 'should return false if it hasn\'t' do
+      @constituency.member_party = 'old'
+      @constituency2.member_party = 'old'
+      @constituency.member_party_changed?(@constituency2).should be_false
+    end
   end
 
   describe 'when asked for find_all_name_or_member_name_matches' do

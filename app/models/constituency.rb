@@ -136,6 +136,14 @@ class Constituency < ActiveRecord::Base
     "---\n#{to_text("yaml")}"
   end
 
+  def member_name_changed? constituency
+    member_name != constituency.member_name
+  end
+
+  def member_party_changed? constituency
+    member_party != constituency.member_party
+  end
+
   private
     def valid_email?
       unless member_email.blank?

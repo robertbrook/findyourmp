@@ -6,23 +6,43 @@
 %h3 Changed constituencies
 .text
   - @changed_constituencies.each do |line, constituencies|
-    - old = constituencies[0]
-    - new = constituencies[1]
-    - id = "constituency#{old.id}"
+    - constituency = constituencies[0]
+    - new_constituency = constituencies[1]
+    - id = "constituency#{constituency.id}"
     %div{:id=>id}
-      - remote_form_for(old, :update => id) do |f|
+      - remote_form_for(constituency, :update => id) do |f|
+        %h4= constituency.name
+        - member_name_changed = constituency.member_name_changed?(new_constituency)
+        - member_party_changed = constituency.member_party_changed?(new_constituency)
         %p
-          %h4= old.name
-          %br
-          - if old.member_name != new.member_name
-            = f.label :member_name, "#{old.member_name} -> "
-            = f.text_field :member_name, :value => "#{new.member_name}"
-          %br
-          - if old.member_party != new.member_party
-            = f.label :member_party, "#{old.member_party} -> "
-            = f.text_field :member_party, :value => "#{new.member_party}"
-          %br
-            = f.submit "Update #{old.name}"
+          - if member_name_changed
+            = f.label :member_name, "#{constituency.member_name} -> "
+            = f.text_field :member_name, :value => "#{new_constituency.member_name}"
+          - else
+            = f.label :member_name
+            = f.text_field :member_name
+        %p
+          - if member_party_changed
+            = f.label :member_party, "#{constituency.member_party} -> "
+            = f.text_field :member_party, :value => "#{new_constituency.member_party}"
+          - else
+            = f.label :member_party
+            = f.text_field :member_party
+        %p
+          = f.label :member_email, 'Email'
+          = f.text_field :member_email, :size=>45
+        %p
+          = f.label :member_biography_url, 'Biography URL'
+          = f.text_field :member_biography_url, :size=>45
+        %p
+          = f.label :member_website, 'Website'
+          = f.text_field :member_website, :size=>45
+        %p
+          = f.label :member_requested_contact_url, 'Requested contact URL'
+          = f.text_field :member_requested_contact_url, :size=>45
+        %p
+          %label &nbsp;
+          = f.submit "Update #{constituency.name}"
 %br
 
 %h3 Unchanged constituencies
