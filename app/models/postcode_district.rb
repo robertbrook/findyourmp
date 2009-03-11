@@ -5,6 +5,7 @@ class PostcodeDistrict < ActiveRecord::Base
   delegate :member_website, :to => :constituency
   delegate :member_biography_link, :to => :constituency
   delegate :name, :to => :constituency
+  delegate :friendly_id, :to => :constituency
 
   class << self
     def find_all_by_district search_term

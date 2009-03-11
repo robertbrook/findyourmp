@@ -30,9 +30,9 @@ describe PostcodesController do
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
 
-    @district_record = mock_model(PostcodeDistrict, :id => @friendly_constituency_id, :constituency => @constituency,
+    @district_record = mock_model(PostcodeDistrict, :id => 1234, :friendly_id => @friendly_constituency_id, :constituency => @constituency,
         :constituency_name => @constituency_name, :member_name => @member_name, :district => 'N1')
-    @other_district_record = mock_model(PostcodeDistrict, :id => 'islington-east',  :constituency => @other_constituency,
+    @other_district_record = mock_model(PostcodeDistrict, :id => 1123, :friendly_id => 'islington-east',  :constituency => @other_constituency,
         :constituency_name => 'Islington East', :member_name => 'Donal Duck', :district => 'E1')
 
     Postcode.stub!(:find_postcode_by_code).and_return nil

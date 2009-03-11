@@ -36,7 +36,7 @@ class PostcodesController < ApplicationController
     def render_postcode_districts code, postcode_districts
       flash[:postcode] = postcode_districts.first.district
       if postcode_districts.size == 1
-        redirect_to :action=>'show', :controller=>'constituencies', :id=>postcode_districts.first.id, :format=>params[:format]
+        redirect_to :action=>'show', :controller=>'constituencies', :id=>postcode_districts.first.friendly_id, :format=>params[:format]
       else
         @search_term = code
         @show_postcode_autodiscovery_links = true
