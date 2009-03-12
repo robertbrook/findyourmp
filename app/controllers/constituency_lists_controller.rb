@@ -11,5 +11,8 @@ class ConstituencyListsController < ApplicationController
 
     @changed_constituencies = @constituency_list.changed_constituencies
     @unchanged_constituencies = @constituency_list.unchanged_constituencies
+
+    @unrecognized_constituencies = @constituency_list.unrecognized_constituencies
+    @ommitted_constituencies = @constituency_list.ommitted_constituencies
   end
 end

@@ -3,46 +3,59 @@
 - @crumbtrail = link_to_admin_home
 - @title= 'Constituencies'
 
-%h3 Changed constituencies
-.text
-  - @changed_constituencies.each do |line, constituencies|
-    - constituency = constituencies[0]
-    - new_constituency = constituencies[1]
-    - id = "constituency#{constituency.id}"
-    %div{:id=>id}
-      - remote_form_for(constituency, :update => id) do |f|
-        %h4= constituency.name
-        - member_name_changed = constituency.member_name_changed?(new_constituency)
-        - member_party_changed = constituency.member_party_changed?(new_constituency)
-        %p
-          - if member_name_changed
-            = f.label :member_name, "#{constituency.member_name} -> "
-            = f.text_field :member_name, :value => "#{new_constituency.member_name}"
-          - else
-            = f.label :member_name
-            = f.text_field :member_name
-        %p
-          - if member_party_changed
-            = f.label :member_party, "#{constituency.member_party} -> "
-            = f.text_field :member_party, :value => "#{new_constituency.member_party}"
-          - else
-            = f.label :member_party
-            = f.text_field :member_party
-        %p
-          = f.label :member_email, 'Email'
-          = f.text_field :member_email, :size=>45
-        %p
-          = f.label :member_biography_url, 'Biography URL'
-          = f.text_field :member_biography_url, :size=>45
-        %p
-          = f.label :member_website, 'Website'
-          = f.text_field :member_website, :size=>45
-        %p
-          = f.label :member_requested_contact_url, 'Requested contact URL'
-          = f.text_field :member_requested_contact_url, :size=>45
-        %p
-          %label &nbsp;
-          = f.submit "Update #{constituency.name}"
+- unless @unrecognized_constituencies.empty?
+  %h3 Unrecognized constituencies
+  - @unrecognized_constituencies.each do |line, blank|
+    %h4= line
+
+%p &nbsp;
+- unless @ommitted_constituencies.empty?
+  %h3 Missing constituencies
+  - @ommitted_constituencies.each do |constituency|
+    %h4= constituency.name
+
+%p &nbsp;
+- unless @changed_constituencies.empty?
+  %h3 Changed constituencies
+  .text
+    - @changed_constituencies.each do |line, constituencies|
+      - constituency = constituencies[0]
+      - new_constituency = constituencies[1]
+      - id = "constituency#{constituency.id}"
+      %div{:id=>id}
+        - remote_form_for(constituency, :update => id) do |f|
+          %h4= constituency.name
+          - member_name_changed = constituency.member_name_changed?(new_constituency)
+          - member_party_changed = constituency.member_party_changed?(new_constituency)
+          %p
+            - if member_name_changed
+              = f.label :member_name, "#{constituency.member_name} -> "
+              = f.text_field :member_name, :value => "#{new_constituency.member_name}"
+            - else
+              = f.label :member_name
+              = f.text_field :member_name
+          %p
+            - if member_party_changed
+              = f.label :member_party, "#{constituency.member_party} -> "
+              = f.text_field :member_party, :value => "#{new_constituency.member_party}"
+            - else
+              = f.label :member_party
+              = f.text_field :member_party
+          %p
+            = f.label :member_email, 'Email'
+            = f.text_field :member_email, :size=>45
+          %p
+            = f.label :member_biography_url, 'Biography URL'
+            = f.text_field :member_biography_url, :size=>45
+          %p
+            = f.label :member_website, 'Website'
+            = f.text_field :member_website, :size=>45
+          %p
+            = f.label :member_requested_contact_url, 'Requested contact URL'
+            = f.text_field :member_requested_contact_url, :size=>45
+          %p
+            %label &nbsp;
+            = f.submit "Update #{constituency.name}"
 %br
 
 %h3 Unchanged constituencies
@@ -50,4 +63,3 @@
   - @unchanged_constituencies.each do |line, constituencies|
     = constituencies[0].name
     %br
-
