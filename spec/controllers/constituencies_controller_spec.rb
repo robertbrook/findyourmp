@@ -57,10 +57,6 @@ describe ConstituenciesController do
       route_for(:controller => "constituencies", :action => "show", :id=>@friendly_id).should == "/constituencies/#{@friendly_id}"
       params_from(:get, "/constituencies/#{@friendly_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}"}
     end
-    it 'should find show_list action' do
-      route_for(:controller => "constituencies", :action => "show_list", :search_term => 'foo', :id=>@two_constituency_ids).should == "/constituencies/#{@two_constituency_ids}/foo"
-      params_from(:get, "/constituencies/#{@two_constituency_ids}/foo").should == {:controller => "constituencies", :search_term => 'foo', :action => "show_list", :id=>@two_constituency_ids}
-    end
     # it 'should find message action' do
       # route_for(:controller => "constituencies", :action => "mail", :id=>@constituency_id).should == "/constituencies/#{@constituency_id}/mail"
       # params_from(:get, "/constituencies/#{@constituency_id}/mail").should == {:controller => "constituencies", :action => "mail", :id=>@constituency_id.to_s}
@@ -215,31 +211,6 @@ describe ConstituenciesController do
       @constituency.should_receive(:to_json).and_return('text')
       do_get 'json'
       response.content_type.should == "application/json"
-    end
-  end
-
-  describe "when asked for several constituencies by ids along with search term that matches member and constituency names" do
-    before do
-      Constituency.stub!(:find_all_by_id).and_return [@constituency, @other_constituency]
-    end
-    def do_get
-      get :show_list, :id => @two_constituency_ids, :search_term => @search_term
-    end
-    it 'should assign constituencies to view ordered by name' do
-      Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@constituency]
-      do_get
-      constituencies_ordered_by_name = [@constituency]
-      assigns[:constituencies].should == constituencies_ordered_by_name
-    end
-    it 'should assign members to view ordered by member_name' do
-      Constituency.should_receive(:find_all_by_id).with(["#{@constituency_id}","#{@other_constituency_id}"]).and_return [@other_constituency]
-      do_get
-      members_ordered_by_name = [@other_constituency]
-      assigns[:members].should == members_ordered_by_name
-    end
-    it 'should assign search term to view' do
-      do_get
-      assigns[:last_search_term].should == @search_term
     end
   end
 
