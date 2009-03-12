@@ -3,14 +3,14 @@
 - else
   %p.text= "#{h @constituency.member_name} (#{@constituency.member_party}) is the sitting Member of Parliament for #{@constituency.name}."
   - unless @constituency.member_biography_url.blank?
-    %p.text= %Q|Link to #{link_to "member's biography", @constituency.member_biography_url }.|
+    %p.text= %Q|Link to #{link_to "biography of #{@constituency.member_name}", @constituency.member_biography_url }.|
   - unless @constituency.member_website.blank?
-    %p.text= %Q|Link to #{link_to "member's website", @constituency.member_website }.|
+    %p.text= %Q|Link to #{link_to "website of #{@constituency.member_name}", @constituency.member_website }.|
   - if @constituency.member_requested_contact_url.blank?
     - if @constituency.member_email.blank?
       %p.text= "Sorry: we do not have an email address for #{h @constituency.member_name}."
     - else
-      %p.text= link_to "Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency)
+      %p= %Q|#{link_to("Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency))}.|
   - else
     %p.text= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
 
