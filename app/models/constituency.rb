@@ -26,10 +26,10 @@ class Constituency < ActiveRecord::Base
           new_constituency.member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
           new_constituency.member_party = parts[2].strip[/\((.+)\)/,1]
         end
+        [existing, new_constituency]
       else
+        nil
       end
-
-      [existing, new_constituency]
     end
 
     def find_all_name_or_member_name_matches term
