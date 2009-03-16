@@ -1,5 +1,8 @@
 class SearchController < ApplicationController
 
+  caches_page :show
+  cache_sweeper :constituency_sweeper, :only => [:create, :update, :destroy]
+
   def index
     search_term = params[:search_term]
     search_format = params[:format]
