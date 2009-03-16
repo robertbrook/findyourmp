@@ -9,17 +9,20 @@ describe SearchController do
     @canonical_postcode = @postcode.upcase.tr(' ','')
     @constituency_id = 801
     @constituency_name_part = 'Islington'
+    @member_name_part = 'Bloggs'
     @constituency_name_short = 'sl'
     @constituency_name = 'Islington South'
     @friendly_constituency_id = 'islington-south'
     @constituency = mock_model(Constituency, :name => @constituency_name,
         :id => @constituency_id,
         :friendly_id => @friendly_constituency_id,
-        :has_better_id? => false)
+        :has_better_id? => false,
+        :member_name => 'Dave Bloggs')
     @other_constituency = mock_model(Constituency, :name => 'Islington East',
         :id => 802,
         :friendly_id => 'islington-east',
-        :has_better_id? => false)
+        :has_better_id? => false,
+        :member_name => 'Jo Bloggs')
     @json = '{json : {}}'
     @text = "text:"
     @xml = '<xml/>'
@@ -40,11 +43,7 @@ describe SearchController do
 
   describe "when asked for constituency given an exact constituency name" do
     def do_get format=nil
-      if format
-        get :index, :search_term => @constituency_name, :format => format
-      else
-        get :index, :search_term => @constituency_name
-      end
+      get :index, :search_term => @constituency_name, :format => format
     end
 
     before do
@@ -122,20 +121,6 @@ describe SearchController do
         response.should redirect_to("search/#{@constituency_name_part}")
       end
       
-      it 'should assign constituencies to view ordered by name' do
-        Constituency.should_receive(:find_all_name_or_member_name_matches).with("Islington").and_return @matching
-        do_get
-        constituencies_ordered_by_name = [@constituency]
-        assigns[:constituencies].should == constituencies_ordered_by_name
-      end
-      
-      it 'should assign members to view ordered by member_name' do
-        Constituency.should_receive(:find_all_name_or_member_name_matches).with("Islington").and_return @matching
-        do_get
-        members_ordered_by_name = [@other_constituency]
-        assigns[:members].should == members_ordered_by_name
-      end
-      
       it 'should assign search term to view' do
         do_get
         assigns[:last_search_term].should == @search_term
@@ -149,11 +134,7 @@ describe SearchController do
     end
 
     def do_get format=nil
-      if format
-        get :index, :search_term => @constituency_name_short, :format => format
-      else
-        get :index, :search_term => @constituency_name_short
-      end
+      get :index, :search_term => @constituency_name_short, :format => format
     end
 
     it 'should store "<p>Sorry: we need more than two letters to search" in flash memory</p>' do
@@ -228,4 +209,108 @@ describe SearchController do
     end
   end
 
+  describe 'when asked to show 2 or more constituencies' do
+    before do
+      @matching = [@constituency, @other_constituency]
+    end
+    
+    describe 'and there are constituency matches' do
+      before do
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matching
+      end
+      
+      def do_get format=nil
+        get :show, :search_term => @constituency_name_part, :format => format
+      end
+      
+      it 'should assign constituencies to view ordered by name' do
+        do_get
+        constituencies_ordered_by_name = [@other_constituency, @constituency]
+        assigns[:constituencies].should == constituencies_ordered_by_name
+      end
+      
+      it 'should assign search term to view' do
+        do_get
+        assigns[:last_search_term].should == @constituency_name_part
+      end
+      it 'should return xml if the requested format is xml' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+      end
+      it 'should return text if the requested format is text' do
+        @other_constituency.should_receive(:to_text).and_return('text')
+        @constituency.should_receive(:to_text).and_return('text')
+        do_get 'text'
+        response.content_type.should == "text/plain"
+      end
+      it 'should return yaml if the requested format is yaml' do
+        @other_constituency.should_receive(:to_text).and_return('text')
+        @constituency.should_receive(:to_text).and_return('text')
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+      end
+      it 'should return csv if the requested format is csv' do
+        @other_constituency.should_receive(:to_csv_value).and_return('text')
+        @constituency.should_receive(:to_csv_value).and_return('text')
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+      end
+      it 'should return json if the requested format is json' do
+        @other_constituency.should_receive(:to_json).and_return('text')
+        @constituency.should_receive(:to_json).and_return('text')
+        do_get 'json'
+        response.content_type.should == "application/json"
+      end
+    end
+    
+    describe 'and there are member matches' do
+      before do
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@member_name_part).and_return @matching
+      end
+            
+      def do_get format=nil
+        get :show, :search_term => @member_name_part, :format => format
+      end
+
+      it 'should assign constituencies to view ordered by member_name' do
+        do_get
+        members_ordered_by_name = [@constituency, @other_constituency]
+        assigns[:members].should == members_ordered_by_name
+      end
+      
+      it 'should assign search term to view' do
+        do_get
+        assigns[:last_search_term].should == @member_name_part
+      end
+      it 'should return xml if the requested format is xml' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+      end
+      it 'should return text if the requested format is text' do
+        @other_constituency.should_receive(:to_text).and_return('text')
+        @constituency.should_receive(:to_text).and_return('text')
+        do_get 'text'
+        response.content_type.should == "text/plain"
+      end
+      it 'should return yaml if the requested format is yaml' do
+        @other_constituency.should_receive(:to_text).and_return('text')
+        @constituency.should_receive(:to_text).and_return('text')
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+      end
+      it 'should return csv if the requested format is csv' do
+        @other_constituency.should_receive(:to_csv_value).and_return('text')
+        @constituency.should_receive(:to_csv_value).and_return('text')
+        do_get 'csv'
+        response.content_type.should == "text/csv"
+      end
+      it 'should return json if the requested format is json' do
+        @other_constituency.should_receive(:to_json).and_return('text')
+        @constituency.should_receive(:to_json).and_return('text')
+        do_get 'json'
+        response.content_type.should == "application/json"
+      end
+    end
+
+  end
 end
