@@ -12,10 +12,12 @@ describe ApiController do
     @constituency_name_part = 'Islington'
     @constituency_name_short = 'sl'
     @constituency_name = 'Islington South'
+    @member_name = 'Mickey Muse'
     @friendly_constituency_id = 'islington-south'
     
     @constituency = mock_model(Constituency, :name => @constituency_name,
         :id => @constituency_id,
+        :member_name => @member_name,
         :friendly_id => @friendly_constituency_id,
         :has_better_id? => false)
 
@@ -405,6 +407,160 @@ describe ApiController do
     describe "when not passed a valid parameter" do
       def do_get format=nil
         get :postcodes, :format => format
+      end
+      
+      it 'should store an error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
+      end
+    end
+  end
+  
+  describe "the constituencies api" do
+    describe "when passed a valid ONS id" do
+      before do
+        Constituency.stub!(:find).and_return @constituency
+        Constituency.should_receive(:find).and_return @constituency
+      end
+    
+      def do_get format=nil
+        get :constituencies, :ons_id => '123', :format => format
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+    
+      it 'should assign constituency to view' do
+        do_get
+        assigns[:constituency].should == @constituency
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
+      end
+    end
+  
+    describe "when passed an invalid ONS id" do
+      before do
+        Constituency.stub!(:find).and_return nil
+        Constituency.should_receive(:find).and_return nil
+      end
+      
+      def do_get format=nil
+        get :constituencies, :ons_id => 9999, :format => format
+      end
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+      
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with an ONS id of 9999.</p>"
+      end
+    end
+    
+    describe "when passed a valid member name" do
+      before do
+        Constituency.stub!(:find).and_return @constituency
+        Constituency.should_receive(:find).and_return @constituency
+      end
+    
+      def do_get format=nil
+        get :constituencies, :member => @member_name, :format => format
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+    
+      it 'should assign constituency to view' do
+        do_get
+        assigns[:constituency].should == @constituency
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
+      end
+    end
+  
+    describe "when passed an invalid member name" do
+      before do
+        Constituency.stub!(:find).and_return nil
+        Constituency.should_receive(:find).and_return nil
+      end
+      
+      def do_get format=nil
+        get :constituencies, :member => 'invalid', :format => format
+      end
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+      
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with a member name of invalid.</p>"
+      end
+    end
+    
+    describe "when passed a valid constituency name" do
+      before do
+        Constituency.stub!(:find).and_return @constituency
+        Constituency.should_receive(:find).and_return @constituency
+      end
+
+      def do_get format=nil
+        get :constituencies, :constituency => @constituency_name, :format => format
+      end
+
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+
+      it 'should assign constituency to view' do
+        do_get
+        assigns[:constituency].should == @constituency
+      end
+
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
+      end
+    end
+
+    describe "when passed an invalid constituency name" do
+      before do
+        Constituency.stub!(:find).and_return nil
+        Constituency.should_receive(:find).and_return nil
+      end
+
+      def do_get format=nil
+        get :constituencies, :constituency => 'invalid', :format => format
+      end
+
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+
+      it 'should store the error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with a constituency name of invalid.</p>"
+      end
+    end
+    
+    describe "when not passed a valid parameter" do
+      def do_get format=nil
+        get :constituencies, :format => format
       end
       
       it 'should store an error message in flash memory' do

@@ -71,6 +71,43 @@ class ApiController < ApplicationController
     end
   end
   
+  def constituencies
+    member_name = params[:member]
+    constituency_name = params[:constituency]
+    ons_id = params[:ons_id]
+    search_format = params[:format]
+
+    if ons_id
+      constituency = Constituency.find(:first, :conditions => "ons_id = #{ons_id}")
+      if constituency 
+        show_constituency(constituency, search_format)
+      else
+        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with an ONS id of #{ons_id}.</p>"
+        show_error(search_format)
+      end
+    elsif member_name
+      constituency = Constituency.find(:first, :conditions => "member_name = '#{member_name}'")
+      if constituency 
+        show_constituency(constituency, search_format)
+      else
+        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with a member name of #{member_name}.</p>"
+        show_error(search_format)
+      end
+    elsif constituency_name
+      constituency = Constituency.find(:first, :conditions => "name = '#{constituency_name}'")
+      if constituency 
+        show_constituency(constituency, search_format)
+      else
+        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with a constituency name of #{constituency_name}.</p>"
+        show_error(search_format)
+      end
+    else
+      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      show_error(search_format)
+    end
+  end
+  
+  
   private
   
     def show_postcode postcode, format
