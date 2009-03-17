@@ -9,8 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090303135704) do
-
+ActiveRecord::Schema.define(:version => 20090312170345) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -26,17 +25,13 @@ ActiveRecord::Schema.define(:version => 20090303135704) do
 
   add_index "constituencies", ["ons_id"], :name => "index_constituencies_on_ons_id"
 
-  create_table "constituency_lists", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "emails", :force => true do |t|
+    t.string   "from"
+    t.string   "to"
+    t.integer  "last_send_attempt", :default => 0
+    t.text     "mail"
+    t.datetime "created_on"
   end
-
-  create_table "members", :force => true do |t|
-    t.string  "name"
-    t.integer "constituency_id"
-  end
-
-  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
 
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"
