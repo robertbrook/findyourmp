@@ -141,11 +141,6 @@ describe Message do
         @message.sent_at.month.should == @now.month
         @message.sent_at.day.should == @now.day
       end
-      it 'should leave attempted_send as false' do
-        @message.attempted_send.should be_false
-        @message.deliver
-        @message.attempted_send.should be_false
-      end
       it 'should save message state after sending' do
         @message.should_receive(:save!)
         @message.deliver
@@ -164,11 +159,6 @@ describe Message do
         @message.sent_at.should be_nil
         @message.deliver
         @message.sent_at.should be_nil
-      end
-      it 'should set attempted_send to true' do
-        @message.attempted_send.should be_false
-        @message.deliver
-        @message.attempted_send.should be_true
       end
       it 'should save message state after sending' do
         @message.should_receive(:save!)
@@ -210,24 +200,6 @@ describe Message do
     it 'should count sent correctly' do
       @message.deliver
       Message.count.should == 1
-      Message.attempted_send.count.should == 1
-    end
-    it 'should count sent by month correctly' do
-      @message.deliver
-      Message.attempted_send_by_month.should == [[Date.today.at_beginning_of_month, [@message] ]]
-    end
-  end
-
-  describe 'when asked for count of attempted send messages' do
-    it 'should count attempted send messages and return result' do
-      Message.attempted_send.count.should == 0
-    end
-    describe 'by month' do
-      it 'should call count_by_month for attempted_sends' do
-        results = mock('hash')
-        Message.should_receive(:count_by_month).with(:attempted_send, true).and_return results
-        Message.attempted_send_by_month.should == results
-      end
     end
   end
 

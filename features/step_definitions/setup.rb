@@ -17,13 +17,13 @@ Before do
   Given 'there is no MP in constituency "Glenrothes"'
 
   Given 'there is a postcode "GY1 1AB" with no constituency'
-  
+
   Given 'there is a postcode "BT35 8DL" in constituency "Newry & Armagh", ons id "711"'
   Given 'there is an MP "Conor Murphy" in constituency "Newry & Armagh"'
-  
+
   Given 'there is a postcode "BT35 6QY" in constituency "Upper Bann", ons id "717"'
   Given 'there is an MP "David Simpson" in constituency "Upper Bann"'
-  
+
   Given 'there is a postcode district "BT35" that links to constituencies "upper-bann" and "newry-armagh"'
 
   if user = User.find_by_login('admin')
@@ -35,7 +35,7 @@ Before do
     user = User.new(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :email=>'admin@parliament.uk', :admin=>true)
     user.save!
   end
-  
+
   unless User.find_by_login('editor')
     user = User.new(:login => 'editor', :password => 'editor', :password_confirmation => 'editor', :email=>'editor@parliament.uk', :admin=>false)
     user.save!
@@ -52,10 +52,12 @@ Before do
       :subject => 'test'
   })
   message.save!
-  message.mailer_error = "535 5.7.8 Error: authentication failed: authentication failure" 
-  message.attempted_send = true
+  message.mailer_error = "535 5.7.8 Error: authentication failed: authentication failure"
   message.created_at = Date.new(2009,1,1)
   message.save!
+
+  email = Email.create({:created_on=>message.created_at})
+  email.save
 
   message = Message.new({
       :message => 'test',
@@ -70,6 +72,8 @@ Before do
   message.sent = true
   message.created_at = Date.new(2009,2,1)
   message.save!
+  email = Email.new({:created_on=>message.created_at})
+  email.save
 end
 
 Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|

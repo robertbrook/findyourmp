@@ -14,7 +14,6 @@ class Message < ActiveRecord::Base
   validates_presence_of :recipient
   validates_presence_of :constituency_name
   validates_inclusion_of :sent, :in => [true, false]
-  validates_inclusion_of :attempted_send, :in => [true, false]
 
   validate :email_valid
   validate :postcode_valid
@@ -22,10 +21,9 @@ class Message < ActiveRecord::Base
 
   named_scope :sent, :conditions => {:sent => true}
   named_scope :sent_in_month, lambda { |date| {:conditions => ["sent = 1 AND MONTH(created_at) = ? AND YEAR(created_at) = ?" , date.month, date.year]} }
-  named_scope :attempted_send, :conditions => {:attempted_send => true}
 
   class << self
-    
+
     def sent_by_constituency date
       messages = sent_in_month(date)
       sent = ActiveSupport::OrderedHash.new
@@ -35,45 +33,19 @@ class Message < ActiveRecord::Base
       end
       sent
     end
-    
+
     def sent_by_month
       count_by_month(:sent, false)
     end
-    def attempted_send_by_month
-      count_by_month(:attempted_send, true)
-    end
-    protected
-      def count_by_month type, include_messages
-        first_month = send(type).minimum(:created_at).at_beginning_of_month
-        last_month = send(type).maximum(:created_at).at_beginning_of_month
-        months = [first_month]
-        next_month = first_month.next_month
-        while (next_month <= last_month)
-          months << next_month
-          next_month = next_month.next_month
-        end
-        count_by_month = ActiveSupport::OrderedHash.new
-        months.each do |month|
-          conditions = "MONTH(created_at) = #{month.month} AND YEAR(created_at) = #{month.year}"
-          if include_messages
-            count_by_month[month] = send(type, :conditions => conditions)
-          else
-            count_by_month[month] = send(type).count(:conditions => conditions)
-          end
-        end
-        count_by_month
-      end
   end
 
   def deliver
     begin
       MessageMailer.deliver_sent(self)
       MessageMailer.deliver_confirm(self)
-      self.attempted_send = 0
       self.sent = true
       self.sent_at = Time.now.utc
     rescue Exception => e
-      self.attempted_send = 1
       self.mailer_error = e.message + "\n" + e.backtrace.join("\n")
       logger.error e
     end
@@ -102,11 +74,10 @@ class Message < ActiveRecord::Base
     def populate_defaulted_fields
       self.recipient = constituency.member_name
       self.recipient_email = constituency.member_email
-      self.constituency_name = constituency.name      
+      self.constituency_name = constituency.name
       self.sent = 0
-      self.attempted_send = 0
     end
-    
+
     def populate_postcode_and_sender_is_constituent
       self.sender_is_constituent = 0
 

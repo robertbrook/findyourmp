@@ -5,7 +5,7 @@
 # since you don't have to restart the webserver when you make code changes.
 
 # to test ar_mailer email sending locally set: config.cache_classes = true
-config.cache_classes = false
+config.cache_classes = true
 
 # Log error messages when you accidentally call methods on nil.
 config.whiny_nils = true

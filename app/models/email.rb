@@ -1,11 +1,15 @@
 class Email < ActiveRecord::Base
-  self.skip_time_zone_conversion_for_attributes = []
 
-  def skip_time_zone_conversion_for_attributes
-    []
+  named_scope :waiting
+
+  class << self
+    def waiting_to_be_sent_count
+      count
+    end
+
+    def waiting_to_be_sent_by_month_count
+      count_by_month(:waiting, true, :created_on)
+    end
   end
 
-  def time_zone_aware_attributes
-    false
-  end
 end

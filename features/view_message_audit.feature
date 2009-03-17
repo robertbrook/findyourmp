@@ -8,17 +8,16 @@ Feature: View message audit
     And I am on the Front page
     When I follow "Admin home"
     Then I should see "Sent messages"
-    And I should see "Attempted to send messages"
+    And I should see "Messages waiting to be sent"
     And I should see "Edit your account settings"
     And I should not see "Add new user"
     And I should not see "Edit users"
 
   Scenario: Look at message audit errors
     Given I am on the Admin Home Page as an editing user
-    When I follow "Attempted to send messages"
+    When I follow "Messages waiting to be sent"
     Then I should see "January 2009"
     And I should see "1"
-    And I should see "535 5.7.8 Error: authentication failed: authentication failure"
 
   Scenario: Look at messages by constituency
     Given I am on the Admin Home Page as an editing user

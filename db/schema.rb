@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090312170345) do
+ActiveRecord::Schema.define(:version => 20090317150431) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -49,12 +49,10 @@ ActiveRecord::Schema.define(:version => 20090312170345) do
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
-    t.boolean  "attempted_send"
     t.string   "mailer_error"
     t.datetime "sent_at"
   end
 
-  add_index "messages", ["attempted_send"], :name => "index_messages_on_attempted_send"
   add_index "messages", ["sent"], :name => "index_messages_on_sent"
   add_index "messages", ["sent_at"], :name => "index_messages_on_sent_at"
 
