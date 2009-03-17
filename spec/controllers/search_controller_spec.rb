@@ -127,7 +127,7 @@ describe SearchController do
       end
     end
   end
-
+  
   describe "when asked to search for a term of 2 letters" do
     before do
       Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_short).and_return nil
@@ -312,5 +312,20 @@ describe SearchController do
       end
     end
 
+    describe 'and the search term is all lower case' do
+      before do 
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with('islington').and_return @matching
+      end
+
+      def do_get
+        get :show, :search_term => 'islington'
+      end
+
+      it 'should show list of matching constituencies' do
+        do_get
+        constituencies_ordered_by_name = [@other_constituency, @constituency]
+        assigns[:constituencies].should == constituencies_ordered_by_name
+      end
+    end
   end
 end

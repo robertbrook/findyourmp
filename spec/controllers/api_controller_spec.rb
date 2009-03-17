@@ -149,6 +149,66 @@ describe ApiController do
         response.content_type.should == "application/x-yaml"
       end
     end
+    
+    describe "when passed a search term which matches 2 constituencies and is all lower case" do
+      before do
+        @matches = [ @constituency, @other_constituency ]
+        Postcode.stub!(:find_postcode_by_code)
+        Postcode.should_receive(:find_postcode_by_code).with('islington').and_return nil
+        Constituency.stub!(:find_all_name_or_member_name_matches)
+        Constituency.should_receive(:find_all_name_or_member_name_matches).with('islington').and_return @matches
+        @constituency.should_receive(:member_name).and_return('asdf')
+        @other_constituency.should_receive(:member_name).and_return('qweq')
+      end
+    
+      def do_get format=nil
+        get :search, :search_term => 'islington', :format => format
+      end
+    
+      it 'should assign constituency to view' do  
+        do_get
+        assigns[:constituencies].should == @matches
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+        response.content_type.should == "text/html"
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == "application/xml"
+      end
+    
+      it 'should return yaml when passed format=yaml' do
+        @constituency.should_receive(:to_text).and_return "text"
+        @other_constituency.should_receive(:to_text).and_return "other text"
+        do_get 'yaml'
+        response.content_type.should == "application/x-yaml"
+      end
+    end
+    
+    describe "when passed a search term which matches a postcode district" do
+      before do
+        @matches = [ @postcode_record ]
+        PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return(@matches)
+      end
+    
+      def do_get format=nil
+        get :search, :search_term => @postcode_district, :format => format
+      end
+    
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+    
+      it 'should return xml when passed format=xml' do
+        do_get 'xml'
+        response.content_type.should == 'application/xml'
+      end
+    end
 
     describe "when passed a search term which returns no results" do
       before do
@@ -339,6 +399,17 @@ describe ApiController do
       it 'should store the error message in flash memory' do
         do_get
         flash[:not_found].should == "<p>Sorry: we couldn't find a postcode when we search for <code>invalid</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+      end
+    end
+    
+    describe "when not passed a valid parameter" do
+      def do_get format=nil
+        get :postcodes, :format => format
+      end
+      
+      it 'should store an error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
       end
     end
   end
