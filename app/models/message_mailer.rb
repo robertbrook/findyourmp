@@ -1,6 +1,6 @@
 class MessageMailer < ActionMailer::Base
 
-  # self.delivery_method = :activerecord
+  self.delivery_method = :activerecord
 
   class << self
 
