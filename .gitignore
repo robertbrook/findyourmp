@@ -11,7 +11,9 @@ doc
 data
 db/*.sqlite3*
 public/stylesheets/*.css
+public/constituencies
 public/postcodes
+public/search
 public/postcodes.bak
 db/development_structure.sql
 cucumber.yml

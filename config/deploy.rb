@@ -83,7 +83,7 @@ namespace :deploy do
     puts ""
     puts "*************************************"
     answer = ""
-    message = "Do you want to overwrite the data?\n\nIf yes, type: YES, OVERWRITE!!"
+    message = "Do you want to overwrite the data?\n\nIf yes, type: YES, OVERWRITE!!\n(To continue without overwriting, just hit return)\n"
     answer = Capistrano::CLI.ui.ask(message)
     if answer == "YES, OVERWRITE!!"
       set var, true
@@ -217,3 +217,13 @@ after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:uploa
 after 'deploy', 'deploy:check_site_setup'
 
 
+namespace :fymp do
+  namespace :cache do
+    set :remote_rake_cmd, "/usr/local/bin/rake"
+
+    desc "Expire page cache"
+    task :expire_pages do
+      run("export RAILS_ENV=production; cd #{deploy_to}/current; #{remote_rake_cmd} fymp:cache:expire_pages")
+    end
+  end
+end

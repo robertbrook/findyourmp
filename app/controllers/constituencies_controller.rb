@@ -3,7 +3,7 @@ class ConstituenciesController < ResourceController::Base
   caches_page :show
   cache_sweeper :constituency_sweeper, :only => [:create, :update, :destroy]
 
-  before_filter :respond_unauthorized_if_not_admin, :except => [:show, :show_list]
+  before_filter :respond_unauthorized_if_not_admin, :except => [:show]
 
   before_filter :ensure_current_constituency_url, :only => :show
 
@@ -49,34 +49,6 @@ class ConstituenciesController < ResourceController::Base
       format.text { render :text => @constituency.to_text }
       format.csv  { render :text => @constituency.to_csv }
       format.yaml { render :text => @constituency.to_output_yaml }
-    end
-  end
-
-  def show_list
-    id = params[:id]
-    flash.keep(:postcode)
-    @search_term = params[:search_term]
-    @last_search_term = @search_term
-
-    @constituencies = Constituency.find_all_by_id(id.split('+')).sort_by(&:name)
-    @members = Constituency.find_all_by_id(id.split('+'), :conditions => "member_name is not null").sort_by(&:member_name)
-
-    if @search_term[/[A-Z][a-z].*/]
-      @constituencies.delete_if { |element| !(element.name.include? @search_term) }
-      @members.delete_if { |element| !(element.member_name.include? @search_term) }
-    else
-      @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
-      @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
-    end
-    
-    respond_to do |format|
-      format.html { render :template => '/constituencies/show' }
-      format.xml  { render :template => '/constituencies/show' }
-      format.json { render :json => results_to_json(@constituencies, @members) }
-      format.js   { render :json => results_to_json(@constituencies, @members) }
-      format.text { render :text => results_to_text(@constituencies, @members) }
-      format.csv  { render :text => results_to_csv(@constituencies, @members) }
-      format.yaml { render :text => results_to_yaml(@constituencies, @members) }
     end
   end
 

@@ -11,15 +11,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :constituency_list
 
   map.resources :password_resets
-
+  
   map.root :controller => "postcodes"
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
-  map.connect '/search/:search_term.:format', :controller => "postcodes", :action => 'index'
-  map.connect '/search/:search_term', :controller => "postcodes", :action => 'index'
+  map.connect '/search/:search_term.:format', :controller => "search", :action => 'show'
+  map.connect '/search/:search_term', :controller => "search", :action => 'show'
+  map.search '/search', :controller => "search", :action => 'index'
 
-  map.connect '/constituencies/:id/:search_term.:format', :controller => "constituencies", :action => 'show_list'
-  map.connect '/constituencies/:id/:search_term', :controller => "constituencies", :action => 'show_list'
   map.connect '/constituencies/:id.:format', :controller => "constituencies", :action => 'show'
   map.connect '/constituencies/hide_members', :controller => "constituencies", :action => 'hide_members'
   map.connect '/constituencies/unhide_members', :controller => "constituencies", :action => 'unhide_members'
@@ -32,6 +31,7 @@ ActionController::Routing::Routes.draw do |map|
   map.api '/api', :controller => 'api', :action => 'index'
   map.connect 'api/search', :controller => 'api', :action => 'search'
   map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
+  map.connect 'api/constituencies', :controller => 'api', :action => 'constituencies'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

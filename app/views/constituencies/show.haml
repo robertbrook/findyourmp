@@ -15,3 +15,4 @@
   - if @members.size > 0
     %h4= pluralize(@members.size, 'Member')
     = render :partial => 'constituencies/member_match', :collection => @members
+  =render :partial => 'layouts/search_hints'
