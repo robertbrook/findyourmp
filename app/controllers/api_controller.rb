@@ -7,34 +7,39 @@ class ApiController < ApplicationController
     search_term = params[:search_term]
     search_format = params[:format]
     
-    postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
+    if search_term
+      postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
     
-    unless postcode_districts.empty?
-      show_postcode_districts(postcode_districts, search_format)
-    else
-      postcode = Postcode.find_postcode_by_code(search_term)
-    
-      if postcode
-        show_postcode(postcode, search_format)
+      unless postcode_districts.empty?
+        show_postcode_districts(postcode_districts, search_format)
       else
-        stripped_term = search_term.strip
-        if stripped_term.size > 2
-          constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
-          if constituencies.empty?
-            flash[:not_found] = "<p>Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        postcode = Postcode.find_postcode_by_code(search_term)
+    
+        if postcode
+          show_postcode(postcode, search_format)
+        else
+          stripped_term = search_term.strip
+          if stripped_term.size > 2
+            constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
+            if constituencies.empty?
+              flash[:not_found] = "<p>Sorry: we couldn't find a constituency when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+              flash[:last_search_term] = search_term
+              show_error(search_format)
+            elsif constituencies.size == 1
+              show_constituency(constituencies.first, search_format)
+            else
+              show_constituencies(constituencies, search_term, search_format)
+            end
+          else
+            flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
             flash[:last_search_term] = search_term
             show_error(search_format)
-          elsif constituencies.size == 1
-            show_constituency(constituencies.first, search_format)
-          else
-            show_constituencies(constituencies, search_term, search_format)
           end
-        else
-          flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
-          flash[:last_search_term] = search_term
-          show_error(search_format)
         end
       end
+    else
+      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      show_error(search_format)
     end
   end
   
@@ -51,7 +56,7 @@ class ApiController < ApplicationController
         flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{district}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
         show_error(search_format)
       end
-    else    
+    elsif code
       postcode = Postcode.find_postcode_by_code(code)
     
       if postcode
@@ -60,11 +65,11 @@ class ApiController < ApplicationController
         flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
         show_error(search_format)
       end
+    else
+      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      show_error(search_format)
     end
   end
-   
-  # def constituency
-  # end
   
   private
   
@@ -140,7 +145,7 @@ class ApiController < ApplicationController
       @error_message = flash[:not_found]
 
       respond_to do |format|
-        format.html { render :template => '/postcodes/index'}
+        format.html { render :template => '/api/index'}
         format.xml  { render :template => '/postcodes/error' }
         format.json { render :json => message_to_json("error", @error_message) }
         format.js   { render :json => message_to_json("error", @error_message) }

@@ -41,11 +41,7 @@ describe ApiController do
       end
     
       def do_get format=nil
-        if format
-          get :search, :search_term => @postcode_no_space, :format => format
-        else
-          get :search, :search_term => @postcode_no_space
-        end
+        get :search, :search_term => @postcode_no_space, :format => format
       end
     
       it 'should assign postcode to view' do  
@@ -89,11 +85,7 @@ describe ApiController do
       end
     
       def do_get format=nil
-        if format
-          get :search, :search_term => @constituency_name, :format => format
-        else
-          get :search, :search_term => @constituency_name
-        end
+        get :search, :search_term => @constituency_name, :format => format
       end
     
       it 'should assign constituency to view' do  
@@ -131,11 +123,7 @@ describe ApiController do
       end
     
       def do_get format=nil
-        if format
-          get :search, :search_term => @constituency_name_part, :format => format
-        else
-          get :search, :search_term => @constituency_name_part
-        end
+        get :search, :search_term => @constituency_name_part, :format => format
       end
     
       it 'should assign constituency to view' do  
@@ -171,11 +159,7 @@ describe ApiController do
       end
     
       def do_get format=nil
-        if format
-          get :search, :search_term => 'invalid', :format => format
-        else
-          get :search, :search_term => 'invalid'
-        end
+        get :search, :search_term => 'invalid', :format => format
       end
     
       it 'should not redirect' do
@@ -217,11 +201,7 @@ describe ApiController do
 
     describe "when passed a search term of 2 characters" do    
       def do_get format=nil
-        if format
-          get :search, :search_term => @constituency_name_short, :format => format
-        else
-          get :search, :search_term => @constituency_name_short
-        end
+        get :search, :search_term => @constituency_name_short, :format => format
       end
     
       it 'should not redirect' do
@@ -260,6 +240,17 @@ describe ApiController do
         flash[:last_search_term].should == @constituency_name_short
       end
     end
+    
+    describe "when not passed a search_term parameter" do
+      def do_get format=nil
+        get :search, :format => format
+      end
+      
+      it 'should store an error message in flash memory' do
+        do_get
+        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
+      end
+    end
   end
 
   describe "the postcodes api" do
@@ -270,11 +261,7 @@ describe ApiController do
       end
     
       def do_get format=nil
-        if format
-          get :postcodes, :code => @postcode_no_space, :format => format
-        else
-          get :postcodes, :code => @postcode_no_space
-        end
+        get :postcodes, :code => @postcode_no_space, :format => format
       end
     
       it 'should not redirect' do
