@@ -1,6 +1,6 @@
 #main_nav.homepage {
 	padding-bottom: 10px;
-	border-bottom: 1px solid #EDEDED;
+	border-bottom: 1px solid #cfcfcf;
 }
 
 #homepage_banner {
@@ -117,7 +117,7 @@
 	font-size: 0.8em;
 	height: 46px;
 	float: left;
-	border-right: 1px solid #EDEDED;
+	border-right: 1px solid #cfcfcf;
 }
 
 .home_tab_bar div a,
