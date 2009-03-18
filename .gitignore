@@ -10,6 +10,7 @@ config/mailer.yml*
 doc
 data
 db/*.sqlite3*
+public/stylesheets/screen.css
 public/constituencies
 public/postcodes
 public/search
