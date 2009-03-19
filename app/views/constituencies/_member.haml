@@ -10,7 +10,7 @@
     - if @constituency.member_email.blank?
       %p.text= "Sorry: we do not have an email address for #{h @constituency.member_name}."
     - else
-      %p= %Q|#{link_to("Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency))}.|
+      %p.text= %Q|#{link_to("Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency))}.|
   - else
     %p.text= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
 
