@@ -6,7 +6,7 @@
 %p.text
   = link_to "Sent messages: #{@sent_message_count}", url_for(:controller=>'admin',:action=>'sent')
 %p.text
-  = link_to "Attempted to send messages: #{@attempted_send_message_count}", url_for(:controller=>'admin',:action=>'attempted_send')
+  = link_to "Messages waiting to be sent: #{@waiting_to_be_sent_count}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
 
 %h3 Data maintenance
 %p.text

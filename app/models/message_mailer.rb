@@ -1,11 +1,13 @@
 class MessageMailer < ActionMailer::Base
 
+  self.delivery_method = :activerecord
+
   class << self
-    
+
     def noreply_email
       ActionMailer::Base.smtp_settings[:user_name]
     end
-    
+
     def parse_email text
       email = TMail::Address.parse(text)
       domain = email.domain

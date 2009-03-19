@@ -4,8 +4,7 @@ class AdminController < ApplicationController
 
   def index
     @sent_message_count = Message.sent.count
-    @attempted_send_message_count = Message.attempted_send.count
-    @messages = [] # Message.all
+    @waiting_to_be_sent_count = Email.waiting_to_be_sent_count
   end
 
   def sent_by_month
@@ -19,5 +18,9 @@ class AdminController < ApplicationController
 
   def attempted_send
     @attempted_send_by_month_count = Message.attempted_send_by_month
+  end
+
+  def waiting_to_be_sent
+    @waiting_to_be_sent_by_month_count = Email.waiting_to_be_sent_by_month_count
   end
 end

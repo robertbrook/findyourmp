@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# This file is auto-generated from the current state of the database. Instead of editing this file,
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090309141810) do
+ActiveRecord::Schema.define(:version => 20090317150431) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -33,13 +33,6 @@ ActiveRecord::Schema.define(:version => 20090309141810) do
     t.datetime "created_on"
   end
 
-  create_table "members", :force => true do |t|
-    t.string  "name"
-    t.integer "constituency_id"
-  end
-
-  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
-
   create_table "messages", :force => true do |t|
     t.string   "constituency_id"
     t.string   "sender_email"
@@ -56,12 +49,10 @@ ActiveRecord::Schema.define(:version => 20090309141810) do
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
-    t.boolean  "attempted_send"
     t.string   "mailer_error"
     t.datetime "sent_at"
   end
 
-  add_index "messages", ["attempted_send"], :name => "index_messages_on_attempted_send"
   add_index "messages", ["sent"], :name => "index_messages_on_sent"
   add_index "messages", ["sent_at"], :name => "index_messages_on_sent_at"
 
