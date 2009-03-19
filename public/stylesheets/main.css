@@ -226,7 +226,7 @@ img {
 	padding: 0.4em 0;
 	margin: 0;
 	border: 0;
-	border-bottom: 1px dotted #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
 }
 
 #leftnav ul li.selected {
