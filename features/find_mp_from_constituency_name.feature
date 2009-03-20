@@ -21,7 +21,7 @@ Feature: Find MP from constituency name
     And I should see html "<strong class="highlight">Aberdeen</strong> South"
     And I should see "Frank Doran"
     And I should see "Miss Anne Begg"
-    When I follow "<strong class="highlight">Aberdeen</strong> South"
+    When I follow "Aberdeen South"
     Then I should see "Aberdeen South"
     And I should see "Miss Anne Begg"
 

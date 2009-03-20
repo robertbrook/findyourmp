@@ -7,7 +7,7 @@ Feature: Find MP from partial constituency name
     Given I am logged in as an admin user
     And I am on the Front page
     When I search for "North"
-    Then I should not see "Aberdeen <strong class="highlight">North</strong>"
+    Then I should not see "Aberdeen North"
     And I should not see "Aberdeen South"
     And I should see "Aberdeen North"
     And I should see "Frank Doran"

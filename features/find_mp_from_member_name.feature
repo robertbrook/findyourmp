@@ -21,6 +21,6 @@ Feature: Find MP from MP name
     And I should see "Aberdeen North"
     And I should see html "<strong class="highlight">Frank</strong> Roy"
     And I should see "Motherwell and Wishaw"
-    When I follow html "<strong class="highlight">Frank</strong> Doran"
+    When I follow "Frank Doran"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
