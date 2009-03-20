@@ -24,8 +24,8 @@ Feature: View message audit
 
   Scenario Outline: Create user with compulsory field missing and see detailed warning
     Given I am on a new User page
-    When I save a user without <field_missing>
-    Then I should see <warning_message>
+    When I save a user without "<field_missing>"
+    Then I should see "<warning_message>"
 
   Examples:
     | field_missing         | warning_message                       |

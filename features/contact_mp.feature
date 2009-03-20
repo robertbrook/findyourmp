@@ -23,8 +23,8 @@ Feature: Contact MP
 
   Scenario Outline: Preview message with compulsory field missing and see detailed warning
     Given I am on a new Message page
-    When I preview message without <field_missing>
-    Then I should see <warning_message>
+    When I preview message without "<field_missing>"
+    Then I should see "<warning_message>"
 
   Examples:
     | field_missing      | warning_message                 |
