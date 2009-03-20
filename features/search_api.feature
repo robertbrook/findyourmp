@@ -20,13 +20,13 @@ Feature: Search API
 
   Scenario: Call search API with valid postcode, requesting JSON
     Given I call the search API searching for "AB101AA" and requesting "json"
-    Then I should see "\{\"postcode\": \{\"code\": \"AB10 1AA\", \"constituency_name\": \"Aberdeen North\", \"member_name\": \"Frank Doran\", \"uri\": "
+    Then I should see json {"postcode": {"code": "AB10 1AA", "constituency_name": "Aberdeen North", "member_name": "Frank Doran", "uri":
     And I should see "/postcodes/AB101AA.json"
 
   Scenario: Call search API with valid postcode, requesting CSV
     Given I call the search API searching for "AB101AA" and requesting "csv"
     Then I should see "postcode,constituency_name,member_name,uri"
-    And I should see "\"AB10 1AA\",\"Aberdeen North\",\"Frank Doran\""
+    And I should see csv "AB10 1AA","Aberdeen North","Frank Doran"
     And I should see "/postcodes/AB101AA.csv"
 
   Scenario: Call search API with valid constituency name, requesting XML
@@ -41,14 +41,14 @@ Feature: Search API
 
   Scenario: Call search API with valid constituency name, requesting JSON
     Given I call the search API searching for "Aberdeen South" and requesting "json"
-    Then I should see "\{\"constituency\": \{"
-    And I should see "\"constituency_name\": \"Aberdeen South\""
-    And I should see "\"member_name\": \"Miss Anne Begg\""
-    And I should see "\"member_party\": \"\""
-    And I should see "\"member_biography_url\": \"\""
-    And I should see "\"member_website\": \"\""
-    And I should see "\"uri\": "
-    And I should see "/constituencies/aberdeen-south.json"
+    Then I should see json {"constituency": {
+    And I should see json "constituency_name": "Aberdeen South"
+    And I should see json "member_name": "Miss Anne Begg"
+    And I should see json "member_party": ""
+    And I should see json "member_biography_url": ""
+    And I should see json "member_website": ""
+    And I should see json "uri":
+    And I should see json /constituencies/aberdeen-south.json
 
   Scenario: Call search API with valid constituency name (but no MP), requesting XML
     Given I call the search API searching for "Glenrothes" and requesting "xml"

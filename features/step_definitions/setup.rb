@@ -82,6 +82,14 @@ When /^I clear "(.*)"$/ do |field|
   fills_in(field, :with => "")
 end
 
+Then /^I should see json (.+)$/ do |json|
+  response.body.should include(json)
+end
+
+Then /^I should see csv (.+)$/ do |csv|
+  response.body.should include(csv)
+end
+
 Then /^I should see xml "(.+)"$/ do |xml|
   response.body.should include(xml)
 end
