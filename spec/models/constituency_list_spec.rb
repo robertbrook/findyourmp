@@ -37,7 +37,7 @@ describe ConstituencyList do
       constituencies[@line_2].should == [@constituency_2, @constituency_3]
       constituencies[@line_3].should == nil
 
-      constituencies.first.should == [@line_3, nil]
+      constituencies.keys.first.should == @line_3
     end
 
     it 'should return unchanged constituencies correctly' do

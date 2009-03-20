@@ -18,7 +18,7 @@ Feature: Find MP from postcode
   Scenario: Enter bogus postcode
     Given I am on the Front page
     When I search for "N1 XXX"
-    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>N1 XXX</code>."
+    Then I should see html "Sorry: we couldn't find a constituency when we searched for <code>N1 XXX</code>."
 
   Scenario: Enter Guernsey postcode
     Given I am on the Front page

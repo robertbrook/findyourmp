@@ -20,15 +20,16 @@ Feature: View message audit
     Then I should see "Password confirmation"
     Then I should see "Email"
     Then I should see "Admin privileges"
-    Then I should see "Create user"
+    Then I should see "Create user" button
 
-  Scenario: Create user with compulsory field missing and see detailed warning
+  Scenario Outline: Create user with compulsory field missing and see detailed warning
     Given I am on a new User page
-    When I save a user without "Email"
-    Then I should see "Email is too short"
+    When I save a user without <field_missing>
+    Then I should see <warning_message>
 
-  More Examples:
+  Examples:
     | field_missing         | warning_message                       |
+    | Email                 | Email is too short                    |
     | Login                 | Login is too short                    |
     | Password              | Password is too short                 |
     | Password confirmation | Password doesn't match confirmation   |

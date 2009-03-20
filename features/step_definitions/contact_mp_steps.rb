@@ -6,7 +6,6 @@ Then /^I should see Message Form$/ do
   And 'I should see "Your postcode"'
   And 'I should see "Your subject"'
   And 'I should see "Your message"'
-  And 'I should see "Preview your message"'
   And 'I should see "Dear Frank Doran,"'
   And 'I should see "Yours sincerely,"'
 end
@@ -26,7 +25,7 @@ Given /^the MP in constituency "(.*)" is not contactable via email$/ do |constit
 end
 
 Given /I am on my Postcode page/ do
-  visits "/postcodes/AB101AA"
+  visit "/postcodes/AB101AA"
 end
 
 Given /I am on my Constituency page/ do

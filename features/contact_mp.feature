@@ -19,18 +19,19 @@ Feature: Contact MP
     Given I am on a new Message page
     When I preview message without "Your email address"
     And I should see "1 error prohibited this message from being previewed"
-    And I should see "Preview your message"
+    And I should see "Preview your message" button
 
-  Scenario: Preview message with compulsory field missing and see detailed warning
+  Scenario Outline: Preview message with compulsory field missing and see detailed warning
     Given I am on a new Message page
-    When I preview message without "Your email address"
-    Then I should see "Please enter your email address"
+    When I preview message without <field_missing>
+    Then I should see <warning_message>
 
-  More Examples:
-    | field_missing      | warning_message         |
-    | Your full name     | Please enter your full name |
-    | Your subject       | Please enter your subject   |
-    | Your message       | Please enter your message   |
+  Examples:
+    | field_missing      | warning_message                 |
+    | Your email address | Please enter your email address |
+    | Your full name     | Please enter your full name     |
+    | Your subject       | Please enter your subject       |
+    | Your message       | Please enter your message       |
 
   Scenario: Preview message with invalid email and see detailed warning
     Given I am on a new Message page
@@ -53,16 +54,16 @@ Feature: Contact MP
   Scenario: Preview message
     Given I am on a new Message page
     When I preview message
-    Then I should see "Re-edit your message"
-    And I should see "Send message"
+    Then I should see "Re-edit your message" button
+    And I should see "Send message" button
 
   Scenario: Re-edit message
     Given I am on a preview Message page
     When I re-edit message
-    Then I should see "Preview your message"
+    Then I should see "Preview your message" button
     When I preview message
-    Then I should see "Re-edit your message"
-    And I should see "Send message"
+    Then I should see "Re-edit your message" button
+    And I should see "Send message" button
 
   Scenario: Send message
     Given I am on a preview Message page

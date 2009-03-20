@@ -5,17 +5,17 @@ Feature: Postcodes API
 
   Scenario: Call postcodes API with valid postcode, requesting XML
     Given I call the postcodes API with "AB101AA", requesting "xml"
-    Then I should see "<postcode>"
-    And I should see "<code>AB10 1AA</code>"
-    And I should see "<constituency-name>Aberdeen North</constituency-name>"
-    And I should see "<member>Frank Doran</member>"
-    And I should see "/postcodes/AB101AA.xml</uri>"
+    Then I should see xml "<postcode>"
+    And I should see xml "<code>AB10 1AA</code>"
+    And I should see xml "<constituency-name>Aberdeen North</constituency-name>"
+    And I should see xml "<member>Frank Doran</member>"
+    And I should see xml "/postcodes/AB101AA.xml</uri>"
 
   Scenario: Call postcodes API with valid postcode district, requesting XML
     Given I call the postcodes API with district "BT35", requesting "xml"
-    Then I should see "<results>"
-    And I should see "<constituency-matches>"
-    And I should see "<constituency-name>Upper Bann</constituency-name>"
-    And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"
-    And I should see "/constituencies/upper-bann.xml</uri>"
-    And I should see "/constituencies/newry-armagh.xml</uri>"
+    Then I should see xml "<results>"
+    And I should see xml "<constituency-matches>"
+    And I should see xml "<constituency-name>Upper Bann</constituency-name>"
+    And I should see xml "<constituency-name>Newry &amp; Armagh</constituency-name>"
+    And I should see xml "/constituencies/upper-bann.xml</uri>"
+    And I should see xml "/constituencies/newry-armagh.xml</uri>"

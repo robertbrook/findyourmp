@@ -5,11 +5,11 @@ Feature: Search API
 
   Scenario: Call search API with valid postcode, requesting XML
     Given I call the search API searching for "AB101AA" and requesting "xml"
-    Then I should see "<postcode>"
-    And I should see "<code>AB10 1AA</code>"
-    And I should see "<constituency-name>Aberdeen North</constituency-name>"
-    And I should see "<member>Frank Doran</member>"
-    And I should see "/postcodes/AB101AA.xml</uri>"
+    Then I should see xml "<postcode>"
+    And I should see xml "<code>AB10 1AA</code>"
+    And I should see xml "<constituency-name>Aberdeen North</constituency-name>"
+    And I should see xml "<member>Frank Doran</member>"
+    And I should see xml "/postcodes/AB101AA.xml</uri>"
 
   Scenario: Call search API with valid postcode, requesting plain text
     Given I call the search API searching for "AB101AA" and requesting "text"
@@ -25,19 +25,19 @@ Feature: Search API
 
   Scenario: Call search API with valid postcode, requesting CSV
     Given I call the search API searching for "AB101AA" and requesting "csv"
-    Then I should see "postcode,constituency_name,member_name,uri\n"
+    Then I should see "postcode,constituency_name,member_name,uri"
     And I should see "\"AB10 1AA\",\"Aberdeen North\",\"Frank Doran\""
     And I should see "/postcodes/AB101AA.csv"
 
   Scenario: Call search API with valid constituency name, requesting XML
     Given I call the search API searching for "Aberdeen South" and requesting "xml"
-    Then I should see "<constituency>"
-    And I should see "<constituency-name>Aberdeen South</constituency-name>"
-    And I should see "<member-name>Miss Anne Begg</member-name>"
-    And I should see "<member-party></member-party>"
-    And I should see "<member-biography-url></member-biography-url>"
-    And I should see "<member-website></member-website>"
-    And I should see "/constituencies/aberdeen-south.xml</uri>"
+    Then I should see xml "<constituency>"
+    And I should see xml "<constituency-name>Aberdeen South</constituency-name>"
+    And I should see xml "<member-name>Miss Anne Begg</member-name>"
+    And I should see xml "<member-party></member-party>"
+    And I should see xml "<member-biography-url></member-biography-url>"
+    And I should see xml "<member-website></member-website>"
+    And I should see xml "/constituencies/aberdeen-south.xml</uri>"
 
   Scenario: Call search API with valid constituency name, requesting JSON
     Given I call the search API searching for "Aberdeen South" and requesting "json"
@@ -52,38 +52,38 @@ Feature: Search API
 
   Scenario: Call search API with valid constituency name (but no MP), requesting XML
     Given I call the search API searching for "Glenrothes" and requesting "xml"
-    Then I should see "<constituency>"
-    And I should see "<constituency-name>Glenrothes</constituency-name>"
-    And I should see "<member-name>No sitting member</member-name>"
-    And I should see "<member-party></member-party>"
-    And I should see "<member-biography-url></member-biography-url>"
-    And I should see "<member-website></member-website>"
-    And I should see "/constituencies/glenrothes.xml</uri>"
+    Then I should see xml "<constituency>"
+    And I should see xml "<constituency-name>Glenrothes</constituency-name>"
+    And I should see xml "<member-name>No sitting member</member-name>"
+    And I should see xml "<member-party></member-party>"
+    And I should see xml "<member-biography-url></member-biography-url>"
+    And I should see xml "<member-website></member-website>"
+    And I should see xml "/constituencies/glenrothes.xml</uri>"
 
   Scenario: Call search API with partial member name which will return more than 1 result line, requesting XML
     Given I call the search API searching for "Frank" and requesting "xml"
-    Then I should see "<results>"
-    And I should see "<constituency-name>Aberdeen North</constituency-name>"
-    And I should see "<member-name>Frank Doran</member-name>"
-    And I should see "<constituency-name>Motherwell and Wishaw</constituency-name>"
-    And I should see "<member-name>Mr Frank Roy</member-name>"
-    And I should see "/constituencies/motherwell-and-wishaw.xml</uri>"
-    And I should see "/constituencies/aberdeen-north.xml</uri>"
+    Then I should see xml "<results>"
+    And I should see xml "<constituency-name>Aberdeen North</constituency-name>"
+    And I should see xml "<member-name>Frank Doran</member-name>"
+    And I should see xml "<constituency-name>Motherwell and Wishaw</constituency-name>"
+    And I should see xml "<member-name>Mr Frank Roy</member-name>"
+    And I should see xml "/constituencies/motherwell-and-wishaw.xml</uri>"
+    And I should see xml "/constituencies/aberdeen-north.xml</uri>"
 
   Scenario: Call search API with an invalid search term, requesting XML
     Given I call the search API searching for "invalid" and requesting "xml"
-    Then I should see "<error>"
+    Then I should see xml "<error>"
 
   Scenario: Call search API to return a single record where the constituency name contains a "&" character, requesting XML
     Given I call the search API searching for "Newry" and requesting "xml"
-    Then I should see "<constituency>"
-    And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"
+    Then I should see xml "<constituency>"
+    And I should see xml "<constituency-name>Newry &amp; Armagh</constituency-name>"
 
   Scenario: Call search API with postcode district, requesting XML
     Given I call the search API searching for "BT35" and requesting "xml"
-    Then I should see "<results>"
-    And I should see "<constituency-matches>"
-    And I should see "<constituency-name>Upper Bann</constituency-name>"
-    And I should see "<constituency-name>Newry &amp; Armagh</constituency-name>"
-    And I should see "/constituencies/upper-bann.xml</uri>"
-    And I should see "/constituencies/newry-armagh.xml</uri>"
+    Then I should see xml "<results>"
+    And I should see xml "<constituency-matches>"
+    And I should see xml "<constituency-name>Upper Bann</constituency-name>"
+    And I should see xml "<constituency-name>Newry &amp; Armagh</constituency-name>"
+    And I should see xml "/constituencies/upper-bann.xml</uri>"
+    And I should see xml "/constituencies/newry-armagh.xml</uri>"

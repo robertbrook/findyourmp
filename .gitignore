@@ -1,5 +1,6 @@
 log/*.log
 tmp/**/*
+tmp
 test
 coverage
 config/database.yml
@@ -8,6 +9,7 @@ config/virtualserver
 config/mailer.yml*
 .DS_Store
 doc
+log
 data
 db/*.sqlite3*
 public/stylesheets/screen.css

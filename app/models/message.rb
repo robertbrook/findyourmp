@@ -35,7 +35,7 @@ class Message < ActiveRecord::Base
     end
 
     def sent_by_month
-      count_by_month(:sent, false)
+      count_by_month(:sent, false).to_a.sort{|a,b| a[0]<=>b[0]}
     end
   end
 

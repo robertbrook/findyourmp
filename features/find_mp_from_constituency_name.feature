@@ -12,13 +12,13 @@ Feature: Find MP from constituency name
   Scenario: Enter an invalid constituency name
     Given I am on the Front page
     When I search for "Tamaki"
-    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>Tamaki</code>."
+    Then I should see html "Sorry: we couldn't find a constituency when we searched for <code>Tamaki</code>."
 
   Scenario: Enter part of a valid constituency name that returns multiple results
     Given I am on the Front page
     When I search for "Aberdeen"
-    Then I should see "<strong class="highlight">Aberdeen</strong> North"
-    And I should see "<strong class="highlight">Aberdeen</strong> South"
+    Then I should see html "<strong class="highlight">Aberdeen</strong> North"
+    And I should see html "<strong class="highlight">Aberdeen</strong> South"
     And I should see "Frank Doran"
     And I should see "Miss Anne Begg"
     When I follow "<strong class="highlight">Aberdeen</strong> South"
@@ -43,24 +43,24 @@ Feature: Find MP from constituency name
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "a"
-    Then I should see "Sorry: we need more than two letters to search."
+    Then I should see "Sorry: we need more than two letters to search"
     And I should not see "berdeen North"
     And I should not see "berdeen South"
 
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "ab"
-    Then I should see "Sorry: we need more than two letters to search."
+    Then I should see "Sorry: we need more than two letters to search"
     And I should not see "erdeen North"
     And I should not see "erdeen South"
 
   Scenario: Enter a single letter search term
     Given I am on the Front page
     When I search for "abe"
-    Then I should see "<strong class=\"highlight\">Abe</strong>rdeen North</a>"
-    And I should see "<strong class=\"highlight\">Abe</strong>rdeen South</a>"
+    Then I should see html "<strong class="highlight">Abe</strong>rdeen North</a>"
+    And I should see html "<strong class="highlight">Abe</strong>rdeen South</a>"
 
   Scenario: Enter a constituency name that returns no results
     Given I am on the Front page
     When I search for "Isle of Wight"
-    Then I should see "Sorry: we couldn't find a constituency when we searched for <code>Isle of Wight</code>."
+    Then I should see html "Sorry: we couldn't find a constituency when we searched for <code>Isle of Wight</code>."

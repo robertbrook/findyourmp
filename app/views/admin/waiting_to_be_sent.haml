@@ -8,7 +8,7 @@
     %tr
       %th Month
       %th Email count
-    - @waiting_to_be_sent_by_month_count.reverse.each do |month, emails|
+    - @waiting_to_be_sent_by_month_count.each do |month, emails|
       %tr
         %td= month.to_s(:month_year)
         %td= emails.size

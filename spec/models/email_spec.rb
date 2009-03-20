@@ -7,8 +7,6 @@ describe Email do
       Email.should_receive(:count).and_return 2
       Email.waiting_to_be_sent_count.should == 2
     end
-
-
   end
 
 end

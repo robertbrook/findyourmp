@@ -156,6 +156,6 @@ class Constituency < ActiveRecord::Base
     end
 
     def object_url format=nil
-      url_for :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+      url_for :host=>'localhost', :port=>'3000', :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
     end
 end

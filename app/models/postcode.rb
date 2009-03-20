@@ -80,6 +80,6 @@ class Postcode < ActiveRecord::Base
     end
 
     def object_url format=nil
-      url_for :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
+      url_for :host=>'localhost', :port=>'3000', :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
     end
 end

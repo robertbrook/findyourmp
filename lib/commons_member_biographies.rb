@@ -3,7 +3,7 @@ require 'hpricot'
 require 'net/http'
 require 'open-uri'
 require 'uri'
-require 'morph'
+# require 'morph'
 
 class MemberBiography
   @@step_off = 1
@@ -51,7 +51,7 @@ end
 
 class CommonsMemberBiography < MemberBiography
 
-  include Morph
+  # include Morph
 
   class << self
 

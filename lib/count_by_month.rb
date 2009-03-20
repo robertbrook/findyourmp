@@ -27,7 +27,7 @@ module CountByMonth
           end
         end
       end
-      count_by_month
+      count_by_month.to_a.sort {|a,b|b[0]<=>a[0]}
     end
   end
 

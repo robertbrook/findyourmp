@@ -20,9 +20,9 @@ describe ConstituenciesController do
 
     @other_constituency_id = 802
     @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802, :member_name => 'A Biggens-South')
-    @constituency_without_mp = mock_model(Constituency, 
-        :name => 'Glenrothes', 
-        :id => 835,  
+    @constituency_without_mp = mock_model(Constituency,
+        :name => 'Glenrothes',
+        :id => 835,
         :friendly_id => 'glenrothes',
         :has_better_id? => false,
         :member_visible => false)
@@ -51,10 +51,10 @@ describe ConstituenciesController do
       params_from(:get, "/constituencies").should == {:controller => "constituencies", :action => "index"}
     end
     it 'should find show action' do
-      route_for(:controller => "constituencies", :action => "show", :id=>@constituency_id).should == "/constituencies/#{@constituency_id}"
+      route_for(:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}").should == "/constituencies/#{@constituency_id}"
       params_from(:get, "/constituencies/#{@constituency_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}"}
 
-      route_for(:controller => "constituencies", :action => "show", :id=>@friendly_id).should == "/constituencies/#{@friendly_id}"
+      route_for(:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}").should == "/constituencies/#{@friendly_id}"
       params_from(:get, "/constituencies/#{@friendly_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}"}
     end
     # it 'should find message action' do

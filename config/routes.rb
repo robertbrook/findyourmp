@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :constituency_list
 
   map.resources :password_resets
-  
+
   map.root :controller => "postcodes"
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
@@ -20,8 +20,8 @@ ActionController::Routing::Routes.draw do |map|
   map.search '/search', :controller => "search", :action => 'index'
 
   map.connect '/constituencies/:id.:format', :controller => "constituencies", :action => 'show'
-  map.connect '/constituencies/hide_members', :controller => "constituencies", :action => 'hide_members'
-  map.connect '/constituencies/unhide_members', :controller => "constituencies", :action => 'unhide_members'
+  map.connect '/constituencies/hide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'hide_members'
+  map.connect '/constituencies/unhide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'unhide_members'
 
   map.admin '/admin', :controller => 'admin', :action => 'index'
   map.connect '/admin/sent', :controller => 'admin', :action => 'sent'

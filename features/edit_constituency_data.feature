@@ -19,9 +19,9 @@ Feature: Edit constituency data
     And I fill in "Member website" with "http://it.is"
     And I press "Update"
     Then I should see "Aberdeen East"
-    And I should see "William Wallace \(SNP\)"
-    And I should see "http://the.re"
-    And I should see "http://it.is"
+    And I should see "William Wallace (SNP)"
+    And I should see link to "http://the.re"
+    And I should see link to "http://it.is"
     And I should see "Send a message to William Wallace"
 
   Scenario: Edit member email to be empty

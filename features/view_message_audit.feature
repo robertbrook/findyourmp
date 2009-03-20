@@ -17,11 +17,11 @@ Feature: View message audit
     Given I am on the Admin Home Page as an editing user
     When I follow "Messages waiting to be sent"
     Then I should see "January 2009"
-    And I should see "1"
+    And I should see "2"
 
   Scenario: Look at messages by constituency
     Given I am on the Admin Home Page as an editing user
     When I follow "Sent messages"
     Then I should see "February 2009"
-    And I should see "1"
+    And I should see "2"
 

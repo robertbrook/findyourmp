@@ -4,5 +4,5 @@ When /^I search for "(.*)"$/ do |postcode_code|
 end
 
 Given /I am on the Front page/ do
-  visits "/"
+  visit "/"
 end

@@ -43,7 +43,7 @@ class ConstituenciesController < ResourceController::Base
     @url_for_this = url_for(:only_path=>false)
     respond_to do |format|
       format.html { @constituency }
-      format.xml  { @constituency }
+      format.xml  { render :xml => @constituency }
       format.json { render :json => @constituency.to_json }
       format.js   { render :json => @constituency.to_json }
       format.text { render :text => @constituency.to_text }

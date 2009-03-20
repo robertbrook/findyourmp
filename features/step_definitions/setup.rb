@@ -42,6 +42,8 @@ Before do
   end
 
   Message.delete_all
+  Email.delete_all
+
   message = Message.new({
       :message => 'test',
       :sender_email => 'x@y.co.uk',
@@ -74,6 +76,26 @@ Before do
   message.save!
   email = Email.new({:created_on=>message.created_at})
   email.save
+end
+
+When /^I clear "(.*)"$/ do |field|
+  fills_in(field, :with => "")
+end
+
+Then /^I should see xml "(.+)"$/ do |xml|
+  response.body.should include(xml)
+end
+
+Then /^I should see html "(.+)"$/ do |html|
+  response.body.should include(html)
+end
+
+Then /^I should see link to "(.+)"$/ do |url|
+  response.body.should include(%Q|href="#{url}"|)
+end
+
+Then /^I should see "(.+)" button$/ do |button_text|
+  response.body.should include(%Q|value="#{button_text}"|)
 end
 
 Given /^there is a postcode "(.*)" with no constituency$/ do |postcode_code|
