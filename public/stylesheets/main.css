@@ -437,13 +437,13 @@ h2.section_head {
 h3.section_head {
 	font-size: 0.95em;
 	padding-bottom: 5px;
-	border-bottom: 1px dotted #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
 }
 
 h3.section_subhead {
 	font-size: 0.8em;
 	padding-bottom: 5px;
-	border-bottom: 1px dotted #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
 }
 
 h3.subheading {
