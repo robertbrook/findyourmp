@@ -19,9 +19,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/search/:search_term', :controller => "search", :action => 'show'
   map.search '/search', :controller => "search", :action => 'index'
 
-  map.connect '/constituencies/:id.:format', :controller => "constituencies", :action => 'show'
   map.connect '/constituencies/hide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'hide_members'
   map.connect '/constituencies/unhide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'unhide_members'
+  map.connect '/constituencies/:id.:format', :controller => "constituencies", :action => 'show'
 
   map.admin '/admin', :controller => 'admin', :action => 'index'
   map.connect '/admin/sent', :controller => 'admin', :action => 'sent'
