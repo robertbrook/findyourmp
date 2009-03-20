@@ -435,8 +435,7 @@ h2.section_head {
 }
 
 h3.section_head {
-	font-size: 1em;
-	font-weight: normal;
+	font-size: 0.95em;
 	padding-bottom: 5px;
 	border-bottom: 1px dotted #cfcfcf;
 }
