@@ -226,7 +226,7 @@ img {
 	padding: 0.4em 0;
 	margin: 0;
 	border: 0;
-	border-bottom: 1px solid #cfcfcf;
+	border-bottom: 1px dotted #cfcfcf;
 }
 
 #leftnav ul li.selected {
@@ -435,8 +435,7 @@ h2.section_head {
 }
 
 h3.section_head {
-	font-size: 1em;
-	font-weight: normal;
+	font-size: 0.95em;
 	padding-bottom: 5px;
 	border-bottom: 1px dotted #cfcfcf;
 }
