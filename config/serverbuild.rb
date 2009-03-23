@@ -84,6 +84,7 @@ namespace :serverbuild do
     # sudo "apt-get install libruby1.8=1.8.7.72-1 -y --force-yes"
     #     sudo "apt-get install ruby1.8-dev -y --force-yes"
     #     sudo "apt-get install rdoc -y --force-yes"
+    sudo "gem sources -a http://gems.github.com"
   end
 
   desc "Install Passenger"
