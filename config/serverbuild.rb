@@ -143,14 +143,7 @@ namespace :serverbuild do
     change_password 'cftuser', randompassword
   end
   
-  def create_user username, group, newpassword    
-    run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
-      if data =~ /not found/
-        sudo "mkdir /home/#{username}"
-        sudo "chown #{username} /home/#{username}"
-      end
-    end
-    
+  def create_user username, group, newpassword        
     begin
       sudo "grep '^#{group}:' /etc/group"
     rescue 
@@ -164,6 +157,13 @@ namespace :serverbuild do
     end
     
     change_password username, newpassword
+    
+    run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
+      if data =~ /not found/
+        sudo "mkdir /home/#{username}"
+        sudo "chown #{username} /home/#{username}"
+      end
+    end
   end
     
   def change_password username, newpassword    
