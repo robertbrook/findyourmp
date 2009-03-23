@@ -45,11 +45,16 @@ class Message < ActiveRecord::Base
       MessageMailer.deliver_confirm(self)
       self.sent = true
       self.sent_at = Time.now.utc
+      self.save!
+
+      summary = MessageSummary.new
+      summary.message = self
+      summary.save!
     rescue Exception => e
       self.mailer_error = e.message + "\n" + e.backtrace.join("\n")
       logger.error e
+      save!
     end
-    save!
     return self.sent
   end
 

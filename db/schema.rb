@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file,
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090317150431) do
+ActiveRecord::Schema.define(:version => 20090323122334) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(:version => 20090317150431) do
     t.integer  "last_send_attempt", :default => 0
     t.text     "mail"
     t.datetime "created_on"
+  end
+
+  create_table "message_summaries", :force => true do |t|
+    t.string   "recipient"
+    t.datetime "sent_at"
+    t.string   "constituency_name"
+    t.string   "recipient_email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "messages", :force => true do |t|

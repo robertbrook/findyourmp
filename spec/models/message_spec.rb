@@ -115,6 +115,11 @@ describe Message do
       @message = Message.new(@valid_attributes)
       @message.valid?.should be_true
       @message.stub!(:save!)
+
+      @summary = MessageSummary.new
+      MessageSummary.stub!(:new).and_return @summary
+      @summary.stub!(:save!)
+
       MessageMailer.stub!(:deliver_sent)
       MessageMailer.stub!(:deliver_confirm)
       @now = Time.now.utc
@@ -141,8 +146,13 @@ describe Message do
         @message.sent_at.month.should == @now.month
         @message.sent_at.day.should == @now.day
       end
-      it 'should save message state after sending' do
+      it 'should save message summary after sending' do
         @message.should_receive(:save!)
+        @summary.should_receive(:save!)
+        @message.deliver
+      end
+      it 'should not persist message contents' do
+        @summary.should_receive(:message=).with(@message)
         @message.deliver
       end
     end
@@ -179,12 +189,11 @@ describe Message do
     end
     it 'should count sent correctly' do
       @message.deliver
-      Message.count.should == 1
-      Message.sent.count.should == 1
+      MessageSummary.count.should == 1
     end
     it 'should count sent by month correctly' do
       @message.deliver
-      Message.sent_by_month.should == [[Date.today.at_beginning_of_month, 1]]
+      MessageSummary.sent_by_month.should == [[Date.today.at_beginning_of_month, 1]]
     end
   end
 
