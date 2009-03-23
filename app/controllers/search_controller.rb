@@ -23,7 +23,7 @@ class SearchController < ApplicationController
       @members.delete_if { |element| !(element.member_name.include? @search_term) }
     else
       @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
-      @members.delete_if { |element| !(element.member_name.downcase.include? @search_term.downcase) }
+      @members.delete_if { |element| (element.member_name.nil?) || !(element.member_name.downcase.include? @search_term.downcase) }
     end
     
     @constituencies = @constituencies.sort_by { |record| record.name }

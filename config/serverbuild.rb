@@ -1,6 +1,7 @@
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb')
   
 role :app, domain
+set :passenger_version, '2.1.2'
 
 namespace :serverbuild do
   set :user, deployuser
@@ -87,17 +88,17 @@ namespace :serverbuild do
 
   desc "Install Passenger"
   task :install_passenger, :roles => :app  do
-    sudo "gem install passenger"
+    sudo "gem install passenger #{passenger_version}"
 
-    sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}"
+    sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{passenger_version}"
     
-    run "cd /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}; sudo rake clean apache2"
+    run "cd /var/lib/gems/1.8/gems/passenger-#{passenger_version}; sudo rake clean apache2"
   end
   
   desc "Add Passenger stuff to apache config and restart apache"
   task :passenger_apache_conf, :roles => :app  do
     data = ""
-    gemversion = get_passenger_version
+    gemversion = passenger_version
     
     source = File.read("config/apache2.conf.example")
     
