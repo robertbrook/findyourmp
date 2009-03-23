@@ -180,6 +180,7 @@ namespace :deploy do
       end
     end
 
+    sudo "gem sources -a http://gems.github.com"
     sudo "gem install hpricot"
     sudo "gem install morph"
     sudo "gem install unicode"
