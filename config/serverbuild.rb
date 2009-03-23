@@ -93,7 +93,8 @@ namespace :serverbuild do
 
     sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{passenger_version}"
     
-    run "cd /var/lib/gems/1.8/gems/passenger-#{passenger_version}; sudo rake clean apache2"
+    #run "cd /var/lib/gems/1.8/gems/passenger-#{passenger_version}; sudo rake clean apache2"
+    sudo "/var/lib/gems/1.8/gems/passenger-#{passenger_version}/bin/passenger-install-apache2-module --auto"
   end
   
   desc "Add Passenger stuff to apache config and restart apache"
