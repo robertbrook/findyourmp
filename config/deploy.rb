@@ -180,11 +180,13 @@ namespace :deploy do
       end
     end
 
+    sudo "gem sources -a http://gems.github.com"
     sudo "gem install hpricot"
     sudo "gem install morph"
     sudo "gem install unicode"
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
+    sudo "gem install adzap-ar_mailer"
 
     rake_tasks
 

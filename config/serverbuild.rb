@@ -1,6 +1,7 @@
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb')
   
 role :app, domain
+set :passenger_version, '2.1.2'
 
 namespace :serverbuild do
   set :user, deployuser
@@ -87,17 +88,18 @@ namespace :serverbuild do
 
   desc "Install Passenger"
   task :install_passenger, :roles => :app  do
-    sudo "gem install passenger"
+    sudo "gem install --no-rdoc --no-ri passenger --version '#{passenger_version}'"
 
-    sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}"
+    sudo "chown -R #{passengeruser} /var/lib/gems/1.8/gems/passenger-#{passenger_version}"
     
-    run "cd /var/lib/gems/1.8/gems/passenger-#{get_passenger_version}; sudo rake clean apache2"
+    #run "cd /var/lib/gems/1.8/gems/passenger-#{passenger_version}; sudo rake clean apache2"
+    sudo "/var/lib/gems/1.8/gems/passenger-#{passenger_version}/bin/passenger-install-apache2-module --auto"
   end
   
   desc "Add Passenger stuff to apache config and restart apache"
   task :passenger_apache_conf, :roles => :app  do
     data = ""
-    gemversion = get_passenger_version
+    gemversion = passenger_version
     
     source = File.read("config/apache2.conf.example")
     
@@ -141,14 +143,7 @@ namespace :serverbuild do
     change_password 'cftuser', randompassword
   end
   
-  def create_user username, group, newpassword    
-    run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
-      if data =~ /not found/
-        sudo "mkdir /home/#{username}"
-        sudo "chown #{username} /home/#{username}"
-      end
-    end
-    
+  def create_user username, group, newpassword        
     begin
       sudo "grep '^#{group}:' /etc/group"
     rescue 
@@ -162,6 +157,13 @@ namespace :serverbuild do
     end
     
     change_password username, newpassword
+    
+    run "if [ -d /home/#{username} ]; then echo exists ; else echo not found ; fi", :pty => true do |ch, stream, data|
+      if data =~ /not found/
+        sudo "mkdir /home/#{username}"
+        sudo "chown #{username} /home/#{username}"
+      end
+    end
   end
     
   def change_password username, newpassword    

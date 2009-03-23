@@ -42,6 +42,7 @@ Before do
   end
 
   Message.delete_all
+  # MessageSummary.delete_all
   Email.delete_all
 
   message = Message.new({
@@ -58,7 +59,7 @@ Before do
   message.created_at = Date.new(2009,1,1)
   message.save!
 
-  email = Email.create({:created_on=>message.created_at})
+  email = Email.create({:created_on => message.created_at})
   email.save
 
   message = Message.new({
@@ -72,9 +73,14 @@ Before do
   })
   message.save!
   message.sent = true
-  message.created_at = Date.new(2009,2,1)
+  message.sent_at = Date.new(2009,2,1)
   message.save!
-  email = Email.new({:created_on=>message.created_at})
+
+  summary = MessageSummary.new
+  summary.message = message
+  summary.save!
+
+  email = Email.new({:created_on => message.created_at})
   email.save
 end
 
