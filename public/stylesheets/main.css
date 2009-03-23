@@ -189,7 +189,7 @@ img {
 	width: 940px;
 	clear: both;
 	font-size: 0.7em;
-	padding-bottom: 10px;
+	padding: 10px 0;
 	border-bottom: 1px solid #cfcfcf;
 	margin: 0 0 10px 0;
 }
