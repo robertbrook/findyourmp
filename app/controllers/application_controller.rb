@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  filter_parameter_logging :password, :password_confirmation
+  filter_parameter_logging :password, :password_confirmation, :message
   # filter_parameter_logging :password, :user
 
   helper_method :current_user_session, :is_admin?
