@@ -47,8 +47,8 @@ class Message < ActiveRecord::Base
       self.sent_at = Time.now.utc
       self.save!
 
-      summary = MessageSummary.new
-      summary.message = self
+      summary = MessageSummary.find_from_message(self)
+      summary.increment_count
       summary.save!
     rescue Exception => e
       self.mailer_error = e.message + "\n" + e.backtrace.join("\n")

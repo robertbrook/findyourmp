@@ -117,7 +117,7 @@ describe Message do
       @message.stub!(:save!)
 
       @summary = MessageSummary.new
-      MessageSummary.stub!(:new).and_return @summary
+      MessageSummary.stub!(:find_from_message).and_return @summary
       @summary.stub!(:save!)
 
       MessageMailer.stub!(:deliver_sent)
@@ -148,11 +148,8 @@ describe Message do
       end
       it 'should save message summary after sending' do
         @message.should_receive(:save!)
+        @summary.should_receive(:increment_count)
         @summary.should_receive(:save!)
-        @message.deliver
-      end
-      it 'should not persist message contents' do
-        @summary.should_receive(:message=).with(@message)
         @message.deliver
       end
     end
