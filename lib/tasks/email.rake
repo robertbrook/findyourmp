@@ -7,5 +7,21 @@ namespace :fymp do
 hi!"
     puts email.inspect.to_s
   end
-
+  
+  desc "Populate data for Bulk Email test in DB"
+  task :bulk_email => :environment do
+    raise 'can only be run in the development environment' unless RAILS_ENV == "development"
+    
+    email_file = "emails.txt"
+    
+    IO.foreach(email_file) do |line|
+      parts = line.split("\t")
+      sender = parts[0].strip
+      recipient = parts[1].strip
+      message = parts[2].strip
+      
+      Email.create :from => sender, :to => recipient, :mail => message
+    end
+    
+  end
 end

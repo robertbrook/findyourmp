@@ -3,7 +3,6 @@ load File.expand_path(File.dirname(__FILE__) + '/virtualserver/test_secrets.rb')
 role :siege, siege_box
 
 namespace :servertest do
-  
   desc "Set up the siege box"
   task :setup, :roles => :siege do
     set :user, siege_user
@@ -35,5 +34,24 @@ namespace :servertest do
     set :user, siege_user
     set :password, siege_password
     sudo "siege -c20 -r40 -i -f url-speed-test.txt"
+  end
+  
+  desc "Stress test the email sending capability"
+  task :email, :roles => :app do
+    run "cd #{current_path}; rake db:migrate RAILS_ENV='development'"
+    
+    tempfile = File.new("emails.txt", APPEND)
+    
+    counter = 1
+    emails_to_send.times do
+      message = "Subject: Test - Bulk Message #{counter} of #{emails_to_send}\r\nBulk message #{counter}"
+      counter+=1
+      tempfile.puts "#{email_sender}\t#{email_recipient}\t"
+    end
+    
+    sudo "rake fymp:bulk_email RAILS_ENV='development'"
+    File.delete(tempfile)
+    
+    sudo "ar_sendmail -e 'development' -b #{emails_to_send}"
   end
 end
