@@ -1,7 +1,5 @@
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/test_secrets.rb')
 
-role :siege, siege_box
-
 namespace :servertest do
   desc "Set up the siege box"
   task :setup, :roles => :siege do
@@ -40,7 +38,7 @@ namespace :servertest do
   task :email, :roles => :app do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='development'"
     
-    tempfile = File.new("emails.txt", APPEND)
+    tempfile = File.open("#{current_path}/config/emails.txt", 'w')
     
     counter = 1
     emails_to_send.times do
@@ -49,7 +47,7 @@ namespace :servertest do
       tempfile.puts "#{email_sender}\t#{email_recipient}\t"
     end
     
-    sudo "rake fymp:bulk_email RAILS_ENV='development'"
+    sudo "cd #{current_path}; rake fymp:bulk_email RAILS_ENV='development'"
     File.delete(tempfile)
     
     sudo "ar_sendmail -e 'development' -b #{emails_to_send}"

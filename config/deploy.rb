@@ -225,7 +225,7 @@ namespace :fymp do
     set :remote_rake_cmd, "/usr/local/bin/rake"
 
     desc "Expire page cache"
-    task :expire_pages do
+    task :expire_pages, :roles => :app do
       run("export RAILS_ENV=production; cd #{deploy_to}/current; #{remote_rake_cmd} fymp:cache:expire_pages")
     end
   end
