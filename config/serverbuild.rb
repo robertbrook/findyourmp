@@ -10,7 +10,7 @@ namespace :serverbuild do
   set :use_sudo, false
 
   desc "Install Passenger including all prerequisites and restart Apache"
-  task :default do
+  task :default, :roles => :app do
     setup_users
     aptget_config
     install_prereqs
