@@ -1,19 +1,20 @@
 - @crumbtrail = link_to_admin_home
 - @title = 'Waiting to be sent'
 
--if @waiting_to_be_sent_by_month_count.blank?
-  %p.text There are no emails waiting to be sent.
--else
-  %table.text.column_content
-    %tr
-      %th Month
-      %th Email count
-    - @waiting_to_be_sent_by_month_count.each do |month, emails|
+.column_content
+  -if @waiting_to_be_sent_by_month_count.blank?
+    %p.text There are no emails waiting to be sent.
+  -else
+    %table.text
       %tr
-        %td= month.to_s(:month_year)
-        %td= emails.size
+        %th Month
+        %th Email count
+      - @waiting_to_be_sent_by_month_count.each do |month, emails|
+        %tr
+          %td= month.to_s(:month_year)
+          %td{:style=>'text-align: right'}= number_with_delimiter(emails.size)
 
-%p.text
-  = '&nbsp;'
-%p.text
-  = link_to 'Admin home', admin_url
+  %p.text
+    = '&nbsp;'
+  %p.text
+    = link_to 'Admin home', admin_url
