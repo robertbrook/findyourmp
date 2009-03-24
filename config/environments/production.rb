@@ -9,12 +9,12 @@ config.action_controller.consider_all_requests_local = false
 config.action_controller.perform_caching             = true
 config.action_view.cache_template_loading            = true
 
-# See everything in the log (default is :info)
-# config.log_level = :debug
-
 # Use a different logger for distributed setups
 # config.logger = SyslogLogger.new
-config.logger = Logger.new(config.log_path, 10, 10.megabytes)
+# config.logger = Logger.new(config.log_path, 10, 10.megabytes)
+
+# See everything in the log (default is :info)
+config.log_level = :info
 
 # Use a different cache store in production
 # config.cache_store = :mem_cache_store
