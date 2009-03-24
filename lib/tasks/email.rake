@@ -12,7 +12,7 @@ hi!"
   task :bulk_email => :environment do
     raise 'can only be run in the development environment' unless RAILS_ENV == "development"
     
-    data_dir = File.expand_path(File.dirname(__FILE__) + '/../config')
+    data_dir = File.expand_path(File.dirname(__FILE__) + '/../data')
     email_file = "#{data_dir}/emails.txt"
     
     IO.foreach(email_file) do |line|
