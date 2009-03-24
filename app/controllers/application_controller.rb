@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # :secret => 'a3075db5ff3a469c66fda661be6d8070'
 
   filter_parameter_logging :password, :password_confirmation
+  # filter_parameter_logging :password, :user
 
   helper_method :current_user_session, :is_admin?
 
