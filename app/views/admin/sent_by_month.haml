@@ -1,20 +1,21 @@
 - @crumbtrail = link_to_admin_home
 - @title = "#{@month.to_s(:month_year)} Sent Messages"
 
-%table.text.column_content
-  %tr
-    %th
-    %th Message count
-  - @sent_by_constituency.each do |constituency_name, message_summaries|
+.column_content
+  %table.text
     %tr
-      %td
-        %strong= link_to_edit_constituency constituency_name
-    - message_summaries.each do |summary|
+      %th
+      %th Message count
+    - @sent_by_constituency.each do |constituency_name, message_summaries|
       %tr
-        %td= "#{h(summary.recipient)} (#{h(summary.recipient_email)})"
-        %td= h(summary.count)
+        %td
+          %strong= link_to_edit_constituency constituency_name
+      - message_summaries.each do |summary|
+        %tr
+          %td= "#{h(summary.recipient)} (#{h(summary.recipient_email)})"
+          %td{:style=>'text-align: right'}= number_with_delimiter(summary.count)
 
-%p.text
-  = '&nbsp;'
-%p.text
-  = link_to 'Sent messages', url_for(:controller=>'admin',:action=>'sent')
+  %p.text
+    = '&nbsp;'
+  %p.text
+    = link_to 'Sent messages', url_for(:controller=>'admin',:action=>'sent')

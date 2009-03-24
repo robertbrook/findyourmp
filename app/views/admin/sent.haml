@@ -1,16 +1,17 @@
 - @crumbtrail = link_to_admin_home
 - @title = 'Sent Messages'
 
-%table.text.column_content
-  %tr
-    %th Month
-    %th Message count
-  - @sent_by_month_count.reverse.each do |month, count|
+.column_content
+  %table.text
     %tr
-      %td= link_to month.to_s(:month_year), url_for(:action=>'sent_by_month',:yyyy_mm=>month.strftime('%Y-%m') )
-      %td= h(count.inspect)
+      %th Month
+      %th Message count
+    - @sent_by_month_count.reverse.each do |month, count|
+      %tr
+        %td= link_to month.to_s(:month_year), url_for(:action=>'sent_by_month',:yyyy_mm=>month.strftime('%Y-%m') )
+        %td{:style=>'text-align: right'}= number_with_delimiter(count)
 
-%p.text
-  = '&nbsp;'
-%p.text
-  = link_to 'Admin home', admin_url
+  %p.text
+    = '&nbsp;'
+  %p.text
+    = link_to 'Admin home', admin_url
