@@ -109,7 +109,7 @@ namespace :deploy do
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
   end
 
-  task:check_folder_setup do
+  task :check_folder_setup, :roles => :app do
     if is_first_run?
       set :overwrite, true
     else
@@ -138,7 +138,7 @@ namespace :deploy do
     puts 'checks complete!'
   end
 
-  task :check_server do
+  task :check_server, :roles => :app do
     run "git --help" do |channel, stream, message|
       if message =~ /No such file or directory/
         raise "You need to install git before proceeding"
@@ -146,7 +146,7 @@ namespace :deploy do
     end
   end
 
-  task :check_site_setup do
+  task :check_site_setup, :roles => :app do
     if is_first_run?
       site_setup
     else
@@ -154,7 +154,7 @@ namespace :deploy do
     end
   end
 
-  task :site_setup do
+  task :site_setup, :roles => :app do
     puts 'entering first time only setup...'
 
     sudo "touch /etc/apache2/sites-available/#{application}"
