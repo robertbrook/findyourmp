@@ -8,7 +8,7 @@
   - @sent_by_month_count.reverse.each do |month, count|
     %tr
       %td= link_to month.to_s(:month_year), url_for(:action=>'sent_by_month',:yyyy_mm=>month.strftime('%Y-%m') )
-      %td= count
+      %td= h(count.inspect)
 
 %p.text
   = '&nbsp;'
