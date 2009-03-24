@@ -25,5 +25,6 @@ features.txt
 features.pdf
 *~
 *#
+FYMP*
 config/newrelic.yml
 vendor/plugins/newrelic_rpm/*
