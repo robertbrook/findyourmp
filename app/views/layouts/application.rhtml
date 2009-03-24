@@ -32,7 +32,7 @@
     }
     -->
   </script>
-  <script language="JavaScript1.1" src="http://www.parliament.uk//styles/webtrends.js" type="text/javascript"></script>
+  <script language="JavaScript1.1" src="/javascripts/webtrends.js" type="text/javascript"></script>
 <% end %>
 </head>
 <body>
@@ -43,7 +43,7 @@
       <div id="banner">
         <div id="banner_top">
           <div id="banner_img">
-            <a href="http://www.parliament.uk/"><img src="http://news.parliament.uk/wp-content/themes/ukparlnews/images/parliament-uk.gif" width="300" height="55" alt="United Kingdom Parliament" /></a>
+            <a href="http://www.parliament.uk/"><img src="/images/parliament-uk.gif" width="300" height="55" alt="United Kingdom Parliament" /></a>
           </div>
           <!--div class="banner_divider">&nbsp;</div-->
           <div id="banner_time">&nbsp;</div>
@@ -53,7 +53,7 @@
               <h2 class="hidden">Search</h2>
                 <label for="search" class="hidden">Search</label>
                 <input type="text" name="QUERY00" id="search" class="searchBox" />
-                <input type="image" class="searchSubmit" src="http://news.parliament.uk/wp-content/themes/ukparlnews/images/search_button.gif" alt="search" title="search" name="CMD=search.run" />
+                <input type="image" class="searchSubmit" src="/images/search_button.gif" alt="search" title="search" name="CMD=search.run" />
                 <input type="hidden" name="STYPE" value="SIMPLE" />
                 <input type="hidden" name="DB" value="semukparl" />
                 <input type="hidden" name="SHOWCONCEPT" value="1" />
@@ -94,39 +94,39 @@
 
       <div id="page_content">
 <% if RAILS_ENV != 'test' %>
-        <div id="leftnav">
-          <ul id="sidebarleft">
-            <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
-            <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
-            <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
-      <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
-      <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
-      <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
-      <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
-      <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
-          </ul>
+        <div class="column_wrapper_right">
+          <div id="leftnav">
+	        <ul id="sidebarleft">
+	          <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
+	          <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
+	          <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
+			  <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
+	        </ul>
+	      </div>
+		  <div class="spacer">&nbsp;</div>
         </div>
 <% end %>
 
-        <div class="spacer">&nbsp;</div>
-        <div class="column_wrapper">
-          <div class="spacer9">&nbsp;</div>
-          <div class="<%= is_admin? ? "column-620" : "column-460" %>">
-          <h1>Find Your MP</h1>
-            <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
-            <% if flash[:notice] %>
-              <div class="text flash">
-                <%= flash[:notice] %>
-              </div>
-            <% end %>
-            <div><%= yield %></div>
-          </div>
-          <div class="spacer9">&nbsp;</div>
-        </div>
-        <div class="spacer">&nbsp;</div>
+         <div class="spacer9">&nbsp;</div>
+         <div class="<%= is_admin? ? "column-620" : "column-460" %>">
+         <h1>Find Your MP</h1>
+           <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
+           <% if flash[:notice] %>
+             <div class="text flash">
+               <%= flash[:notice] %>
+             </div>
+           <% end %>
+           <div><%= yield %></div>
+         </div>
+         <div class="spacer9">&nbsp;</div>
 
 <% if !is_admin? && RAILS_ENV != 'test' %>
-        <div class="column-300">
+        <div class="column_wrapper_left">
+		  <div class="spacer">&nbsp;</div>
           <div class="column-300">
             <div class="column_content">
                 <h3 class="section_head">Help and contacts</h3>
