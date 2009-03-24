@@ -94,39 +94,39 @@
 
       <div id="page_content">
 <% if RAILS_ENV != 'test' %>
-        <div id="leftnav">
-          <ul id="sidebarleft">
-            <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
-            <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
-            <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
-      <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
-      <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
-      <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
-      <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
-      <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
-          </ul>
+        <div class="column_wrapper_right">
+          <div id="leftnav">
+	        <ul id="sidebarleft">
+	          <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
+	          <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
+	          <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
+			  <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
+			  <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
+	        </ul>
+	      </div>
+		  <div class="spacer">&nbsp;</div>
         </div>
 <% end %>
 
-        <div class="spacer">&nbsp;</div>
-        <div class="column_wrapper">
-          <div class="spacer9">&nbsp;</div>
-          <div class="<%= is_admin? ? "column-620" : "column-460" %>">
-          <h1>Find Your MP</h1>
-            <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
-            <% if flash[:notice] %>
-              <div class="text flash">
-                <%= flash[:notice] %>
-              </div>
-            <% end %>
-            <div><%= yield %></div>
-          </div>
-          <div class="spacer9">&nbsp;</div>
-        </div>
-        <div class="spacer">&nbsp;</div>
+         <div class="spacer9">&nbsp;</div>
+         <div class="<%= is_admin? ? "column-620" : "column-460" %>">
+         <h1>Find Your MP</h1>
+           <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
+           <% if flash[:notice] %>
+             <div class="text flash">
+               <%= flash[:notice] %>
+             </div>
+           <% end %>
+           <div><%= yield %></div>
+         </div>
+         <div class="spacer9">&nbsp;</div>
 
 <% if !is_admin? && RAILS_ENV != 'test' %>
-        <div class="column-300">
+        <div class="column_wrapper_left">
+		  <div class="spacer">&nbsp;</div>
           <div class="column-300">
             <div class="column_content">
                 <h3 class="section_head">Help and contacts</h3>
