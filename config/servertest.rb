@@ -38,7 +38,7 @@ namespace :servertest do
   task :email, :roles => :app do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='development'"
     
-    tempfile = File.open("#{current_path}/data/emails.txt", 'w')
+    tempfile = File.new("#{current_path}/data/emails.txt",  "w+")
     
     counter = 1
     emails_to_send.times do
