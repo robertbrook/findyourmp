@@ -109,7 +109,7 @@ namespace :deploy do
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
   end
 
-  task:check_folder_setup do
+  task :check_folder_setup, :roles => :app do
     if is_first_run?
       set :overwrite, true
     else
@@ -138,7 +138,7 @@ namespace :deploy do
     puts 'checks complete!'
   end
 
-  task :check_server do
+  task :check_server, :roles => :app do
     run "git --help" do |channel, stream, message|
       if message =~ /No such file or directory/
         raise "You need to install git before proceeding"
@@ -146,7 +146,7 @@ namespace :deploy do
     end
   end
 
-  task :check_site_setup do
+  task :check_site_setup, :roles => :app do
     if is_first_run?
       site_setup
     else
@@ -154,7 +154,7 @@ namespace :deploy do
     end
   end
 
-  task :site_setup do
+  task :site_setup, :roles => :app do
     puts 'entering first time only setup...'
 
     sudo "touch /etc/apache2/sites-available/#{application}"
@@ -169,13 +169,14 @@ namespace :deploy do
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-
+    
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
       if data =~ /Enter password:/
         ch.send_data(sql_server_password + "\n")
       else
         ch.send_data("create database #{application}_production CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
+        ch.send_data("create database #{application}_development CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
         ch.send_data("exit \n")
       end
     end
@@ -224,7 +225,7 @@ namespace :fymp do
     set :remote_rake_cmd, "/usr/local/bin/rake"
 
     desc "Expire page cache"
-    task :expire_pages do
+    task :expire_pages, :roles => :app do
       run("export RAILS_ENV=production; cd #{deploy_to}/current; #{remote_rake_cmd} fymp:cache:expire_pages")
     end
   end
