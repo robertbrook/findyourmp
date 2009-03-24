@@ -6,11 +6,13 @@ describe MessageSummary do
     before do
       @constituency_id = "value for constituency_id"
       @postcode = "N1 2SD"
-      @time = Time.now
+      @time = Time.now.to_date
+      @constituency_name = 'constituency_name'
       @recipient_email = "value.for@recipient.email"
       @recipient = "recipient"
       @valid_attributes = {
         :constituency_id => @constituency_id,
+        :constituency_name => @constituency_name,
         :sender => "value for sender",
         :sender_email => "value.for@sender.email",
         :recipient_email => @recipient_email,
@@ -24,12 +26,12 @@ describe MessageSummary do
       @message = Message.new(@valid_attributes)
     end
 
-    it 'should set recipient_email, recipient, constituency_name and sent_at' do
-      summary = MessageSummary.new
-      summary.message = @message
+    it 'should set recipient_email, recipient, constituency_name and sent_month' do
+      summary = MessageSummary.find_from_message(@message)
+      summary.constituency_name.should == @constituency_name
       summary.recipient_email.should == @recipient_email
       summary.recipient.should == @recipient
-      summary.sent_at.should == @time
+      summary.sent_month.should == @time.at_beginning_of_month
     end
   end
 

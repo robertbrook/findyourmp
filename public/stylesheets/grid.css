@@ -1,204 +1,204 @@
 /* generic columns */
 
 .column-620 {
-	width: 620px;
-	padding :0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 620px;
+  padding :0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-618 {
-	width: 618px;
-	padding :0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 618px;
+  padding :0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-460 {
-	width: 460px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 460px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-300 {
-	width: 300px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 300px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-278 {
-	width: 278px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 278px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-220 {
-	width: 220px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 220px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-200 {
-	width: 200px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 200px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-142 {
-	width: 142px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 142px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 .column-140 {
-	width: 140px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	float: left;
+  width: 140px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  float: left;
 }
 
 /* helper styles */
 
 .column_content {
-	float: left;
-	width: 100%;
-	clear: both;
-	margin: 0;
-	padding: 0;
-	border: 0;
+  float: left;
+  width: 100%;
+  clear: both;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 /* column wrappers for layout effects */
 
 .column_wrapper {
-	border-left: 1px solid #cfcfcf;
-	border-right: 1px solid #cfcfcf;
-	float: left;
-	padding: 0 0 30px 0;
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+  float: left;
+  padding: 0 0 30px 0;
 }
 
 .column_wrapper_right {
-	border-right: 1px solid #cfcfcf;
-	float: left;
-	padding: 0 0 30px 0;
+  border-right: 1px solid #cfcfcf;
+  float: left;
+  padding: 0 0 30px 0;
 }
 
 .column_wrapper_top {
-	border-top: 1px dotted #cfcfcf;
-	float: left;
-	width: 100%;
-	padding: 10px 0 0 0;
-	margin: 10px 0 0 0;
+  border-top: 1px dotted #cfcfcf;
+  float: left;
+  width: 100%;
+  padding: 10px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 .column_outline {
-	border: 1px solid #cfcfcf;
+  border: 1px solid #cfcfcf;
 }
 
 .sidebar_subsection {
-	float: left;
-	margin: 0;
-	padding: 10px 0;
-	border-top: 1px dotted #cfcfcf;
+  float: left;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px dotted #cfcfcf;
 }
 
 
 /* data table styles */
 
 tr.table_header {
-	background-color: #F5F3E7;
+  background-color: #F5F3E7;
 }
 
 .table_header th {
-	font-weight: normal;
-	text-align: left;
-	padding: 0.4em 1em;
-	margin: 0;
+  font-weight: normal;
+  text-align: left;
+  padding: 0.4em 1em;
+  margin: 0;
 }
 
 tr {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 td {
-	padding: 0.4em 1em;
-	margin: 0;
+  padding: 0.4em 1em;
+  margin: 0;
 }
 
 table.table-300 {
-	width: 300px;
-	float: left;
-	margin: 0;
-	padding: 0;
-	border-collapse: collapse;
+  width: 300px;
+  float: left;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
 }
 
 table.table-460 {
-	width: 460px;
-	float: left;
-	margin: 0;
-	padding: 0;
-	border-collapse: collapse;
+  width: 460px;
+  float: left;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
 }
 
 table.table-460 tr.table_header {
-	background-color: #F5F3E7;
+  background-color: #F5F3E7;
 }
 
 table.table-460 tr.table_header th {
-	border-bottom: 1px solid #FFFFFF;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 table.table-598 {
-	width: 598px;
-	float: left;
-	margin: 0;
-	padding: 0;
-	border-collapse: collapse;
+  width: 598px;
+  float: left;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
 }
 
 table.table-598 tr.table_header {
-	background-color: #333333;
+  background-color: #333333;
 }
 
 table.table-598 .table_header th {
-	font-weight: normal;
-	text-align: left;
-	padding: 0.4em 1em;
-	margin: 0;
-	color: #FFFFFF;
+  font-weight: normal;
+  text-align: left;
+  padding: 0.4em 1em;
+  margin: 0;
+  color: #FFFFFF;
 }
 
 table.fullwidth_table {
-	padding: 0;
-	margin: 0;
-	width: 100%;
-	clear: both;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  clear: both;
 }
 
 td.fullwidth {
-	width: 100%;
+  width: 100%;
 }
 
 th.bold  {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 th.centered {
-	text-align: center;
+  text-align: center;
 }

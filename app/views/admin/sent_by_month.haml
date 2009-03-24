@@ -3,12 +3,16 @@
 
 %table.text.column_content
   %tr
-    %th Constituency
+    %th
     %th Message count
-  - @sent_by_constituency.each do |constituency_name, messages|
+  - @sent_by_constituency.each do |constituency_name, message_summaries|
     %tr
-      %td= link_to_edit_constituency constituency_name
-      %td= messages.size
+      %td
+        %strong= link_to_edit_constituency constituency_name
+    - message_summaries.each do |summary|
+      %tr
+        %td= "#{h(summary.recipient)} (#{h(summary.recipient_email)})"
+        %td= h(summary.count)
 
 %p.text
   = '&nbsp;'

@@ -3,7 +3,7 @@ class AdminController < ApplicationController
   before_filter :require_user
 
   def index
-    @sent_message_count = MessageSummary.count
+    @sent_message_count = MessageSummary.all.collect(&:count).sum
     @waiting_to_be_sent_count = Email.waiting_to_be_sent_count
   end
 

@@ -76,8 +76,7 @@ Before do
   message.sent_at = Date.new(2009,2,1)
   message.save!
 
-  summary = MessageSummary.new
-  summary.message = message
+  summary = MessageSummary.find_from_message(message)
   summary.save!
 
   email = Email.new({:created_on => message.created_at})
@@ -85,7 +84,7 @@ Before do
 end
 
 When /^I clear "(.*)"$/ do |field|
-  fills_in(field, :with => "")
+  fill_in(field, :with => "")
 end
 
 Then /^I should see json (.+)$/ do |json|
