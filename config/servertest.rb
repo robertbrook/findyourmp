@@ -1,0 +1,39 @@
+load File.expand_path(File.dirname(__FILE__) + '/virtualserver/test_secrets.rb')
+
+role :siege, siege_box
+
+namespace :servertest do
+  
+  desc "Set up the siege box"
+  task :setup, :roles => :siege do
+    set :user, siege_user
+    set :password, siege_password
+    
+    data = File.read("config/virtualserver/url-stress-test.txt")
+    put data, "url-stress-test.txt", :mode => 0664
+    
+    data = File.read("config/virtualserver/url-speed-test.txt")
+    put data, "url-speed-test.txt", :mode => 0664
+  end
+
+  desc "Run the concurrent users test"
+  task :concurrent, :roles => :siege do
+    set :user, siege_user
+    set :password, siege_password
+    sudo "siege -c285 -r40 -i -f url-speed-test.txt -b"
+  end
+  
+  desc "Run the response time test"
+  task :response_time, :roles => :siege do
+    set :user, siege_user
+    set :password, siege_password
+    sudo "siege -c20 -r40 -i -f url-stress-test.txt"
+  end
+  
+  desc "Run the response time (light) test"
+  task :response_time_light, :roles => :siege do
+    set :user, siege_user
+    set :password, siege_password
+    sudo "siege -c20 -r40 -i -f url-speed-test.txt"
+  end
+end
