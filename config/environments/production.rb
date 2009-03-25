@@ -14,7 +14,7 @@ config.action_view.cache_template_loading            = true
 # config.logger = Logger.new(config.log_path, 10, 10.megabytes)
 
 # See everything in the log (default is :info)
-config.log_level = :info
+config.log_level = :warn
 
 # Use a different cache store in production
 # config.cache_store = :mem_cache_store

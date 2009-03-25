@@ -37,6 +37,11 @@
   background-color: #ffcccc;
 }
 
+.formError {
+  color: red;
+  margin-left: 10em;
+}
+
 label {
   font-size:0.8em;
   width: 12em;
