@@ -8,13 +8,11 @@
   - @unrecognized_constituencies.each do |line, blank|
     %h4= line
 
-%p &nbsp;
 - unless @ommitted_constituencies.empty?
   %h3 Missing constituencies
   - @ommitted_constituencies.each do |constituency|
     %h4= constituency.name
 
-%p &nbsp;
 - unless @changed_constituencies.empty?
   %h3 Changed constituencies
   .text
