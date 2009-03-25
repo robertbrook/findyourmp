@@ -19,7 +19,7 @@ hi!"
       parts = line.split("\t")
       sender = parts[0].strip
       recipient = parts[1].strip
-      message = parts[2].strip << '\r' << parts[3].strip
+      message = parts[2].strip << '\r\n' << parts[3].strip
       
       Email.create :from => sender, :to => recipient, :mail => message
     end
