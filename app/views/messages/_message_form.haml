@@ -44,3 +44,6 @@
     %p
       If you do not include a full address and postcode you may not receive a reply. Please note the following
       = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'
+- # fix for Rails bug in adding errorExplanation div closing tag
+- is_error = !error_messages_for(:message).blank?
+= is_error ? "</div>" : ""
