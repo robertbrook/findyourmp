@@ -43,11 +43,15 @@ namespace :servertest do
     tempfile = File.new("data/emails.txt",  "w")
     
     counter = 1
+    recipient_counter = 0
     emails_to_send.times do
       subject = "Subject: Test - Bulk Message #{counter} of #{emails_to_send}"
       message = "Bulk message #{counter}"
       counter+=1
-      tempfile.puts "#{email_sender} \t #{email_recipient} \t #{subject} \t #{message}"
+      recipient = email_recipients[recipient_counter]
+      recipient_counter += 1
+      recipient_counter = 0 if recipient_counter >= email_recipients.length
+      tempfile.puts "#{email_sender} \t #{recipient} \t #{subject} \t #{message}"
     end
     
     tempfile.close_write
@@ -59,6 +63,6 @@ namespace :servertest do
     run "cd #{current_path};rake fymp:bulk_email RAILS_ENV='development'"
     run "rm #{current_path}/data/emails.txt"
     
-    run "cd #{current_path};ar_sendmail -e 'development' -o
+    run "cd #{current_path};ar_sendmail -e 'development' -o"
   end
 end
