@@ -52,7 +52,7 @@ namespace :servertest do
     
     tempfile.close_write
     data = File.read("data/emails.txt")
-    #File.delete("data/emails.txt")
+    File.delete("data/emails.txt")
     
     put data, "#{current_path}/data/emails.txt", :mode => 0664
     
