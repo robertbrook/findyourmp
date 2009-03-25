@@ -59,6 +59,6 @@ namespace :servertest do
     run "cd #{current_path};rake fymp:bulk_email RAILS_ENV='development'"
     run "rm #{current_path}/data/emails.txt"
     
-    run "cd #{current_path};ar_sendmail -e 'development' -b #{emails_to_send}"
+    run "cd #{current_path};ar_sendmail -e 'development' -o
   end
 end
