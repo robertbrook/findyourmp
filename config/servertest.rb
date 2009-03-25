@@ -6,6 +6,8 @@ namespace :servertest do
     set :user, siege_user
     set :password, siege_password
     
+    set :use_sudo, false
+    
     data = File.read("config/virtualserver/url-stress-test.txt")
     put data, "url-stress-test.txt", :mode => 0664
     
@@ -42,15 +44,21 @@ namespace :servertest do
     
     counter = 1
     emails_to_send.times do
-      message = "Subject: Test - Bulk Message #{counter} of #{emails_to_send}\r\nBulk message #{counter}"
+      subject = "Subject: Test - Bulk Message #{counter} of #{emails_to_send}"
+      message = "Bulk message #{counter}"
       counter+=1
-      tempfile.puts "#{email_sender}\t#{email_recipient}\t"
+      tempfile.puts "#{email_sender} \t #{email_recipient} \t #{subject} \t #{message}"
     end
+    
     tempfile.close_write
+    data = File.read("data/emails.txt")
+    #File.delete("data/emails.txt")
     
-    run "cd #{current_path}; sudo rake fymp:bulk_email RAILS_ENV='development'"
-    File.delete(tempfile)
+    put data, "#{current_path}/data/emails.txt", :mode => 0664
     
-    sudo "ar_sendmail -e 'development' -b #{emails_to_send}"
+    run "cd #{current_path};rake fymp:bulk_email RAILS_ENV='development'"
+    run "rm #{current_path}/data/emails.txt"
+    
+    run "cd #{current_path};ar_sendmail -e 'development' -b #{emails_to_send}"
   end
 end
