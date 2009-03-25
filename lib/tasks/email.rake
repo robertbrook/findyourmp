@@ -19,7 +19,8 @@ hi!"
       parts = line.split("\t")
       sender = parts[0].strip
       recipient = parts[1].strip
-      message = parts[2].strip << '\r\n' << parts[3].strip
+      
+      message = "From: " << sender << "\r\nTo:" << recipient << "\r\n" << parts [2].strip << "\r\nMime-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8" << "\r\n\r\n\n" << parts[3].strip
       
       Email.create :from => sender, :to => recipient, :mail => message
     end
