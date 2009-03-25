@@ -9,24 +9,25 @@ class ConstituenciesController < ResourceController::Base
 
   def update
     load_object
-    is_remote = (params[:commit]=="Update #{object.name}")
-
     before :update
+
     if object.update_attributes object_params
       after :update
       set_flash :update
-      if is_remote
+      if is_remote?
         @message = flash[:notice]
         flash[:notice] = nil
+        render 'update', :layout => false
       else
         response_for(:update)
       end
     else
       after :update_fails
       set_flash :update_fails
-      if is_remote
+      if is_remote?
         @message = flash[:notice]
         flash[:notice] = nil
+        render 'update', :layout => false
       else
         response_for(:update_fails)
       end
@@ -61,6 +62,11 @@ class ConstituenciesController < ResourceController::Base
   end
 
   private
+
+    def is_remote?
+      (params[:commit]=="Update #{object.name}")
+    end
+
     def toggle_hide_members visible
       if is_admin? && request.post?
         Constituency.all.each do |constituency|
