@@ -38,7 +38,7 @@ namespace :servertest do
   task :email, :roles => :app do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='development'"
     
-    tempfile = File.new("#{current_path}/data/emails.txt",  "w")
+    tempfile = File.new("data/emails.txt",  "w")
     
     counter = 1
     emails_to_send.times do
@@ -46,6 +46,7 @@ namespace :servertest do
       counter+=1
       tempfile.puts "#{email_sender}\t#{email_recipient}\t"
     end
+    tempfile.close_write
     
     sudo "cd #{current_path}; rake fymp:bulk_email RAILS_ENV='development'"
     File.delete(tempfile)
