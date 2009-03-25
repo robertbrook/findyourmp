@@ -48,7 +48,7 @@ namespace :servertest do
     end
     tempfile.close_write
     
-    sudo "cd #{current_path}; rake fymp:bulk_email RAILS_ENV='development'"
+    run "cd #{current_path}; sudo rake fymp:bulk_email RAILS_ENV='development'"
     File.delete(tempfile)
     
     sudo "ar_sendmail -e 'development' -b #{emails_to_send}"
