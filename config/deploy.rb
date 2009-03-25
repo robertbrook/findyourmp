@@ -169,13 +169,14 @@ namespace :deploy do
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-
+    
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
       if data =~ /Enter password:/
         ch.send_data(sql_server_password + "\n")
       else
         ch.send_data("create database #{application}_production CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
+        ch.send_data("create database #{application}_development CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
         ch.send_data("exit \n")
       end
     end
@@ -224,7 +225,7 @@ namespace :fymp do
     set :remote_rake_cmd, "/usr/local/bin/rake"
 
     desc "Expire page cache"
-    task :expire_pages do
+    task :expire_pages, :roles => :app do
       run("export RAILS_ENV=production; cd #{deploy_to}/current; #{remote_rake_cmd} fymp:cache:expire_pages")
     end
   end
