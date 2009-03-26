@@ -2,7 +2,7 @@ load File.expand_path(File.dirname(__FILE__) + '/virtualserver/test_secrets.rb')
 
 namespace :servertest do
   desc "Set up the siege box"
-  task :setup, :roles => :siege do
+  task :setup, :hosts => siege do
     set :user, siege_user
     set :password, siege_password
     
@@ -16,21 +16,21 @@ namespace :servertest do
   end
 
   desc "Run the concurrent users test"
-  task :concurrent, :roles => :siege do
+  task :concurrent, :hosts => siege do
     set :user, siege_user
     set :password, siege_password
     sudo "siege -c285 -r40 -i -f url-speed-test.txt -b"
   end
   
   desc "Run the response time test"
-  task :response_time, :roles => :siege do
+  task :response_time, :hosts => siege do
     set :user, siege_user
     set :password, siege_password
     sudo "siege -c20 -r40 -i -f url-stress-test.txt"
   end
   
   desc "Run the response time (light) test"
-  task :response_time_light, :roles => :siege do
+  task :response_time_light, :hosts => siege do
     set :user, siege_user
     set :password, siege_password
     sudo "siege -c20 -r40 -i -f url-speed-test.txt"
