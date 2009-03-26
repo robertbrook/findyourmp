@@ -36,8 +36,8 @@ namespace :servertest do
     sudo "siege -c20 -r40 -i -f url-speed-test.txt"
   end
   
-  desc "Stress test the email sending capability"
-  task :email, :roles => :app do
+  desc "Set up a dummy mail queue for testing the email sending capability"
+  task :setup_email, :roles => :app do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='development'"
     
     tempfile = File.new("data/emails.txt",  "w")
@@ -62,7 +62,5 @@ namespace :servertest do
     
     run "cd #{current_path};rake fymp:bulk_email RAILS_ENV='development'"
     run "rm #{current_path}/data/emails.txt"
-    
-    run "cd #{current_path};ar_sendmail -e 'development' -o"
   end
 end
