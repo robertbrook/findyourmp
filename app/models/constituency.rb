@@ -99,7 +99,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def to_tsv_line
-    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"|
+    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"|
   end
 
   def to_json
