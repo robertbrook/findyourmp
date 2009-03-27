@@ -187,7 +187,7 @@ namespace :deploy do
     sudo "gem install unicode"
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
-    sudo "gem install adzap-ar_mailer"
+    sudo "gem install adzap-ar_mailer --version '2.0.0'"
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 
     rake_tasks
