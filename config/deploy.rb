@@ -16,7 +16,7 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-set :test_deploy, true
+set :test_deploy, false
 
 namespace :deploy do
   set :user, deployuser
@@ -194,6 +194,7 @@ namespace :deploy do
 
     run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
 
     sudo "/usr/sbin/apache2ctl restart"
     puts 'first time only setup complete!'
