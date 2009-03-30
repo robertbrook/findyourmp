@@ -145,9 +145,16 @@ describe Constituency do
       @new_constituency.should_receive(:member_biography_url=).with('http://biographies.parliament.uk/parliament/default.asp?id=25505')
       @new_constituency.should_receive(contact_type).with(contact)
       line = tsv_line(contact)
-      Constituency.load_tsv_line(line).should == [@constituency, @new_constituency]
+      loaded = Constituency.load_tsv_line(line)
+      loaded.should == [@constituency, @new_constituency]
+      loaded[1]
     end
 
+    describe 'and constituency exists and tsv line contains broken email/contact url' do
+      it 'should update constituency' do
+        new_constituency = check_update_constituency 'broken.contact.details', :member_email=
+      end
+    end
     describe 'and constituency exists and tsv line contains email' do
       it 'should update constituency' do
         check_update_constituency 'example@email.address', :member_email=

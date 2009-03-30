@@ -3,26 +3,35 @@
 - @crumbtrail = link_to_admin_home
 - @title= 'Constituencies'
 
+- unless @invalid_constituencies.empty?
+  %h3 Invalid data
+  .text{:style => "margin-bottom: 3em;"}
+    - @invalid_constituencies.each do |item|
+      %p= item.new_constituency.errors.full_messages.join("<br/>")
+      %p.warn= item.line
+
 - unless @unrecognized_constituencies.empty?
   %h3 Unrecognized constituencies
-  - @unrecognized_constituencies.each do |line, blank|
-    %h4= line
+  .text{:style => "margin-bottom: 3em;"}
+    - @unrecognized_constituencies.each do |item|
+      %p= item.line
 
 - unless @ommitted_constituencies.empty?
   %h3 Missing constituencies
-  - @ommitted_constituencies.each do |constituency|
-    %h4= constituency.name
+  .text{:style => "margin-bottom: 3em;"}
+    - @ommitted_constituencies.each do |constituency|
+      %p.warn= constituency.name
 
 - unless @changed_constituencies.empty?
   %h3 Changed constituencies
   .text
-    - @changed_constituencies.each do |line, constituencies|
-      - constituency = constituencies[0]
-      - new_constituency = constituencies[1]
+    - @changed_constituencies.each do |item|
+      - constituency = item.old
+      - new_constituency = item.new_constituency
       - id = "constituency#{constituency.id}"
       %div{:id=>id}
         - remote_form_for(constituency, :update => id) do |f|
-          %h4= constituency.name
+          %p= constituency.name
           - member_name_changed = constituency.member_name_changed?(new_constituency)
           - member_party_changed = constituency.member_party_changed?(new_constituency)
           %p
@@ -58,6 +67,6 @@
 
 %h3 Unchanged constituencies
 %p.text
-  - @unchanged_constituencies.each do |line, constituencies|
-    = constituencies[0].name
+  - @unchanged_constituencies.each do |item|
+    = item.old.name
     %br
