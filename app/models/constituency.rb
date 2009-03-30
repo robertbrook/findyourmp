@@ -32,7 +32,11 @@ class Constituency < ActiveRecord::Base
           new_constituency.member_name = member_name
           new_constituency.member_party = member_party
           new_constituency.member_biography_url = member_bio_url
-          new_constituency.member_email = member_contact
+          if member_contact[/http:\/\//]
+            new_constituency.member_requested_contact_url = member_contact
+          else
+            new_constituency.member_email = member_contact
+          end
         end
         [existing, new_constituency]
       else

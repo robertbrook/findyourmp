@@ -132,24 +132,35 @@ describe Constituency do
   end
 
   describe 'when asked to load tsv line' do
-    before do
-      @tsv_line = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=25505"\t"example@email.address"|
+    def tsv_line email
+      %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=25505"\t"#{email}"|
     end
-    describe 'and constituency exists' do
+
+    def check_update_constituency contact, contact_type
+      Constituency.should_receive(:find_by_constituency_name).with('Islington West').and_return @constituency
+      @new_constituency = Constituency.new
+      Constituency.should_receive(:new).with(@constituency.attributes).and_return @new_constituency
+      @new_constituency.should_receive(:member_name=).with('Duncan McCloud')
+      @new_constituency.should_receive(:member_party=).with('SDP')
+      @new_constituency.should_receive(:member_biography_url=).with('http://biographies.parliament.uk/parliament/default.asp?id=25505')
+      @new_constituency.should_receive(contact_type).with(contact)
+      line = tsv_line(contact)
+      Constituency.load_tsv_line(line).should == [@constituency, @new_constituency]
+    end
+
+    describe 'and constituency exists and tsv line contains email' do
       it 'should update constituency' do
-        Constituency.should_receive(:find_by_constituency_name).with('Islington West').and_return @constituency
-        @new_constituency = Constituency.new
-        Constituency.should_receive(:new).with(@constituency.attributes).and_return @new_constituency
-        @new_constituency.should_receive(:member_name=).with('Duncan McCloud')
-        @new_constituency.should_receive(:member_party=).with('SDP')
-        @new_constituency.should_receive(:member_biography_url=).with('http://biographies.parliament.uk/parliament/default.asp?id=25505')
-        @new_constituency.should_receive(:member_email=).with('example@email.address')
-        Constituency.load_tsv_line(@tsv_line).should == [@constituency, @new_constituency]
+        check_update_constituency 'example@email.address', :member_email=
+      end
+    end
+    describe 'and constituency exists and tsv line contains contact url' do
+      it 'should update constituency' do
+        check_update_constituency 'http://example.contactform.com', :member_requested_contact_url=
       end
     end
     describe 'and constituency doesn\'t already exist' do
       it 'should create new constituency?' do
-        Constituency.load_tsv_line @tsv_line
+        Constituency.load_tsv_line tsv_line('example@email.address')
       end
     end
   end
