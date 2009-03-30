@@ -16,7 +16,7 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-set :test_deploy, true
+set :test_deploy, false
 
 namespace :deploy do
   set :user, deployuser
@@ -187,13 +187,14 @@ namespace :deploy do
     sudo "gem install unicode"
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
-    sudo "gem install adzap-ar_mailer"
+    sudo "gem install adzap-ar_mailer --version '2.0.0'"
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 
     rake_tasks
 
     run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
     run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
+    run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
 
     sudo "/usr/sbin/apache2ctl restart"
     puts 'first time only setup complete!'
