@@ -133,7 +133,7 @@ describe Constituency do
 
   describe 'when asked to load tsv line' do
     before do
-      @tsv_line = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"|
+      @tsv_line = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=25505"\t"example@email.address"|
     end
     describe 'and constituency exists' do
       it 'should update constituency' do
@@ -142,6 +142,8 @@ describe Constituency do
         Constituency.should_receive(:new).with(@constituency.attributes).and_return @new_constituency
         @new_constituency.should_receive(:member_name=).with('Duncan McCloud')
         @new_constituency.should_receive(:member_party=).with('SDP')
+        @new_constituency.should_receive(:member_biography_url=).with('http://biographies.parliament.uk/parliament/default.asp?id=25505')
+        @new_constituency.should_receive(:member_email=).with('example@email.address')
         Constituency.load_tsv_line(@tsv_line).should == [@constituency, @new_constituency]
       end
     end

@@ -10,12 +10,18 @@ class Constituency < ActiveRecord::Base
 
   class << self
 
+    def remove_quotes text
+      text.strip[/^"?([^"]+)"?$/,1]
+    end
+
     def load_tsv_line line
       parts = line.split("\t")
 
-      constituency_name = parts.first.strip[/^"?([^"]+)"?$/,1]
-      member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
+      constituency_name = remove_quotes(parts[0])
+      member_name = remove_quotes(parts[1])
       member_party = parts[2].strip[/\((.+)\)/,1]
+      member_bio_url = remove_quotes(parts[3])
+      member_contact = remove_quotes(parts[4])
 
       existing = Constituency.find_by_constituency_name(constituency_name)
       new_constituency = nil
@@ -23,8 +29,10 @@ class Constituency < ActiveRecord::Base
       if existing
         if existing.member_name != member_name || existing.member_party != member_party
           new_constituency = Constituency.new(existing.attributes)
-          new_constituency.member_name = parts[1].strip[/^"?([^"]+)"?$/,1]
-          new_constituency.member_party = parts[2].strip[/\((.+)\)/,1]
+          new_constituency.member_name = member_name
+          new_constituency.member_party = member_party
+          new_constituency.member_biography_url = member_bio_url
+          new_constituency.member_email = member_contact
         end
         [existing, new_constituency]
       else
