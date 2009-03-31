@@ -16,7 +16,9 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-set :test_deploy, false
+set :test_deploy, true
+
+set :master_data_file, 'NSPDC_AUG_2008_UK_100M.txt'
 
 namespace :deploy do
   set :user, deployuser
@@ -45,14 +47,19 @@ namespace :deploy do
 
     if overwrite
       run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
-
+      
+      run "rm #{data_dir}/ConstituencyToMember.txt"
       put_data data_dir, 'ConstituencyToMember.txt'
+      
+      run "rm #{data_dir}/constituencies.txt"
       put_data data_dir, 'constituencies.txt'
 
       if test_deploy
+        run "rm #{data_dir}/postcodes.txt"
         put_data data_dir, 'postcodes.txt'
       else
-        put_data data_dir, 'NSPDC_AUG_2008_UK_100M.txt'
+        run "rm #{data_dir}/#{master_data_file}"
+        put_data data_dir, "#{master_data_file}"
       end
     end
 
@@ -97,13 +104,16 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 
-  desc "Perform non-destructive rake tasks"
+  desc "Perform rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
 
     if overwrite
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
+      
+      run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
+      run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
     end
 
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
@@ -191,10 +201,6 @@ namespace :deploy do
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 
     rake_tasks
-
-    run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
-    run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
-    run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
 
     sudo "/usr/sbin/apache2ctl restart"
     puts 'first time only setup complete!'
