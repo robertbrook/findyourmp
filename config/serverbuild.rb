@@ -130,7 +130,7 @@ namespace :serverbuild do
       puts 'USAGE: cap serverbuild:create_initial_admin_user password=pass email=admin@host.com'
       puts
     else
-      run "cd #{current_path};rake fymp:create_admin_user password=#{password} email=#{email}"
+      run "cd #{current_path};rake fymp:create_admin_user password=#{password} email=#{email} RAILS_ENV=production"
     end
   end
 
