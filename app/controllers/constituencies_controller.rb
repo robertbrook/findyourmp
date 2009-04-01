@@ -1,6 +1,6 @@
 class ConstituenciesController < ResourceController::Base
 
-  caches_page :show
+  caches_action :show
   cache_sweeper :constituency_sweeper, :only => [:create, :update, :destroy]
 
   before_filter :respond_unauthorized_if_not_admin, :except => [:show]

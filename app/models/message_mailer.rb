@@ -25,7 +25,7 @@ class MessageMailer < ActionMailer::Base
 
   def sent(message, sent_at = Time.now)
     subject    message.subject
-    recipients "#{message.recipient} <#{message.test_recipient_email}>"
+    recipients "#{message.recipient} <#{message.recipient_email}>"
     from       MessageMailer.noreply_email
     sent_on    sent_at
 

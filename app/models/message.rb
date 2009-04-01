@@ -62,10 +62,6 @@ class Message < ActiveRecord::Base
     "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n"
   end
 
-  def test_recipient_email
-    RAILS_ENV == 'development' ? ActionMailer::Base.smtp_settings[:user_name] : recipient_email
-  end
-
   def clean_message_whitespace
     if self.message
       text = []

@@ -22,6 +22,10 @@
   color: red;
 }
 
+.warn {
+  color: red;
+}
+
 .hidden_member {
   color: grey;
   font-style: italic;

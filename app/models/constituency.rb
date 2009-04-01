@@ -22,12 +22,16 @@ class Constituency < ActiveRecord::Base
       member_party = parts[2].strip[/\((.+)\)/,1]
       member_bio_url = remove_quotes(parts[3])
       member_contact = remove_quotes(parts[4])
+      member_contact = "" unless member_contact
 
       existing = Constituency.find_by_constituency_name(constituency_name)
       new_constituency = nil
 
       if existing
-        if existing.member_name != member_name || existing.member_party != member_party
+        non_matching = (existing.member_name != member_name || existing.member_party != member_party || existing.member_biography_url != member_bio_url)
+        non_matching = non_matching || ( member_contact[/http:\/\//] ?
+          (existing.member_requested_contact_url.to_s != member_contact.to_s) : (existing.member_email.to_s != member_contact.to_s) )
+        if non_matching
           new_constituency = Constituency.new(existing.attributes)
           new_constituency.member_name = member_name
           new_constituency.member_party = member_party
@@ -40,7 +44,7 @@ class Constituency < ActiveRecord::Base
         end
         [existing, new_constituency]
       else
-        nil
+        [nil, nil]
       end
     end
 
