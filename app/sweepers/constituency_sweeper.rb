@@ -20,9 +20,15 @@ class ConstituencySweeper < ActionController::Caching::Sweeper
   private
     def expire_cache_for(record)
       expire_page(:controller => 'constituencies', :action => 'show', :id => record.friendly_id)
+      cache_dir = RAILS_ROOT+"/public/search"
+      FileUtils.rm_r(Dir.glob(cache_dir+"/*")) rescue Errno::ENOENT
+      RAILS_DEFAULT_LOGGER.info("Cache directory '#{cache_dir}' fully swept.")
     end
     
     def expire_constituency_cache
       expire_page(:controller => 'constituencies', :action => 'show')
+      cache_dir = RAILS_ROOT+"/public/search"
+      FileUtils.rm_r(Dir.glob(cache_dir+"/*")) rescue Errno::ENOENT
+      RAILS_DEFAULT_LOGGER.info("Cache directory '#{cache_dir}' fully swept.")
     end
 end
