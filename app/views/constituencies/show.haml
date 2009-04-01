@@ -1,16 +1,11 @@
 - if @constituency
   = render :partial => 'constituencies/constituency', :object => @constituency
-  - if is_admin?
-    %ul.text
-      %li{ :class=>"first"}= link_to 'All constituencies', constituencies_path
-      %li= link_to 'Show message audit', url_for(:controller=>'admin',:action=>'index')
-      %li= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
-- elsif @constituencies or @members
+- if @constituencies or @members
   #search= render :partial => 'layouts/search_form'
   %h3.subheading Search Results
   %p.text Your search term matched more than one constituency - for a more accurate result, please enter your full postcode
   - if @constituencies.size > 0
-    %h4= pluralize(@constituencies.size, 'Consituency')
+    %h4= pluralize(@constituencies.size, 'Constituency')
     = render :partial => 'constituencies/constituency_match', :collection => @constituencies
   - if @members.size > 0
     %h4= pluralize(@members.size, 'Member')
