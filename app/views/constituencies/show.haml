@@ -1,11 +1,11 @@
 - if @constituency
   = render :partial => 'constituencies/constituency', :object => @constituency
-- if @constituencies or @members
+- elsif @constituencies or @members
   #search= render :partial => 'layouts/search_form'
   %h3.subheading Search Results
   %p.text Your search term matched more than one constituency - for a more accurate result, please enter your full postcode
   - if @constituencies.size > 0
-    %h4= pluralize(@constituencies.size, 'Constituency')
+    %h4= pluralize(@constituencies.size, 'Consituency')
     = render :partial => 'constituencies/constituency_match', :collection => @constituencies
   - if @members.size > 0
     %h4= pluralize(@members.size, 'Member')
