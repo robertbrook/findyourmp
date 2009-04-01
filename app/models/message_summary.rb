@@ -12,7 +12,7 @@ class MessageSummary < ActiveRecord::Base
 
     def find_from_message message
       summary = find_by_constituency_name_and_recipient_and_recipient_email_and_sent_month(
-        message.constituency_name, message.recipient, message.recipient_email, message.sent_at.at_beginning_of_month)
+        message.constituency_name, message.recipient, message.recipient_email, message.sent_at.beginning_of_month)
       unless summary
         summary = MessageSummary.new
         summary.populate_from(message)
@@ -60,7 +60,7 @@ class MessageSummary < ActiveRecord::Base
     self.recipient_email = message.recipient_email
     self.recipient = message.recipient
     self.constituency_name = message.constituency_name
-    self.sent_month = message.sent_at.at_beginning_of_month
+    self.sent_month = message.sent_at.beginning_of_month
     self.count = 0
   end
 end
