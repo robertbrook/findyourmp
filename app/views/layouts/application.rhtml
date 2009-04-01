@@ -10,6 +10,7 @@
     @import url("/stylesheets/grid.css");
     @import url("/stylesheets/main.css");
   </style>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
   <% if @show_postcode_autodiscovery_links %>
   <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
   <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
