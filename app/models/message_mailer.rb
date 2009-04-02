@@ -27,7 +27,7 @@ class MessageMailer < ActionMailer::Base
     subject    message.subject
     recipients "#{message.recipient} <#{message.recipient_email}>"
     from       MessageMailer.noreply_email
-    # reply_to   message.sender_email
+    reply_to   message.sender_email
     sent_on    sent_at
 
     body       :message => message
@@ -37,7 +37,6 @@ class MessageMailer < ActionMailer::Base
     subject    "Confirmation of your message to #{message.recipient}"
     recipients "#{message.sender} <#{message.sender_email}>"
     from       MessageMailer.noreply_email
-    # reply_to
     sent_on    sent_at
 
     body       :message => message

@@ -9,13 +9,13 @@
   - postcode = flash[:postcode]
   - form_for([@constituency, @message], {:only_path => false}) do |f|
     .form_field
-      = label :message, :sender_email, 'Your email address *'
-      = f.text_field(:sender_email)
-      = error_message_on(:message, :sender_email)
-    .form_field
       = label :message, :sender, 'Your full name *'
       = f.text_field(:sender)
       = error_message_on(:message, :sender)
+    .form_field
+      = label :message, :sender_email, 'Your email address *'
+      = f.text_field(:sender_email)
+      = error_message_on(:message, :sender_email)
     .form_field
       = label :message, :address, 'Your postal address'
       = f.text_area(:address, :rows=>3)

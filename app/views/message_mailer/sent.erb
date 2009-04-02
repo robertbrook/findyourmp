@@ -1,7 +1,7 @@
-<% if @message.sender_is_constituent %>
-Message from constituent:
-<% else %>
-Message from non-constituent:
-<% end %>
+This message is from:
+
+<%= @message.sender_details %>
+
+The message is:
 
 <%= @message.message %>

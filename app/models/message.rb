@@ -70,6 +70,26 @@ class Message < ActiveRecord::Base
     end
   end
 
+  def address_or_not_given
+    address.blank? ? 'not given' : address
+  end
+
+  def postcode_with_constituency
+    if sender_is_constituent
+      "#{postcode} (postcode is in #{constituency_name})"
+    else
+      "#{postcode} (postcode is not in #{constituency_name})"
+    end
+  end
+
+  def sender_details
+    details = []
+    details << "Name: #{sender}"
+    details << "Address: #{address_or_not_given}"
+    details << "Postcode: #{postcode_with_constituency}"
+    details.join("\n")
+  end
+
   private
 
     def populate_defaulted_fields

@@ -12,14 +12,16 @@ describe MessageMailer do
     @sender_email = "sender@public.uk"
     @subject = "Subject"
     @contents = "My message"
+    @sender_details = "details"
 
     @no_reply_email = "no_reply@findyourmp.parliament.uk"
 
     MessageMailer.stub!(:noreply_email).and_return @no_reply_email
-    
+
     @message = mock(Message, :constituency_id => @constituency_id,
       :sender => @sender_name,
       :sender_email => @sender_email,
+      :sender_details => @sender_details,
       :test_sender_email => @sender_email,
       :recipient => @recipient_name,
       :recipient_email => @recipient_email,
@@ -49,14 +51,14 @@ describe MessageMailer do
       @email.to.should == [@recipient_email]
     end
     it 'should set body correctly' do
-      @email.body.strip.should == "Message from constituent:\n\n\n#{@contents}"
+      @email.body.strip.should == "Message from:\n\n#{@sender_details}\n\n#{@contents}"
     end
 
     describe 'and sender is not a constituent' do
       it 'should set body correctly' do
         @message.stub!(:sender_is_constituent).and_return false
         @email = MessageMailer.create_sent(@message)
-        @email.body.strip.should == "Message from non-constituent:\n\n\n#{@contents}"
+        @email.body.strip.should == "Message from:\n\n#{@sender_details}\n\n#{@contents}"
       end
     end
   end
