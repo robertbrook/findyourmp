@@ -26,7 +26,7 @@ img {
 
 #inner_container {
 	width: 940px;
-	margin: 35px 0;
+	margin: 15px 0;
 	padding: 0;
 	border: 0;
 	float: left;
@@ -51,7 +51,7 @@ img {
 
 #banner_img {
 	float: left;
-	width: 425px;
+	width: 405px;
 }
 
 .banner_divider {
@@ -63,7 +63,8 @@ img {
 
 #banner_time {
 	/* width: 200px; */
-	width: 208px;
+	width: 228px;
+	height: 55px;
 	float: left;
 	font-family: Arial, sans-serif;
 	font-size: 0.7em;
@@ -76,7 +77,7 @@ img {
 #banner_search {
 	float: left;
 	padding: 0 0 0 20px;
-	margin: 20px 0 0 0;
+	margin: 17px 0 0 0;
 }
 
 #banner_search input {
@@ -99,6 +100,40 @@ img {
 #banner_search .searchSubmit {
 	float: left;
 	padding: 10px 0 0 10px;
+}
+
+/* top nav bar */
+#top_nav {
+	float: left;
+	width: 940px;
+}
+
+#top_nav_content {
+	float: right;
+}
+
+#top_nav_content ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#top_nav_content ul li {
+	font-size: 0.8em;
+	color: #336A9F;
+	float: left;
+	padding: 0;
+	border-left: #cfcfcf 1px solid;
+}
+
+#top_nav_content ul li.first {
+	border: 0;
+}
+
+#top_nav_content a {
+	display: block;
+	padding: 0.2em 7px;
+	text-decoration: none;
 }
 
 /* main nav bar */
