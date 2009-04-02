@@ -24,6 +24,25 @@ namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
 
+  desc "Set ar_sendmail cron job"
+  task :set_ar_sendmail_cron_job, :roles => :app do
+    batch_size = ENV['batch_size']
+    freq_in_minutes = ENV['freq_in_mins']
+    unless batch_size && freq_in_minutes
+      puts
+      puts 'must supply batch-size and freq-in-minutes when setting cron job'
+      puts 'USAGE: cap deploy:set_ar_sendmail_cron_job batch_size=100 freq_in_mins=5'
+      puts
+    else
+      cmd = "*/#{freq_in_minutes} * * * * /usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_to}/current --environment production"
+      tmpname = "/tmp/appname-crontab.#{Time.now.strftime('%s')}"
+      run "(crontab -l || echo '') | grep -v 'ar_sendmail' > #{tmpname}"
+      run %Q|echo "#{cmd}" >> #{tmpname}|
+      run "crontab #{tmpname}"
+      run "rm #{tmpname}"
+    end
+  end
+
   desc "Upload deployed database.yml"
   task :upload_deployed_database_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_database.yml")
@@ -47,10 +66,10 @@ namespace :deploy do
 
     if overwrite
       run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
-      
+
       run "rm #{data_dir}/ConstituencyToMember.txt"
       put_data data_dir, 'ConstituencyToMember.txt'
-      
+
       run "rm #{data_dir}/constituencies.txt"
       put_data data_dir, 'constituencies.txt'
 
@@ -111,7 +130,7 @@ namespace :deploy do
     if overwrite
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
-      
+
       run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
       run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
     end
@@ -179,7 +198,7 @@ namespace :deploy do
     put data, "/etc/apache2/sites-available/#{application}", :mode => 0664
 
     sudo "sudo ln -s -f /etc/apache2/sites-available/#{application} /etc/apache2/sites-enabled/000-default"
-    
+
     run "sudo mysql -uroot -p", :pty => true do |ch, stream, data|
       # puts data
       if data =~ /Enter password:/

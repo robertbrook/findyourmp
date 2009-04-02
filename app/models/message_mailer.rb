@@ -27,6 +27,7 @@ class MessageMailer < ActionMailer::Base
     subject    message.subject
     recipients "#{message.recipient} <#{message.recipient_email}>"
     from       MessageMailer.noreply_email
+    reply_to   message.sender_email
     sent_on    sent_at
 
     body       :message => message

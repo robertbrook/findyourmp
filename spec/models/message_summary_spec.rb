@@ -6,7 +6,7 @@ describe MessageSummary do
     before do
       @constituency_id = "value for constituency_id"
       @postcode = "N1 2SD"
-      @time = Time.now.to_date
+      @time = Time.now.utc
       @constituency_name = 'constituency_name'
       @recipient_email = "value.for@recipient.email"
       @recipient = "recipient"
@@ -31,7 +31,7 @@ describe MessageSummary do
       summary.constituency_name.should == @constituency_name
       summary.recipient_email.should == @recipient_email
       summary.recipient.should == @recipient
-      summary.sent_month.should == @time.at_beginning_of_month
+      summary.sent_month.should == @time.to_date.beginning_of_month
     end
   end
 

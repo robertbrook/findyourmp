@@ -14,15 +14,20 @@ Given /^I am logged in as an admin user$/ do
   And 'I press "Login"'
 end
 
-Given /I am on a Constituency page/ do
-  Given 'I am on the Front page'
-  And 'I search for "Aberdeen North"'
-end
-
 Given /^I am on a Edit Constituency page$/ do
   Given 'I am logged in as an admin user'
-  And 'I am on a Constituency page'
-  When 'I follow "edit"'
+  And 'I follow "All constituencies"'
+  And 'I follow "Aberdeen North"'
+end
+
+Given /^I am on the Constituency edit page for "(.+)"$/ do |constituency_name|
+  Given 'I follow "All constituencies"'
+  And "I follow \"#{constituency_name}\""
+end
+
+Then /^I should see the "(.+)" constituency page without "(.+)"$/ do |constituency_name, member_name|
+  Then "I should see \"#{constituency_name}\""
+  And "I should not see \"#{member_name}\""
 end
 
 Then /^I should see Edit Constituency Form$/ do

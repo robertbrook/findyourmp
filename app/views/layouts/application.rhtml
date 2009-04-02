@@ -10,6 +10,7 @@
     @import url("/stylesheets/grid.css");
     @import url("/stylesheets/main.css");
   </style>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
   <% if @show_postcode_autodiscovery_links %>
   <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
   <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
@@ -34,19 +35,45 @@
   </script>
   <script language="JavaScript1.1" src="/javascripts/webtrends.js" type="text/javascript"></script>
 <% end %>
+  <script language="JavaScript1.1" type="text/javascript">
+    <!--
+    function displayDate() {
+	  var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+	  var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+
+     today = new Date();
+	 formattedDate = DAY_NAMES[today.getDay()] + ' ' + today.getDate() + ' ' + MONTH_NAMES[today.getMonth()] + ' ' + today.getFullYear();
+	 return formattedDate;
+    }
+    -->
+  </script>
 </head>
 <body>
   <div id="outer_container">
     <div id="inner_container">
 <% if RAILS_ENV != 'test' %>
       <span class="hidden"><a href="#maincontent">Skip to main content</a></span>
+	<div id="top_nav">
+		<div id="top_nav_content">
+			<ul>
+				<li class="first"><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
+				<li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
+				<li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
+				<li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
+				<li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
+			</ul>
+		</div>
+	</div>
       <div id="banner">
         <div id="banner_top">
           <div id="banner_img">
             <a href="http://www.parliament.uk/"><img src="/images/parliament-uk.gif" width="300" height="55" alt="United Kingdom Parliament" /></a>
           </div>
-          <!--div class="banner_divider">&nbsp;</div-->
-          <div id="banner_time">&nbsp;</div>
+          <div class="banner_divider">&nbsp;</div>
+		  	<div id="banner_time">
+			  <div id="big_ben"><object type="application/x-shockwave-flash" data="http://www.parliament.uk/images/bigben.swf" width="50" height="50" id="bigben"></object></div>
+			  <div id="time_text"><script language="Javascript 1.1" type="text/javascript">document.write(displayDate());</script></div>
+		  </div>
           <div class="banner_divider">&nbsp;</div>
           <form action="http://www.publications.parliament.uk/cgi-bin/search.pl" method="post">
             <div id="banner_search">

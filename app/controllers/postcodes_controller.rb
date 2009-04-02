@@ -1,7 +1,6 @@
 class PostcodesController < ApplicationController
   
   caches_page :show
-  cache_sweeper :postcode_sweeper, :only => [:create, :update, :destroy]
 
   def index
     @last_search_term = flash[:last_search_term]

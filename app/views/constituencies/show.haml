@@ -1,10 +1,5 @@
 - if @constituency
   = render :partial => 'constituencies/constituency', :object => @constituency
-  - if is_admin?
-    %ul.text
-      %li{ :class=>"first"}= link_to 'All constituencies', constituencies_path
-      %li= link_to 'Show message audit', url_for(:controller=>'admin',:action=>'index')
-      %li= link_to 'Edit constituency and member data', edit_constituency_path(@constituency)
 - elsif @constituencies or @members
   #search= render :partial => 'layouts/search_form'
   %h3.subheading Search Results
@@ -15,4 +10,4 @@
   - if @members.size > 0
     %h4= pluralize(@members.size, 'Member')
     = render :partial => 'constituencies/member_match', :collection => @members
-  =render :partial => 'layouts/search_hints'
+  = render :partial => 'layouts/search_hints'

@@ -1,7 +1,7 @@
 class ConstituenciesController < ResourceController::Base
 
-  caches_action :show
-  cache_sweeper :constituency_sweeper, :only => [:create, :update, :destroy]
+  caches_page :show, :if => '!is_admin?'
+  cache_sweeper :constituency_sweeper, :only => [:update, :destroy, :hide_members, :unhide_members]
 
   before_filter :respond_unauthorized_if_not_admin, :except => [:show]
 
