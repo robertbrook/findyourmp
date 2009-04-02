@@ -1,3 +1,17 @@
-<%= "Confirmation that your message to #{@message.recipient} has been sent with the following text:"%>
+You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk.
+
+=================================================================
+
+Your message was sent with the following sender details submitted:
+
+<%= @message.sender_details %>
+
+=================================================================
+
+Your message was sent with the following text:
 
 <%= @message.message %>
+
+=================================================================
+
+If you wish to comment on this service, please mail the Information Office at hcio@parliament.uk.
