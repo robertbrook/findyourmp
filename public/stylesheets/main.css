@@ -664,3 +664,13 @@ ul.nopadding {
 	font-size: 0.7em;
 	color: #B0B0B0;
 }
+
+#big_ben {
+	float: left;
+}
+
+#time_text {
+	float: left;
+	width: 169px;
+	margin: 34px 0 0 4px;
+}
