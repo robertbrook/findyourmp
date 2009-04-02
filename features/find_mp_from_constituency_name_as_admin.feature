@@ -10,4 +10,4 @@ Feature: Find MP from partial constituency name
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
     And I should see "Send a message to Frank Doran"
-    And I should see "Edit"
+    And I should not see "Edit"

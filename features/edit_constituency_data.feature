@@ -5,12 +5,13 @@ Feature: Edit constituency data
 
   Scenario: Follow the "edit" link from constituency page
     Given I am logged in as an admin user
-    And I am on a Constituency page
-    When I follow "edit"
+    And I follow "All constituencies"
+    And I follow "Aberdeen North"
     Then I should see Edit Constituency Form
 
   Scenario: Edit constituency and member details
-    Given I am on a Edit Constituency page
+    Given I am logged in as an admin user
+    And I am on the Constituency edit page for "Aberdeen North"
     When I fill in "Constituency" with "Aberdeen East"
     And I fill in "Member" with "William Wallace"
     And I fill in "Member party" with "SNP"
@@ -25,7 +26,8 @@ Feature: Edit constituency data
     And I should see "Send a message to William Wallace"
 
   Scenario: Edit member email to be empty
-    Given I am on a Edit Constituency page
+    Given I am logged in as an admin user
+    And I am on the Constituency edit page for "Aberdeen North"
     When I fill in "Member email" with ""
     And I press "Update"
     Then I should see "Frank Doran"
@@ -33,7 +35,8 @@ Feature: Edit constituency data
     And I should not see "Send a message to Frank Doran"
 
   Scenario: Set member requested contact url
-    Given I am on a Edit Constituency page
+    Given I am logged in as an admin user
+    And I am on the Constituency edit page for "Aberdeen North"
     When I fill in "Requested contact url" with "http://member.requested.url/"
     And I press "Update"
     Then I should see "Frank Doran"

@@ -9,7 +9,7 @@
     -for constituency in @constituencies
       %tr
         %td= h constituency.code
-        %td= link_to h(constituency.name), constituency_path(constituency)
+        %td= link_to h(constituency.name), edit_constituency_path(constituency)
         %td
           - unless constituency.member_name.blank?
             - if constituency.member_visible
@@ -17,7 +17,8 @@
             - else
               %span.hidden_member= h(constituency.member_name) + ' (hidden)'
 
-        %td= link_to 'Edit', edit_constituency_path(constituency)
+        %td
+          = link_to 'Show', constituency_path(constituency)
         - #%td= link_to 'Destroy', constituency_path(constituency), :confirm => 'Are you sure?', :method => :delete
 
 - # %p.text= link_to 'New constituency', new_constituency_path
