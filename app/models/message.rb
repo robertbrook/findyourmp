@@ -3,7 +3,9 @@ class Message < ActiveRecord::Base
   belongs_to :constituency
 
   before_validation_on_create :populate_defaulted_fields
-  before_validation :populate_postcode_and_sender_is_constituent, :clean_message_whitespace
+  before_validation :populate_postcode_and_sender_is_constituent
+  before_validation :clean_address_whitespace
+  before_validation :clean_message_whitespace
 
   validates_presence_of :sender, :message => 'Please enter your full name'
   validates_presence_of :sender_email, :message => 'Please enter your email address'
@@ -68,6 +70,40 @@ class Message < ActiveRecord::Base
       self.message.each_line { |line| text << line.strip }
       self.message = text.join("\n")
     end
+  end
+
+  def clean_address_whitespace
+    if self.address
+      text = []
+      self.address.each_line { |line| text << line.strip }
+      self.address = text.join("\n")
+    end
+  end
+
+  def address_or_not_given
+    if address.blank?
+      'not given'
+    else
+      lines = []
+      address.each_line {|line| lines << line.strip}
+      lines.join("\n")
+    end
+  end
+
+  def postcode_with_constituency
+    if sender_is_constituent
+      "#{postcode} (postcode is in #{constituency_name})"
+    else
+      "#{postcode} (postcode is not in #{constituency_name})"
+    end
+  end
+
+  def sender_details
+    details = []
+    details << "Name: #{sender}"
+    details << "Address:\n#{address_or_not_given}"
+    details << "Postcode: #{postcode_with_constituency}"
+    details.join("\n")
   end
 
   private

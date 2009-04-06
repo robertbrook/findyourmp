@@ -12,14 +12,16 @@ describe MessageMailer do
     @sender_email = "sender@public.uk"
     @subject = "Subject"
     @contents = "My message"
+    @sender_details = "details"
 
     @no_reply_email = "no_reply@findyourmp.parliament.uk"
 
     MessageMailer.stub!(:noreply_email).and_return @no_reply_email
-    
+
     @message = mock(Message, :constituency_id => @constituency_id,
       :sender => @sender_name,
       :sender_email => @sender_email,
+      :sender_details => @sender_details,
       :test_sender_email => @sender_email,
       :recipient => @recipient_name,
       :recipient_email => @recipient_email,
@@ -39,7 +41,7 @@ describe MessageMailer do
       @email = MessageMailer.create_sent(@message)
     end
     it 'should set subject correctly' do
-      @email.subject.should == @subject
+      @email.subject.should == "[FindYourMP] #{@subject}"
     end
     it 'should set from correctly' do
       @email.from.should == [@no_reply_email]
@@ -48,15 +50,22 @@ describe MessageMailer do
       # @email.to.should == "#{@recipient_name} <#{@recipient_email}>"
       @email.to.should == [@recipient_email]
     end
-    it 'should set body correctly' do
-      @email.body.strip.should == "Message from constituent:\n\n\n#{@contents}"
-    end
 
     describe 'and sender is not a constituent' do
       it 'should set body correctly' do
         @message.stub!(:sender_is_constituent).and_return false
         @email = MessageMailer.create_sent(@message)
-        @email.body.strip.should == "Message from non-constituent:\n\n\n#{@contents}"
+        expected = ['You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk.']
+        expected << "\n\n"
+        expected << "================================================================="
+        expected << "\n\n"
+        expected << "The message was sent with the following sender details submitted:\n\n#{@sender_details}\n\n"
+        expected << "================================================================="
+        expected << "\n\n"
+        expected << "The message was sent with the following text:\n\n#{@contents}\n\n"
+        expected << "=================================================================\n\n"
+        expected << "If you wish to comment on this service or amend your details, please mail the Information Office at hcio@parliament.uk."
+        @email.body.strip.should == expected.join('')
       end
     end
   end
@@ -66,7 +75,7 @@ describe MessageMailer do
       @email = MessageMailer.create_confirm(@message)
     end
     it 'should set subject correctly' do
-      @email.subject.should == "Confirmation of your message to #{@recipient_name}"
+      @email.subject.should == "[FindYourMP] Confirmation of your message: #{@subject}"
     end
     it 'should set from correctly' do
       @email.from.should == [@no_reply_email]
@@ -76,7 +85,14 @@ describe MessageMailer do
       @email.to.should == [@sender_email]
     end
     it 'should set body correctly' do
-      @email.body.strip.should == "Confirmation that your message to #{@recipient_name} has been sent with the following text:\n\n#{@contents}"
+      expected = ["You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk.\n\n"]
+      expected << "=================================================================\n\n"
+      expected << "Your message was sent with the following sender details submitted:\n\n#{@sender_details}\n\n"
+      expected << "=================================================================\n\n"
+      expected << "Your message was sent with the following text:\n\n#{@contents}\n\n"
+      expected << "=================================================================\n\n"
+      expected << "If you wish to comment on this service, please mail the Information Office at hcio@parliament.uk."
+      @email.body.strip.should == expected.join('')
     end
   end
 end

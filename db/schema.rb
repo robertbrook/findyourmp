@@ -33,9 +33,16 @@ ActiveRecord::Schema.define(:version => 20090323170554) do
     t.datetime "created_on"
   end
 
+  create_table "members", :force => true do |t|
+    t.string  "name"
+    t.integer "constituency_id"
+  end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
+
   create_table "message_summaries", :force => true do |t|
-    t.string   "recipient"
     t.string   "constituency_name"
+    t.string   "recipient"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"

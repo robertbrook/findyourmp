@@ -20,7 +20,9 @@ describe Message do
       :constituency_id => @constituency_id,
       :sender => "value for sender",
       :sender_email => "value.for@sender.email",
-      :address => "value for address",
+      :address => "100 Path
+      Islington
+      London",
       :postcode => @postcode,
       :subject => "value for subject",
       :message => "value for message"
@@ -59,6 +61,10 @@ describe Message do
       message = Message.new(@valid_attributes)
       message.valid?.should be_true
       message.recipient.should == @member_name
+      message.address.should == "100 Path
+Islington
+London"
+
     end
 
     describe "sender's postcode is in constituency" do

@@ -1,7 +1,17 @@
-<% if @message.sender_is_constituent %>
-Message from constituent:
-<% else %>
-Message from non-constituent:
-<% end %>
+You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk.
+
+=================================================================
+
+The message was sent with the following sender details submitted:
+
+<%= @message.sender_details %>
+
+=================================================================
+
+The message was sent with the following text:
 
 <%= @message.message %>
+
+=================================================================
+
+If you wish to comment on this service or amend your details, please mail the Information Office at hcio@parliament.uk.
