@@ -17,6 +17,7 @@
       = f.text_field(:sender_email)
       = error_message_on(:message, :sender_email)
     .form_field
+      - @message.clean_address_whitespace
       = label :message, :address, 'Your postal address'
       = f.text_area(:address, :rows=>3)
       = error_message_on(:message, :address)

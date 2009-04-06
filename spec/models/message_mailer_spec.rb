@@ -41,7 +41,7 @@ describe MessageMailer do
       @email = MessageMailer.create_sent(@message)
     end
     it 'should set subject correctly' do
-      @email.subject.should == @subject
+      @email.subject.should == "[FindYourMP] #{@subject}"
     end
     it 'should set from correctly' do
       @email.from.should == [@no_reply_email]
@@ -75,7 +75,7 @@ describe MessageMailer do
       @email = MessageMailer.create_confirm(@message)
     end
     it 'should set subject correctly' do
-      @email.subject.should == "Confirmation of your message to #{@recipient_name}"
+      @email.subject.should == "[FindYourMP] Confirmation of your message: #{@subject}"
     end
     it 'should set from correctly' do
       @email.from.should == [@no_reply_email]
