@@ -2,12 +2,11 @@
 
 body {
 	border: 0;
-	margin: 0;
 	padding: 0;
 	font-family: Verdana, Arial, sans-serif;
-	Xbackground-image:url(../images/background-left.gif);
-	background-color:#FFFFFF;
-	background-position:left top;
+	background-color: #FFFFFF;
+	background-image:url(/images/background-left.gif);
+	background-position: 10px 0;
 	background-repeat:repeat-y;
 	color: #333333;
 }
@@ -62,7 +61,6 @@ img {
 }
 
 #banner_time {
-	/* width: 200px; */
 	width: 228px;
 	height: 55px;
 	float: left;
@@ -70,8 +68,19 @@ img {
 	font-size: 0.7em;
 }
 
-#banner_time img {
-	padding: 0 10px;
+#big_ben {
+	float: left;
+	margin-left: 10px;
+}
+
+#time_text {
+	float: left;
+	width: 149px;
+	margin: 34px 10px 0 4px;
+}
+
+#time_text span {
+  float: right;
 }
 
 #banner_search {
@@ -663,14 +672,4 @@ ul.nopadding {
 .disclaimer {
 	font-size: 0.7em;
 	color: #B0B0B0;
-}
-
-#big_ben {
-	float: left;
-}
-
-#time_text {
-	float: left;
-	width: 169px;
-	margin: 34px 0 0 4px;
 }
