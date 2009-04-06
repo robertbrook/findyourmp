@@ -22,6 +22,20 @@ Spec::Rake::SpecTask.new(:spec) do |t|
 end
 
 namespace :spec do
+  
+  desc "Report uncovered view templates."
+  task :missing_view_templates => :environment do
+    EXTENSION       = ENV['extention'] || 'haml'
+    APP_VIEWS_DIR   = File.join('app', 'views')
+    SPEC_VIEWS_DIR  = File.join('spec', 'views')
+
+    Dir[File.join(Rails.root, "#{APP_VIEWS_DIR}/**/*.html.#{EXTENSION}")].each do |file|
+      file.match(%r{^#{File.join(Rails.root, APP_VIEWS_DIR)}/(.*)\.html.#{EXTENSION}$})
+      puts $1 unless File.exists?(File.join(Rails.root, SPEC_VIEWS_DIR, "#{$1}.html.#{EXTENSION}_spec.rb"))
+    end
+  end
+  
+  
   desc "Run all specs in spec directory with RCov (excluding plugin specs)"
   Spec::Rake::SpecTask.new(:rcov) do |t|
     t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
