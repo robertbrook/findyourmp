@@ -43,7 +43,7 @@ describe Message do
 
   def mock_message_setup
     nil_conditions = {:readonly=>nil, :select=>nil, :include=>nil, :conditions=>nil}
-    @constituency_name = 'constituency_name'
+    @constituency_name = 'Islington South'
     @member_name = 'member_name'
     @member_email = 'member_name@parl.uk'
     constituency = mock_model(Constituency, :member_email => @member_email, :member_name=>@member_name, :id => @constituency_id, :name => @constituency_name)
@@ -76,11 +76,24 @@ London"
     end
 
     describe "sender's postcode is not in constituency" do
-      it 'should return false for sender_in_constituency' do
+      before do
         @post_code.stub!(:in_constituency?).and_return false
-        message = Message.new(@valid_attributes)
-        message.valid?.should be_true
-        message.sender_is_constituent.should be_false
+        @message = Message.new(@valid_attributes)
+      end
+      it 'should return false for sender_in_constituency' do
+        @message.valid?.should be_true
+        @message.sender_is_constituent.should be_false
+      end
+
+      it 'should show sender_details correctly' do
+        @message.valid?.should be_true
+        @message.sender_details.should == "Name: value for sender
+Address:
+100 Path
+Islington
+London
+Postcode: N1 2SD
+This postcode is not in Islington South."
       end
     end
 

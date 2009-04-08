@@ -94,11 +94,11 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def postcode_with_constituency
+  def in_constituency_message
     if sender_is_constituent
-      "#{postcode} (postcode is in #{constituency_name})"
+      "This postcode is in #{constituency_name}."
     else
-      "#{postcode} (postcode is not in #{constituency_name})"
+      "This postcode is not in #{constituency_name}."
     end
   end
 
@@ -106,7 +106,8 @@ class Message < ActiveRecord::Base
     details = []
     details << "Name: #{sender}"
     details << "Address:\n#{address_or_not_given}"
-    details << "Postcode: #{postcode_with_constituency}"
+    details << "Postcode: #{postcode}"
+    details << in_constituency_message
     details.join("\n")
   end
 
