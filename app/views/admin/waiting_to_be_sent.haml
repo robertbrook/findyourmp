@@ -8,11 +8,11 @@
     %table.text
       %tr
         %th Month
-        %th Email count
-      - @waiting_to_be_sent_by_month_count.each do |month, emails|
+        %th Message count
+      - @waiting_to_be_sent_by_month_count.each do |month, count|
         %tr
           %td= month.to_s(:month_year)
-          %td{:style=>'text-align: right'}= number_with_delimiter(emails.size)
+          %td{:style=>'text-align: right'}= number_with_delimiter(count)
 
   %p.text
     = '&nbsp;'

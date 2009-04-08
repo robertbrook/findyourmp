@@ -30,14 +30,30 @@ class Message < ActiveRecord::Base
       "hcinfo@parliament.uk"
     end
 
-    def sent_by_constituency date
-      messages = sent_in_month(date)
-      sent = ActiveSupport::OrderedHash.new
-      groups = messages.group_by(&:constituency_name)
-      groups.keys.compact.sort.each do |constituency|
-        sent[constituency] = groups[constituency]
+    def sent_by_month_count
+      waiting = waiting_to_be_sent_by_month_count
+      MessageSummary.sent_by_month.collect do |month, count|
+        waiting_count = waiting.assoc(month) ? waiting.assoc(month)[1] : 0
+        [month, count - waiting_count ]
       end
-      sent
+    end
+
+    def sent_by_constituency(month)
+      MessageSummary.sent_by_constituency(month)
+    end
+
+    def waiting_to_be_sent_by_month_count
+      Email.waiting_to_be_sent_by_month_count.collect do |month, emails|
+        [month, emails.size / 2]
+      end
+    end
+
+    def sent_message_count
+      MessageSummary.all.collect(&:count).sum - waiting_to_be_sent_count
+    end
+
+    def waiting_to_be_sent_count
+      Email.waiting_to_be_sent_count / 2
     end
 
     def sent_by_month
