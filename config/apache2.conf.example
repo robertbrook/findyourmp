@@ -102,7 +102,7 @@ KeepAliveTimeout 15
     StartServers          5
     MinSpareServers       5
     MaxSpareServers      10
-    MaxClients          150
+    MaxClients          200
     MaxRequestsPerChild   0
 </IfModule>
  
@@ -115,7 +115,7 @@ KeepAliveTimeout 15
 # MaxRequestsPerChild: maximum number of requests a server process serves
 <IfModule mpm_worker_module>
     StartServers          2
-    MaxClients          150
+    MaxClients          175
     MinSpareThreads      25
     MaxSpareThreads      75 
     ThreadsPerChild      25
@@ -670,6 +670,7 @@ LoadModule passenger_module /var/lib/gems/1.8/gems/passenger-[PASSENGER-VERSION]
 PassengerRoot /var/lib/gems/1.8/gems/passenger-[PASSENGER-VERSION]
 PassengerRuby /usr/bin/ruby1.8
 PassengerDefaultUser [PASSENGER-USER]
+PassengerMaxPoolSize 9
  
 # Include the virtual host configurations:
 Include /etc/apache2/sites-enabled/
