@@ -26,6 +26,10 @@ class Message < ActiveRecord::Base
 
   class << self
 
+    def feedback_email
+      "hcinfo@parliament.uk"
+    end
+
     def sent_by_constituency date
       messages = sent_in_month(date)
       sent = ActiveSupport::OrderedHash.new

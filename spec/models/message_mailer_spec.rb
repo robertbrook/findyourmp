@@ -64,7 +64,7 @@ describe MessageMailer do
         expected << "\n\n"
         expected << "The message was sent with the following text:\n\n#{@contents}\n\n"
         expected << "=================================================================\n\n"
-        expected << "If you wish to comment on this service or amend your details, please mail the Information Office at hcio@parliament.uk."
+        expected << "If you wish to comment on this service or amend your details, please mail the Information Office at #{Message.feedback_email}"
         @email.body.strip.should == expected.join('')
       end
     end
@@ -91,7 +91,7 @@ describe MessageMailer do
       expected << "=================================================================\n\n"
       expected << "Your message was sent with the following text:\n\n#{@contents}\n\n"
       expected << "=================================================================\n\n"
-      expected << "If you wish to comment on this service, please mail the Information Office at hcio@parliament.uk."
+      expected << "If you wish to comment on this service, please mail the Information Office at #{Message.feedback_email}"
       @email.body.strip.should == expected.join('')
     end
   end
