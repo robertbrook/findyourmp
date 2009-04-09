@@ -15,6 +15,7 @@ NameVirtualHost *
                 AllowOverride None
                 Order allow,deny
                 allow from all
+                ErrorDocument 500 /500.html
                 FileETag none
 				ExpiresByType text/css "access plus 1 month"
 				ExpiresByType text/javascript "access plus 1 month"
