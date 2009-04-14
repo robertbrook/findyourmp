@@ -6,9 +6,9 @@ body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	background-color: #FFFFFF;
 	background-image:url(../images/background-left.gif);
-	background-position: 10px 0;
-	background-repeat:repeat-y;
+	background-position: 20px 0;
 	color: #333333;
+	padding: 0 0 0 10px;
 }
 
 img {
