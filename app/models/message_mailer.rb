@@ -3,11 +3,6 @@ class MessageMailer < ActionMailer::Base
   self.delivery_method = :activerecord
 
   class << self
-
-    def noreply_email
-      ActionMailer::Base.smtp_settings[:user_name]
-    end
-
     def parse_email text
       email = TMail::Address.parse(text)
       domain = email.domain
@@ -26,7 +21,7 @@ class MessageMailer < ActionMailer::Base
   def sent(message, sent_at = Time.now)
     subject    "[FindYourMP] #{message.subject}"
     recipients "#{message.recipient} <#{message.recipient_email}>"
-    from       MessageMailer.noreply_email
+    from       Message.noreply_email
     reply_to   message.sender_email
     sent_on    sent_at
 
@@ -36,7 +31,7 @@ class MessageMailer < ActionMailer::Base
   def confirm(message, sent_at = Time.now)
     subject    "[FindYourMP] Confirmation of your message: #{message.subject}"
     recipients "#{message.sender} <#{message.sender_email}>"
-    from       MessageMailer.noreply_email
+    from       Message.noreply_email
     sent_on    sent_at
 
     body       :message => message

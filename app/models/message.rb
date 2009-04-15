@@ -26,6 +26,10 @@ class Message < ActiveRecord::Base
 
   class << self
 
+    def noreply_email
+      "noreply@parliament.uk"
+    end
+
     def feedback_email
       "hcinfo@parliament.uk"
     end
