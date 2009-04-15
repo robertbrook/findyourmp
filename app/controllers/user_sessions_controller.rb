@@ -10,6 +10,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
+      flash[:notice] = ''
       redirect_back_or_default admin_url
     else
       flash[:notice] = 'Your user name and password combination was not recognized. Please try again.'
