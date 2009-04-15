@@ -12,6 +12,7 @@ class UserSessionsController < ApplicationController
     if @user_session.save
       redirect_back_or_default admin_url
     else
+      flash[:notice] = 'Your user name and password combination was not recognized. Please try again.'
       render :action => :new
     end
   end
@@ -20,5 +21,5 @@ class UserSessionsController < ApplicationController
     current_user_session.destroy
     redirect_back_or_default root_url
   end
-end
 
+end
