@@ -9,7 +9,7 @@ module FindYourMP::DataLoader
   MEMBER_FILE = "#{DATA_DIR}/ConstituencyToMember.txt"
   CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
 
-  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDC_AUG_2008_UK_100M.txt"
+  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
   def load_members
@@ -67,7 +67,7 @@ module FindYourMP::DataLoader
     IO.foreach(SOURCE_POSTCODE_FILE) do |line|
       termination_date = line[29..34]
       if termination_date == blank_date
-        consistuency_code = line[62..64]
+        consistuency_code = line[69..71]
         unless consistuency_code == blank_code
           post_code = line[0..6]
           post_codes << post_code << space << consistuency_code
