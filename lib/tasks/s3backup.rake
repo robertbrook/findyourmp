@@ -32,16 +32,7 @@ namespace :fymp do
       unless File.exist?(backup_file)
         puts "ERROR: file #{backup_file} does not exist. Aborting"
       else
-        send_file = backup_file #+ ".tar.gz"
-        
-        backupfile_path = File.dirname(backup_file)
-        backupfile_name = backup_file.gsub(backupfile_path + '/', '')
-        
-        puts "Compressing file..."
-        system("tar -C #{backupfile_path} -cvzf #{send_file} #{backupfile_name}")
-        puts ""
-        
-        send_backup(send_file)
+        send_backup(backup_file)
       end
     end
   end

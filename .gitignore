@@ -12,6 +12,7 @@ doc
 log
 data
 db/*.sqlite3*
+db/backup/*
 public/stylesheets/screen.css
 public/constituencies
 public/postcodes

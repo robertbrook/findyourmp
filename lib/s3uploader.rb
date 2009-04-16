@@ -8,29 +8,47 @@ module FindYourMP::S3Uploader
       raise "Error, file to be backed up does not exist"
     end
 
+    backup_path = "#{RAILS_ROOT}/db/backup"
     s3_conf = "#{RAILS_ROOT}/config/S3.yml"
 
     s3_config = File.open(s3_conf)
     s3_options = YAML.load(s3_config)
+
+    system("cp #{backup_file} #{backup_path}")
+    backup_file_path = File.dirname(backup_file)
+    backup_file_name = backup_file.gsub(backup_file_path + '/', '')
     
     puts "Encrypting file..."
-    encrypted = encrypt_file(backup_file, s3_options[:key], s3_options[:alg], s3_options[:iv])
+    encrypted = encrypt_file(backup_file_name, backup_path, s3_options[:alg], 'fymp-public.pem')
     puts encrypted
+    puts ""
+        
+    data_file_name = encrypted.gsub(backup_path + '/', '')
+    send_file_name = data_file_name.gsub('.bak', '.tar.gz')
+    key_file_name = data_file_name.gsub('.bak', '_key.txt')
+    iv_file_name = data_file_name.gsub('.bak', '_iv.txt')
+    
+    puts "Compressing files..."
+    system("tar -C #{backup_path} -cvzf #{backup_path}/#{send_file_name} #{data_file_name} #{key_file_name} #{iv_file_name}")
+    puts ""
+    
+    puts "Deleting temporary files..."
+    system("rm #{backup_path}/#{data_file_name}; rm #{backup_path}/#{key_file_name}; rm #{backup_path}/#{iv_file_name}; rm #{backup_path}/#{backup_file}")
     puts ""
     
     puts "Uploading to S3..."
-    upload_file(encrypted, s3_options[:bucket_name], s3_options[:bucket_key], s3_options[:bucket_secret])
+    upload_file("#{backup_path}/#{send_file_name}", s3_options[:bucket_name], s3_options[:bucket_key], s3_options[:bucket_secret])
     puts ""
     
-    puts "Deleting encrypted file..."
-    File.delete(encrypted)
+    puts "Deleting backup file..."
+    system("rm #{backup_path}/#{send_file_name}")
     puts ""
     
     puts "Done!"
   end
 
 
-  def symmetric_encryption(cipher, input, output)
+  def symmetric_file_encryption(cipher, input, output)
     cipher.encrypt
     size = File.size(input)
     blocks = size / 16
@@ -57,7 +75,7 @@ module FindYourMP::S3Uploader
     end
   end
   
-  def symmetric_decryption(cipher, input, output)
+  def symmetric_file_decryption(cipher, input, output)
     cipher.decrypt
     size = File.size(input)
     blocks = size / 16
@@ -85,17 +103,44 @@ module FindYourMP::S3Uploader
     end
   end
 
-  def encrypt_file(input, key, alg, iv)
+  def asymmetric_encryption(keyfile, plain_text)
+    public_key_file = keyfile
+    public_key = OpenSSL::PKey::RSA.new(File.read(public_key_file))  
+   
+    encrypted = public_key.public_encrypt(plain_text)
+    encrypted
+  end
+  
+  def asymmetric_decryption(keyfile, password, encrypted)
+    private_key_file = keyfile 
+    private_key = OpenSSL::PKey::RSA.new(File.read(private_key_file),password)  
+
+    decrypted = private_key.private_decrypt(encrypted)
+    decrypted
+  end
+
+  def encrypt_file(input, folder, alg, pem_file)
     t = Time.now
     datetime = t.strftime("%Y%m%d%H%M%S")
-    output = "#{datetime}_s3.bak"
+    
+    output = "#{folder}/#{datetime}_s3.bak"
 
-    bf = OpenSSL::Cipher::Cipher.new(alg)
-    bf.encrypt
-    bf.key = key
-    bf.iv = iv
+    cipher = OpenSSL::Cipher::Cipher.new(alg)
+    cipher.encrypt
+    cipher.key = cipher_key = cipher.random_key
+    cipher.iv = cipher_iv = cipher.random_iv
 
-    symmetric_encryption(bf, input, output)
+    symmetric_file_encryption(cipher, input, output)
+
+    key_file = "#{folder}/#{datetime}_s3_key.txt"
+    File.open(key_file,'w') do |file|
+      file << asymmetric_encryption(pem_file, cipher_key)
+    end
+    
+    iv_file = "#{folder}/#{datetime}_s3_iv.txt"
+    File.open(iv_file,'w') do |file|
+      file << asymmetric_encryption(pem_file, cipher_iv)
+    end
 
     return output
   end
@@ -119,7 +164,7 @@ module FindYourMP::S3Uploader
     bf.key = key
     bf.iv = iv
 
-    symmetric_decryption(bf, input, output)
+    symmetric_file_decryption(bf, input, output)
     
     return output
   end
@@ -130,6 +175,8 @@ module FindYourMP::S3Uploader
          :secret_access_key => secret
      )
 
-     AWS::S3::S3Object.store(file, open(file), bucket)
+     stored_file_path = File.dirname(file)
+     stored_file = file.gsub(stored_file_path + '/', '')
+     AWS::S3::S3Object.store(stored_file, open(file), bucket)
   end
 end
