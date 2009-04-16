@@ -29,10 +29,63 @@ module FindYourMP::S3Uploader
     puts "Done!"
   end
 
-  def encrypt_file(input, key, alg, iv)
+
+  def symmetric_encryption(cipher, input, output)
+    cipher.encrypt
     size = File.size(input)
     blocks = size / 16
+    
+    File.open(output,'w') do |enc|
+      File.open(input) do |file|
+        for i in 1..blocks-1
+          block = file.read(16)
+          enc << cipher.update(block)
+        end
 
+        if size%16 > 0
+          pad_size = 16 - size%16
+          padding = ""
+          padding = padding.ljust(pad_size+1, " ")
+          
+          block = file.read() << padding
+          enc << cipher.update(block)
+          
+          enc << cipher.final
+          enc << pad_size.to_s(base=16)
+        end
+      end
+    end
+  end
+  
+  def symmetric_decryption(cipher, input, output)
+    cipher.decrypt
+    size = File.size(input)
+    blocks = size / 16
+    
+    if size%16 > 0
+      blocks = blocks - 1
+    end
+    
+    File.open(output,'w') do |dec|
+      File.open(input) do |file|        
+        for i in 1..blocks
+          block = file.read(16)
+          dec << cipher.update(block)
+        end
+        
+        if size%16 >0
+          last_bit_crypted = file.read(16)
+          last_bit_plain = cipher.update(last_bit_crypted)
+          
+          pad_size = file.read().hex
+          pad_size+=1
+          dec << last_bit_plain[0..-pad_size]
+        end
+      end
+    end
+  end
+
+  def encrypt_file(input, key, alg, iv)
     t = Time.now
     datetime = t.strftime("%Y%m%d%H%M%S")
     output = "#{datetime}_s3.bak"
@@ -42,29 +95,8 @@ module FindYourMP::S3Uploader
     bf.key = key
     bf.iv = iv
 
-    File.open(output,'w') do |enc|
-      File.open(input) do |f|
-        for i in 1..blocks-1
-          r = f.read(16)
-          cipher = bf.update(r)
-          enc << cipher
-        end
+    symmetric_encryption(bf, input, output)
 
-        if size%16 > 0
-          puts size%16
-          pad_size = 16 - size%16
-          padding = ""
-          padding = padding.ljust(pad_size+1, " ")
-          
-          r = f.read() << padding
-          cipher = bf.update(r)
-          enc << cipher
-          
-          enc << bf.final
-          enc << pad_size.to_s(base=16)
-        end
-      end
-    end
     return output
   end
   
@@ -78,13 +110,6 @@ module FindYourMP::S3Uploader
     key = s3_options[:key]
     iv = s3_options[:iv]
     
-    size = File.size(input)
-    blocks = size / 16
-
-    if size%16 > 0
-      blocks = blocks - 1
-    end
-
     t = Time.now
     datetime = t.strftime("%Y%m%d%H%M%S")
     output = input.gsub(".bak", ".decrypted")
@@ -94,24 +119,8 @@ module FindYourMP::S3Uploader
     bf.key = key
     bf.iv = iv
 
-    File.open(output,'w') do |dec|
-      File.open(input) do |f|        
-        for i in 1..blocks
-          r = f.read(16)
-          cipher = bf.update(r)
-          dec << cipher
-        end
-        
-        if size%16 >0
-          last_bit = f.read(16)
-          cipher = bf.update(last_bit)
-          
-          pad_size = f.read().hex
-          pad_size+=1
-          dec << cipher[0..-pad_size]
-        end
-      end
-    end
+    symmetric_decryption(bf, input, output)
+    
     return output
   end
 
