@@ -19,7 +19,7 @@ namespace :servertest do
   task :concurrent, :hosts => siege do
     set :user, siege_user
     set :password, siege_password
-    sudo "siege -c285 -r40 -i -f url-speed-test.txt -b"
+    sudo "siege -c275 -r42 -i -f url-speed-test.txt -b"
   end
   
   desc "Run the response time test"
