@@ -14,7 +14,7 @@
       .row_item
         .row_label Website
         .row_value
-          = link_to @constituency.member_website.sub('http://',''), @constituency.member_website
+          = link_to @constituency.member_website.sub('http://','').chomp('/'), @constituency.member_website
     .row_item
       .row_label= @constituency.member_requested_contact_url? ? "Contact" : "Email"
       .row_value
