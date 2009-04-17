@@ -1,16 +1,16 @@
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/passenger.rb')
 
 role :app, domain
-set :passenger_path, '/var/lib/gems/1.8/gems/passenger-2.1.2/bin'
 
 namespace :passenger do
   desc "Display the memory stats info"
   task :memory_stats do
-    sudo "#{passenger_path}/passenger-memory-stats"
+    sudo FindYourMP::Passenger.memory_stats_cmd
   end
-  
+
   desc "Display detailed status info"
   task :status do
-    sudo "#{passenger_path}/passenger-status"
+    sudo FindYourMP::Passenger.status_cmd
   end
 end
