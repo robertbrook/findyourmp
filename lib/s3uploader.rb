@@ -15,6 +15,14 @@ module FindYourMP::S3Uploader
     backup_path = "#{RAILS_ROOT}/db/backup"
     s3_conf = "#{RAILS_ROOT}/config/S3.yml"
     pem_file = "#{RAILS_ROOT}/data/fymp-public.pem"
+    
+    unless File.exist?(pem_file)
+      raise "Error, public key not found - cannot encrypt backup data"
+    end
+    
+    unless File.exist?(s3_conf)
+      raise "Error, config file not found"
+    end
 
     s3_config = File.open(s3_conf)
     s3_options = YAML.load(s3_config)
@@ -66,6 +74,14 @@ module FindYourMP::S3Uploader
   def decrypt_data(input)
     pem_file = "#{RAILS_ROOT}/data/fymp-private.pem"
     s3_conf = "#{RAILS_ROOT}/config/S3.yml"
+
+    unless File.exist?(pem_file)
+      raise "Error, private key not found - cannot decrypt the data"
+    end
+    
+    unless File.exist?(s3_conf)
+      raise "Error, config file not found"
+    end
 
     s3_config = File.open(s3_conf)
     s3_options = YAML.load(s3_config)
