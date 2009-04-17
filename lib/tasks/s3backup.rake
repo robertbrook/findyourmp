@@ -22,12 +22,12 @@ namespace :fymp do
   end
   
   desc "Send database backup file to S3"
-  task :backup_to_S3 do
+  task :backup_to_s3 do
     backup_file = ENV['backupfile']
     
     unless backup_file
       puts 'must supply backupfile to send to S3'
-      puts 'USAGE: rake fymp:backup_to_S3 backupfile=/full/path/and/filename.tar.gz'
+      puts 'USAGE: rake fymp:backup_to_S3 backupfile=/full/path/and/filename.bak'
     else
       unless File.exist?(backup_file)
         puts "ERROR: file #{backup_file} does not exist. Aborting"
@@ -41,6 +41,11 @@ namespace :fymp do
   task :decrypt_file do
     crypted_file = ENV['filename']
     
-    decrypt_data(crypted_file)
+    unless crypted_file
+      puts 'must supply file to decrypt'
+      puts 'USAGE: rake fymp:decrypt_file filename=/path/and/filename.bak'
+    else
+      decrypt_data(crypted_file)
+    end
   end
 end
