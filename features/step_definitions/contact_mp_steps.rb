@@ -35,7 +35,7 @@ end
 
 Given /I am on a new Message page/ do
   Given "I am on my Postcode page"
-  And 'I follow "Send a message to Frank Doran"'
+  And 'I follow "Email Frank Doran"'
 end
 
 Given /I am on a preview Message page/ do

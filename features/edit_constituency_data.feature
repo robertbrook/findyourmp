@@ -23,7 +23,7 @@ Feature: Edit constituency data
     And I should see "William Wallace (SNP)"
     And I should see link to "http://the.re"
     And I should see link to "http://it.is"
-    And I should see "Send a message to William Wallace"
+    And I should see "Email William Wallace"
 
   Scenario: Edit member email to be empty
     Given I am logged in as an admin user
@@ -31,8 +31,8 @@ Feature: Edit constituency data
     When I fill in "Member email" with ""
     And I press "Update"
     Then I should see "Frank Doran"
-    And I should see "Sorry: we do not have an email address for Frank Doran."
-    And I should not see "Send a message to Frank Doran"
+    And I should see "Sorry, we do not have an email address for Frank Doran."
+    And I should not see "Email Frank Doran"
 
   Scenario: Set member requested contact url
     Given I am logged in as an admin user

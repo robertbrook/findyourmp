@@ -31,14 +31,14 @@ Feature: Find MP from constituency name
     Then I should see "Aberdeen North"
     And I should not see "Aberdeen South"
     And I should see "Frank Doran"
-    And I should see "Send a message to Frank Doran"
+    And I should see "Email Frank Doran"
     And I should not see "Edit"
 
   Scenario: Enter a valid constituency with no sitting MP
     Given I am on the Front page
     When I search for "Glenrothes"
     Then I should see "Glenrothes"
-    And I should see "No sitting member"
+    And I should see "No sitting Member of Parliament."
 
   Scenario: Enter a single letter search term
     Given I am on the Front page

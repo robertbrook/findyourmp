@@ -111,7 +111,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def no_sitting_member?
-    member_name.blank? || !member_visible
+    (!member_name?) || (!member_visible)
   end
 
   def to_tsv_line

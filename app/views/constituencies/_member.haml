@@ -1,16 +1,34 @@
-- if @constituency.no_sitting_member?
-  %p.text No sitting member.
-- else
-  %p.text= "#{h @constituency.member_name} (#{@constituency.member_party}) is the sitting Member of Parliament for #{@constituency.name}."
-  - unless @constituency.member_biography_url.blank?
-    %p.text= %Q|Link to #{link_to "biography of #{@constituency.member_name}", @constituency.member_biography_url }.|
-  - unless @constituency.member_website.blank?
-    %p.text= %Q|Link to #{link_to "website of #{@constituency.member_name}", @constituency.member_website }.|
-  - if @constituency.member_requested_contact_url.blank?
-    - if @constituency.member_email.blank?
-      %p.text= "Sorry: we do not have an email address for #{h @constituency.member_name}."
-    - else
-      %p.text= %Q|#{link_to("Send a message to #{@constituency.member_name}", new_constituency_message_url(@constituency))}.|
+.text
+  - if @constituency.no_sitting_member?
+    %p No sitting Member of Parliament.
   - else
-    %p.text= link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
-
+    .row_item
+      .row_label Sitting MP
+      .row_value
+        - text = "#{h(@constituency.member_name)} (#{@constituency.member_party})"
+        - if @constituency.member_biography_url?
+          = link_to text, @constituency.member_biography_url
+        - else
+          = text
+    - if @constituency.member_website?
+      .row_item
+        .row_label Website
+        .row_value
+          = link_to @constituency.member_website.sub('http://',''), @constituency.member_website
+    .row_item
+      .row_label= @constituency.member_requested_contact_url? ? "Contact" : "Email"
+      .row_value
+        - if @constituency.member_requested_contact_url?
+          = link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
+        - elsif @constituency.member_email?
+          = %Q|#{link_to("Email #{@constituency.member_name}", new_constituency_message_url(@constituency))}|
+        - else
+          = "Sorry, we do not have an email address for #{h @constituency.member_name}."
+    .row_item
+      .row_label Telephone
+      .row_label
+        020 7219 3000 (House of Commons Switchboard - ask for your Member's Office)
+    .row_item
+      .row_label Letter
+      .row_value
+        House of Commons, London, SW1A 0AA

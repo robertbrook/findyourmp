@@ -64,3 +64,16 @@ label.checkbox_label {
   float: none;
   display: inline;
 }
+
+.row_item {
+  padding-top: 1em;
+  clear: both;
+  height: 25px;
+}
+.row_label {
+  float: left;
+  width: 125px;
+}
+.row_value {
+  float: left;
+}

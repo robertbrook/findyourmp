@@ -9,4 +9,4 @@ Feature: By-election handling when previous MP standing
     When I uncheck "Member visible"
     And I press "Update"
     Then I should see the "Aberdeen North" constituency page without "Frank Doran"
-    And I should see "No sitting member."
+    And I should see "No sitting Member of Parliament."

@@ -38,12 +38,12 @@
   <script language="JavaScript1.1" type="text/javascript">
     <!--
     function displayDate() {
-	  var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-	  var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+    var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+    var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
      today = new Date();
-	 formattedDate = DAY_NAMES[today.getDay()] + ' ' + today.getDate() + ' ' + MONTH_NAMES[today.getMonth()] + ' ' + today.getFullYear();
-	 return formattedDate;
+   formattedDate = DAY_NAMES[today.getDay()] + ' ' + today.getDate() + ' ' + MONTH_NAMES[today.getMonth()] + ' ' + today.getFullYear();
+   return formattedDate;
     }
     -->
   </script>
@@ -53,27 +53,27 @@
     <div id="inner_container">
 <% if RAILS_ENV != 'test' %>
       <span class="hidden"><a href="#maincontent">Skip to main content</a></span>
-	<div id="top_nav">
-		<div id="top_nav_content">
-			<ul>
-				<li class="first"><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
-				<li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
-				<li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
-				<li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
-				<li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
-			</ul>
-		</div>
-	</div>
+  <div id="top_nav">
+    <div id="top_nav_content">
+      <ul>
+        <li class="first"><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
+        <li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
+        <li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
+        <li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
+        <li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
       <div id="banner">
         <div id="banner_top">
           <div id="banner_img">
             <a href="http://www.parliament.uk/"><img src="/images/parliament-uk.gif" width="300" height="55" alt="United Kingdom Parliament" /></a>
           </div>
           <div class="banner_divider">&nbsp;</div>
-		  	<div id="banner_time">
-			  <div id="big_ben"><object type="application/x-shockwave-flash" data="http://www.parliament.uk/images/bigben.swf" width="50" height="50" id="bigben"></object></div>
-			  <div id="time_text"><span><script language="Javascript 1.1" type="text/javascript">document.write(displayDate());</script></span></div>
-		  </div>
+        <div id="banner_time">
+        <div id="big_ben"><object type="application/x-shockwave-flash" data="http://www.parliament.uk/images/bigben.swf" width="50" height="50" id="bigben"></object></div>
+        <div id="time_text"><span><script language="Javascript 1.1" type="text/javascript">document.write(displayDate());</script></span></div>
+      </div>
           <div class="banner_divider">&nbsp;</div>
           <form action="http://www.publications.parliament.uk/cgi-bin/search.pl" method="post">
             <div id="banner_search">
@@ -123,18 +123,18 @@
 <% if RAILS_ENV != 'test' %>
         <div class="column_wrapper_right">
           <div id="leftnav">
-	        <ul id="sidebarleft">
-	          <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
-	          <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
-	          <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
-			  <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
-			  <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
-			  <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
-			  <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
-			  <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
-	        </ul>
-	      </div>
-		  <div class="spacer">&nbsp;</div>
+          <ul id="sidebarleft">
+            <li><a href="http://www.parliament.uk/directories/hciolists/alms.cfm">MPs by Alphabetical list</a></li>
+            <li><a href="http://www.parliament.uk/directories/hciolists/alcm.cfm">MPs by Constituency</a></li>
+            <li><a href="http://www.parliament.uk/directories/hciolists/clomps.cfm">MPs by County and Unitary Authority</a></li>
+        <li><a href="http://www.parliament.uk/directories/hcio/party.cfm">MPs by Party</a></li>
+        <li><a href="http://www.parliament.uk/directories/hciolists/gender.cfm">MPs by Gender</a></li>
+        <li><a href="http://www.parliament.uk/directories/hcio/stateparties.cfm">Current state of the parties</a></li>
+        <li><a href="http://www.parliament.uk/useful/politicalparties.cfm">Political parties represented at Parliament</a></li>
+        <li><a href="http://www.parliament.uk/directories/hciolists/selmem.cfm">Select Committee Membership</a></li>
+          </ul>
+        </div>
+      <div class="spacer">&nbsp;</div>
         </div>
 <% end %>
 
@@ -153,7 +153,7 @@
 
 <% if !is_admin? && RAILS_ENV != 'test' %>
         <div class="column_wrapper_left">
-		  <div class="spacer">&nbsp;</div>
+      <div class="spacer">&nbsp;</div>
           <div class="column-300">
             <div class="column_content">
                 <h3 class="section_head">Help and contacts</h3>

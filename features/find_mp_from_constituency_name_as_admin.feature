@@ -9,5 +9,5 @@ Feature: Find MP from partial constituency name
     When I search for "North"
     Then I should see "Aberdeen North"
     And I should see "Frank Doran"
-    And I should see "Send a message to Frank Doran"
+    And I should see "Email Frank Doran"
     And I should not see "Edit"

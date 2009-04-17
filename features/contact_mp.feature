@@ -6,13 +6,13 @@ Feature: Contact MP
   Scenario: Follow the "send a message" link from postcode page
     Given my MP is contactable via email
     And I am on my Postcode page
-    When I follow "Send a message to Frank Doran"
+    When I follow "Email Frank Doran"
     Then I should see Message Form
 
   Scenario: Follow the "send a message" link from constituency page
     Given my MP is contactable via email
     And I am on my Constituency page
-    When I follow "Send a message to Frank Doran"
+    When I follow "Email Frank Doran"
     Then I should see Message Form
 
     Scenario: Preview message with compulsory field missing and see generic warning
@@ -75,4 +75,4 @@ Feature: Contact MP
     And the MP in constituency "Motherwell and Wishaw" is not contactable via email
     When I search for "Motherwell and Wishaw"
     Then I should see "Mr Frank Roy"
-    And I should see "Sorry: we do not have an email address for Mr Frank Roy."
+    And I should see "Sorry, we do not have an email address for Mr Frank Roy."

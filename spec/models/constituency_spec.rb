@@ -253,7 +253,7 @@ describe Constituency do
   describe 'with member' do
     before do
       @member_name = 'Tiberius Kirk'
-      @constituency.stub!(:member_name).and_return @member_name
+      @constituency.member_name = @member_name
       @constituency.member_visible = true
     end
     describe 'when asked for member name' do
