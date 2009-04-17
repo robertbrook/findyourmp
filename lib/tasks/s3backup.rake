@@ -41,6 +41,6 @@ namespace :fymp do
   task :decrypt_file do
     crypted_file = ENV['filename']
     
-    decrypt_file(crypted_file)
+    decrypt_data(crypted_file)
   end
 end
