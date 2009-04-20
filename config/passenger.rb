@@ -6,7 +6,7 @@ role :app, domain
 namespace :passenger do
   desc "Display the memory stats info"
   task :memory_stats do
-    sudo FindYourMP::Passenger.memory_stats_cmd
+    run FindYourMP::Passenger.memory_stats_cmd
   end
 
   desc "Display detailed status info"
