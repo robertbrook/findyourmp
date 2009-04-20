@@ -115,19 +115,19 @@ describe SearchController do
         @matching = [@constituency, @other_constituency]
         Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matching
       end
-      
+
       it 'should show list of matching constituencies' do
         do_get
         response.should redirect_to("search/#{@constituency_name_part}")
       end
-      
+
       it 'should assign search term to view' do
         do_get
         assigns[:last_search_term].should == @search_term
       end
     end
   end
-  
+
   describe "when asked to search for a term of 2 letters" do
     before do
       Postcode.should_receive(:find_postcode_by_code).with(@constituency_name_short).and_return nil
@@ -213,22 +213,22 @@ describe SearchController do
     before do
       @matching = [@constituency, @other_constituency]
     end
-    
+
     describe 'and there are constituency matches' do
       before do
         Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matching
       end
-      
+
       def do_get format=nil
         get :show, :search_term => @constituency_name_part, :format => format
       end
-      
+
       it 'should assign constituencies to view ordered by name' do
         do_get
         constituencies_ordered_by_name = [@other_constituency, @constituency]
         assigns[:constituencies].should == constituencies_ordered_by_name
       end
-      
+
       it 'should assign search term to view' do
         do_get
         assigns[:last_search_term].should == @constituency_name_part
@@ -262,12 +262,12 @@ describe SearchController do
         response.content_type.should == "application/json"
       end
     end
-    
+
     describe 'and there are member matches' do
       before do
         Constituency.should_receive(:find_all_name_or_member_name_matches).with(@member_name_part).and_return @matching
       end
-            
+
       def do_get format=nil
         get :show, :search_term => @member_name_part, :format => format
       end
@@ -277,7 +277,7 @@ describe SearchController do
         members_ordered_by_name = [@constituency, @other_constituency]
         assigns[:members].should == members_ordered_by_name
       end
-      
+
       it 'should assign search term to view' do
         do_get
         assigns[:last_search_term].should == @member_name_part
@@ -313,7 +313,7 @@ describe SearchController do
     end
 
     describe 'and the search term is all lower case' do
-      before do 
+      before do
         Constituency.should_receive(:find_all_name_or_member_name_matches).with('islington').and_return @matching
       end
 
