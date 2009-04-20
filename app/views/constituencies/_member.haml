@@ -21,7 +21,7 @@
         - if @constituency.member_requested_contact_url?
           = link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
         - elsif @constituency.member_email?
-          = %Q|#{link_to("Email #{@constituency.member_name}", new_constituency_message_url(@constituency))}|
+          = %Q|#{link_to("Email #{@constituency.member_name}", new_constituency_message_url(@constituency) )}|
         - else
           = "Sorry, we do not have an email address for #{h @constituency.member_name}."
     .row_item

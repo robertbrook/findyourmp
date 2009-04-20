@@ -88,6 +88,7 @@ When /^I preview message$/ do
 end
 
 When /^I re-edit message$/ do
+  request.env["HTTP_REFERER"] = 'http://www.example.com/constituencies/aberdeen-north/messages'
   When 'I press "Re-edit your message"'
 end
 
