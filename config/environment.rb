@@ -69,6 +69,7 @@ Rails::Initializer.run do |config|
 end
 
 require 'action_mailer/ar_mailer'
+require 'passenger_mgt'
 
 Haml::Template.options[:format] = :html5
 
@@ -80,4 +81,5 @@ ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
 )
 
 ActiveRecord::Base.send(:include, CountByMonth)
+ActiveRecord::Base.send(:include, FindYourMP::PassengerManagement)
 

@@ -1,5 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/passenger.rb')
-
 class AdminController < ApplicationController
 
   before_filter :require_user
@@ -20,7 +18,6 @@ class AdminController < ApplicationController
 
   def waiting_to_be_sent
     @waiting_to_be_sent_by_month_count = Message.waiting_to_be_sent_by_month_count
-
-    @memory_stats = FindYourMP::Passenger.memory_stats
+    @memory_stats = Message.memory_stats
   end
 end

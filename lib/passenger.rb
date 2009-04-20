@@ -1,8 +1,10 @@
-module FindYourMP; end
+module PassengerMgt
 
-module FindYourMP::Passenger
+  def self.included(base) # :nodoc:
+    base.extend ClassMethods
+  end
 
-  class << self
+  module ClassMethods
     def passenger_path
       '/var/lib/gems/1.8/gems/passenger-2.1.2/bin'
     end
@@ -24,7 +26,7 @@ module FindYourMP::Passenger
     end
 
     def example_memory_stats
-      %Q|-------------- Apache processes --------------
+    %Q|-------------- Apache processes --------------
 PID    PPID  Threads  VMSize    Private  Name
 ----------------------------------------------
 2509   1     1        130.0 MB  0.2 MB   /usr/sbin/apache2 -k start
