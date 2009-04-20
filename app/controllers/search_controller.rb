@@ -5,10 +5,10 @@ class SearchController < ApplicationController
   def index
     search_term = params[:search_term]
     search_format = params[:format]
-    
+
     do_search search_term, search_format
   end
-  
+
   def show
     flash.keep(:postcode)
     @search_term = params[:search_term]
@@ -16,7 +16,7 @@ class SearchController < ApplicationController
 
     @constituencies = Constituency.find_all_name_or_member_name_matches(@search_term)
     @members = @constituencies.clone
-     
+
     if @search_term[/[A-Z][a-z].*/]
       @constituencies.delete_if { |element| !(element.name.include? @search_term) }
       @members.delete_if { |element| !(element.member_name.include? @search_term) }
@@ -24,10 +24,10 @@ class SearchController < ApplicationController
       @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
       @members.delete_if { |element| (element.member_name.nil?) || !(element.member_name.downcase.include? @search_term.downcase) }
     end
-    
+
     @constituencies = @constituencies.sort_by { |record| record.name }
     @members = @members.sort_by { |record| record.member_name }
-    
+
     respond_to do |format|
       format.html { render :template => '/constituencies/show' }
       format.xml  { render :template => '/constituencies/show' }
@@ -38,9 +38,9 @@ class SearchController < ApplicationController
       format.yaml { render :text => results_to_yaml(@constituencies, @members) }
     end
   end
-  
+
   private
-  
+
     def do_search search_term, search_format
       postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
 
@@ -52,7 +52,7 @@ class SearchController < ApplicationController
         if postcode
           redirect_to :controller => 'postcodes', :action=>'show', :postcode => postcode.code, :format => search_format
         else
-          stripped_term = search_term.strip
+          stripped_term = search_term ? search_term.strip : ''
           if stripped_term.size > 2
             constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
             if constituencies.empty?
@@ -94,5 +94,5 @@ class SearchController < ApplicationController
         format.yaml { render :text => message_to_yaml("error", @error_message) }
       end
     end
-  
+
 end
