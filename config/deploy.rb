@@ -58,10 +58,10 @@ namespace :deploy do
   desc "Upload S3 data files"
   task :put_s3_data, :roles => :app do
     data = File.read("config/virtualserver/deployed_s3.yml")
-    put data, "#{release_path}/config/s3.yml", :mode => 0664
+    put data "#{release_path}/config/s3.yml", :mode => 0664
     
     data = File.read("config/virtualserver/fymp-public.pem")
-    put_data, "#{release_path}/config/fymp-public.pem", :mode => 0664
+    put_data "#{release_path}/config/fymp-public.pem", :mode => 0664
   end
 
   task :link_to_data, :roles => :app do
