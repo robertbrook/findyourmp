@@ -88,7 +88,7 @@ module FindYourMP::S3Uploader
     
     alg = s3_options[:alg]
     pass = s3_options[:password]
-    output = input + ".decrypted"
+    output = input + ".decrypted.tar.gz"
     
     decrypt_file(input, output, alg, pass, pem_file)
     

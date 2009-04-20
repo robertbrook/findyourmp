@@ -54,6 +54,12 @@ namespace :deploy do
     data = File.read("config/virtualserver/deployed_mailer.yml")
     put data, "#{release_path}/config/mailer.yml", :mode => 0664
   end
+  
+  desc "Upload deployed S3.yml"
+  task :upload_deployed_s3_yml, :roles => :app do
+    data = File.read("config/virtualserver/deployed_s3.yml")
+    put data, "#{release_path}/config/s3.yml", :mode => 0664
+  end
 
   task :link_to_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
@@ -216,6 +222,7 @@ namespace :deploy do
     sudo "gem install unicode"
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
+    sudo "gem install aws-s3"
     sudo "gem install adzap-ar_mailer --version '2.0.0'"
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 
@@ -243,7 +250,7 @@ namespace :deploy do
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
-after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_data', 'deploy:link_to_data'
+after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:upload_deployed_s3_yml', 'deploy:put_data', 'deploy:link_to_data'
 after 'deploy', 'deploy:check_site_setup'
 
 
