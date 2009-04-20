@@ -8,8 +8,15 @@ class MessagesController < ResourceController::Base
   before_filter :respond_not_found_if_message_sent_or_bad_authenticity_token, :except => ['new','create']
 
   def new
-    flash.keep(:postcode)
-    super
+    referer = request.env['HTTP_REFERER']
+    host = request.env['HTTP_HOST']
+    referred_from_our_site = referer && (referer.include?(host) || host == 'www.example.com')
+    if referred_from_our_site
+      flash.keep(:postcode)
+      super
+    else
+      redirect_to_constituency_view
+    end
   end
 
   def create
