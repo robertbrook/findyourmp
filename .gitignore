@@ -8,6 +8,7 @@ config/database.yml.bak
 config/virtualserver
 config/mailer.yml*
 config/s3.yml*
+config/*.pem
 .DS_Store
 doc
 log

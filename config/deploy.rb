@@ -55,10 +55,13 @@ namespace :deploy do
     put data, "#{release_path}/config/mailer.yml", :mode => 0664
   end
   
-  desc "Upload deployed S3.yml"
-  task :upload_deployed_s3_yml, :roles => :app do
+  desc "Upload S3 data files"
+  task :put_s3_data, :roles => :app do
     data = File.read("config/virtualserver/deployed_s3.yml")
     put data, "#{release_path}/config/s3.yml", :mode => 0664
+    
+    data = File.read("config/virtualserver/fymp-public.pem")
+    put_data, "#{release_path}/config/fymp-public.pem", :mode => 0664
   end
 
   task :link_to_data, :roles => :app do
@@ -250,7 +253,7 @@ namespace :deploy do
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
-after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:upload_deployed_s3_yml', 'deploy:put_data', 'deploy:link_to_data'
+after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_s3_data', 'deploy:put_data', 'deploy:link_to_data'
 after 'deploy', 'deploy:check_site_setup'
 
 
