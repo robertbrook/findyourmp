@@ -7,7 +7,7 @@ module FindYourMP
 
     module ClassMethods
       def passenger_path
-        '/var/lib/gems/1.8/gems/passenger-2.1.2/bin'
+        '/var/lib/gems/1.8/gems/passenger-2.2.1/bin'
       end
 
       def memory_stats
