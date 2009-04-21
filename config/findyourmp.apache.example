@@ -25,6 +25,7 @@ NameVirtualHost *
 				ExpiresByType image/png "access plus 1 month"
 				AddOutputFilterByType DEFLATE application/javascript
 				AddOutputFilterByType DEFLATE text/css
+				AddOutputFilterByType DEFLATE text/html
         </Directory>
 
         ErrorLog /var/log/apache2/error.log
