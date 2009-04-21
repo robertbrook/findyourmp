@@ -52,6 +52,18 @@ describe Message do
     Postcode.should_receive(:find_postcode_by_code).with(@postcode).any_number_of_times.and_return @post_code
   end
 
+  describe "when asked to clear stored messages" do
+    it 'should delete messages older than given number of weeks' do
+      message = mock(Message)
+      weeks = 4
+      delete_past_date = (Date.today - (weeks*7)).to_s(:yyyy_mm_dd)
+      conditions = "sent = true AND created_at < '#{delete_past_date}'"
+
+      Message.should_receive(:delete_all).with(conditions)
+      Message.clear_stored_messages weeks
+    end
+  end
+
   describe 'creating' do
     before do
       mock_message_setup
@@ -64,7 +76,6 @@ describe Message do
       message.address.should == "100 Path
 Islington
 London"
-
     end
 
     describe "sender's postcode is in constituency" do

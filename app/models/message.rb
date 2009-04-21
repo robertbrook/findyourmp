@@ -26,6 +26,12 @@ class Message < ActiveRecord::Base
 
   class << self
 
+    def clear_stored_messages weeks
+      delete_past_date = (Date.today - (weeks*7)).to_s(:yyyy_mm_dd)
+      conditions = "sent = true AND created_at < '#{delete_past_date}'"
+      delete_all(conditions)
+    end
+
     def noreply_email
       "noreply@parliament.uk"
     end
@@ -71,7 +77,7 @@ class Message < ActiveRecord::Base
       MessageMailer.deliver_confirm(self)
       self.sent = true
       self.sent_at = Time.now.utc
-      self.save!
+      save!
 
       summary = MessageSummary.find_from_message(self)
       summary.increment_count

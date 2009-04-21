@@ -12,7 +12,8 @@ module FindYourMP
 
       def memory_stats
         if RAILS_ENV == 'production'
-          fork {|| exec "#{memory_stats_cmd} >> memory_stats.txt" }
+          Process.fork {|| exec "#{memory_stats_cmd} >> memory_stats.txt" }
+          Process.wait
           stats = File.new('memory_stats.txt').read.to_s
           File.delete('memory_stats.txt')
           stats
