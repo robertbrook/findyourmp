@@ -52,6 +52,12 @@ namespace :deploy do
       set_cron_job cmd, 'ar_sendmail'
     end
   end
+  
+  desc "Set db backup cron job"
+  task :set_db_backup_cron_job, :roles => :app do
+    cmd = "02 3 * * * cd #{release_path}; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
+    set_cron_job cmd, 'backup_database_to_S3'
+  end
 
   def set_cron_job cmd, identifier
     tmpname = "/tmp/appname-crontab.#{Time.now.strftime('%s')}"
