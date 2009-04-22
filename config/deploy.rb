@@ -52,6 +52,12 @@ namespace :deploy do
       set_cron_job cmd, 'ar_sendmail'
     end
   end
+  
+  desc "Set db backup cron job"
+  task :set_db_backup_cron_job, :roles => :app do
+    cmd = "02 3 * * * cd #{release_path}; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
+    set_cron_job cmd, 'backup_database_to_S3'
+  end
 
   def set_cron_job cmd, identifier
     tmpname = "/tmp/appname-crontab.#{Time.now.strftime('%s')}"
@@ -70,7 +76,7 @@ namespace :deploy do
   desc "Upload deployed mailer.yml"
   task :upload_deployed_mailer_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_mailer.yml")
-    put data, "#{release_path}/config/mailer.yml", :mode => 0664
+    put data "#{release_path}/config/mailer.yml", :mode => 0664
   end
 
   desc "Upload S3 data files"
@@ -233,6 +239,10 @@ namespace :deploy do
       else
         ch.send_data("create database #{application}_production CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
         ch.send_data("create database #{application}_development CHARACTER SET utf8 COLLATE utf8_unicode_ci; \n")
+        ch.send_data("create user '#{sql_backup_user}'@'localhost' identified by '#{sql_backup_password}'; \n")
+        ch.send_data("grant SELECT, LOCK TABLES on #{application}_production.* to '#{sql_backup_user}'@'localhost'; \n")
+        ch.send_data("grant SHOW DATABASES, RELOAD on *.* to '#{sql_backup_user}'@'localhost'; \n")
+        ch.send_data("FLUSH PRIVILEGES; \n")
         ch.send_data("exit \n")
       end
     end
@@ -243,7 +253,7 @@ namespace :deploy do
     sudo "gem install unicode"
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
-    sudo "gem install aws-s3"
+    sudo "gem install aws-s3 --version '0.5.1'"
     sudo "gem install adzap-ar_mailer --version '2.0.0'"
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 

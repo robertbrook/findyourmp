@@ -6,15 +6,13 @@ namespace :fymp do
   
   desc "Backup the database to a file and send to S3"
   task :backup_db_s3 do  
-    user = ENV['username']
-    password = ENV['password']
     path = ENV['path']
     
-    unless password && user && path
-      puts 'must supply username, password and path to run the db backup'
-      puts 'USAGE: rake fymp:db_backup username=user password=pass path=/directory/you/want/the/output/file/to/go'
+    unless path
+      puts 'must supply path to run the db backup'
+      puts 'USAGE: rake fymp:db_backup path=/directory/you/want/the/output/file/to/go'
     else
-      backup_file = db_backup(user, password, path, RAILS_ENV)
+      backup_file = db_backup(path, RAILS_ENV)
       backup_to_s3(backup_file)
     end
   end
@@ -30,33 +28,6 @@ namespace :fymp do
       decrypt_data(crypted_file)
     end
   end
-  
-  def db_backup(user, password, path, env)    
-    unless password && user && path
-      puts 'must supply username, password and path to run the db backup'
-      puts 'USAGE: rake fymp:db_backup username=user password=pass path=/directory/you/want/the/output/file/to/go'
-    else
-      if path.last == "/"
-        path = path.chop
-      end
-      
-      t = Time.now
-      datetime = t.strftime("%Y%m%d%H%M%S")
-
-      outfile = "#{path}/findyourmp_#{datetime}.bak"
-      
-      puts ""
-      puts "backing up database to #{outfile} ..."
-      unless password.blank?
-        system("mysqldump findyourmp_#{env} --user=#{user} --password=#{password} > #{outfile}")
-      else
-        system("mysqldump findyourmp_#{env} --user=#{user} > #{outfile}")
-      end
-      puts ""
-            
-      return outfile
-    end
-  end  
   
   def backup_to_s3(backup_file)    
     unless backup_file
