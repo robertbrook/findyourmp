@@ -24,23 +24,41 @@ namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
 
+  desc "Set clear stored messages cron job"
+  task :set_clear_messages_cron_job, :roles => :app do
+    weeks_to_keep = ENV['weeks_to_keep']
+    unless weeks_to_keep
+      puts
+      puts 'must supply weeks_to_keep when setting cron job'
+      puts 'USAGE: cap deploy:set_clear_stored_messages_cron_job weeks_to_keep=6'
+      puts
+    else
+      cmd = "05 4 * * * cd #{release_path}; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
+      set_cron_job cmd, 'clear_stored_messages'
+    end
+  end
+
   desc "Set ar_sendmail cron job"
   task :set_ar_sendmail_cron_job, :roles => :app do
     batch_size = ENV['batch_size']
     freq_in_minutes = ENV['freq_in_mins']
     unless batch_size && freq_in_minutes
       puts
-      puts 'must supply batch-size and freq-in-minutes when setting cron job'
+      puts 'must supply batch_size and freq_in_minutes when setting cron job'
       puts 'USAGE: cap deploy:set_ar_sendmail_cron_job batch_size=100 freq_in_mins=5'
       puts
     else
       cmd = "*/#{freq_in_minutes} * * * * /usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_to}/current --environment production"
-      tmpname = "/tmp/appname-crontab.#{Time.now.strftime('%s')}"
-      run "(crontab -l || echo '') | grep -v 'ar_sendmail' > #{tmpname}"
-      run %Q|echo "#{cmd}" >> #{tmpname}|
-      run "crontab #{tmpname}"
-      run "rm #{tmpname}"
+      set_cron_job cmd, 'ar_sendmail'
     end
+  end
+
+  def set_cron_job cmd, identifier
+    tmpname = "/tmp/appname-crontab.#{Time.now.strftime('%s')}"
+    run "(crontab -l || echo '') | grep -v '#{identifier}' > #{tmpname}"
+    run %Q|echo "#{cmd}" >> #{tmpname}|
+    run "crontab #{tmpname}"
+    run "rm #{tmpname}"
   end
 
   desc "Upload deployed database.yml"
@@ -54,12 +72,12 @@ namespace :deploy do
     data = File.read("config/virtualserver/deployed_mailer.yml")
     put data, "#{release_path}/config/mailer.yml", :mode => 0664
   end
-  
+
   desc "Upload S3 data files"
   task :put_s3_data, :roles => :app do
     data = File.read("config/virtualserver/deployed_s3.yml")
-    put data "#{release_path}/config/s3.yml", :mode => 0664
-    
+    put data("#{release_path}/config/s3.yml", :mode => 0664)
+
     data = File.read("config/virtualserver/fymp-public.pem")
     put_data "#{release_path}/config/fymp-public.pem", :mode => 0664
   end
