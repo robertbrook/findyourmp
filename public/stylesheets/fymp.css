@@ -77,3 +77,14 @@ label.checkbox_label {
 .row_value {
   float: left;
 }
+
+.padded_subheading {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-bottom: none;
+}
+
+#mp_search {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
