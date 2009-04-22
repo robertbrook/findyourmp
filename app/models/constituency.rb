@@ -22,6 +22,7 @@ class Constituency < ActiveRecord::Base
       member_party = parts[2].strip[/\((.+)\)/,1]
       member_bio_url = remove_quotes(parts[3])
       member_contact = remove_quotes(parts[4])
+      member_website = remove_quotes(parts[5])
       member_contact = "" unless member_contact
 
       existing = Constituency.find_by_constituency_name(constituency_name)
@@ -39,8 +40,9 @@ class Constituency < ActiveRecord::Base
           if member_contact[/http:\/\//]
             new_constituency.member_requested_contact_url = member_contact
           else
-            new_constituency.member_email = member_contact
+            new_constituency.member_email = member_contact.chomp('.')
           end
+          new_constituency.member_website = member_website
         end
         [existing, new_constituency]
       else
@@ -115,7 +117,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def to_tsv_line
-    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"|
+    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"\t"#{member_website}"|
   end
 
   def to_json

@@ -7,7 +7,7 @@ class MessageMailer < ActionMailer::Base
       email = TMail::Address.parse(text)
       domain = email.domain
       if domain
-        if domain.downcase[/\.([a-z]+)/] && ($1.size >= 2)
+        if domain.downcase[/\.([a-z]+)$/] && ($1.size >= 2)
           return email
         else
           raise Exception('email must have top level domain')
