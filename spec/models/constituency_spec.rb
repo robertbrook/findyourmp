@@ -14,12 +14,12 @@ describe Constituency do
     it 'should return true if it has' do
       @constituency.member_name = 'old'
       @constituency2.member_name = 'new'
-      @constituency.member_name_changed?(@constituency2).should be_true
+      @constituency.member_attribute_changed?(:member_name, @constituency2).should be_true
     end
     it 'should return false if it hasn\'t' do
       @constituency.member_name = 'old'
       @constituency2.member_name = 'old'
-      @constituency.member_name_changed?(@constituency2).should be_false
+      @constituency.member_attribute_changed?(:member_name, @constituency2).should be_false
     end
   end
 
@@ -27,12 +27,12 @@ describe Constituency do
     it 'should return true if it has' do
       @constituency.member_party = 'old'
       @constituency2.member_party = 'new'
-      @constituency.member_party_changed?(@constituency2).should be_true
+      @constituency.member_attribute_changed?(:member_party, @constituency2).should be_true
     end
     it 'should return false if it hasn\'t' do
       @constituency.member_party = 'old'
       @constituency2.member_party = 'old'
-      @constituency.member_party_changed?(@constituency2).should be_false
+      @constituency.member_attribute_changed?(:member_party, @constituency2).should be_false
     end
   end
 
@@ -164,6 +164,9 @@ describe Constituency do
     describe 'and constituency exists and tsv line contains contact url' do
       it 'should update constituency' do
         check_update_constituency 'http://example.contactform.com', :member_requested_contact_url=
+      end
+      it 'should update constituency when contact url ends in html file' do
+        check_update_constituency 'http://www.armp.org.uk/contact.html', :member_requested_contact_url=
       end
     end
     describe 'and constituency doesn\'t already exist' do
