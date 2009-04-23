@@ -22,6 +22,7 @@ class Constituency < ActiveRecord::Base
       member_party = parts[2].strip[/\((.+)\)/,1]
       member_bio_url = remove_quotes(parts[3])
       member_contact = remove_quotes(parts[4])
+      member_website = remove_quotes(parts[5])
       member_contact = "" unless member_contact
 
       existing = Constituency.find_by_constituency_name(constituency_name)
@@ -30,17 +31,19 @@ class Constituency < ActiveRecord::Base
       if existing
         non_matching = (existing.member_name != member_name || existing.member_party != member_party || existing.member_biography_url != member_bio_url)
         non_matching = non_matching || ( member_contact[/http:\/\//] ?
-          (existing.member_requested_contact_url.to_s != member_contact.to_s) : (existing.member_email.to_s != member_contact.to_s) )
+          (existing.member_requested_contact_url.to_s.strip != member_contact.to_s.strip) : (existing.member_email.to_s.strip != member_contact.to_s.strip) )
         if non_matching
           new_constituency = Constituency.new(existing.attributes)
           new_constituency.member_name = member_name
           new_constituency.member_party = member_party
           new_constituency.member_biography_url = member_bio_url
           if member_contact[/http:\/\//]
+            puts "member_contact " + member_contact
             new_constituency.member_requested_contact_url = member_contact
           else
-            new_constituency.member_email = member_contact
+            new_constituency.member_email = member_contact.chomp('.')
           end
+          new_constituency.member_website = member_website
         end
         [existing, new_constituency]
       else
@@ -115,7 +118,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def to_tsv_line
-    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"|
+    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"\t"#{member_website}"|
   end
 
   def to_json
@@ -152,12 +155,8 @@ class Constituency < ActiveRecord::Base
     "---\n#{to_text("yaml")}"
   end
 
-  def member_name_changed? constituency
-    member_name != constituency.member_name
-  end
-
-  def member_party_changed? constituency
-    member_party != constituency.member_party
+  def member_attribute_changed? attribute, constituency
+    send(attribute).to_s.strip != constituency.send(attribute).to_s.strip
   end
 
   private

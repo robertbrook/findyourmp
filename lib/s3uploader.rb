@@ -6,6 +6,37 @@ module FindYourMP; end
 module FindYourMP::S3Uploader
   
   include FindYourMP::Encryption
+  
+  def db_backup(path, env)    
+    if path.last == "/"
+      path = path.chop
+    end
+    
+    s3_conf = "#{RAILS_ROOT}/config/s3.yml"
+    
+    unless File.exist?(s3_conf)
+      raise "Error, config file not found"
+    end
+    
+    s3_config = File.open(s3_conf)
+    s3_options = YAML.load(s3_config)
+      
+    t = Time.now
+    datetime = t.strftime("%Y%m%d%H%M%S")
+
+    outfile = "#{path}/findyourmp_#{datetime}.bak"
+    
+    puts ""
+    puts "backing up database to #{outfile} ..."
+    unless s3_options[:db_password].blank?
+      system("mysqldump findyourmp_#{env} --user=#{s3_options[:db_user]} --password=#{s3_options[:db_password]} > #{outfile}")
+    else
+      system("mysqldump findyourmp_#{env} --user=#{s3_options[:db_user]} > #{outfile}")
+    end
+    puts ""
+          
+    return outfile
+  end
 
   def send_backup(backup_file)
     unless File.exist?(backup_file)
@@ -13,7 +44,7 @@ module FindYourMP::S3Uploader
     end
 
     backup_path = "#{RAILS_ROOT}/db/backup"
-    s3_conf = "#{RAILS_ROOT}/config/S3.yml"
+    s3_conf = "#{RAILS_ROOT}/config/s3.yml"
     pem_file = "#{RAILS_ROOT}/config/fymp-public.pem"
     
     unless File.exist?(pem_file)
@@ -73,7 +104,7 @@ module FindYourMP::S3Uploader
   
   def decrypt_data(input)
     pem_file = "#{RAILS_ROOT}/config/fymp-private.pem"
-    s3_conf = "#{RAILS_ROOT}/config/S3.yml"
+    s3_conf = "#{RAILS_ROOT}/config/s3.yml"
 
     unless File.exist?(pem_file)
       raise "Error, private key not found - cannot decrypt the data"
@@ -100,7 +131,6 @@ module FindYourMP::S3Uploader
          :access_key_id     => key,
          :secret_access_key => secret
      )
-
      stored_file_path = File.dirname(file)
      stored_file = file.gsub(stored_file_path + '/', '')
      AWS::S3::S3Object.store(stored_file, open(file), bucket)

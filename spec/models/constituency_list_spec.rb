@@ -5,9 +5,9 @@ describe ConstituencyList do
   describe 'when asked for constituencies' do
     before do
       @header = "Constituency	Member	Party"
-      @line_1 = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"|
-      @line_2 = %Q|"Aberdeen North"	"Doran, Mr Frank"	"(Lab)"|
-      @line_3 = %Q|"Aberdeen Centre"	"Doran, Frank"	"(Lab)"|
+      @line_1 = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=1"\t"dm@parliament.uk"	"http://www.dm.co.uk/"|
+      @line_2 = %Q|"Aberdeen North"	"Doran, Mr Frank"	"(Lab)"	"http://biographies.parliament.uk/parliament/default.asp?id=2"	"dmf@parliament.uk."	"http://www.dmf.co.uk/"|
+      @line_3 = %Q|"Aberdeen Centre"	"Doran, Frank"	"(Lab)"	"http://biographies.parliament.uk/parliament/default.asp?id=3"	"http://www.df.co.uk/contact"	"http://www.df.co.uk/"|
       @items = "#{@header}
 #{@line_1}
 #{@line_2}
