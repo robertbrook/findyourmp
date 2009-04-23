@@ -24,17 +24,20 @@
 
 %h3 Find Your MP 
 
-%p.text= 'You are logged in as <strong>' + @current_user.login + '</strong>.'
+%p.text
+  = 'You are logged in as <strong>' + @current_user.login + '</strong>.'
+  |
+  = link_to 'Edit your account settings', edit_user_path(@current_user)
 
 - if @current_user.admin?
   
   %p.text= 'Your account has administrator rights.'
   
-  %p.text= link_to 'Add new user', new_user_path
+  %p.text
+    = link_to 'Add new user', new_user_path
+    |
+    = link_to 'Edit users', users_path
     
-  %p.text= link_to 'Edit users', users_path
-    
-%p.text= link_to 'Edit your account settings', edit_user_path(@current_user)
 
 
 
