@@ -7,7 +7,7 @@ Feature: View message audit
     Given I am logged in as an editing user
     And I am on the Front page
     When I follow "Admin home"
-    Then I should see "Sent messages"
+    Then I should see "Messages sent"
     And I should see "Messages waiting to be sent"
     And I should see "Edit your account settings"
     And I should not see "Add new user"
@@ -21,7 +21,7 @@ Feature: View message audit
 
   Scenario: Look at messages by constituency
     Given I am on the Admin Home Page as an editing user
-    When I follow "Sent messages"
+    When I follow "Messages sent"
     Then I should see "February 2009"
     And I should see "2"
 
