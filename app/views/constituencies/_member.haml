@@ -26,7 +26,9 @@
         - elsif @constituency.member_email?
           = %Q|#{link_to("Email #{member_name}", new_constituency_message_url(@constituency) )}|
         - else
-          = "#{member_name} cannot be contacted by email<br/>from this website."
+          = "#{member_name} cannot be contacted by email"
+          %br
+          from this website.
     .row_item
       .row_label Telephone
       .row_label
