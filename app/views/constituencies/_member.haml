@@ -2,28 +2,31 @@
   - if @constituency.no_sitting_member?
     %p No sitting Member of Parliament.
   - else
+    - member_name = h(@constituency.member_name)
     .row_item
       .row_label Sitting MP
       .row_value
-        - text = "#{h(@constituency.member_name)} (#{@constituency.member_party})"
         - if @constituency.member_biography_url?
-          = link_to text, @constituency.member_biography_url
+          = link_to member_name, @constituency.member_biography_url
         - else
-          = text
+          = member_name
+    .row_item
+      .row_label Party
+      .row_value= h(@constituency.member_party)
     - if @constituency.member_website?
       .row_item
         .row_label Website
         .row_value
-          = link_to @constituency.member_website.sub('http://','').chomp('/'), @constituency.member_website
+          = link_to h(@constituency.member_website.sub('http://','').chomp('/')), @constituency.member_website
     .row_item
       .row_label= @constituency.member_requested_contact_url? ? "Contact" : "Email"
       .row_value
         - if @constituency.member_requested_contact_url?
-          = link_to "Contact #{@constituency.member_name}", @constituency.member_requested_contact_url
+          = link_to "Contact #{member_name}", @constituency.member_requested_contact_url
         - elsif @constituency.member_email?
-          = %Q|#{link_to("Email #{@constituency.member_name}", new_constituency_message_url(@constituency) )}|
+          = %Q|#{link_to("Email #{member_name}", new_constituency_message_url(@constituency) )}|
         - else
-          = "Sorry, we do not have an email address for #{h @constituency.member_name}."
+          = "#{member_name} cannot be contacted by email<br/>from this website."
     .row_item
       .row_label Telephone
       .row_label
