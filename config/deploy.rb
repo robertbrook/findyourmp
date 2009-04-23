@@ -151,9 +151,10 @@ namespace :deploy do
     end
   end
 
-  desc "Restarting apache"
+  desc "Restarting apache and clearing the cache"
   task :restart, :roles => :app do
     sudo "/usr/sbin/apache2ctl restart"
+    run "cd #{current_path}; rake fymp:cache:expire_pages RAILS_ENV='production'"
   end
 
   desc "Perform rake tasks"
