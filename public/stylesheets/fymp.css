@@ -76,6 +76,7 @@ label.checkbox_label {
 }
 .row_value {
   float: left;
+  width:330px;
 }
 
 .padded_subheading {
