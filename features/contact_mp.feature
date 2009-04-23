@@ -75,4 +75,5 @@ Feature: Contact MP
     And the MP in constituency "Motherwell and Wishaw" is not contactable via email
     When I search for "Motherwell and Wishaw"
     Then I should see "Mr Frank Roy"
-    And I should see "Sorry, we do not have an email address for Mr Frank Roy."
+    And I should see "Mr Frank Roy cannot be contacted by email"
+    And I should see "from this website."

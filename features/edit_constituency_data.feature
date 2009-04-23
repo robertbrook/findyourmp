@@ -20,7 +20,8 @@ Feature: Edit constituency data
     And I fill in "Member website" with "http://it.is"
     And I press "Update"
     Then I should see "Aberdeen East"
-    And I should see "William Wallace (SNP)"
+    And I should see "William Wallace"
+    And I should see "SNP"
     And I should see link to "http://the.re"
     And I should see link to "http://it.is"
     And I should see "Email William Wallace"
@@ -31,7 +32,8 @@ Feature: Edit constituency data
     When I fill in "Member email" with ""
     And I press "Update"
     Then I should see "Frank Doran"
-    And I should see "Sorry, we do not have an email address for Frank Doran."
+    And I should see "Frank Doran cannot be contacted by email"
+    And I should see "from this website."
     And I should not see "Email Frank Doran"
 
   Scenario: Set member requested contact url
