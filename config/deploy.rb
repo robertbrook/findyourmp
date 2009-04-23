@@ -151,9 +151,9 @@ namespace :deploy do
     end
   end
 
-  desc "Restarting mod_rails with restart.txt"
+  desc "Restarting apache"
   task :restart, :roles => :app do
-    run "touch #{current_path}/tmp/restart.txt"
+    sudo "/usr/sbin/apache2ctl restart"
   end
 
   desc "Perform rake tasks"
