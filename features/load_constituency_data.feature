@@ -5,5 +5,5 @@ Feature: Contact MP
 
   Scenario: View load constituencies page
     Given I am on the Admin Home page as an admin user
-    When I follow "Load constituencies"
+    When I follow "Edit Members database information"
 

@@ -4,11 +4,9 @@
 %h3 Messages
 
 %p.text
-  - if @sent_message_count > 0
-    = link_to "Messages sent: #{number_with_delimiter(@sent_message_count)}", url_for(:controller=>'admin',:action=>'sent')
-  - else
-    The service has not sent any messages.
-    
+  = link_to("Messages sent", url_for(:controller=>'admin',:action=>'sent') ) + ':'
+  = number_with_delimiter(@sent_message_count)
+
 %p.text
   - if @waiting_to_be_sent_count > 0
     = link_to "Messages waiting to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
@@ -19,10 +17,10 @@
 %h3 Members database
 
 %p.text= link_to 'Edit Members database information', edit_constituency_list_path
-  
+
 %p.text= link_to 'Edit constituencies', constituencies_path
 
-%h3 Find Your MP 
+%h3 Find Your MP
 
 %p.text
   = 'You are logged in as <strong>' + @current_user.login + '</strong>.'
@@ -30,14 +28,13 @@
   = link_to 'Edit your account settings', edit_user_path(@current_user)
 
 - if @current_user.admin?
-  
+
   %p.text= 'Your account has administrator rights.'
   
   %p.text
     = link_to 'Add new user', new_user_path
     |
     = link_to 'Edit users', users_path
-    
 
 
 

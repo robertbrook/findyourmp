@@ -5,7 +5,7 @@ Feature: Edit constituency data
 
   Scenario: Follow the "edit" link from constituency page
     Given I am logged in as an admin user
-    And I follow "All constituencies"
+    And I follow "Edit constituencies"
     And I follow "Aberdeen North"
     Then I should see Edit Constituency Form
 

@@ -19,7 +19,7 @@ class Constituency < ActiveRecord::Base
 
       constituency_name = remove_quotes(parts[0])
       member_name = remove_quotes(parts[1])
-      member_party = parts[2].strip[/\((.+)\)/,1]
+      member_party = remove_quotes(parts[2])
       member_bio_url = remove_quotes(parts[3])
       member_contact = remove_quotes(parts[4])
       member_website = remove_quotes(parts[5])
@@ -117,7 +117,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def to_tsv_line
-    %Q|"#{name}"\t"#{member_name}"\t"(#{member_party})"\t"#{member_biography_url}"\t"#{member_email}"\t"#{member_website}"|
+    %Q|"#{name}"\t"#{member_name}"\t"#{member_party}"\t"#{member_biography_url}"\t"#{member_email}"\t"#{member_website}"|
   end
 
   def to_json

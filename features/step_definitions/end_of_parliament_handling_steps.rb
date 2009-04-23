@@ -1,7 +1,7 @@
 Given /^I am on the Constituency index page$/ do
   Given 'I am on the Front page'
   And "I follow \"Admin home\""
-  And "I follow \"All constituencies\""
+  And "I follow \"Edit constituencies\""
 end
 
 Then /^I should see all MPs marked hidden$/ do

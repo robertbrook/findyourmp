@@ -16,12 +16,12 @@ end
 
 Given /^I am on a Edit Constituency page$/ do
   Given 'I am logged in as an admin user'
-  And 'I follow "All constituencies"'
+  And 'I follow "Edit constituencies"'
   And 'I follow "Aberdeen North"'
 end
 
 Given /^I am on the Constituency edit page for "(.+)"$/ do |constituency_name|
-  Given 'I follow "All constituencies"'
+  Given 'I follow "Edit constituencies"'
   And "I follow \"#{constituency_name}\""
 end
 
