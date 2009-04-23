@@ -77,19 +77,20 @@
         </div>
         <div id="main_nav">
           <ul>
-            <li class="first"><a href="http://www.parliament.uk/about/">About</a></li>
-            <li class="selected"><a href="http://www.parliament.uk/people/">Members &amp; Staff</a></li>
-            <li><a href="http://www.parliament.uk/business/">Business</a></li>
-            <li><a href="http://www.parliament.uk/publications/">Publications</a></li>
-            <li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
-            <li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
-            <li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact</a></li>
+			<li class="first"><a href="http://www.parliament.uk/">Home</a></li>
+			<li><a href="http://www.parliament.uk/visiting">Visiting</a></li>
+            <li><a href="http://www.parliament.uk/about/">About</a></li>
+			<li><a href="http://www.parliament.uk/business/">Parliamentary Business</a></li>
+			<li class="selected"><a href="http://www.parliament.uk/mpslordsandoffices/">MPs, Lords and Offices</a></li>
+			<li><a href="http://www.parliament.uk/getinvolved/">Get Involved</a></li>
+			<li><a href="http://www.parliament.uk/topics/topical-issues.htm">Topical Issues</a></li>
+			<li><a href="http://www.parliament.uk/education/">Education</a></li>
           </ul>
         </div>
         <div id="secondary_nav">
           <ul>
-            <li class="selected"><a href="http://www.parliament.uk/people/mps_and_lords.cfm">MPs and Lords</a></li>
-            <li><a href="http://www.parliament.uk/people/government_and_opposition.cfm">Government and Opposition</a></li>
+            <li class="selected"><a href="http://www.parliament.uk/directories/directories.cfm">MPs and Lords</a></li>
+            <li><a href="http://www.parliament.uk/directories/directories21.cfm">Government and Opposition</a></li>
             <li><a href="http://www.parliament.uk/site_information/allowances.cfm">Allowances and Interests</a></li>
             <li><a href="http://www.parliament.uk/directories/directories31.cfm">Parliamentary Offices</a></li>
           </ul>
@@ -180,17 +181,14 @@
         <div id="footer_nav">
           <p>Source: NSPD 2008, National Statistics Crown copyright material is reproduced with the permission of the Controller of HMSO and Queen’s Printer for Scotland.</p>
           <ul>
-            <li class="first"><a href="http://www.parliament.uk/">Home</a></li>
-            <li><a href="http://www.parliament.uk/about/">About</a></li>
-            <li><a href="http://www.parliament.uk/people/">Members</a></li>
-            <li class="selected"><a href="http://www.parliament.uk/business/">Business</a></li>
-            <li><a href="http://www.parliament.uk/publications/">Publications</a></li>
-            <li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
-            <li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
-            <li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
-            <li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
-            <li><a href="http://www.parliament.uk/site_information/privacy_policy.cfm">Privacy Policy</a></li>
-            <li><a href="http://www.parliament.uk/site_information/parliamentary_copyright.cfm">Copyright</a></li>
+            <li class="first"><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
+			<li><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
+			<li><a href="http://www.parliament.uk/site_information/careers/jobs.cfm">Jobs</a></li>
+			<li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
+			<li><a href="http://www.parliament.uk/parliamentary_publications_and_archives/foi_introduction.cfm">Freedom of Information</a></li>
+			<li><a href="http://www.parliament.uk/site_information/glossary.cfm">Glossary</a></li>
+			<li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
+			<li><a href="http://www.parliament.uk/site_information/site_information.cfm">Using this website</a></li>
             <% if is_admin? %>
               <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
               <li><%= link_to 'Admin home', admin_path %></li>
