@@ -52,7 +52,7 @@ namespace :deploy do
       set_cron_job cmd, 'ar_sendmail'
     end
   end
-  
+
   desc "Set db backup cron job"
   task :set_db_backup_cron_job, :roles => :app do
     cmd = "02 3 * * * cd #{release_path}; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
@@ -76,16 +76,16 @@ namespace :deploy do
   desc "Upload deployed mailer.yml"
   task :upload_deployed_mailer_yml, :roles => :app do
     data = File.read("config/virtualserver/deployed_mailer.yml")
-    put data "#{release_path}/config/mailer.yml", :mode => 0664
+    put data, "#{release_path}/config/mailer.yml", :mode => 0664
   end
 
   desc "Upload S3 data files"
   task :put_s3_data, :roles => :app do
     data = File.read("config/virtualserver/deployed_s3.yml")
-    put data("#{release_path}/config/s3.yml", :mode => 0664)
+    put data, "#{release_path}/config/s3.yml", :mode => 0664
 
     data = File.read("config/virtualserver/fymp-public.pem")
-    put_data "#{release_path}/config/fymp-public.pem", :mode => 0664
+    put data, "#{release_path}/config/fymp-public.pem", :mode => 0664
   end
 
   task :link_to_data, :roles => :app do
