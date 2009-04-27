@@ -106,8 +106,8 @@ namespace :deploy do
     if overwrite
       run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
 
-      run "rm #{data_dir}/ConstituencyToMember.txt"
-      put_data data_dir, 'ConstituencyToMember.txt'
+      run "rm #{data_dir}/FYMP_all.txt"
+      put_data data_dir, 'FYMP_all.txt'
 
       run "rm #{data_dir}/constituencies.txt"
       put_data data_dir, 'constituencies.txt'
