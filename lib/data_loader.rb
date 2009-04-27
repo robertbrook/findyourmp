@@ -12,7 +12,8 @@ module FindYourMP::DataLoader
   SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
-  def load_members member_file=MEMBER_FILE
+  def load_members member_file
+    member_file = MEMBER_FILE unless member_file
     return if file_not_found(member_file)
 
     lines = []
@@ -31,11 +32,13 @@ module FindYourMP::DataLoader
           log "Constituency is vacant: #{constituency_name}"
         else
           existing, updated_constituency = Constituency.load_tsv_line(line)
-          if existing
+          if existing && updated_constituency
             existing.attributes = updated_constituency.attributes
             existing.save!
-          else
+          elsif updated_constituency
             log "Cannot find constituency for member for line: #{line}"
+          else
+            # nothing to update
           end
         end
       rescue Exception => e
