@@ -1,4 +1,5 @@
 - if @constituency
+  - @meta_description = meta_description(@constituency)
   = render :partial => 'constituencies/constituency', :object => @constituency
   %p &nbsp;
   %h3.padded_subheading Search

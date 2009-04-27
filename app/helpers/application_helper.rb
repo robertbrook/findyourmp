@@ -5,4 +5,15 @@ module ApplicationHelper
     link_to('Admin', admin_path)
   end
 
+  def meta_description constituency
+    if constituency
+      if constituency.no_sitting_member?
+        "No sitting member for #{h(constituency.name)} - UK Parliament"
+      else
+        "#{h(constituency.member_name)} is the sitting member for #{constituency.name} - UK Parliament"
+      end
+    else
+      nil
+    end
+  end
 end
