@@ -33,7 +33,7 @@ namespace :deploy do
       puts 'USAGE: cap deploy:set_clear_stored_messages_cron_job weeks_to_keep=6'
       puts
     else
-      cmd = "05 4 * * * cd #{release_path}; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
+      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
       set_cron_job cmd, 'clear_stored_messages'
     end
   end
@@ -55,13 +55,13 @@ namespace :deploy do
 
   desc "Set db backup cron job"
   task :set_db_backup_cron_job, :roles => :app do
-    cmd = "02 3 * * * cd #{release_path}; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
+    cmd = "02 3 * * * #{deploy_to}/current; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
     set_cron_job cmd, 'backup_database_to_S3'
   end
   
   desc "Set db backup cleanup cron job"
   task :set_db_backup_cleanup_cron_job, :roles => :app do
-    cmd = "42 3 * * * cd #{release_path}; rake fymp:cleanup_db_backup files=42 RAILS_ENV='production'"
+    cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files=42 RAILS_ENV='production'"
     set_cron_job cmd, 'S3_backup_cleanup'
   end
 
