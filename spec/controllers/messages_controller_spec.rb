@@ -119,8 +119,11 @@ describe MessagesController do
       before do
         @controller.should_receive(:authenticity_token).any_number_of_times.and_return @authenticity_token
         Message.stub!(:new).and_return @message
+        @sender_ip = '127.0.0.1'
+        request.env['REMOTE_ADDR'] = @sender_ip
         @message.should_receive(:valid?).and_return true
         @message.should_receive(:[]=).with("authenticity_token", @authenticity_token)
+        @message.should_receive(:[]=).with("sender_ip_address", @sender_ip)
         @message.should_receive(:[]).with('sent').and_return 0
         @message.should_receive(:delete).with('sent')
       end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090323170554) do
+ActiveRecord::Schema.define(:version => 20090427131554) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -33,16 +33,9 @@ ActiveRecord::Schema.define(:version => 20090323170554) do
     t.datetime "created_on"
   end
 
-  create_table "members", :force => true do |t|
-    t.string  "name"
-    t.integer "constituency_id"
-  end
-
-  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
-
   create_table "message_summaries", :force => true do |t|
-    t.string   "constituency_name"
     t.string   "recipient"
+    t.string   "constituency_name"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -67,12 +60,13 @@ ActiveRecord::Schema.define(:version => 20090323170554) do
     t.boolean  "sent"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "authenticity_token"
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
     t.string   "mailer_error"
     t.datetime "sent_at"
+    t.string   "authenticity_token"
+    t.string   "sender_ip_address"
   end
 
   add_index "messages", ["sent"], :name => "index_messages_on_sent"
