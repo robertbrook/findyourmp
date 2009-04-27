@@ -16,6 +16,18 @@ namespace :fymp do
       backup_to_s3(backup_file)
     end
   end
+  
+  desc "Test"
+  task :cleanup_db_backup do
+    max_files = ENV['files']
+    
+    unless max_files
+      puts 'must supply number of files to keep'
+      puts 'USAGE: rake fymp:cleanup_db_backup files=42'
+    else
+      call_cleanup(max_files)
+    end
+  end
 
   desc "Decrypt"
   task :decrypt_file do
