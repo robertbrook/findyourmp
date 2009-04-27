@@ -87,7 +87,6 @@ module FindYourMP::DataLoader
 
   def load_postcodes group_size=1000
     return if file_not_found(POSTCODE_FILE)
-    start_timing
     index = 0
     groups = 0
     puts 'saving data to db'
@@ -100,6 +99,8 @@ module FindYourMP::DataLoader
     include ActionView::Helpers::DateHelper
 
     post_codes = []
+
+    start_timing
 
     IO.foreach(POSTCODE_FILE) do |line|
       code = line[0..6].tr(' ','')
