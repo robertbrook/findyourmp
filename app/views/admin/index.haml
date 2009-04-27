@@ -12,7 +12,6 @@
     = link_to "Messages waiting to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
   - else
     There are no messages waiting to be sent.
-    = link_to "Messages waiting to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
 
 %h3 Members database
 
