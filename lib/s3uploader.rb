@@ -7,6 +7,19 @@ module FindYourMP::S3Uploader
   
   include FindYourMP::Encryption
   
+  def call_cleanup(max_size)
+    s3_conf = "#{RAILS_ROOT}/config/s3.yml"
+    
+    unless File.exist?(s3_conf)
+      raise "Error, config file not found"
+    end
+    
+    s3_config = File.open(s3_conf)
+    s3_options = YAML.load(s3_config)
+    
+    cleanup_files(s3_options[:bucket_name], s3_options[:bucket_key], s3_options[:bucket_secret], max_size)
+  end
+  
   def db_backup(path, env)    
     if path.last == "/"
       path = path.chop
@@ -134,5 +147,27 @@ module FindYourMP::S3Uploader
      stored_file_path = File.dirname(file)
      stored_file = file.gsub(stored_file_path + '/', '')
      AWS::S3::S3Object.store(stored_file, open(file), bucket)
+  end
+  
+  def cleanup_files(bucket, key, secret, max_size)
+    AWS::S3::Base.establish_connection!(
+         :access_key_id     => key,
+         :secret_access_key => secret
+    )
+    backup_store = AWS::S3::Bucket.find(bucket)
+    current_size = backup_store.objects.size
+    
+    if current_size > max_size   
+      files = []
+      backup_store.each do |object|
+        files << object.key
+      end
+      files.sort!
+      files.reverse!
+      while files.size > max_size
+        AWS::S3::S3Object.delete files.last, bucket
+        files.pop
+      end
+    end
   end
 end

@@ -33,7 +33,7 @@ namespace :deploy do
       puts 'USAGE: cap deploy:set_clear_stored_messages_cron_job weeks_to_keep=6'
       puts
     else
-      cmd = "05 4 * * * cd #{release_path}; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
+      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
       set_cron_job cmd, 'clear_stored_messages'
     end
   end
@@ -55,8 +55,14 @@ namespace :deploy do
 
   desc "Set db backup cron job"
   task :set_db_backup_cron_job, :roles => :app do
-    cmd = "02 3 * * * cd #{release_path}; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
+    cmd = "02 3 * * * #{deploy_to}/current; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
     set_cron_job cmd, 'backup_database_to_S3'
+  end
+  
+  desc "Set db backup cleanup cron job"
+  task :set_db_backup_cleanup_cron_job, :roles => :app do
+    cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files_to_keep=42 RAILS_ENV='production'"
+    set_cron_job cmd, 'S3_backup_cleanup'
   end
 
   def set_cron_job cmd, identifier
@@ -100,8 +106,8 @@ namespace :deploy do
     if overwrite
       run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
 
-      run "rm #{data_dir}/ConstituencyToMember.txt"
-      put_data data_dir, 'ConstituencyToMember.txt'
+      run "rm #{data_dir}/FYMP_all.txt"
+      put_data data_dir, 'FYMP_all.txt'
 
       run "rm #{data_dir}/constituencies.txt"
       put_data data_dir, 'constituencies.txt'
@@ -148,6 +154,21 @@ namespace :deploy do
       set var, true
     else
       set var, false
+    end
+  end
+
+  def check_correct_ip
+    puts ""
+    puts "*************************************"
+    answer = "n"
+
+    servers = roles[:app].servers.uniq!.join(", ")
+
+    message = "You are about to deploy to: #{servers} do you want to continue? (y/N)\n"
+    answer = Capistrano::CLI.ui.ask(message)
+    answer = "n" if answer == ""
+    unless answer.downcase == 'y' # answer.first.downcase == "y"
+      raise "Deploy aborted by user"
     end
   end
 
@@ -202,6 +223,7 @@ namespace :deploy do
   end
 
   task :check_server, :roles => :app do
+    check_correct_ip
     run "git --help" do |channel, stream, message|
       if message =~ /No such file or directory/
         raise "You need to install git before proceeding"

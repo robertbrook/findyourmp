@@ -6,16 +6,22 @@ module FindYourMP::DataLoader
   include FindYourMP::Timer
 
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + '/../data')
-  MEMBER_FILE = "#{DATA_DIR}/ConstituencyToMember.txt"
+  MEMBER_FILE = "#{DATA_DIR}/FYMP_all.txt"
   CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
 
   SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
-  def load_members
-    return if file_not_found(MEMBER_FILE)
+  def load_members member_file=MEMBER_FILE
+    return if file_not_found(member_file)
 
-    IO.foreach(MEMBER_FILE) do |line|
+    lines = []
+    IO.foreach(member_file) do |line|
+      line.strip!
+      lines << line unless(line.blank? || line[/Constituency/])
+    end
+
+    lines.each do |line|
       begin
         parts = line.split("\t")
         constituency_name = parts[0].strip
@@ -24,15 +30,10 @@ module FindYourMP::DataLoader
         if is_vacant?(member_name)
           log "Constituency is vacant: #{constituency_name}"
         else
-          name_parts = member_name.split('(')
-          member_name = name_parts[0].strip
-          party = name_parts[1].chomp(')').strip
-          constituency = Constituency.find_by_constituency_name(constituency_name)
-          if constituency
-            constituency.member_name = member_name
-            constituency.member_party = party
-            constituency.member_visible = 1
-            constituency.save!
+          existing, updated_constituency = Constituency.load_tsv_line(line)
+          if existing
+            existing.attributes = updated_constituency.attributes
+            existing.save!
           else
             log "Cannot find constituency for member for line: #{line}"
           end

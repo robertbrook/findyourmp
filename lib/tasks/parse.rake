@@ -13,8 +13,8 @@ namespace :fymp do
 
   desc "Populate data for members in DB"
   task :members => :environment do
-    load_members
-    CommonsMemberBiography.load_biographies
+    file = ENV['file']
+    load_members file
   end
 
   desc "Create cache of all postcode pages"
@@ -31,7 +31,7 @@ namespace :fymp do
   task :populate => :environment do
     load_postcodes
   end
-  
+
   desc "Populate the postcode districts table"
   task :load_postcode_districts => :environment do
     load_postcode_districts
