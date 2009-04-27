@@ -4,11 +4,8 @@
 %h3 Messages
 
 %p.text
-  - if @sent_message_count > 0
-    = link_to("Messages sent", url_for(:controller=>'admin',:action=>'sent') ) + ':'
-    = number_with_delimiter(@sent_message_count)
-  - else
-    No messages have been sent.
+  = link_to("Messages sent", url_for(:controller=>'admin',:action=>'sent') ) + ':'
+  = number_with_delimiter(@sent_message_count)
 
 %p.text
   - if @waiting_to_be_sent_count > 0
@@ -33,12 +30,12 @@
 - if @current_user.admin?
 
   %p.text= 'Your account has administrator rights.'
-  
+
   %p.text
     = link_to 'Add new user', new_user_path
     |
     = link_to 'Edit users', users_path
-    
+
 %h3 Memory use on server
 
 %p.text
