@@ -156,18 +156,18 @@ namespace :deploy do
       set var, false
     end
   end
-  
+
   def check_correct_ip
     puts ""
     puts "*************************************"
     answer = "n"
-    
+
     servers = roles[:app].servers.uniq!.join(", ")
-    
+
     message = "You are about to deploy to: #{servers} do you want to continue? (y/N)\n"
     answer = Capistrano::CLI.ui.ask(message)
     answer = "n" if answer == ""
-    unless answer.first.downcase == "y"
+    unless answer.downcase == 'y' # answer.first.downcase == "y"
       raise "Deploy aborted by user"
     end
   end

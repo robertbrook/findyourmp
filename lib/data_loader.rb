@@ -32,8 +32,8 @@ module FindYourMP::DataLoader
         else
           existing, updated_constituency = Constituency.load_tsv_line(line)
           if existing
-            updated_constituency.id = existing.id
-            updated_constituency.save!
+            existing.attributes = updated_constituency.attributes
+            existing.save!
           else
             log "Cannot find constituency for member for line: #{line}"
           end
