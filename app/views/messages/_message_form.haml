@@ -31,7 +31,7 @@
       = error_message_on(:message, :subject)
     .form_field
       - @message.clean_message_whitespace
-      = label :message, :message, 'Your message (max chars including spaces 4000) *'
+      = label :message, :message, 'Your message *'
       - @message.message = @message.default_message if @message.message.nil?
       = error_message_on(:message, :message)
       = f.text_area(:message, :rows=>30)
@@ -40,8 +40,9 @@
         * denotes required text
 
     %p
-      = link_to 'Cancel', constituency_path(@message.constituency)
       %span{:style=>'margin-left: 22em'}= f.submit "Preview your message"
+    %p
+      = link_to 'Discard message', constituency_path(@message.constituency), :confirm => 'Continue with discarding message?'
     %p
       If you do not include a full address and postcode you may not receive a reply. Please note the following
       = link_to('email guidance notes', "http://www.parliament.uk/directories/emailguidance.cfm", :target => "_blank") + '.'

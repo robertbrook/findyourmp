@@ -26,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/admin/sent', :controller => 'admin', :action => 'sent'
   map.connect '/admin/sent/:yyyy_mm', :controller => 'admin', :action => 'sent_by_month'
   map.connect '/admin/waiting_to_be_sent', :controller => 'admin', :action => 'waiting_to_be_sent'
+  map.connect '/admin/stats', :controller => 'admin', :action => 'stats'
 
   map.api '/api', :controller => 'api', :action => 'index'
   map.connect 'api/search', :controller => 'api', :action => 'search'

@@ -9,30 +9,37 @@
 
 %p.text
   - if @waiting_to_be_sent_count > 0
-    = link_to "Messages waiting to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
+    = link_to "Messages <strong>waiting on the server</strong> to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
   - else
-    There are no messages waiting to be sent.
-    = link_to "Messages waiting to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
+    There are no <strong>waiting on the server</strong> to be sent.
 
 %h3 Members database
 
-%p.text= link_to 'Edit Members database information', edit_constituency_list_path
+%p.text
+  = link_to 'Edit Members database information', edit_constituency_list_path
+  |
+  = link_to 'Edit constituencies', constituencies_path
 
-%p.text= link_to 'Edit constituencies', constituencies_path
+%h3 Users
 
-%h3 Find Your MP
-
-%p.text= 'You are logged in as <strong>' + @current_user.login + '</strong>.'
+%p.text
+  = 'You are logged in as <strong>' + @current_user.login + '</strong>'
+  |
+  = link_to 'Edit your account settings', edit_user_path(@current_user)
 
 - if @current_user.admin?
 
   %p.text= 'Your account has administrator rights.'
 
-  %p.text= link_to 'Add new user', new_user_path
+  %p.text
+    = link_to 'Add new user', new_user_path
+    |
+    = link_to 'Edit users', users_path
 
-  %p.text= link_to 'Edit users', users_path
+%h3 Memory use on server
 
-%p.text= link_to 'Edit your account settings', edit_user_path(@current_user)
+%p.text
+  = link_to "Memory statistics", url_for(:controller=>'admin',:action=>'stats')
 
 
 
