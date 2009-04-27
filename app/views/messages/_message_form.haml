@@ -31,7 +31,7 @@
       = error_message_on(:message, :subject)
     .form_field
       - @message.clean_message_whitespace
-      = label :message, :message, 'Your message (max chars including spaces 4000) *'
+      = label :message, :message, 'Your message *'
       - @message.message = @message.default_message if @message.message.nil?
       = error_message_on(:message, :message)
       = f.text_area(:message, :rows=>30)
