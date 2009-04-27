@@ -8,6 +8,11 @@ class SearchController < ApplicationController
 
     do_search search_term, search_format
   end
+  
+  def redir
+    @search_term = params[:search_term]
+    redirect_to :action => 'show', :search_term => @search_term
+  end
 
   def show
     flash.keep(:postcode)

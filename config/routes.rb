@@ -31,6 +31,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'api/search', :controller => 'api', :action => 'search'
   map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
   map.connect 'api/constituencies', :controller => 'api', :action => 'constituencies'
+  
+  map.connect '/commons/constituency/search/l/:search_term.html', :controller => 'search', :action => 'redir'
+  map.connect '/commons/member/search/l/:search_term.html', :controller => 'search', :action => 'redir'
+  map.connect '/commons/postcode/search/l/:search_term.html', :controller => 'search', :action => 'redir'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end
