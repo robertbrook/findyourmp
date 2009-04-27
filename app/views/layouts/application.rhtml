@@ -191,7 +191,7 @@
       <li><a href="http://www.parliament.uk/site_information/site_information.cfm">Using this website</a></li>
             <% if is_admin? %>
               <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
-              <li><%= link_to 'Admin home', admin_path %></li>
+              <li><%= link_to 'Admin', admin_path %></li>
             <% elsif RAILS_ENV == 'test' %>
               <li><%= link_to "Log In", new_user_session_path %></li>
             <% end %>
