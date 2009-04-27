@@ -23,6 +23,7 @@ class MessagesController < ResourceController::Base
     if params['message']
       params['message']['authenticity_token'] = params[:authenticity_token]
       flash['authenticity_token'] = params[:authenticity_token]
+      params['message']['sender_ip_address'] = request.env['REMOTE_ADDR']
       send_message = (params['message']['sent'] == '1')
       params['message'].delete('sent')
     end

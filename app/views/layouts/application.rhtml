@@ -4,6 +4,7 @@
 <% if RAILS_ENV != 'test' %>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
+  <% if @meta_description %><meta name="description" content="<%= @meta_description %>" /><% end %>
   <style type="text/css" media="screen, projection">
     @import url("/stylesheets/fymp.css");
     @import url("/stylesheets/homepage.css");
