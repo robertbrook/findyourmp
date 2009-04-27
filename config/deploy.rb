@@ -61,7 +61,7 @@ namespace :deploy do
   
   desc "Set db backup cleanup cron job"
   task :set_db_backup_cleanup_cron_job, :roles => :app do
-    cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files=42 RAILS_ENV='production'"
+    cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files_to_keep=42 RAILS_ENV='production'"
     set_cron_job cmd, 'S3_backup_cleanup'
   end
 
@@ -304,9 +304,7 @@ namespace :deploy do
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
-after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_s3_data', 'deploy:put_data', 'deploy:link_to_data'
-after 'deploy', 'deploy:check_site_setup'
-
+after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_s3_data', 'deploy:put_data', 'deploy:link_to_data', 'deploy:check_site_setup'
 
 namespace :fymp do
   namespace :cache do

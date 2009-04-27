@@ -18,6 +18,10 @@ class AdminController < ApplicationController
 
   def waiting_to_be_sent
     @waiting_to_be_sent_by_month_count = Message.waiting_to_be_sent_by_month_count
+  end
+  
+  def stats
     @memory_stats = Message.memory_stats
   end
+  
 end

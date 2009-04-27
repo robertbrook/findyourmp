@@ -19,11 +19,11 @@ namespace :fymp do
   
   desc "Test"
   task :cleanup_db_backup do
-    max_files = ENV['files']
+    max_files = ENV['files_to_keep']
     
     unless max_files
       puts 'must supply number of files to keep'
-      puts 'USAGE: rake fymp:cleanup_db_backup files=42'
+      puts 'USAGE: rake fymp:cleanup_db_backup files_to_keep=42'
     else
       call_cleanup(max_files)
     end

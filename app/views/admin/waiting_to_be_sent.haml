@@ -16,13 +16,4 @@
   %p.text
     = '&nbsp;'
 
-- if @memory_stats
-  .column_content
-    %h2 Server Memory Stats
-    %p.text Output of passenger-memory-stats command:
-    %pre= @memory_stats
-%p.text
-  = '&nbsp;'
-%p.text
-  = link_to 'Admin home', admin_url
 
