@@ -38,6 +38,11 @@
     = link_to 'Add new user', new_user_path
     |
     = link_to 'Edit users', users_path
+    
+%h3 Memory use on server
+
+%p.text
+  = link_to "Memory statistics", url_for(:controller=>'admin',:action=>'stats')
 
 
 
