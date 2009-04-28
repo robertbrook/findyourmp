@@ -48,7 +48,7 @@ namespace :deploy do
       puts 'USAGE: cap deploy:set_ar_sendmail_cron_job batch_size=100 freq_in_mins=5'
       puts
     else
-      cmd = "*/#{freq_in_minutes} * * * * /usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_to}/current --environment production"
+      cmd = "*/#{freq_in_minutes} * * * * cd #{deploy_to}/current; rake fymp:run_ar_sendmail batch-size=#{batch_size} deploy_dir=#{deploy_to}/current environment=production"
       set_cron_job cmd, 'ar_sendmail'
     end
   end
@@ -58,7 +58,7 @@ namespace :deploy do
     cmd = "02 3 * * * #{deploy_to}/current; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
     set_cron_job cmd, 'backup_database_to_S3'
   end
-  
+
   desc "Set db backup cleanup cron job"
   task :set_db_backup_cleanup_cron_job, :roles => :app do
     cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files_to_keep=42 RAILS_ENV='production'"

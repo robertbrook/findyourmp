@@ -20,4 +20,25 @@ namespace :fymp do
       puts 'USAGE: rake fymp:clear_stored_messages weeks_to_keep=6 RAILS_ENV=production'
     end
   end
+
+  task :run_ar_sendmail do
+    batch_size = ENV['batch_size']
+    deploy_dir = ENV['deploy_dir']
+    environment = ENV['environment']
+
+    if batch_size && deploy_dir && environment
+      cmd = "ps -A | grep ar_sendmail | grep -v 'grep' | grep -v 'run_ar_sendmail' | wc -l"
+      process_count = `#{cmd}`.strip
+      puts process_count.to_s
+      running = process_count == '1'
+      puts running.to_s
+
+      unless running
+        cmd = "/usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_dir} --environment #{environment}"
+        `#{cmd}`
+      end
+    else
+      puts 'USAGE: rake fymp:run_ar_sendmail batch_size=10 deploy_dir=/apps/current environment=production'
+    end
+  end
 end
