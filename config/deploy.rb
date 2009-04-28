@@ -24,17 +24,31 @@ namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
 
-  desc "Set clear stored messages cron job"
-  task :set_clear_messages_cron_job, :roles => :app do
+  desc "Set delete stored messages cron job"
+  task :set_delete_message_contents_cron_job, :roles => :app do
     weeks_to_keep = ENV['weeks_to_keep']
     unless weeks_to_keep
       puts
       puts 'must supply weeks_to_keep when setting cron job'
-      puts 'USAGE: cap deploy:set_clear_stored_messages_cron_job weeks_to_keep=6'
+      puts 'USAGE: cap deploy:set_delete_stored_message_contents_cron_job weeks_to_keep=6'
       puts
     else
-      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
-      set_cron_job cmd, 'clear_stored_messages'
+      cmd = "35 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_message_contents weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
+      set_cron_job cmd, 'delete_stored_message_contents'
+    end
+  end
+
+  desc "Set delete stored messages cron job"
+  task :set_delete_messages_cron_job, :roles => :app do
+    months_to_keep = ENV['months_to_keep']
+    unless months_to_keep
+      puts
+      puts 'must supply months_to_keep when setting cron job'
+      puts 'USAGE: cap deploy:set_delete_stored_messages_cron_job months_to_keep=6'
+      puts
+    else
+      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_messages months_to_keep=#{months_to_keep} RAILS_ENV=production"
+      set_cron_job cmd, 'delete_stored_messages'
     end
   end
 
