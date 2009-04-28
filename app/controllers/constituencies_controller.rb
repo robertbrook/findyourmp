@@ -36,8 +36,13 @@ class ConstituenciesController < ResourceController::Base
   
   def redir
     up_my_street_code = params[:up_my_street_code]
-    constituency = UpMyStreetCode.find_by_code(up_my_street_code).constituency
-    redirect_to :action => 'show', :id => constituency
+    upmystreet = UpMyStreetCode.find_by_code(up_my_street_code)
+    if upmystreet
+      constituency = upmystreet.constituency
+      redirect_to :action => 'show', :id => constituency
+    else
+      redirect_to :root
+    end
   end
 
   def show
