@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090427131554) do
+ActiveRecord::Schema.define(:version => 20090427152914) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(:version => 20090427131554) do
   end
 
   create_table "message_summaries", :force => true do |t|
-    t.string   "recipient"
     t.string   "constituency_name"
+    t.string   "recipient"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -60,12 +60,12 @@ ActiveRecord::Schema.define(:version => 20090427131554) do
     t.boolean  "sent"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "authenticity_token"
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
     t.string   "mailer_error"
     t.datetime "sent_at"
-    t.string   "authenticity_token"
     t.string   "sender_ip_address"
   end
 
@@ -100,6 +100,13 @@ ActiveRecord::Schema.define(:version => 20090427131554) do
 
   add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_name_and_sluggable_type_and_scope_and_sequence", :unique => true
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
+  create_table "up_my_street_codes", :force => true do |t|
+    t.integer "code"
+    t.string  "constituency"
+  end
+
+  add_index "up_my_street_codes", ["code"], :name => "index_up_my_street_codes_on_code"
 
   create_table "users", :force => true do |t|
     t.string   "login"

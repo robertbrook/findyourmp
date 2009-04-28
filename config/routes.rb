@@ -36,6 +36,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/commons/constituency/search/l/:search_term.html', :controller => 'search', :action => 'redir'
   map.connect '/commons/member/search/l/:search_term.html', :controller => 'search', :action => 'redir'
   map.connect '/commons/postcode/search/l/:search_term.html', :controller => 'search', :action => 'redir'
-
+  
+  map.connect '/commons/constituency/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
+  map.connect '/commons/email/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
+  
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

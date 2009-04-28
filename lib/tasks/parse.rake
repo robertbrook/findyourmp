@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
 require File.expand_path(File.dirname(__FILE__) + '/../commons_member_biographies')
 require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
+require File.expand_path(File.dirname(__FILE__) + '/../constituency_upmystreet_links')
 
 namespace :fymp do
   include FindYourMP::DataLoader
@@ -36,4 +37,10 @@ namespace :fymp do
   task :load_postcode_districts => :environment do
     load_postcode_districts
   end
+  
+  desc "Populate the upmystreet lookup table"
+  task :load_upmystreet_lookup => :environment do
+    UpMyStreet.load_upmystreet_codes('http://www.parliament.uk/directories/hciolists/alms.cfm')
+  end
+  
 end
