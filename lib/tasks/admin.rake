@@ -29,9 +29,7 @@ namespace :fymp do
     if batch_size && deploy_dir && environment
       cmd = "ps -A | grep ar_sendmail | grep -v 'grep' | grep -v 'run_ar_sendmail' | wc -l"
       process_count = `#{cmd}`.strip
-      puts process_count.to_s
       running = process_count == '1'
-      puts running.to_s
 
       unless running
         cmd = "/usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_dir} --environment #{environment}"

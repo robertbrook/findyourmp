@@ -48,7 +48,7 @@ namespace :deploy do
       puts 'USAGE: cap deploy:set_ar_sendmail_cron_job batch_size=100 freq_in_mins=5'
       puts
     else
-      cmd = "*/#{freq_in_minutes} * * * * cd #{deploy_to}/current; rake fymp:run_ar_sendmail batch-size=#{batch_size} deploy_dir=#{deploy_to}/current environment=production"
+      cmd = "*/#{freq_in_minutes} * * * * cd #{deploy_to}/current; rake fymp:run_ar_sendmail batch_size=#{batch_size} deploy_dir=#{deploy_to}/current environment=production"
       set_cron_job cmd, 'ar_sendmail'
     end
   end
