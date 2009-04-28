@@ -26,8 +26,19 @@ class Message < ActiveRecord::Base
 
   class << self
 
-    def clear_stored_messages weeks
-      delete_past_date = (Date.today - (weeks*7)).to_s(:yyyy_mm_dd)
+    def delete_stored_message_contents no_of_weeks
+      delete_past_date = (Date.today - no_of_weeks.weeks).to_s(:yyyy_mm_dd)
+      conditions = "sent = true AND created_at < '#{delete_past_date}'"
+
+      find_each(:conditions => conditions) do |message|
+        message.subject = 'DELETED'
+        message.message = 'DELETED'
+        message.save!
+      end
+    end
+
+    def delete_stored_messages no_of_months
+      delete_past_date = (Date.today - no_of_months.months).to_s(:yyyy_mm_dd)
       conditions = "sent = true AND created_at < '#{delete_past_date}'"
       delete_all(conditions)
     end
@@ -91,7 +102,7 @@ class Message < ActiveRecord::Base
   end
 
   def default_message
-    "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n"
+    constituency ? "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n" : ''
   end
 
   def clean_message_whitespace
@@ -152,7 +163,7 @@ class Message < ActiveRecord::Base
       if @post_code = Postcode.find_postcode_by_code(postcode)
         self.postcode = @post_code.code_with_space
 
-        if @post_code.in_constituency?(constituency)
+        if constituency && @post_code.in_constituency?(constituency)
           self.sender_is_constituent = 1
         end
       end

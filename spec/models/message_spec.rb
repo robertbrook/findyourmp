@@ -52,15 +52,29 @@ describe Message do
     Postcode.should_receive(:find_postcode_by_code).with(@postcode).any_number_of_times.and_return @post_code
   end
 
-  describe "when asked to clear stored messages" do
-    it 'should delete messages older than given number of weeks' do
+  describe "when asked to delete stored messages" do
+    it 'should delete message contents and subject when older than given number of weeks' do
       message = mock(Message)
       weeks = 4
-      delete_past_date = (Date.today - (weeks*7)).to_s(:yyyy_mm_dd)
+      delete_past_date = (Date.today - 4.weeks).to_s(:yyyy_mm_dd)
+      conditions = "sent = true AND created_at < '#{delete_past_date}'"
+
+      message = mock(Message)
+      message.should_receive(:message=).with('DELETED')
+      message.should_receive(:subject=).with('DELETED')
+      message.should_receive(:save!)
+
+      Message.should_receive(:find_each).with(:conditions => conditions).and_yield message
+      Message.delete_stored_message_contents weeks
+    end
+    it 'should delete messages older than given number of months' do
+      message = mock(Message)
+      months = 4
+      delete_past_date = (Date.today - 4.months).to_s(:yyyy_mm_dd)
       conditions = "sent = true AND created_at < '#{delete_past_date}'"
 
       Message.should_receive(:delete_all).with(conditions)
-      Message.clear_stored_messages weeks
+      Message.delete_stored_messages months
     end
   end
 

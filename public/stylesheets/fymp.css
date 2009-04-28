@@ -18,6 +18,10 @@
   font-size: 1.3em;
 }
 
+.info {
+  color: green;
+}
+
 .flash {
   color: red;
 }
