@@ -40,7 +40,7 @@ namespace :fymp do
   
   desc "Populate the upmystreet lookup table"
   task :load_upmystreet_lookup => :environment do
-    UpMyStreet.load_upmystreet_codes('http://www.parliament.uk/directories/hciolists/alms.cfm')
+    load_upmystreetcodes
   end
   
 end
