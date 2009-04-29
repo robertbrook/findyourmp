@@ -3,7 +3,7 @@ class ConstituencyList
   attr_reader :constituencies, :invalid_constituencies, :unchanged_constituencies, :changed_constituencies, :unrecognized_constituencies, :ommitted_constituencies
 
   def items
-    Constituency.all.collect(&:to_tsv_line).sort.join("\n")
+    Constituency.all_constituencies.collect(&:to_tsv_line).sort.join("\n")
   end
 
   def items= text
@@ -27,7 +27,7 @@ class ConstituencyList
     @changed_constituencies = @changed_constituencies - @invalid_constituencies
     @unrecognized_constituencies = constituency_list.select{|x| x.old.nil? && x.new_constituency.nil? }
 
-    @ommitted_constituencies = Constituency.all
+    @ommitted_constituencies = Constituency.all_constituencies
     constituency_list.each { |x| @ommitted_constituencies.delete(x.old) if x.old }
 
     @constituencies = constituencies

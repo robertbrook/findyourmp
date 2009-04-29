@@ -10,6 +10,10 @@ class Constituency < ActiveRecord::Base
 
   class << self
 
+    def all_constituencies
+      all.select{|c| c.name != 'Example'}
+    end
+
     def remove_quotes text
       text.strip[/^"?([^"]+)"?$/,1]
     end
@@ -71,6 +75,7 @@ class Constituency < ActiveRecord::Base
       matches_name_or_member_name = %Q|name like "%#{term.squeeze(' ')}%" or | +
           %Q|member_name like "%#{term.squeeze(' ')}%"|
       constituencies = find(:all, :conditions => matches_name_or_member_name)
+      constituencies.delete_if{|c| c.name == 'Example'}
 
       if case_sensitive(term)
         constituencies.delete_if do |c|
@@ -120,7 +125,9 @@ class Constituency < ActiveRecord::Base
   end
 
   def code
-    if ons_id < 10
+    if ons_id.nil?
+      ''
+    elsif ons_id < 10
       "00#{ons_id}"
     elsif ons_id < 100
       "0#{ons_id}"

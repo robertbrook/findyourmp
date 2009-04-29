@@ -30,7 +30,7 @@ namespace :deploy do
     unless weeks_to_keep
       puts
       puts 'must supply weeks_to_keep when setting cron job'
-      puts 'USAGE: cap deploy:set_delete_stored_message_contents_cron_job weeks_to_keep=6'
+      puts 'USAGE: cap deploy:set_delete_message_contents_cron_job weeks_to_keep=6'
       puts
     else
       cmd = "35 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_message_contents weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
@@ -44,7 +44,7 @@ namespace :deploy do
     unless months_to_keep
       puts
       puts 'must supply months_to_keep when setting cron job'
-      puts 'USAGE: cap deploy:set_delete_stored_messages_cron_job months_to_keep=6'
+      puts 'USAGE: cap deploy:set_delete_messages_cron_job months_to_keep=6'
       puts
     else
       cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_messages months_to_keep=#{months_to_keep} RAILS_ENV=production"

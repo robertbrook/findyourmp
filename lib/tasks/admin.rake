@@ -1,5 +1,14 @@
 namespace :fymp do
 
+  task :create_example_constituency => :environment do
+    example = Constituency.find_by_name('Example')
+    unless example
+      example = Constituency.new(:name=>'Example', :member_name=>'Example member')
+      example.save!
+      puts example.inspect
+    end
+  end
+
   desc "Create initial admin user"
   task :create_admin_user => :environment do
     password = ENV['password']

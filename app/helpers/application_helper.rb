@@ -16,4 +16,17 @@ module ApplicationHelper
       nil
     end
   end
+
+  def sort_constituencies constituencies
+    constituencies.sort! do |a,b|
+      if a.name == 'Example'
+        -1
+      elsif b.name == 'Example'
+        +1
+      else
+        a.name <=> b.name
+      end
+    end
+    constituencies
+  end
 end

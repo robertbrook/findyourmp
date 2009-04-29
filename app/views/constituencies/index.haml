@@ -6,7 +6,8 @@
 
 %table.text
   %tbody
-    -for constituency in @constituencies
+    - constituencies = sort_constituencies(@constituencies)
+    - for constituency in constituencies
       %tr
         %td= h constituency.code
         %td= link_to h(constituency.name), edit_constituency_path(constituency)
