@@ -33,9 +33,16 @@ ActiveRecord::Schema.define(:version => 20090429095739) do
     t.datetime "created_on"
   end
 
+  create_table "members", :force => true do |t|
+    t.string  "name"
+    t.integer "constituency_id"
+  end
+
+  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
+
   create_table "message_summaries", :force => true do |t|
-    t.string   "recipient"
     t.string   "constituency_name"
+    t.string   "recipient"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -60,12 +67,12 @@ ActiveRecord::Schema.define(:version => 20090429095739) do
     t.boolean  "sent"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "authenticity_token"
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
     t.string   "mailer_error"
     t.datetime "sent_at"
-    t.string   "authenticity_token"
     t.string   "sender_ip_address"
   end
 
