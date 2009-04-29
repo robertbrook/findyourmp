@@ -10,6 +10,47 @@ describe Constituency do
     @constituency2 = Constituency.new
   end
 
+  describe 'when asked for find_all_constituency_and_member_matches' do
+    before do
+      @constituency.name = 'Bethnal Green and Bow'
+      @constituency2.name = 'Aldershot Bow'
+      @constituency.member_name = ''
+      @constituency2.member_name = ''
+    end
+
+    it 'should sort constituencies by name' do
+      constituencies = [@constituency,@constituency2]
+      Constituency.should_receive(:find_all_name_or_member_name_matches).with('Bow').and_return constituencies
+      constituencies, members = Constituency.find_all_constituency_and_member_matches('Bow')
+      constituencies.should == [@constituency2, @constituency]
+    end
+
+    it 'should match case of constituency name' do
+      @constituency2.name = 'Aldershotbow'
+      constituencies = [@constituency,@constituency2]
+      Constituency.should_receive(:find_all_name_or_member_name_matches).with('Bow').and_return constituencies
+      constituencies, members = Constituency.find_all_constituency_and_member_matches('Bow')
+      constituencies.should == [@constituency]
+    end
+
+    it 'should ignore case of search term if not capitalized' do
+      @constituency2.name = 'Aldershotbow'
+      constituencies = [@constituency,@constituency2]
+      Constituency.should_receive(:find_all_name_or_member_name_matches).with('bow').and_return constituencies
+      constituencies, members = Constituency.find_all_constituency_and_member_matches('bow')
+      constituencies.should == [@constituency2,@constituency]
+    end
+
+    it 'should match case of member name if capitalized' do
+      @constituency.member_name = 'Ian'
+      @constituency2.member_name = 'Sian'
+      constituencies = [@constituency,@constituency2]
+      Constituency.should_receive(:find_all_name_or_member_name_matches).with('Ian').and_return constituencies
+      constituencies, members = Constituency.find_all_constituency_and_member_matches('Ian')
+      members.should == [@constituency]
+    end
+  end
+
   describe 'when asked if member name has changed' do
     it 'should return true if it has' do
       @constituency.member_name = 'old'

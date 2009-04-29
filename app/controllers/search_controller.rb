@@ -8,30 +8,17 @@ class SearchController < ApplicationController
 
     do_search search_term, search_format
   end
-  
+
   def redir
-    @search_term = params[:search_term]
-    redirect_to :action => 'show', :search_term => @search_term
+    @search_term = params[:search_term].gsub('+',' ')
+    redirect_to :action => 'index', :search_term => @search_term
   end
 
   def show
     flash.keep(:postcode)
     @search_term = params[:search_term]
     @last_search_term = @search_term
-
-    @constituencies = Constituency.find_all_name_or_member_name_matches(@search_term)
-    @members = @constituencies.clone
-
-    if @search_term[/[A-Z][a-z].*/]
-      @constituencies.delete_if { |element| !(element.name.include? @search_term) }
-      @members.delete_if { |element| !(element.member_name.include? @search_term) }
-    else
-      @constituencies.delete_if { |element| !(element.name.downcase.include? @search_term.downcase) }
-      @members.delete_if { |element| (element.member_name.nil?) || !(element.member_name.downcase.include? @search_term.downcase) }
-    end
-
-    @constituencies = @constituencies.sort_by { |record| record.name }
-    @members = @members.sort_by { |record| record.member_name }
+    @constituencies, @members = Constituency.find_all_constituency_and_member_matches @search_term
 
     respond_to do |format|
       format.html { render :template => '/constituencies/show' }

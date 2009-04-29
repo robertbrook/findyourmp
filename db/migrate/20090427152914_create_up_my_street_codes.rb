@@ -4,7 +4,7 @@ class CreateUpMyStreetCodes < ActiveRecord::Migration
       t.integer :code
       t.string :constituency
     end
-    
+
     add_index :up_my_street_codes, :code
   end
 

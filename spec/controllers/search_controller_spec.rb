@@ -211,22 +211,16 @@ describe SearchController do
 
   describe 'when asked to show 2 or more constituencies' do
     before do
-      @matching = [@constituency, @other_constituency]
+      @matching = [[@other_constituency, @constituency], []]
     end
 
     describe 'and there are constituency matches' do
       before do
-        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matching
+        Constituency.should_receive(:find_all_constituency_and_member_matches).with(@constituency_name_part).and_return @matching
       end
 
       def do_get format=nil
         get :show, :search_term => @constituency_name_part, :format => format
-      end
-
-      it 'should assign constituencies to view ordered by name' do
-        do_get
-        constituencies_ordered_by_name = [@other_constituency, @constituency]
-        assigns[:constituencies].should == constituencies_ordered_by_name
       end
 
       it 'should assign search term to view' do
@@ -265,7 +259,8 @@ describe SearchController do
 
     describe 'and there are member matches' do
       before do
-        Constituency.should_receive(:find_all_name_or_member_name_matches).with(@member_name_part).and_return @matching
+        matching = [[], [@constituency, @other_constituency]]
+        Constituency.should_receive(:find_all_constituency_and_member_matches).with(@member_name_part).and_return matching
       end
 
       def do_get format=nil
@@ -314,7 +309,7 @@ describe SearchController do
 
     describe 'and the search term is all lower case' do
       before do
-        Constituency.should_receive(:find_all_name_or_member_name_matches).with('islington').and_return @matching
+        Constituency.should_receive(:find_all_constituency_and_member_matches).with('islington').and_return @matching
       end
 
       def do_get
@@ -328,4 +323,12 @@ describe SearchController do
       end
     end
   end
+
+  describe 'search route' do
+    it 'should route correctly' do
+      params_from(:get, "/search?search_term=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :search_term=>'E3+2AT', :commit=>"Find+MP"}
+    end
+  end
+
 end
+
