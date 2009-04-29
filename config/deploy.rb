@@ -86,11 +86,6 @@ namespace :deploy do
     run "crontab #{tmpname}"
     run "rm #{tmpname}"
   end
-  
-  desc "Populate the UpMyStreet lookup table"
-  task :populate_upmystreet_lookup, :roles => :app do
-    run "cd #{deploy_to}/current; rake fymp:load_upmystreet_lookup RAILS_ENV='production'"
-  end
 
   desc "Upload deployed database.yml"
   task :upload_deployed_database_yml, :roles => :app do
