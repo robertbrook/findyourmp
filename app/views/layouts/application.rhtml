@@ -130,7 +130,7 @@
          <h1><a href="http://findyourmp.parliament.uk/">Find Your MP</a></h1>
            <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
            <% if flash[:notice] %>
-             <div class="text flash">
+             <div class="text <%= flash[:notice][/Successful/] ? 'info' : 'flash' %>">
                <%= flash[:notice] %>
              </div>
            <% end %>

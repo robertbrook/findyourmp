@@ -11,6 +11,8 @@ module FindYourMP::DataLoader
 
   SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
+  
+  UPMYSTREET_FILE = "#{DATA_DIR}/upmystreetcodes.csv"
 
   def load_members member_file
     member_file = MEMBER_FILE unless member_file
@@ -58,6 +60,18 @@ module FindYourMP::DataLoader
       Constituency.create :name=>constituency_name, :ons_id=>constituency_id
     end
   end
+  
+  def load_upmystreetcodes
+     return if file_not_found(UPMYSTREET_FILE)
+     UpMyStreetCode.delete_all
+
+     IO.foreach(UPMYSTREET_FILE) do |line|
+       parts = line.split(",")
+       code = parts[0]
+       constituency = parts[1].gsub('"','').gsub("\n",'')
+       UpMyStreetCode.create :code=>code, :constituency=>constituency
+     end
+   end
 
   def parse_postcodes
     return if file_not_found(SOURCE_POSTCODE_FILE)

@@ -24,17 +24,31 @@ namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
 
-  desc "Set clear stored messages cron job"
-  task :set_clear_messages_cron_job, :roles => :app do
+  desc "Set delete stored messages cron job"
+  task :set_delete_message_contents_cron_job, :roles => :app do
     weeks_to_keep = ENV['weeks_to_keep']
     unless weeks_to_keep
       puts
       puts 'must supply weeks_to_keep when setting cron job'
-      puts 'USAGE: cap deploy:set_clear_stored_messages_cron_job weeks_to_keep=6'
+      puts 'USAGE: cap deploy:set_delete_stored_message_contents_cron_job weeks_to_keep=6'
       puts
     else
-      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:clear_stored_messages weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
-      set_cron_job cmd, 'clear_stored_messages'
+      cmd = "35 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_message_contents weeks_to_keep=#{weeks_to_keep} RAILS_ENV=production"
+      set_cron_job cmd, 'delete_stored_message_contents'
+    end
+  end
+
+  desc "Set delete stored messages cron job"
+  task :set_delete_messages_cron_job, :roles => :app do
+    months_to_keep = ENV['months_to_keep']
+    unless months_to_keep
+      puts
+      puts 'must supply months_to_keep when setting cron job'
+      puts 'USAGE: cap deploy:set_delete_stored_messages_cron_job months_to_keep=6'
+      puts
+    else
+      cmd = "05 4 * * * cd #{deploy_to}/current; rake fymp:delete_stored_messages months_to_keep=#{months_to_keep} RAILS_ENV=production"
+      set_cron_job cmd, 'delete_stored_messages'
     end
   end
 
@@ -48,7 +62,7 @@ namespace :deploy do
       puts 'USAGE: cap deploy:set_ar_sendmail_cron_job batch_size=100 freq_in_mins=5'
       puts
     else
-      cmd = "*/#{freq_in_minutes} * * * * /usr/local/bin/ar_sendmail -o --batch-size #{batch_size} --chdir #{deploy_to}/current --environment production"
+      cmd = "*/#{freq_in_minutes} * * * * cd #{deploy_to}/current; rake fymp:run_ar_sendmail batch_size=#{batch_size} deploy_dir=#{deploy_to}/current environment=production"
       set_cron_job cmd, 'ar_sendmail'
     end
   end
@@ -58,7 +72,7 @@ namespace :deploy do
     cmd = "02 3 * * * #{deploy_to}/current; rake fymp:backup_db_s3 path=db/backup RAILS_ENV='production'"
     set_cron_job cmd, 'backup_database_to_S3'
   end
-  
+
   desc "Set db backup cleanup cron job"
   task :set_db_backup_cleanup_cron_job, :roles => :app do
     cmd = "42 3 * * * cd #{deploy_to}/current; rake fymp:cleanup_db_backup files_to_keep=42 RAILS_ENV='production'"
@@ -71,6 +85,11 @@ namespace :deploy do
     run %Q|echo "#{cmd}" >> #{tmpname}|
     run "crontab #{tmpname}"
     run "rm #{tmpname}"
+  end
+  
+  desc "Populate the UpMyStreet lookup table"
+  task :populate_upmystreet_lookup, :roles => :app do
+    run "cd #{deploy_to}/current; rake fymp:load_upmystreet_lookup RAILS_ENV='production'"
   end
 
   desc "Upload deployed database.yml"
@@ -304,7 +323,8 @@ namespace :deploy do
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
-after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_s3_data', 'deploy:put_data', 'deploy:link_to_data', 'deploy:check_site_setup'
+after 'deploy:update_code', 'deploy:upload_deployed_database_yml', 'deploy:upload_deployed_mailer_yml', 'deploy:put_s3_data', 'deploy:put_data', 'deploy:link_to_data'
+after 'deploy:symlink', 'deploy:check_site_setup'
 
 namespace :fymp do
   namespace :cache do

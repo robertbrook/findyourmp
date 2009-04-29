@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090427131554) do
+ActiveRecord::Schema.define(:version => 20090427152914) do
 
   create_table "constituencies", :force => true do |t|
     t.string  "name"
@@ -107,6 +107,13 @@ ActiveRecord::Schema.define(:version => 20090427131554) do
 
   add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_name_and_sluggable_type_and_scope_and_sequence", :unique => true
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
+  create_table "up_my_street_codes", :force => true do |t|
+    t.integer "code"
+    t.string  "constituency"
+  end
+
+  add_index "up_my_street_codes", ["code"], :name => "index_up_my_street_codes_on_code"
 
   create_table "users", :force => true do |t|
     t.string   "login"

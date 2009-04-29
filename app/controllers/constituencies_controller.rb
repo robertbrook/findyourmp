@@ -3,7 +3,7 @@ class ConstituenciesController < ResourceController::Base
   caches_page :show, :if => '!is_admin?'
   cache_sweeper :constituency_sweeper, :only => [:update, :destroy, :hide_members, :unhide_members]
 
-  before_filter :respond_unauthorized_if_not_admin, :except => [:show]
+  before_filter :respond_unauthorized_if_not_admin, :except => [:show, :redir]
 
   before_filter :ensure_current_constituency_url, :only => :show
 
@@ -31,6 +31,17 @@ class ConstituenciesController < ResourceController::Base
       else
         response_for(:update_fails)
       end
+    end
+  end
+  
+  def redir
+    up_my_street_code = params[:up_my_street_code]
+    upmystreet = UpMyStreetCode.find_by_code(up_my_street_code)
+    if upmystreet
+      constituency = upmystreet.constituency
+      redirect_to :action => 'show', :id => constituency
+    else
+      redirect_to :root
     end
   end
 

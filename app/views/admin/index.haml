@@ -1,7 +1,7 @@
 - @crumbtrail = 'Admin'
 - @title = 'Admin'
 
-%h3 Messages
+%h3.padded_subheading Messages
 
 %p.text
   = link_to("Messages sent", url_for(:controller=>'admin',:action=>'sent') ) + ':'
@@ -11,16 +11,16 @@
   - if @waiting_to_be_sent_count > 0
     = link_to "Messages <strong>waiting on the server</strong> to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
   - else
-    There are no <strong>waiting on the server</strong> to be sent.
+    There are no messages waiting on the server to be sent.
 
-%h3 Members database
+%h3.padded_subheading Members database
 
 %p.text
   = link_to 'Edit Members database information', edit_constituency_list_path
   |
   = link_to 'Edit constituencies', constituencies_path
 
-%h3 Users
+%h3.padded_subheading Users
 
 %p.text
   = 'You are logged in as <strong>' + @current_user.login + '</strong>'
@@ -36,11 +36,7 @@
     |
     = link_to 'Edit users', users_path
 
-%h3 Memory use on server
+%h3.padded_subheading Memory use on server
 
 %p.text
   = link_to "Memory statistics", url_for(:controller=>'admin',:action=>'stats')
-
-
-
-
