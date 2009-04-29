@@ -3,16 +3,62 @@
 
 %div.text.flash= flash[:not_found] if flash[:not_found]
 
-%p.text The API for the Find Your MP service provides output in several standard formats.
+%p.text The API for the Find Your MP service provides output in several formats in addition to HTML - XML, JSON, Javascript, plain text, comma separated values and YAML. 
+
+%p.text There are currently no usage limits to the API, but they may be introduced in future.
 
 %h3 Postcodes
 
+%p.text Using the example of SE1 2XR as a target postcode.
+
+%p.text URL: <code>/postcodes/se12xr</code><br/>Content: HTML, forwards to <code>constituencies/north-southwark-and-bermondsey</code>
+
+%p.text URL: <code>/postcodes/se12xr.xml</code><br/>Content: XML as "application/xml"
+
+%p.text URL: <code>/postcodes/se12xr.json</code><br/>Content: JSON as "application/json"
+
+%p.text URL: <code>/postcodes/se12xr.js</code><br/>Content: Javascript as "text/javascript"
+
+%p.text URL: <code>/postcodes/se12xr.text</code><br/>Content: plain text as "text/plain"
+
+%p.text URL: <code>/postcodes/se12xr.csv</code><br/>Content: comma separated values as "text/csv"
+
+%p.text URL: <code>/postcodes/se12xr.yaml</code><br/>Content: YAML as "application/x-yaml"
 
 %h3 Postcode areas
 
+%p.text Using the example of N1 as a target postcode area.
 
+%p.text URL: <code>/postcodes/n1</code><br/>Content: HTML
 
-%h3 Constituencies
+%p.text URL: <code>/postcodes/n1.xml</code><br/>Content: XML as "application/xml"
 
+%p.text URL: <code>/postcodes/n1.json</code><br/>Content: JSON as "application/json"
+
+%p.text URL: <code>/postcodes/n1.js</code><br/>Content: Javascript as "text/javascript"
+
+%p.text URL: <code>/postcodes/n1.text</code><br/>Content: plain text as "text/plain"
+
+%p.text URL: <code>/postcodes/n1.csv</code><br/>Content: comma separated values as "text/csv"
+
+%p.text URL: <code>/postcodes/n1.yaml</code><br/>Content: YAML as "application/x-yaml"
+
+%h3 Constituencies 
+
+%p.text Using the example of Islington North as a target constituency.
+
+%p.text URL: <code>/constituencies/islington-north</code><br/>Content: HTML
+
+%p.text URL: <code>/constituencies/islington-north.xml</code><br/>Content: XML as "application/xml"
+
+%p.text URL: <code>/constituencies/islington-north.json</code><br/>Content: JSON as "application/json"
+
+%p.text URL: <code>/constituencies/islington-north.js</code><br/>Content: Javascript as "text/javascript"
+
+%p.text URL: <code>/constituencies/islington-north.text</code><br/>Content: plain text as "text/plain"
+
+%p.text URL: <code>/constituencies/islington-north.csv</code><br/>Content: comma separated values as "text/csv"
+
+%p.text URL: <code>/constituencies/islington-north.yaml</code><br/>Content: YAML as "application/x-yaml"
 
 
