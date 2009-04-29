@@ -4,7 +4,7 @@
   - else
     - member_name = h(@constituency.member_name)
     .row_item
-      .row_label Sitting MP
+      .row_label Member for this constituency
       .row_value
         - if @constituency.member_biography_url?
           = link_to member_name, @constituency.member_biography_url
@@ -31,9 +31,7 @@
           from this website.
     .row_item
       .row_label Telephone
-      .row_value
-        020 7219 3000<br /> (House of Commons Switchboard - ask for your Member's Office)
+      .row_value= "House of Commons Switchboard: 020 7219 3000. Please ask for the office of #{member_name}."
     .row_item
       .row_label Letter
-      .row_value
-        House of Commons, London, SW1A 0AA
+      .row_value= "#{member_name}, House of Commons, London SW1A 0AA"
