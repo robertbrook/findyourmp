@@ -1,6 +1,6 @@
 .text
   - if @constituency.no_sitting_member?
-    %p No sitting Member of Parliament.
+    %p There is no sitting Member of Parliament for this constituency.
   - else
     - member_name = h(@constituency.member_name)
     .row_item
