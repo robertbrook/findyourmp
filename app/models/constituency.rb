@@ -50,6 +50,23 @@ class Constituency < ActiveRecord::Base
       end
     end
 
+    def find_all_constituency_and_member_matches term
+      constituencies = Constituency.find_all_name_or_member_name_matches(term)
+      members = constituencies.clone
+
+      if term[/[A-Z][a-z].*/]
+        constituencies = constituencies.select { |c| c.name.include? term }
+        members = members.select { |c| c.member_name.include? term }
+      else
+        constituencies = constituencies.select { |c| c.name.downcase.include? term.downcase }
+        members = members.select { |c| c.member_name? && c.member_name.downcase.include?(term.downcase) }
+      end
+
+      constituencies = constituencies.sort_by(&:name)
+      members = members.sort_by(&:member_name)
+      return [constituencies, members]
+    end
+
     def find_all_name_or_member_name_matches term
       matches_name_or_member_name = %Q|name like "%#{term.squeeze(' ')}%" or | +
           %Q|member_name like "%#{term.squeeze(' ')}%"|
