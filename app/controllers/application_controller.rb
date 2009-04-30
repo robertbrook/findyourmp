@@ -11,7 +11,10 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :is_admin?
 
   def render_not_found message='Page not found.'
-    render :text => message, :status => :not_found
+    #render :text => message, :status => :not_found
+    @title = "Page cannot be found (404 error)"
+    @crumbtrail = "Error page cannot be found"
+    render :template => 'public/404.html', :status => 404
   end
 
   private
