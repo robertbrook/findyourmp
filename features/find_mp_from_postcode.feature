@@ -13,7 +13,7 @@ Feature: Find MP from postcode
     Given I am on the Front page
     When I search for "KY8 5XY"
     Then I should see "Glenrothes"
-    And I should see "No sitting Member of Parliament."
+    And I should see "There is no sitting Member of Parliament for this constituency."
 
   Scenario: Enter bogus postcode
     Given I am on the Front page

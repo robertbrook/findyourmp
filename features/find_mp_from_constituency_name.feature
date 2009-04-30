@@ -38,7 +38,7 @@ Feature: Find MP from constituency name
     Given I am on the Front page
     When I search for "Glenrothes"
     Then I should see "Glenrothes"
-    And I should see "No sitting Member of Parliament."
+    And I should see "There is no sitting Member of Parliament for this constituency."
 
   Scenario: Enter a single letter search term
     Given I am on the Front page
