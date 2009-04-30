@@ -9,7 +9,7 @@
 
 - elsif @constituencies or @members
   - if @constituencies.size > 0
-    %h4= pluralize(@constituencies.size, 'Consituency')
+    %h4= pluralize(@constituencies.size, 'Constituency')
     - if @constituencies.size > 1
       %p.text A search using your full postcode will show fewer constituencies
     = render :partial => 'constituencies/constituency_match', :collection => @constituencies
