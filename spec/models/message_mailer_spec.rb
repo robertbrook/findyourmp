@@ -57,16 +57,16 @@ describe MessageMailer do
       it 'should set body correctly' do
         @message.stub!(:sender_is_constituent).and_return false
         @email = MessageMailer.create_sent(@message)
-        expected = ['You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk.']
+        expected = [""]
+        expected << "You are receiving this message from the Find Your MP service at http://findyourmp.parliament.uk. To comment on this service or amend your details, contact the Information Office: #{ Message.feedback_email }. Replies to this email will be sent to the sender's address and not to the Find Your MP service."
         expected << "\n\n"
         expected << "================================================================="
         expected << "\n\n"
-        expected << "The message was sent with the following sender details submitted:\n\n#{@sender_details}\n\n"
+        expected << "The message was sent with the following sender details:\n\n#{@sender_details}\n\n"
         expected << "================================================================="
         expected << "\n\n"
         expected << "The message was sent with the following text:\n\n#{@contents}\n\n"
-        expected << "=================================================================\n\n"
-        expected << "If you wish to comment on this service or amend your details, please mail the Information Office at #{Message.feedback_email}"
+        expected << "================================================================="
         @email.body.strip.should == expected.join('')
       end
     end
