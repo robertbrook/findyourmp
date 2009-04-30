@@ -21,7 +21,7 @@ class MessageMailer < ActionMailer::Base
   def sent(message, sent_at = Time.now)
     subject    "[FindYourMP] #{message.subject}"
     recipients "#{message.recipient} <#{message.recipient_email}>"
-    from       Message.noreply_email
+    from       message.sender_via_fymp_email
     reply_to   message.sender_email
     sent_on    sent_at
 

@@ -9,12 +9,13 @@ describe MessageMailer do
     @recipient_name = "MP name"
     @recipient_email = "mp@parl.uk"
     @sender_name = "Sender name"
+    @no_reply_email = "noreply@parliament.uk"
+    @sender_via_fymp = %Q|"Sender name via FindYourMP" <noreply@parliament.uk>|
     @sender_email = "sender@public.uk"
     @subject = "Subject"
     @contents = "My message"
     @sender_details = "details"
 
-    @no_reply_email = "no_reply@findyourmp.parliament.uk"
 
     Message.stub!(:noreply_email).and_return @no_reply_email
 
@@ -22,6 +23,7 @@ describe MessageMailer do
       :sender => @sender_name,
       :sender_email => @sender_email,
       :sender_details => @sender_details,
+      :sender_via_fymp_email => @sender_via_fymp,
       :test_sender_email => @sender_email,
       :recipient => @recipient_name,
       :recipient_email => @recipient_email,

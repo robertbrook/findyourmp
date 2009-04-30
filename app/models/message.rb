@@ -101,6 +101,10 @@ class Message < ActiveRecord::Base
     return self.sent
   end
 
+  def sender_via_fymp_email
+    %Q|"#{sender} via FindYourMP" <#{Message.noreply_email}>|
+  end
+
   def default_message
     constituency ? "Dear #{constituency.member_name},\n\n\n\nYours sincerely,\n\n" : ''
   end

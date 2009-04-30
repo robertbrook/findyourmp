@@ -18,7 +18,7 @@ describe Message do
     @postcode = "N1 2SD"
     @valid_attributes = {
       :constituency_id => @constituency_id,
-      :sender => "value for sender",
+      :sender => "Joe Smith",
       :sender_email => "value.for@sender.email",
       :address => "100 Path
       Islington
@@ -92,6 +92,12 @@ Islington
 London"
     end
 
+    describe "when asked for sender_via_fymp_email" do
+      it 'should return sender name in quotes, with noreply email address' do
+        message = Message.new(@valid_attributes)
+        message.sender_via_fymp_email.should == %Q|"Joe Smith via FindYourMP" <noreply@parliament.uk>|
+      end
+    end
     describe "sender's postcode is in constituency" do
       it 'should return true for sender_in_constituency' do
         message = Message.new(@valid_attributes)
@@ -112,7 +118,7 @@ London"
 
       it 'should show sender_details correctly' do
         @message.valid?.should be_true
-        @message.sender_details.should == "Name: value for sender
+        @message.sender_details.should == "Name: Joe Smith
 Address:
 100 Path
 Islington
