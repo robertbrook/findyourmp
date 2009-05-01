@@ -39,6 +39,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect '/commons/constituency/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
   map.connect '/commons/email/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
+  
+  map.connect '/commons/l/', :controller => 'postcodes', :action => 'redir'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
 end

@@ -22,6 +22,10 @@ class PostcodesController < ApplicationController
       end
     end
   end
+  
+  def redir
+    redirect_to :root
+  end
 
   private
 
