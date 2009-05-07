@@ -50,7 +50,7 @@ When /^I preview message without "(.*)"$/ do |field|
   And %Q|I fill in "Your postcode" with "AB101AA"| unless field == 'Your postcode'
   And %Q|I fill in "Your subject" with "Problem"| unless field == 'Your subject'
   And %Q|I fill in "Your message" with "Question"| unless field == 'Your message'
-  And 'I press "Preview your message"'
+  And 'I press "Preview your message before sending"'
 end
 
 When /^I fill in valid message$/ do
@@ -68,23 +68,23 @@ end
 
 When /^I preview message with an invalid sender email$/ do
   When 'I fill in valid message with email address "bad_address"'
-  And 'I press "Preview your message"'
+  And 'I press "Preview your message before sending"'
 end
 
 When /^I preview message with a parliament.uk sender email$/ do
   When 'I fill in valid message with email address "me@parliament.uk"'
-  And 'I press "Preview your message"'
+  And 'I press "Preview your message before sending"'
 end
 
 When /^I preview message with an invalid postcode$/ do
   When 'I fill in valid message with email address "me@example.com"'
   And %Q|I fill in "Your postcode" with "AB1"|
-  And 'I press "Preview your message"'
+  And 'I press "Preview your message before sending"'
 end
 
 When /^I preview message$/ do
   When 'I fill in valid message with email address "me@example.com"'
-  And 'I press "Preview your message"'
+  And 'I press "Preview your message before sending"'
 end
 
 When /^I re-edit message$/ do

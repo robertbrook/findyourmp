@@ -19,7 +19,7 @@ Feature: Contact MP
     Given I am on a new Message page
     When I preview message without "Your email address"
     And I should see "1 error prohibited this message from being previewed"
-    And I should see "Preview your message" button
+    And I should see "Preview your message before sending" button
 
   Scenario Outline: Preview message with compulsory field missing and see detailed warning
     Given I am on a new Message page
@@ -60,7 +60,7 @@ Feature: Contact MP
   Scenario: Re-edit message
     Given I am on a preview Message page
     When I re-edit message
-    Then I should see "Preview your message" button
+    Then I should see "Preview your message before sending" button
     When I preview message
     Then I should see "Re-edit your message" button
     And I should see "Send message" button
