@@ -252,7 +252,7 @@ describe ApiController do
     
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency when we searched for <code>invalid</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency or MP when we searched for <code>invalid</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode. If you were looking for a Member you may wish to check the <a href=\"http://www.parliament.uk/directories/hciolists/alms.cfm\">alphabetical list of Members</a> instead.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
       end
     
       it 'should store the search term in flash memory' do

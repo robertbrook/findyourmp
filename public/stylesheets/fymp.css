@@ -30,6 +30,14 @@
   color: red;
 }
 
+a.warn {
+  text-decoration: underline;
+}
+
+a.warn:visited {
+  color: red;
+}
+
 .hidden_member {
   color: grey;
   font-style: italic;

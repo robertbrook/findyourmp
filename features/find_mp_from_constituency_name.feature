@@ -12,7 +12,7 @@ Feature: Find MP from constituency name
   Scenario: Enter an invalid constituency name
     Given I am on the Front page
     When I search for "Tamaki"
-    Then I should see html "Sorry: we couldn't find a constituency when we searched for <code>Tamaki</code>."
+    Then I should see html "Sorry: we couldn't find a constituency or MP when we searched for <code>Tamaki</code>."
 
   Scenario: Enter part of a valid constituency name that returns multiple results
     Given I am on the Front page
@@ -63,4 +63,4 @@ Feature: Find MP from constituency name
   Scenario: Enter a constituency name that returns no results
     Given I am on the Front page
     When I search for "Isle of Wight"
-    Then I should see html "Sorry: we couldn't find a constituency when we searched for <code>Isle of Wight</code>."
+    Then I should see html "Sorry: we couldn't find a constituency or MP when we searched for <code>Isle of Wight</code>."
