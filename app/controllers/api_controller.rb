@@ -22,7 +22,7 @@ class ApiController < ApplicationController
           if stripped_term.size > 2
             constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
             if constituencies.empty?
-              flash[:not_found] = "<p>Sorry: we couldn't find a constituency or MP when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode. If you were looking for a Member you may wish to check the <a href=\"http://www.parliament.uk/directories/hciolists/alms.cfm\">alphabetical list of Members</a> instead.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+              flash[:not_found] = "Sorry: we couldn't find a constituency or MP when we searched for #{search_term}. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
               flash[:last_search_term] = search_term
               show_error(search_format)
             elsif constituencies.size == 1
@@ -31,14 +31,14 @@ class ApiController < ApplicationController
               show_constituencies(constituencies, search_term, search_format)
             end
           else
-            flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
+            flash[:not_found] = "Sorry: we need more than two letters to search"
             flash[:last_search_term] = search_term
             show_error(search_format)
           end
         end
       end
     else
-      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      flash[:not_found] = "Sorry: the API did not recognise this parameter"
       show_error(search_format)
     end
   end
@@ -53,7 +53,7 @@ class ApiController < ApplicationController
       unless postcode_districts.empty?
         show_postcode_districts(postcode_districts, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we search for <code>#{district}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found] = "Sorry: we couldn't find a postcode when we searched for #{district}. Please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
         show_error(search_format)
       end
     elsif code
@@ -62,11 +62,11 @@ class ApiController < ApplicationController
       if postcode
         show_postcode(postcode, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a postcode when we searched for <code>#{code}</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found] = "Sorry: we couldn't find a postcode when we searched for #{code}. Please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
         show_error(search_format)
       end
     else
-      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      flash[:not_found] = "Sorry: the API did not recognise this parameter"
       show_error(search_format)
     end
   end
@@ -82,7 +82,7 @@ class ApiController < ApplicationController
       if constituency
         show_constituency(constituency, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with an ONS id of #{ons_id}.</p>"
+        flash[:not_found] = "Sorry: we couldn't find a constituency with an ONS id of #{ons_id}"
         show_error(search_format)
       end
     elsif member_name
@@ -90,7 +90,7 @@ class ApiController < ApplicationController
       if constituency
         show_constituency(constituency, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with a member name of #{member_name}.</p>"
+        flash[:not_found] = "Sorry: we couldn't find a constituency with a member name of #{member_name}"
         show_error(search_format)
       end
     elsif constituency_name
@@ -98,11 +98,11 @@ class ApiController < ApplicationController
       if constituency
         show_constituency(constituency, search_format)
       else
-        flash[:not_found] = "<p>Sorry: we couldn't find a constituency with a constituency name of #{constituency_name}.</p>"
+        flash[:not_found] = "Sorry: we couldn't find a constituency with a constituency name of #{constituency_name}"
         show_error(search_format)
       end
     else
-      flash[:not_found] = "<p>Sorry: the API did not recognise this parameter.</p>"
+      flash[:not_found] = "Sorry: the API did not recognise this parameter"
       show_error(search_format)
     end
   end

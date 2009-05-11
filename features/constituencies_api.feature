@@ -22,5 +22,5 @@ Feature: Constituencies API
     And I should see xml "<member-name>No sitting member</member-name>"
 
   Scenario: Call constituencies API without a valid parameter
-    Given I call the constituencies API with no parameters
-    Then I should see xml "Sorry: the API did not recognise this parameter."
+    Given I call the constituencies API with no parameters, requesting "xml"
+    Then I should see xml "Sorry: the API did not recognise this parameter"

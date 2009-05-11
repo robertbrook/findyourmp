@@ -252,7 +252,7 @@ describe ApiController do
     
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency or MP when we searched for <code>invalid</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode. If you were looking for a Member you may wish to check the <a href=\"http://www.parliament.uk/directories/hciolists/alms.cfm\">alphabetical list of Members</a> instead.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a constituency or MP when we searched for invalid. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
       end
     
       it 'should store the search term in flash memory' do
@@ -294,7 +294,7 @@ describe ApiController do
     
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we need more than two letters to search</p>"
+        flash[:not_found].should == "Sorry: we need more than two letters to search"
       end
     
       it 'should store the search term in flash memory' do
@@ -310,7 +310,7 @@ describe ApiController do
       
       it 'should store an error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
+        flash[:not_found].should == "Sorry: the API did not recognise this parameter"
       end
     end
   end
@@ -359,7 +359,7 @@ describe ApiController do
       
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a postcode when we searched for <code>invalid</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a postcode when we searched for invalid. Please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
       end
     end
   
@@ -400,7 +400,7 @@ describe ApiController do
       
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a postcode when we search for <code>invalid</code>. Please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a postcode when we searched for invalid. Please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
       end
     end
     
@@ -411,7 +411,7 @@ describe ApiController do
       
       it 'should store an error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
+        flash[:not_found].should == "Sorry: the API did not recognise this parameter"
       end
     end
   end
@@ -460,7 +460,7 @@ describe ApiController do
       
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with an ONS id of 9999.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a constituency with an ONS id of 9999"
       end
     end
     
@@ -507,7 +507,7 @@ describe ApiController do
       
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with a member name of invalid.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a constituency with a member name of invalid"
       end
     end
     
@@ -554,7 +554,7 @@ describe ApiController do
 
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: we couldn't find a constituency with a constituency name of invalid.</p>"
+        flash[:not_found].should == "Sorry: we couldn't find a constituency with a constituency name of invalid"
       end
     end
     
@@ -565,7 +565,7 @@ describe ApiController do
       
       it 'should store an error message in flash memory' do
         do_get
-        flash[:not_found].should == "<p>Sorry: the API did not recognise this parameter.</p>"
+        flash[:not_found].should == "Sorry: the API did not recognise this parameter"
       end
     end
   end

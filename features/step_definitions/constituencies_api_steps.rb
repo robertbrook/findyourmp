@@ -12,6 +12,6 @@ Given /^I call the constituencies API with a constituency name of "(.+)", reques
   visit URI.escape("/api/constituencies?constituency=#{constituency}&format=#{format}")
 end
 
-Given /^I call the constituencies API with no parameters$/ do
-  visit URI.escape("/api/constituencies/")
+Given /^I call the constituencies API with no parameters, requesting "(.*)"$/ do |format|
+  visit URI.escape("/api/constituencies/?format=#{format}")
 end
