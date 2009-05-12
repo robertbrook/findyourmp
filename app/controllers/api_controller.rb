@@ -4,7 +4,10 @@ class ApiController < ApplicationController
   end
 
   def search
+    params[:search_term] = params[:q] unless params[:q].blank?
     search_term = params[:search_term]
+
+    params[:format] = params[:f] unless params[:f].blank?
     search_format = params[:format]
 
     if search_term
@@ -46,6 +49,7 @@ class ApiController < ApplicationController
   def postcodes
     code = params[:code]
     district = params[:district]
+    params[:format] = params[:f] unless params[:f].blank?
     search_format = params[:format]
 
     if district
@@ -75,6 +79,7 @@ class ApiController < ApplicationController
     member_name = params[:member]
     constituency_name = params[:constituency]
     ons_id = params[:ons_id]
+    params[:format] = params[:f] unless params[:f].blank?
     search_format = params[:format]
 
     if ons_id
