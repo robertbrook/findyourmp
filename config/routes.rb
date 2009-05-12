@@ -15,8 +15,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "postcodes"
   map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
   map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
-  map.connect '/search/:search_term.:format', :controller => "search", :action => 'show'
-  map.connect '/search/:search_term', :controller => "search", :action => 'show'
+  map.connect '/search/:q.:format', :controller => "search", :action => 'show'
+  map.connect '/search/:q', :controller => "search", :action => 'show'
   map.search '/search', :controller => "search", :action => 'index'
 
   map.connect '/constituencies/hide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'hide_members'
@@ -33,14 +33,14 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
   map.connect 'api/constituencies', :controller => 'api', :action => 'constituencies'
 
-  map.connect '/commons/constituency/search/l/:search_term.html', :controller => 'search', :action => 'redir'
-  map.connect '/commons/member/search/l/:search_term.html', :controller => 'search', :action => 'redir'
-  map.connect '/commons/postcode/search/l/:search_term.html', :controller => 'search', :action => 'redir'
+  map.connect '/commons/constituency/search/l/:q.html', :controller => 'search', :action => 'redir'
+  map.connect '/commons/member/search/l/:q.html', :controller => 'search', :action => 'redir'
+  map.connect '/commons/postcode/search/l/:q.html', :controller => 'search', :action => 'redir'
 
   map.connect '/commons/constituency/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
   map.connect '/commons/member/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
   map.connect '/commons/email/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
-  
+
   map.connect '/commons/l/', :controller => 'postcodes', :action => 'redir'
 
   map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'

@@ -1,37 +1,45 @@
 class SearchController < ApplicationController
 
-  caches_page :show
-
   def index
+    params[:search_term] = params[:q] unless params[:q].blank?
     search_term = params[:search_term]
+
+    params[:format] = params[:f] unless params[:f].blank?
     search_format = params[:format]
 
     do_search search_term, search_format
   end
 
   def redir
-    @search_term = params[:search_term].gsub('+',' ')
-    redirect_to :action => 'index', :search_term => @search_term
+    params[:search_term] = params[:q] unless params[:q].blank?
+    search_term = params[:search_term]
+    @search_term = search_term.gsub('+',' ')
+    redirect_to :action => 'index', :q => @search_term
   end
 
   def show
-    flash.keep(:postcode)
-    @search_term = params[:search_term]
-    @last_search_term = @search_term
-    @constituencies, @members = Constituency.find_all_constituency_and_member_matches @search_term
-
-    respond_to do |format|
-      format.html { render :template => '/constituencies/show' }
-      format.xml  { render :template => '/constituencies/show' }
-      format.json { render :json => results_to_json(@constituencies, @members) }
-      format.js   { render :json => results_to_json(@constituencies, @members) }
-      format.text { render :text => results_to_text(@constituencies, @members) }
-      format.csv  { render :text => results_to_csv(@constituencies, @members) }
-      format.yaml { render :text => results_to_yaml(@constituencies, @members) }
-    end
+    render_show
   end
 
   private
+
+    def render_show
+      flash.keep(:postcode)
+      params[:search_term] = params[:q] unless params[:q].blank?
+      @search_term = params[:search_term]
+      @last_search_term = @search_term
+      @constituencies, @members = Constituency.find_all_constituency_and_member_matches @search_term
+
+      respond_to do |format|
+        format.html { render :template => '/constituencies/show' }
+        format.xml  { render :template => '/constituencies/show' }
+        format.json { render :json => results_to_json(@constituencies, @members) }
+        format.js   { render :json => results_to_json(@constituencies, @members) }
+        format.text { render :text => results_to_text(@constituencies, @members) }
+        format.csv  { render :text => results_to_csv(@constituencies, @members) }
+        format.yaml { render :text => results_to_yaml(@constituencies, @members) }
+      end
+    end
 
     def do_search search_term, search_format
       postcode_districts = PostcodeDistrict.find_all_by_district(search_term)
@@ -56,9 +64,13 @@ class SearchController < ApplicationController
                 redirect_to root_url
               end
             elsif constituencies.size == 1
-              redirect_to :controller=>'constituencies', :action=>'show', :id => constituencies.first.friendly_id, :format => search_format
+              redirect_to :controller => 'constituencies', :action => 'show', :id => constituencies.first.friendly_id, :format => search_format
             else
-              redirect_to :controller=> 'search', :action=>'show',:search_term => search_term, :format => search_format
+              if params[:commit].blank?
+                render_show
+              else
+                redirect_to :controller => 'search', :action=>'index', :q => search_term, :format => search_format
+              end
             end
           else
             flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"

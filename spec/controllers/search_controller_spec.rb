@@ -43,7 +43,7 @@ describe SearchController do
 
   describe "when asked for constituency given an exact constituency name" do
     def do_get format=nil
-      get :index, :search_term => @constituency_name, :format => format
+      get :index, :q => @constituency_name, :format => format
     end
 
     before do
@@ -95,7 +95,7 @@ describe SearchController do
 
   describe "when asked for constituency given part of constituency name" do
     def do_get
-      get :index, :search_term => @constituency_name_part
+      get :index, :q => @constituency_name_part
     end
 
     before do
@@ -114,16 +114,17 @@ describe SearchController do
         @other_constituency = mock_model(Constituency, :name => 'Islington North', :id => 802)
         @matching = [@constituency, @other_constituency]
         Constituency.should_receive(:find_all_name_or_member_name_matches).with(@constituency_name_part).and_return @matching
+        Constituency.should_receive(:find_all_constituency_and_member_matches).and_return [@matching, []]
       end
 
       it 'should show list of matching constituencies' do
+        @controller.should_receive(:render).with :template => '/constituencies/show'
         do_get
-        response.should redirect_to("search/#{@constituency_name_part}")
       end
 
       it 'should assign search term to view' do
         do_get
-        assigns[:last_search_term].should == @search_term
+        assigns[:last_search_term].should == @constituency_name_part
       end
     end
   end
@@ -134,7 +135,7 @@ describe SearchController do
     end
 
     def do_get format=nil
-      get :index, :search_term => @constituency_name_short, :format => format
+      get :index, :q => @constituency_name_short, :format => format
     end
 
     it 'should store "<p>Sorry: we need more than two letters to search" in flash memory</p>' do
@@ -161,9 +162,9 @@ describe SearchController do
   describe "when asked for constituency given a postcode" do
     def do_get format=nil
       if format
-        get :index, :search_term => @postcode, :format => format
+        get :index, :q => @postcode, :format => format
       else
-        get :index, :search_term => @postcode
+        get :index, :q => @postcode
       end
     end
 
@@ -195,7 +196,7 @@ describe SearchController do
 
   describe "when asked to search for a partial postcode" do
     def do_get format=nil
-      get :index, :search_term => @postcode_district, :format => format
+      get :index, :q => @postcode_district, :format => format
     end
 
     before do
@@ -220,7 +221,7 @@ describe SearchController do
       end
 
       def do_get format=nil
-        get :show, :search_term => @constituency_name_part, :format => format
+        get :show, :q => @constituency_name_part, :format => format
       end
 
       it 'should assign search term to view' do
@@ -264,7 +265,7 @@ describe SearchController do
       end
 
       def do_get format=nil
-        get :show, :search_term => @member_name_part, :format => format
+        get :show, :q => @member_name_part, :format => format
       end
 
       it 'should assign constituencies to view ordered by member_name' do
@@ -313,7 +314,7 @@ describe SearchController do
       end
 
       def do_get
-        get :show, :search_term => 'islington'
+        get :show, :q => 'islington'
       end
 
       it 'should show list of matching constituencies' do
@@ -326,7 +327,7 @@ describe SearchController do
 
   describe 'search route' do
     it 'should route correctly' do
-      params_from(:get, "/search?search_term=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :search_term=>'E3+2AT', :commit=>"Find+MP"}
+      params_from(:get, "/search?q=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :q=>'E3+2AT', :commit=>"Find+MP"}
     end
   end
 

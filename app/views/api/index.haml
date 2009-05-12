@@ -3,13 +3,13 @@
 
 %div.text.flash= flash[:not_found] if flash[:not_found]
 
-%p.text The API for the Find Your MP service provides output in several formats in addition to HTML - XML, JSON, Javascript, plain text, comma separated values and YAML. 
+%p.text The API for the Find Your MP service provides output in several formats in addition to HTML - XML, JSON, Javascript, plain text, comma separated values and YAML.
 
 %p.text There are currently no usage limits to the API, but they may be introduced in future.
 
 %h3 Search
 
-%p.text You can query the service using the following URL format: <code>api/search?search_term=YOUR_SEARCH_TERM&format=YOUR_DESIRED_FORMAT</code>, where YOUR_SEARCH_TERM should be replaced with whatever you wish to search for and YOUR_DESIRED_FORMAT with one of XML, JSON, JS, TEXT, CSV, or YAML.
+%p.text You can query the service using the following URL format: <code>api/search?q=YOUR_SEARCH_TERM&format=YOUR_DESIRED_FORMAT</code>, where YOUR_SEARCH_TERM should be replaced with whatever you wish to search for and YOUR_DESIRED_FORMAT with one of XML, JSON, JS, TEXT, CSV, or YAML.
 
 %h3 Postcodes
 
@@ -47,7 +47,7 @@
 
 %p.text URL: <code>/postcodes/n1.yaml</code><br/>Content: YAML as "application/x-yaml"
 
-%h3 Constituencies 
+%h3 Constituencies
 
 %p.text Using the example of Islington North as a target constituency.
 
