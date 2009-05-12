@@ -14,7 +14,11 @@ class PostcodeDistrict < ActiveRecord::Base
         code.strip!
         code.upcase!
         code.tr!(' ','')
-        find(:all, :conditions => %Q|district = "#{code}"|, :include => :constituency)
+        results = find(:all, :conditions => %Q|district = "#{code}"|, :include => :constituency)
+        if results.empty? && code.length() == 3
+          results = find(:all, :conditions => %Q|district LIKE "#{code}%"|, :group => :constituency_id, :include => :constituency)
+        end
+        results
       else
         []
       end
