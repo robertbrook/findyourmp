@@ -1,5 +1,5 @@
 - form_tag(search_url, :method => :get) do
-  = text_field_tag 'search_term', (@last_search_term ? @last_search_term : ''), :size => 24
+  = text_field_tag 'q', (@last_search_term ? @last_search_term : ''), :size => 24
   = submit_tag 'Find MP'
 
 %div.text.flash= flash[:not_found] if flash[:not_found]
