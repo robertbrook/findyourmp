@@ -39,6 +39,32 @@ describe PostcodeDistrict do
       PostcodeDistrict.should_not_receive(:find)
       PostcodeDistrict.find_all_by_district(district).should == []
     end
+    
+    describe 'and given a 3 character partial district' do
+      before do
+        @other_postcode_district = PostcodeDistrict.new
+        @postcode_district.id = 1
+        @postcode_district.district = "EC1A"
+        @postcode_district.constituency_id = 123
+        @other_postcode_district.id = 2
+        @other_postcode_district.district = "EC1Y"
+        @other_postcode_district.constituency_id = 124
+        @other_postcode_district.stub!(:constituency).and_return @other_constituency
+        @matches = [@postcode_district, @other_postcode_district]
+      end
+      
+      it 'should return matches including the constituencies' do
+        district ='EC1'
+        PostcodeDistrict.should_receive(:find).with(:all, {:include => :constituency, :conditions => %Q|district = "EC1"|}).and_return []
+        PostcodeDistrict.should_receive(:find).with(:all, {:include => :constituency,  :group => :constituency_id, :conditions => %Q|district LIKE "EC1%"|}).and_return @matches
+        PostcodeDistrict.find_all_by_district(district).should == @matches
+        
+        @matches.size.should == 2
+        @matches[0].district.should == "EC1A"
+        @matches[1].district.should == "EC1Y"
+      end
+    end
+    
   end
 
 end
