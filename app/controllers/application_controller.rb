@@ -3,15 +3,11 @@
 
 class ApplicationController < ActionController::Base
 
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
-
   filter_parameter_logging :password, :password_confirmation, :message, :constituency_list
-  # filter_parameter_logging :password, :user
 
   helper_method :current_user_session, :is_admin?
 
   def render_not_found message='Page not found.'
-    #render :text => message, :status => :not_found
     @title = "Page cannot be found (404 error)"
     @crumbtrail = "Error: page cannot be found"
     render :template => 'public/404.html', :status => 404
