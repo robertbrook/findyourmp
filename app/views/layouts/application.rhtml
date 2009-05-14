@@ -102,7 +102,7 @@
         You are here:
         <a href="http://www.parliament.uk/">Parliament Home</a> &gt;
         <a href="http://www.parliament.uk/mpslordsandoffices/">MPs, Lords and Offices</a> &gt;
-        <%= @crumbtrail ? "<a href=\"/\">Find Your MP</a> &gt; #{@crumbtrail}" : "Find Your MP" %>
+        <%= @crumbtrail ? "<a href=\"/\">Find your MP</a> &gt; #{@crumbtrail}" : "Find your MP" %>
       </div>
 <% end %>
 
@@ -127,7 +127,7 @@
 
          <div class="spacer9">&nbsp;</div>
          <div class="<%= is_admin? ? "column-620" : "column-460" %>">
-         <h1><a href="/">Find Your MP</a></h1>
+         <h1><a href="/">Find your MP</a></h1>
            <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
            <% if flash[:notice] %>
              <div class="text <%= flash[:notice][/Successful/] ? 'info' : 'flash' %>">
