@@ -70,6 +70,9 @@ end
 
 require 'action_mailer/ar_mailer'
 require 'passenger_mgt'
+require 'route_helper'
+require 'sitemap'
+require 'zlib'
 
 Haml::Template.options[:format] = :html5
 

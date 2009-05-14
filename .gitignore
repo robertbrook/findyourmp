@@ -15,6 +15,7 @@ log
 data
 db/*.sqlite3*
 db/backup/*
+public/sitemap.xml.gz
 public/stylesheets/screen.css
 public/constituencies
 public/postcodes
