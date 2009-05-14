@@ -119,6 +119,7 @@ London"
       it 'should show sender_details correctly' do
         @message.valid?.should be_true
         @message.sender_details.should == "Name: Joe Smith
+Email: value.for@sender.email
 Address:
 100 Path
 Islington
