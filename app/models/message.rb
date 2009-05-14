@@ -146,6 +146,7 @@ class Message < ActiveRecord::Base
   def sender_details
     details = []
     details << "Name: #{sender}"
+    details << "Email: #{sender_email}"
     details << "Address:\n#{address_or_not_given}"
     details << "Postcode: #{postcode}"
     details << in_constituency_message
