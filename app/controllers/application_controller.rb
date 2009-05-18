@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
       render_unauthorized unless is_admin?
     end
 
+    def redirect_to_root_if_not_admin
+      redirect_to '/', :status => 303 unless is_admin?
+    end
+
     def is_admin?
       current_user ? true : false
     end

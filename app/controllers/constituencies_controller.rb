@@ -3,7 +3,9 @@ class ConstituenciesController < ResourceController::Base
   caches_page :show, :if => '!is_admin?'
   cache_sweeper :constituency_sweeper, :only => [:update, :destroy, :hide_members, :unhide_members]
 
-  before_filter :respond_unauthorized_if_not_admin, :except => [:show, :redir]
+  before_filter :respond_unauthorized_if_not_admin, :except => [:index, :show, :redir]
+
+  before_filter :redirect_to_root_if_not_admin, :only => :index
 
   before_filter :ensure_current_constituency_url, :only => :show
 
