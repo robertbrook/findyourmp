@@ -20,21 +20,35 @@ class SiteMap
 
   # over ride in subclass
   def create_sitemap
-    @site_map = ConstituencySiteMap.new(@hostname, @logger)
-    @site_map.create_sitemap
+    if (RAILS_ENV != 'test') && File.exists?("public/sitemap.xml.gz")
+      site_map_time = File.new("public/sitemap.xml.gz").mtime
+      last_update_time = Constituency.all.collect(&:updated_at).max
+      needs_update = last_update_time > site_map_time
+      if needs_update
+        @site_map = ConstituencySiteMap.new(@hostname, @logger)
+        @site_map.create_sitemap
+      else
+        @site_map = nil
+      end
+    else
+      @site_map = ConstituencySiteMap.new(@hostname, @logger)
+      @site_map.create_sitemap
+    end
   end
 
   def write_to_file!
     create_sitemap
-    raise "can't write empty sitemap to file" if empty?
-    raise "can only write to file once" unless site_map
+    if site_map
+      raise "can't write empty sitemap to file" if empty?
+      raise "can only write to file once" unless site_map
 
-    Zlib::GzipWriter.open(site_map.location) do |file|
-      @logger.write 'writing: ' + site_map.location + "\n" if @logger
-      file.write site_map.site_map
+      Zlib::GzipWriter.open(site_map.location) do |file|
+        @logger.write 'writing: ' + site_map.location + "\n" if @logger
+        file.write site_map.site_map
+      end
+
+      @site_map = nil
     end
-
-    @site_map = nil
   end
 
   def empty?
