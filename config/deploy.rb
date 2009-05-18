@@ -24,6 +24,20 @@ namespace :deploy do
   set :user, deployuser
   set :password, deploypassword
 
+  desc "Set sitemap cron job"
+  task :set_sitemap_cron_job, :roles => :app do
+    freq_in_minutes = ENV['freq_in_minutes']
+    unless freq_in_minutes
+      puts
+      puts 'must supply freq_in_minutes when setting cron job'
+      puts 'USAGE: cap deploy:set_sitemap_cron_job freq_in_minutes=59'
+      puts
+    else
+      cmd = "*/#{freq_in_minutes} * * * * cd #{deploy_to}/current; rake fymp:make_sitemap RAILS_ENV=production"
+      set_cron_job cmd, 'make_sitemap'
+    end
+  end
+
   desc "Set delete stored messages cron job"
   task :set_delete_message_contents_cron_job, :roles => :app do
     weeks_to_keep = ENV['weeks_to_keep']
