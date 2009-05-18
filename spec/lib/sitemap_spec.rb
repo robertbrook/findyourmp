@@ -68,20 +68,18 @@ describe SiteMap do
       it 'should create map based on model instance urls' do
         map = ConstituencySiteMap.new 'hostname'
 
-        resource = mock('resource', :friendly_id => 'islington', :name => 'Islington')
+        date = Date.new(2009,1,1)
+        resource = mock('resource', :friendly_id => 'islington', :name => 'Islington', :updated_at => date)
         Constituency.should_receive(:find).with(:all).and_return [resource]
 
-        entry0 = mock('entry0')
-        map.should_receive(:new_entry).with("constituencies").and_return entry0
-
+        entry0 = mock('entry')
         entry = mock('entry')
-        map.should_receive(:new_entry).with("constituencies/i").and_return entry
+
+        map.should_receive(:new_entry).with('').and_return entry0
         map.should_receive(:url_for).with(:constituency_url, resource).and_return 'constituencies/islington'
+        map.should_receive(:new_entry).with('constituencies/islington',date).and_return entry
 
-        entry2 = mock('entry2')
-        map.should_receive(:new_entry).with('constituencies/islington').and_return entry2
-
-        map.should_receive(:populate_sitemap).with('constituencies', [entry0, entry, entry2])
+        map.should_receive(:populate_sitemap).with('constituencies', [entry0, entry])
         map.create_sitemap
       end
     end

@@ -70,31 +70,23 @@ end
 
 class ModelSiteMap < SiteMap
   def create_sitemap
-    populate_sitemap_for_model model, url_name
+    pages = [new_entry('')]
+    populate_sitemap_for_model pages, model, url_name
   end
 
   def url_name
     nil
   end
 
-  def populate_sitemap_for_model model_class, url_helper_method=nil
+  def populate_sitemap_for_model pages, model_class, url_helper_method=nil
     type = model_class.name.downcase
     url_helper_method = "#{type}_url".to_sym unless url_helper_method
 
-    pages = [new_entry(type.pluralize)]
     resources = all_resources
-
-    if !resources.empty? && resources.first.respond_to?(:friendly_id)
-      resources = resources.sort_by(&:friendly_id)
-      letters = resources.inject({}) {|hash,r| hash[r.friendly_id[0..0]]=true; hash }
-      ('a'..'z').each do |letter|
-        pages << new_entry("#{type.pluralize}/#{letter}") if letters[letter]
-      end
-    end
 
     pages += resources.collect do |resource|
       url = url_for(url_helper_method, resource)
-      new_entry(url)
+      new_entry(url, resource.updated_at)
     end
 
     populate_sitemap type.pluralize, pages

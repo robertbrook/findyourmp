@@ -9,18 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090429095739) do
+ActiveRecord::Schema.define(:version => 20090518103907) do
 
   create_table "constituencies", :force => true do |t|
-    t.string  "name"
-    t.string  "member_name"
-    t.string  "member_party"
-    t.string  "member_email"
-    t.string  "member_biography_url"
-    t.boolean "member_visible"
-    t.string  "member_website"
-    t.string  "member_requested_contact_url"
-    t.integer "ons_id"
+    t.string   "name"
+    t.string   "member_name"
+    t.string   "member_party"
+    t.string   "member_email"
+    t.string   "member_biography_url"
+    t.boolean  "member_visible"
+    t.string   "member_website"
+    t.string   "member_requested_contact_url"
+    t.integer  "ons_id"
+    t.datetime "updated_at"
   end
 
   add_index "constituencies", ["ons_id"], :name => "index_constituencies_on_ons_id"
@@ -33,16 +34,9 @@ ActiveRecord::Schema.define(:version => 20090429095739) do
     t.datetime "created_on"
   end
 
-  create_table "members", :force => true do |t|
-    t.string  "name"
-    t.integer "constituency_id"
-  end
-
-  add_index "members", ["constituency_id"], :name => "index_members_on_constituency_id"
-
   create_table "message_summaries", :force => true do |t|
-    t.string   "constituency_name"
     t.string   "recipient"
+    t.string   "constituency_name"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -67,12 +61,12 @@ ActiveRecord::Schema.define(:version => 20090429095739) do
     t.boolean  "sent"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "authenticity_token"
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
     t.string   "mailer_error"
     t.datetime "sent_at"
+    t.string   "authenticity_token"
     t.string   "sender_ip_address"
   end
 
