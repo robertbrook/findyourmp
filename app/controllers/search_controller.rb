@@ -32,13 +32,17 @@ class SearchController < ApplicationController
 
       respond_to do |format|
         format.html { render :template => '/constituencies/show' }
-        format.xml  { render :template => '/constituencies/show' }
-        format.json { render :json => results_to_json(@constituencies, @members) }
-        format.js   { render :json => results_to_json(@constituencies, @members) }
-        format.text { render :text => results_to_text(@constituencies, @members) }
-        format.csv  { render :text => results_to_csv(@constituencies, @members) }
-        format.yaml { render :text => results_to_yaml(@constituencies, @members) }
+        format.xml  { redirect_to_api_search 'xml'  }
+        format.json { redirect_to_api_search 'json' }
+        format.js   { redirect_to_api_search 'js'   }
+        format.text { redirect_to_api_search 'text' }
+        format.csv  { redirect_to_api_search 'csv'  }
+        format.yaml { redirect_to_api_search 'yaml' }
       end
+    end
+
+    def redirect_to_api_search format
+      redirect_to :action=>'search', :controller=>'api', :q => @search_term, :f => format
     end
 
     def do_search search_term, search_format

@@ -228,33 +228,26 @@ describe SearchController do
         do_get
         assigns[:last_search_term].should == @constituency_name_part
       end
+
       it 'should return xml if the requested format is xml' do
         do_get 'xml'
-        response.content_type.should == "application/xml"
+        response.should redirect_to('/api/search?f=xml&q='+@constituency_name_part)
       end
       it 'should return text if the requested format is text' do
-        @other_constituency.should_receive(:to_text).and_return('text')
-        @constituency.should_receive(:to_text).and_return('text')
         do_get 'text'
-        response.content_type.should == "text/plain"
+        response.should redirect_to('/api/search?f=text&q='+@constituency_name_part)
       end
       it 'should return yaml if the requested format is yaml' do
-        @other_constituency.should_receive(:to_text).and_return('text')
-        @constituency.should_receive(:to_text).and_return('text')
         do_get 'yaml'
-        response.content_type.should == "application/x-yaml"
+        response.should redirect_to('/api/search?f=yaml&q='+@constituency_name_part)
       end
       it 'should return csv if the requested format is csv' do
-        @other_constituency.should_receive(:to_csv_value).and_return('text')
-        @constituency.should_receive(:to_csv_value).and_return('text')
         do_get 'csv'
-        response.content_type.should == "text/csv"
+        response.should redirect_to('/api/search?f=csv&q='+@constituency_name_part)
       end
       it 'should return json if the requested format is json' do
-        @other_constituency.should_receive(:to_json).and_return('text')
-        @constituency.should_receive(:to_json).and_return('text')
         do_get 'json'
-        response.content_type.should == "application/json"
+        response.should redirect_to('/api/search?f=json&q='+@constituency_name_part)
       end
     end
 
@@ -283,28 +276,20 @@ describe SearchController do
         response.content_type.should == "application/xml"
       end
       it 'should return text if the requested format is text' do
-        @other_constituency.should_receive(:to_text).and_return('text')
-        @constituency.should_receive(:to_text).and_return('text')
         do_get 'text'
-        response.content_type.should == "text/plain"
+        response.should redirect_to('/api/search?f=text&q='+@member_name_part)
       end
       it 'should return yaml if the requested format is yaml' do
-        @other_constituency.should_receive(:to_text).and_return('text')
-        @constituency.should_receive(:to_text).and_return('text')
         do_get 'yaml'
-        response.content_type.should == "application/x-yaml"
+        response.should redirect_to('/api/search?f=yaml&q='+@member_name_part)
       end
       it 'should return csv if the requested format is csv' do
-        @other_constituency.should_receive(:to_csv_value).and_return('text')
-        @constituency.should_receive(:to_csv_value).and_return('text')
         do_get 'csv'
-        response.content_type.should == "text/csv"
+        response.should redirect_to('/api/search?f=csv&q='+@member_name_part)
       end
       it 'should return json if the requested format is json' do
-        @other_constituency.should_receive(:to_json).and_return('text')
-        @constituency.should_receive(:to_json).and_return('text')
         do_get 'json'
-        response.content_type.should == "application/json"
+        response.should redirect_to('/api/search?f=json&q='+@member_name_part)
       end
     end
 
