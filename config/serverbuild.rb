@@ -133,12 +133,23 @@ namespace :serverbuild do
 
   def get_passenger_version
     gemversion = ""
+    output = ""
 
     #find out what version of Passenger is installed
     run "gem list passenger" do |ch, stream, response|
-      gemversion = response.strip.match('[0-9]*\.[0-9]*\.[0-9]*').to_s
+      output = response.strip
     end
-
+    gemversion = output.match('\(.*,').to_s
+    if gemversion.empty?
+      gemversion = output.match('\(.*\)$').to_s
+    end
+    unless gemversion.empty?
+      gemversion.gsub!('(', "")
+      gemversion.gsub!(')', "")
+      gemversion.gsub!(',', "")
+    else 
+      gemversion = "not installed"
+    end
     gemversion
   end
 
