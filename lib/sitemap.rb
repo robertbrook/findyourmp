@@ -61,9 +61,14 @@ class SiteMap
           %Q|<?xml version="1.0" encoding="UTF-8"?>\n| <<
           %Q|<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n|
       pages.each do |page|
+        if page.last_modification.is_a?(Time)
+          last_modification = page.last_modification.to_date.to_s(:utc)
+        else
+          last_modification = page.last_modification
+        end
         site_map <<
             '<url><loc>' << page.location << "</loc>" <<
-            '<lastmod>' << page.last_modification.to_s << "</lastmod></url>\n" if page.location
+            '<lastmod>' << last_modification.to_s << "</lastmod></url>\n" if page.location
       end
       site_map <<
           %Q|</urlset>\n|
