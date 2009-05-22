@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ApiController do
 
+
   describe 'returns in correct format', :shared => true do
     it 'should not redirect' do
       do_get
@@ -55,7 +56,7 @@ describe ApiController do
         :to_text => 'text version of data',
         :to_csv => 'csv version of data with headers',
         :to_csv_value => 'csv version of data',
-        :to_json => 'json version of data',
+        :to_json => '(json version of data)',
         :to_output_yaml => 'yaml version of data')
 
     @other_constituency_id = 802
@@ -64,7 +65,7 @@ describe ApiController do
       :member_name => 'A Biggens-South',
       :to_text => 'text version of data',
       :to_csv_value => 'csv version of data',
-      :to_json => 'json version of data',
+      :to_json => '(json version of data)',
       :to_output_yaml => 'yaml version of data')
 
     @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
@@ -90,6 +91,16 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+
+      it 'should render js correctly' do
+        do_get 'js'
+        response.body.should == %Q|{"results": { "constituencies": {json version of data}, "members": {} }} |
+      end
+
+      it 'should render js with callback correctly' do
+        get :search, :q => @postcode_no_space, :format => 'js', :callback => 'callback_function'
+        response.body.should == %Q|callback_function({"results": { "constituencies": {json version of data}, "members": {} }} )|
+      end
     end
 
     describe "when passed a search term which matches a single constituency" do
@@ -420,4 +431,5 @@ describe ApiController do
       end
     end
   end
+
 end

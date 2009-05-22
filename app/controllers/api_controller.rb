@@ -180,8 +180,8 @@ class ApiController < ApplicationController
       respond_to do |format|
          format.html { render :template => '/constituencies/show' }
          format.xml  { render :template => '/constituencies/show', :layout => false }
-         format.json { render :json => results_to_json(@constituencies, @members) }
-         format.js   { render :json => results_to_json(@constituencies, @members) }
+         format.json { render :json => results_to_json(@constituencies, @members, params[:callback]) }
+         format.js   { render :json => results_to_json(@constituencies, @members, params[:callback]) }
          format.text { render :text => results_to_text(@constituencies, @members) }
          format.csv  { render :text => results_to_csv(@constituencies, @members) }
          format.yaml { render :text => results_to_yaml(@constituencies, @members) }
