@@ -3,9 +3,8 @@
     = render :partial => 'constituencies/constituency', :object => @constituency
   - else
     - if @constituencies
-      %constituency-matches
+      %constituencies
         = render :partial => 'constituencies/constituency', :collection => @constituencies
     - if @members
-      %member-matches
+      %members
         = render :partial => 'constituencies/constituency', :collection => @members
-      

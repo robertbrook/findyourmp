@@ -19,7 +19,7 @@ class ApiController < ApplicationController
         postcode = Postcode.find_postcode_by_code(search_term)
 
         if postcode
-          show_postcode(postcode, search_format)
+          show_postcode(postcode, search_term, search_format)
         else
           stripped_term = search_term.strip
           if stripped_term.size > 2
@@ -29,7 +29,7 @@ class ApiController < ApplicationController
               flash[:last_search_term] = search_term
               show_error(search_format)
             elsif constituencies.size == 1
-              show_constituency(constituencies.first, search_format)
+              show_constituencies([constituencies.first], search_term, search_format)
             else
               show_constituencies(constituencies, search_term, search_format)
             end
@@ -64,7 +64,7 @@ class ApiController < ApplicationController
       postcode = Postcode.find_postcode_by_code(code)
 
       if postcode
-        show_postcode(postcode, search_format)
+        show_postcode(postcode, code, search_format)
       else
         flash[:not_found] = "Sorry: we couldn't find a postcode when we searched for #{code}. Please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
         show_error(search_format)
@@ -115,19 +115,20 @@ class ApiController < ApplicationController
 
   private
 
-    def show_postcode postcode, format
-      @postcode = postcode
-      @constituency = postcode.constituency
+    def show_postcode postcode, search_term, format
+      show_constituencies([postcode.constituency], nil, format)
 
-      respond_to do |format|
-        format.html { render :template => '/postcodes/show', :postcode => postcode }
-        format.xml  { render :template => '/postcodes/show', :postcode => postcode, :layout => false }
-        format.json { render :json => postcode.to_json }
-        format.js   { render :json => postcode.to_json }
-        format.text { render :text => postcode.to_text }
-        format.csv  { render :text => postcode.to_csv }
-        format.yaml { render :text => postcode.to_output_yaml }
-      end
+      # @postcode = postcode
+      # @constituency = postcode.constituency
+      # respond_to do |format|
+        # format.html { render :template => '/postcodes/show', :postcode => postcode }
+        # format.xml  { render :template => '/postcodes/show', :postcode => postcode, :layout => false }
+        # format.json { render :json => postcode.to_json }
+        # format.js   { render :json => postcode.to_json }
+        # format.text { render :text => postcode.to_text }
+        # format.csv  { render :text => postcode.to_csv }
+        # format.yaml { render :text => postcode.to_output_yaml }
+      # end
     end
 
     def show_postcode_districts postcode_districts, format
@@ -161,14 +162,19 @@ class ApiController < ApplicationController
 
     def show_constituencies constituencies, search_term, format
       @constituencies = constituencies
-      @members = constituencies.clone
 
-      if search_term[/[A-Z][a-z].*/]
-        @constituencies.delete_if { |element| !(element.name.include? search_term) }
-        @members.delete_if { |element| !(element.member_name.include? search_term) }
+      if search_term
+        @members = constituencies.clone
+
+        if search_term[/[A-Z][a-z].*/]
+          @constituencies.delete_if { |element| !(element.name.include? search_term) }
+          @members.delete_if { |element| !(element.member_name.include? search_term) }
+        else
+          @constituencies.delete_if { |element| !(element.name.downcase.include? search_term.downcase) }
+          @members.delete_if { |element| !(element.member_name.downcase.include? search_term.downcase) }
+        end
       else
-        @constituencies.delete_if { |element| !(element.name.downcase.include? search_term.downcase) }
-        @members.delete_if { |element| !(element.member_name.downcase.include? search_term.downcase) }
+        @members = []
       end
 
       respond_to do |format|
