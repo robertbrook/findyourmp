@@ -5,29 +5,36 @@ Feature: Search API
 
   Scenario: Call search API with valid postcode, requesting XML
     Given I call the search API searching for "AB101AA" and requesting "xml"
-    Then I should see xml "<postcode>"
-    And I should see xml "<code>AB10 1AA</code>"
-    And I should see xml "<constituency-name>Aberdeen North</constituency-name>"
-    And I should see xml "<member>Frank Doran</member>"
-    And I should see xml "/postcodes/AB101AA.xml</uri>"
+    Then I should see xml "<results>"
+    Then I should see xml "<constituencies>"
+    Then I should see xml "  <constituency>"
+    Then I should see xml "    <constituency-name>Aberdeen North</constituency-name>"
+    Then I should see xml "    <member-name>Frank Doran</member-name>"
+    Then I should see xml "    <member-party></member-party>"
+    Then I should see xml "    <member-biography-url></member-biography-url>"
+    Then I should see xml "    <member-website></member-website>"
+    Then I should see xml "    <uri>http://www.example.com/constituencies/aberdeen-north.xml</uri>"
 
   Scenario: Call search API with valid postcode, requesting plain text
     Given I call the search API searching for "AB101AA" and requesting "text"
-    Then I should see "postcode: AB10 1AA"
+    # Then I should see "postcode: AB10 1AA"
     And I should see "constituency_name: Aberdeen North"
     And I should see "member_name: Frank Doran"
-    And I should see "/postcodes/AB101AA.txt"
+    # And I should see "/postcodes/AB101AA.txt"
 
   Scenario: Call search API with valid postcode, requesting JSON
     Given I call the search API searching for "AB101AA" and requesting "json"
-    Then I should see json {"postcode": {"code": "AB10 1AA", "constituency_name": "Aberdeen North", "member_name": "Frank Doran", "uri":
-    And I should see "/postcodes/AB101AA.json"
+    # Then I should see json {"postcode": {"code": "AB10 1AA", "constituency_name": "Aberdeen North", "member_name": "Frank Doran", "uri":
+    Then I should see json {"results": { "constituencies": {"constituency": {"constituency_name": "Aberdeen North", "member_name": "Frank Doran", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "http://localhost:3000/constituencies/aberdeen-north.json" } }, "members": {} }}
+    # And I should see "/postcodes/AB101AA.json"
 
   Scenario: Call search API with valid postcode, requesting CSV
     Given I call the search API searching for "AB101AA" and requesting "csv"
-    Then I should see "postcode,constituency_name,member_name,uri"
-    And I should see csv "AB10 1AA","Aberdeen North","Frank Doran"
-    And I should see "/postcodes/AB101AA.csv"
+    # Then I should see "postcode,constituency_name,member_name,uri"
+    # And I should see csv "AB10 1AA","Aberdeen North","Frank Doran"
+    Then I should see "constituency_name,member_name,member_party,member_biography_url,member_website"
+    And I should see csv "Aberdeen North","Frank Doran","","","","http://localhost:3000/constituencies/aberdeen-north.csv"
+    # And I should see "/postcodes/AB101AA.csv"
 
   Scenario: Call search API with valid constituency name, requesting XML
     Given I call the search API searching for "Aberdeen South" and requesting "xml"
@@ -82,7 +89,7 @@ Feature: Search API
   Scenario: Call search API with postcode district, requesting XML
     Given I call the search API searching for "BT35" and requesting "xml"
     Then I should see xml "<results>"
-    And I should see xml "<constituency-matches>"
+    And I should see xml "<constituency>"
     And I should see xml "<constituency-name>Upper Bann</constituency-name>"
     And I should see xml "<constituency-name>Newry &amp; Armagh</constituency-name>"
     And I should see xml "/constituencies/upper-bann.xml</uri>"

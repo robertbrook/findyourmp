@@ -243,7 +243,7 @@ describe Constituency do
     end
     describe 'in text' do
       it 'should create text correctly' do
-        @constituency.to_text.should == %Q|constituency: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
+        @constituency.to_text.should == %Q|constituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
       end
     end
     describe 'in csv' do
@@ -253,7 +253,7 @@ describe Constituency do
     end
     describe 'in yaml' do
       it 'should create yaml correctly' do
-        @constituency.to_output_yaml.should == %Q|---\nconstituency: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
+        @constituency.to_output_yaml.should == %Q|---\nconstituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
       end
     end
   end

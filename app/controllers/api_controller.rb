@@ -167,11 +167,11 @@ class ApiController < ApplicationController
         @members = constituencies.clone
 
         if search_term[/[A-Z][a-z].*/]
-          @constituencies.delete_if { |element| !(element.name.include? search_term) }
-          @members.delete_if { |element| !(element.member_name.include? search_term) }
+          @constituencies.delete_if { |c| !(c.name.include? search_term) }
+          @members.delete_if { |c| c.member_name.blank? || !(c.member_name.include? search_term) }
         else
-          @constituencies.delete_if { |element| !(element.name.downcase.include? search_term.downcase) }
-          @members.delete_if { |element| !(element.member_name.downcase.include? search_term.downcase) }
+          @constituencies.delete_if { |c| !(c.name.downcase.include? search_term.downcase) }
+          @members.delete_if { |c| c.member_name.blank? || !(c.member_name.downcase.include? search_term.downcase) }
         end
       else
         @members = []
