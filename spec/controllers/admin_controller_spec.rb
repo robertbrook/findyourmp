@@ -18,7 +18,7 @@ describe AdminController do
   describe 'when logged in as admin' do
     before do
       current_user = mock_model User
-      current_user.stub!(:has_role?).with('admin').and_return(true)
+      current_user.stub!(:admin?).and_return(true)
       controller.stub!(:current_user).and_return(current_user)
     end
     
