@@ -154,9 +154,9 @@ class Constituency < ActiveRecord::Base
 
   def to_text(format="txt")
     if no_sitting_member?
-      %Q|constituency: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: \nuri: #{object_url(format)}|
+      %Q|constituency_name: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: \nuri: #{object_url(format)}|
     else
-      %Q|constituency: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}\nuri: #{object_url(format)}|
+      %Q|constituency_name: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}\nuri: #{object_url(format)}|
     end
   end
 
