@@ -3,19 +3,25 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ConstituencyListsController do
 
   describe 'when not logged in as admin' do
-    it 'should redirect to login page' do
+    before do
+      current_user = mock_model User
+      current_user.stub!(:admin?).and_return(false)
+      controller.stub!(:current_user).and_return(current_user)
+    end
+    
+    it 'should redirect to admin login page' do
       get :edit
-      response.should redirect_to(new_user_session_url)
+      response.should redirect_to(admin_path)
       
       get :update
-      response.should redirect_to(new_user_session_url)
+      response.should redirect_to(admin_path)
     end
   end
   
   describe 'when logged in as admin' do
     before do
       current_user = mock_model User
-      current_user.stub!(:has_role?).with('admin').and_return(true)
+      current_user.stub!(:admin?).and_return(true)
       controller.stub!(:current_user).and_return(current_user)
     end
     
