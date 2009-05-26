@@ -149,6 +149,23 @@ describe ConstituenciesController do
     end
   end
 
+
+  describe "when not logged in as admin" do
+    describe "when asked for index" do
+      it "should redirect to root" do
+        get :index
+        response.should redirect_to('/')
+      end
+    end
+    
+    describe "when asked for hide_members" do
+      it "should respond with 'Unauthorized'" do
+        get :hide_members
+        response.status.should == '401 Unauthorized'
+      end
+    end
+  end
+  
   # describe "when asked for 'mail to constituency MP' page" do
     # def do_get
       # get :mail, :id => @constituency_id
