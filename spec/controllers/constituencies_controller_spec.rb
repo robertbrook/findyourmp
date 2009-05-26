@@ -166,6 +166,18 @@ describe ConstituenciesController do
     end
   end
   
+  describe "when asked to redirect from an upmystreet style url" do
+    it "should redirect to the constituency when given a valid upmystreet code" do
+      get :redir, :up_my_street_code => 436
+      response.should redirect_to('/constituencies/spelthorne')
+    end
+    
+    it "should redirect to root when given an invalid upmystreet code" do
+      get :redir, :up_my_street_code => 'invalid'
+      response.should redirect_to('/')
+    end
+  end
+  
   # describe "when asked for 'mail to constituency MP' page" do
     # def do_get
       # get :mail, :id => @constituency_id
