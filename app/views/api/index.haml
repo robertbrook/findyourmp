@@ -1,5 +1,6 @@
 -@title = 'API'
 -@crumbtrail = 'API'
+-@javascript = 'prototype'
 
 %div.text.flash= flash[:not_found] if flash[:not_found]
 
@@ -8,4 +9,28 @@
 %p.text You can query the service using the following URL format: <b><code>http://findyourmp.parliament.uk/api/search?q=YOUR_SEARCH_TERM&format=YOUR_DESIRED_FORMAT</code></b>, where <b><code>YOUR_SEARCH_TERM</code></b> should be replaced with whatever you wish to search for and <b><code>YOUR_DESIRED_FORMAT</code></b> with one of XML, JSON, JS, TEXT, CSV, or YAML.
 
 %p.text There are currently no usage limits to the API, but they may be introduced in future.
+
+- form_remote_tag :url => 'api/search', :success => "$('result').innerHTML = '<pre>'+request.responseText.escapeHTML().gsub('{','{<br/>').gsub(',',',<br/>')+'</pre>'" do
+  %p
+    = label_tag 'f_xml', 'XML'
+    = radio_button_tag 'f', 'xml'
+    %br
+    = label_tag 'f_js', 'JS'
+    = radio_button_tag 'f', 'js'
+    %br
+    = label_tag 'f_csv', 'CSV'
+    = radio_button_tag 'f', 'csv'
+  %p
+    = text_field_tag 'q', '', :size => 24
+    = submit_tag 'Find MP'
+= observe_field :f_xml, :frequency => 0.5, :function => 'if($("f_xml").checked) { $("format").innerHTML = $("f_xml").value }'
+= observe_field :f_js, :frequency => 0.5, :function => 'if($("f_js").checked) { $("format").innerHTML = $("f_js").value }'
+= observe_field :f_csv, :frequency => 0.5, :function => 'if($("f_csv").checked) { $("format").innerHTML = $("f_csv").value }'
+= observe_field :q, :frequency => 0.5, :function => '$("query").innerHTML = $("q").value'
+%p
+  URL:
+%p
+  = "http://findyourmp.parliament.uk/api/search?q=<b><span id='query'></span></b>&amp;f=<b><span id='format'></span></b>"
+#result
+
 

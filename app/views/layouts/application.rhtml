@@ -21,6 +21,9 @@
   <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
   <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
   <% end %>
+  <% if @javascript %>
+  <%= javascript_include_tag @javascript %>
+  <% end %>
 <% end %>
   <script language="JavaScript1.1" type="text/javascript">
     <!--
@@ -139,7 +142,7 @@
          </div>
          <div class="spacer9">&nbsp;</div>
 
-<% if !is_admin? && RAILS_ENV != 'test' %>
+<% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
         <div class="column_wrapper_left">
       <div class="spacer">&nbsp;</div>
           <div class="column-300">
