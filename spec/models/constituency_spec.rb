@@ -49,6 +49,15 @@ describe Constituency do
       constituencies, members = Constituency.find_all_constituency_and_member_matches('Ian')
       members.should == [@constituency]
     end
+    
+    it 'should not match a hidden member name' do
+      @constituency.member_name = 'Ian'
+      @constituency2.member_name = 'Sian'
+      @constituency.member_visible = false
+      Constituency.should_receive(:find_all_name_or_member_name_matches).with('ian').and_return [@constituency2]
+      constituencies, members = Constituency.find_all_constituency_and_member_matches('ian')
+      members.should == [@constituency2]
+    end
   end
 
   describe 'when asked if member name has changed' do
@@ -79,7 +88,7 @@ describe Constituency do
 
   describe 'when asked for find_all_name_or_member_name_matches' do
     def should_find_all term
-      conditions = %Q|name like "%#{term.squeeze(' ')}%" or member_name like "%#{term.squeeze(' ')}%"|
+      conditions = %Q|name like "%#{term.squeeze(' ')}%" or (member_name like "%#{term.squeeze(' ')}%" and member_visible = 1)|
 
       @name_match_lc = mock(Constituency, :name => 'Lanark and Hamilton East', :member_name=>'member')
       @member_match_lc = mock(Constituency, :member_name => 'Ms Emily Thornberry', :name=>'place')

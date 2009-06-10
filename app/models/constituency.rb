@@ -68,12 +68,13 @@ class Constituency < ActiveRecord::Base
 
       constituencies = constituencies.sort_by(&:name)
       members = members.sort_by(&:member_name)
+      
       return [constituencies, members]
     end
 
     def find_all_name_or_member_name_matches term
       matches_name_or_member_name = %Q|name like "%#{term.squeeze(' ')}%" or | +
-          %Q|member_name like "%#{term.squeeze(' ')}%"|
+          %Q|(member_name like "%#{term.squeeze(' ')}%" and member_visible = 1)|
       constituencies = find(:all, :conditions => matches_name_or_member_name)
       constituencies.delete_if{|c| c.name == 'Example'}
 
