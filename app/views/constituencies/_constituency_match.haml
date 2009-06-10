@@ -1,3 +1,6 @@
 %p.text
   = link_to("#{highlight(h(constituency_match.name), @search_term)}", constituency_path(:id=>constituency_match.friendly_id))
-  = "&mdash; #{constituency_match.member_name}" if constituency_match.member_name
+  - if constituency_match.no_sitting_member?
+    = "&mdash; no sitting Member"
+  - else
+    = "&mdash; #{constituency_match.member_name}" if constituency_match.member_name
