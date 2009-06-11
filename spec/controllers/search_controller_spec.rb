@@ -56,30 +56,8 @@ describe SearchController do
         do_get
         response.should redirect_to("")
       end
-      it 'should return html format' do
-        do_get
-        response.content_type.should == "text/html"
-      end
-      it 'should return xml if passed format "xml"' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
-      it 'should return json format if passed format "json"' do
-        do_get 'json'
-        response.content_type.should == "application/json"
-      end
-      it 'should return txt format if passed format "txt"' do
-        do_get 'txt'
-        response.content_type.should == "text/plain"
-      end
-      it 'should return csv format if passed format "csv"' do
-        do_get 'csv'
-        response.content_type.should == "text/csv"
-      end
-      it 'should return yaml format if passed format "yaml"' do
-        do_get 'yaml'
-        response.content_type.should == "application/x-yaml"
-      end
+      
+      it_should_behave_like "returns in correct format"
     end
 
     describe 'and a matching constituency is found' do
@@ -94,8 +72,8 @@ describe SearchController do
   end
 
   describe "when asked for constituency given part of constituency name" do
-    def do_get
-      get :index, :q => @constituency_name_part
+    def do_get format=nil
+      get :index, :q => @constituency_name_part, :format => format
     end
 
     before do
@@ -126,6 +104,8 @@ describe SearchController do
         do_get
         assigns[:last_search_term].should == @constituency_name_part
       end
+      
+      it_should_behave_like "returns in correct format"
     end
   end
 
@@ -148,10 +128,7 @@ describe SearchController do
       response.should redirect_to("")
     end
 
-    it 'should return xml page when passed of format "xml"' do
-      do_get 'xml'
-      response.content_type.should == "application/xml"
-    end
+    it_should_behave_like "returns in correct format"
 
     it 'should set last_search_term in flash memory' do
       do_get
@@ -161,11 +138,7 @@ describe SearchController do
 
   describe "when asked for constituency given a postcode" do
     def do_get format=nil
-      if format
-        get :index, :q => @postcode, :format => format
-      else
-        get :index, :q => @postcode
-      end
+      get :index, :q => @postcode, :format => format
     end
 
     describe 'and no matching postcode is found' do
@@ -173,10 +146,9 @@ describe SearchController do
         do_get
         response.should redirect_to("")
       end
-      it 'should return xml if passed format "xml"' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
+      
+      it_should_behave_like "returns in correct format"
+      
       it 'should set last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @postcode
@@ -187,6 +159,7 @@ describe SearchController do
       before do
         Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @postcode_record
       end
+      
       it 'should redirect to postcode view showing constituency' do
         do_get
         response.should redirect_to("postcodes/#{@canonical_postcode}")
@@ -229,26 +202,7 @@ describe SearchController do
         assigns[:last_search_term].should == @constituency_name_part
       end
 
-      it 'should return xml if the requested format is xml' do
-        do_get 'xml'
-        response.should redirect_to('/api/search?f=xml&q='+@constituency_name_part)
-      end
-      it 'should return text if the requested format is text' do
-        do_get 'text'
-        response.should redirect_to('/api/search?f=text&q='+@constituency_name_part)
-      end
-      it 'should return yaml if the requested format is yaml' do
-        do_get 'yaml'
-        response.should redirect_to('/api/search?f=yaml&q='+@constituency_name_part)
-      end
-      it 'should return csv if the requested format is csv' do
-        do_get 'csv'
-        response.should redirect_to('/api/search?f=csv&q='+@constituency_name_part)
-      end
-      it 'should return json if the requested format is json' do
-        do_get 'json'
-        response.should redirect_to('/api/search?f=json&q='+@constituency_name_part)
-      end
+      it_should_behave_like "returns in correct format"
     end
 
     describe 'and there are member matches' do
@@ -271,26 +225,8 @@ describe SearchController do
         do_get
         assigns[:last_search_term].should == @member_name_part
       end
-      it 'should return xml if the requested format is xml' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
-      it 'should return text if the requested format is text' do
-        do_get 'text'
-        response.should redirect_to('/api/search?f=text&q='+@member_name_part)
-      end
-      it 'should return yaml if the requested format is yaml' do
-        do_get 'yaml'
-        response.should redirect_to('/api/search?f=yaml&q='+@member_name_part)
-      end
-      it 'should return csv if the requested format is csv' do
-        do_get 'csv'
-        response.should redirect_to('/api/search?f=csv&q='+@member_name_part)
-      end
-      it 'should return json if the requested format is json' do
-        do_get 'json'
-        response.should redirect_to('/api/search?f=json&q='+@member_name_part)
-      end
+
+      it_should_behave_like "returns in correct format"
     end
 
     describe 'and the search term is all lower case' do
@@ -298,8 +234,8 @@ describe SearchController do
         Constituency.should_receive(:find_all_constituency_and_member_matches).with('islington').and_return @matching
       end
 
-      def do_get
-        get :show, :q => 'islington'
+      def do_get format=nil
+        get :show, :q => 'islington', :format => format
       end
 
       it 'should show list of matching constituencies' do
@@ -307,6 +243,8 @@ describe SearchController do
         constituencies_ordered_by_name = [@other_constituency, @constituency]
         assigns[:constituencies].should == constituencies_ordered_by_name
       end
+      
+      it_should_behave_like "returns in correct format"
     end
   end
 

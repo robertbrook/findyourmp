@@ -106,51 +106,29 @@ describe PostcodesController do
       before do
         @matches = [ @district_record, @other_district_record ]
         PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
+        
+        @constituency.stub!(:to_json).and_return "stuff"
+        @other_constituency.stub!(:to_json).and_return "stuff"
+        @constituency.stub!(:to_text).and_return "stuff"
+        @other_constituency.stub!(:to_text).and_return "stuff"
+        @constituency.stub!(:to_csv_value).and_return "stuff"
+        @other_constituency.stub!(:to_csv_value).and_return "stuff"
+        @constituency.stub!(:to_text).and_return "stuff"
+        @other_constituency.stub!(:to_text).and_return "stuff"
       end
 
       it 'should assign postcodes to the view' do
         do_get
         assigns[:postcode_districts].should == @matches
       end
-
-      it 'should return xml format' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
-      it 'should return json format' do
-        @constituency.should_receive(:to_json).and_return "stuff"
-        @other_constituency.should_receive(:to_json).and_return "stuff"
-        do_get 'json'
-        response.content_type.should == "application/json"
-      end
-      it 'should return text format' do
-        @constituency.should_receive(:to_text).and_return "stuff"
-        @other_constituency.should_receive(:to_text).and_return "stuff"
-        do_get 'text'
-        response.content_type.should == "text/plain"
-      end
-      it 'should return csv format' do
-        @constituency.should_receive(:to_csv_value).and_return "stuff"
-        @other_constituency.should_receive(:to_csv_value).and_return "stuff"
-        do_get 'csv'
-        response.content_type.should == "text/csv"
-      end
-      it 'should return yaml format' do
-        @constituency.should_receive(:to_text).and_return "stuff"
-        @other_constituency.should_receive(:to_text).and_return "stuff"
-        do_get 'yaml'
-        response.content_type.should == "application/x-yaml"
-      end
+      
+      it_should_behave_like "returns in correct format"
     end
   end
 
   describe "when asked to show postcode" do
     def do_get format=nil
-      if format
-        get :show, :postcode => @canonical_postcode, :format => format
-      else
-        get :show, :postcode => @canonical_postcode
-      end
+      get :show, :postcode => @canonical_postcode, :format => format
     end
 
     describe 'and a matching postcode is found' do
@@ -167,52 +145,18 @@ describe PostcodesController do
         do_get
         assigns[:postcode].should == @postcode_record
       end
+      
       it 'should set postcode in flash memory' do
         do_get
         flash[:postcode].should == @postcode_with_space
       end
+      
       it 'should assign constituency to view' do
         do_get
         assigns[:constituency].should == @constituency
       end
-      it 'should return html format' do
-        do_get
-        response.content_type.should == "text/html"
-      end
-      it 'should return xml format' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
-      it 'should return json format' do
-        do_get 'json'
-        response.content_type.should == "application/json"
-        response.body.should == @json
-      end
-      it 'should return js format' do
-        do_get 'js'
-        response.content_type.should == "text/javascript"
-        response.body.should == @json
-      end
-      it 'should return text format' do
-        do_get 'text'
-        response.content_type.should == "text/plain"
-        response.body.should == @text
-      end
-      it 'should return txt format' do
-        do_get 'txt'
-        response.content_type.should == "text/plain"
-        response.body.should == @text
-      end
-      it 'should return csv format' do
-        do_get 'csv'
-        response.content_type.should == "text/csv"
-        response.body.should == @csv
-      end
-      it 'should return yaml format' do
-        do_get 'yaml'
-        response.content_type.should == "application/x-yaml"
-        response.body.should == @yaml
-      end
+      
+      it_should_behave_like "returns in correct format"
     end
 
     describe 'and postcode matches if space removed' do
@@ -236,14 +180,13 @@ describe PostcodesController do
         do_get
         response.should redirect_to(:action=>'index')
       end
-      it 'should return xml if passed format "xml"' do
-        do_get 'xml'
-        response.content_type.should == "application/xml"
-      end
+      
       it 'should set non-matching postcode text as last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @canonical_postcode
       end
+      
+      it_should_behave_like "returns in correct format"
     end
   end
 end

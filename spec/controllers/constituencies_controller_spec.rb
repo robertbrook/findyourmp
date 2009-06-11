@@ -29,6 +29,14 @@ describe ConstituenciesController do
     @constituency_without_mp_id = 835
     @constituency_without_mp_friendly_id = 'glenrothes'
     @two_constituency_ids = "#{@constituency_id}+#{@other_constituency_id}"
+    @constituency.stub!(:to_output_yaml)
+    @constituency.stub!(:to_csv)
+    @constituency.stub!(:to_text)
+    @constituency.stub!(:to_json)
+    @constituency_without_mp.stub!(:to_output_yaml)
+    @constituency_without_mp.stub!(:to_csv)
+    @constituency_without_mp.stub!(:to_text)
+    @constituency_without_mp.stub!(:to_json)
   end
 
   def self.get_request_should_be_successful
@@ -67,9 +75,11 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find).and_raise ActiveRecord::RecordNotFound.new("Couldn't find Constituency")
     end
+    
     def do_get
       get :show, :id => @friendly_id
     end
+    
     it 'should respond with file not found' do
       do_get
       response.status.should == '404 Not Found'
@@ -80,14 +90,17 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find).and_return @constituency
     end
-    def do_get
-      get :show, :id => @friendly_id
+    
+    def do_get format=nil
+      get :show, :id => @friendly_id, :format => format
     end
+    
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@friendly_id).and_return @constituency
       do_get
       assigns[:constituency].should == @constituency
     end
+    
     it 'should keep :postcode in flash memory' do
       flash = mock('flash')
       @controller.stub!(:flash).and_return flash
@@ -95,29 +108,26 @@ describe ConstituenciesController do
       flash.stub!(:sweep)
       do_get
     end
+    
+    it_should_behave_like "returns in correct format"
   end
 
   describe "when asked for a constituency by friendly_id which does not have a sitting MP" do
     before do
       Constituency.stub!(:find).and_return @constituency_without_mp
     end
+    
     def do_get format=nil
-      if format
-        get :show, :id => @constituency_without_mp_friendly_id, :format => format
-      else
-        get :show, :id => @constituency_without_mp_friendly_id
-      end
+      get :show, :id => @constituency_without_mp_friendly_id, :format => format
     end
+    
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
       do_get
       assigns[:constituency].should == @constituency_without_mp
     end
-    it 'should return xml when asked for format XML' do
-      Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
-      do_get 'xml'
-      response.content_type.should == 'application/xml'
-    end
+    
+    it_should_behave_like "returns in correct format"
   end
 
   describe "when on the edit screen" do

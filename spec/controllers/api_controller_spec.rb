@@ -2,39 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ApiController do
 
-
-  describe 'returns in correct format', :shared => true do
-    it 'should not redirect' do
-      do_get
-      response.redirect?.should be_false
-    end
-
-    it 'should return xml when passed format=xml' do
-      do_get 'xml'
-      response.content_type.should == "application/xml"
-    end
-
-    it 'should return json when passed format=json' do
-      do_get 'json'
-      response.content_type.should == "application/json"
-    end
-
-    it 'should return text when passed format=text' do
-      do_get 'text'
-      response.content_type.should == "text/plain"
-    end
-
-    it 'should return csv when passed format=csv' do
-      do_get 'csv'
-      response.content_type.should =='text/csv'
-    end
-
-    it 'should return yaml when passed format=yaml' do
-      do_get 'yaml'
-      response.content_type.should =='application/x-yaml'
-    end
-  end
-
   before do
     @postcode_no_space = 'N11AA'
     @postcode = ' N1  1aA '
@@ -91,6 +58,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
 
       it 'should render js correctly' do
         do_get 'js'
@@ -116,6 +88,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed a search term which matches 2 constituencies" do
@@ -139,6 +116,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed a search term which matches 2 constituencies and is all lower case" do
@@ -158,6 +140,11 @@ describe ApiController do
 
       it_should_behave_like "returns in correct format"
 
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+
       it 'should assign constituency to view' do
         do_get
         assigns[:constituencies].should == @matches
@@ -175,6 +162,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed a search term which returns no results" do
@@ -190,6 +182,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
 
       it 'should store the error message in flash memory' do
         do_get
@@ -209,6 +206,11 @@ describe ApiController do
 
       it_should_behave_like "returns in correct format"
 
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
+      
       it 'should store the error message in flash memory' do
         do_get
         flash[:not_found].should == "Sorry: we need more than two letters to search"
@@ -229,6 +231,11 @@ describe ApiController do
         do_get
         flash[:not_found].should == "Sorry: the API did not recognise this parameter"
       end
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
   end
 
@@ -244,6 +251,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed an invalid postcode" do
@@ -273,6 +285,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed an invalid postcode_district" do
@@ -324,6 +341,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed an invalid ONS id" do
@@ -363,6 +385,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed an invalid member name" do
@@ -402,6 +429,11 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
+      
+      it 'should not redirect' do
+        do_get
+        response.redirect?.should be_false
+      end
     end
 
     describe "when passed an invalid constituency name" do
