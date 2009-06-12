@@ -58,7 +58,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -88,7 +88,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -116,7 +116,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -162,7 +162,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -190,7 +190,7 @@ describe ApiController do
 
       it 'should store the error message in flash memory' do
         do_get
-        flash[:not_found].should == "Sorry: we couldn't find a constituency or MP when we searched for invalid. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
+        flash[:not_found].should == "not_found"
       end
 
       it 'should store the search term in flash memory' do
@@ -210,7 +210,7 @@ describe ApiController do
         do_get
         response.redirect?.should be_false
       end
-      
+
       it 'should store the error message in flash memory' do
         do_get
         flash[:not_found].should == "Sorry: we need more than two letters to search"
@@ -231,7 +231,7 @@ describe ApiController do
         do_get
         flash[:not_found].should == "Sorry: the API did not recognise this parameter"
       end
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -251,7 +251,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -285,7 +285,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -341,7 +341,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -385,7 +385,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false
@@ -429,7 +429,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-      
+
       it 'should not redirect' do
         do_get
         response.redirect?.should be_false

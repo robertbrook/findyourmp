@@ -60,7 +60,7 @@ class SearchController < ApplicationController
           if stripped_term.size > 2
             constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
             if constituencies.empty?
-              flash[:not_found] = "<p>Sorry: we couldn't find a constituency or MP when we searched for <code>#{search_term}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode. If you were looking for a Member you may wish to check the <a class=\"warn\" href=\"http://www.parliament.uk/directories/hciolists/alms.cfm\">alphabetical list of Members</a> instead.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"
+              flash[:not_found] = "not_found"
               flash[:last_search_term] = search_term
               if search_format
                 show_error(search_format)
@@ -77,7 +77,7 @@ class SearchController < ApplicationController
               end
             end
           else
-            flash[:not_found] = "<p>Sorry: we need more than two letters to search</p>"
+            flash[:not_found] = "not_found"
             flash[:last_search_term] = search_term
             if search_format
               show_error(search_format)

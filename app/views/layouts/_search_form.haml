@@ -1,5 +1,10 @@
 - form_tag(search_url, :method => :get) do
-  = text_field_tag 'q', (@last_search_term ? @last_search_term : ''), :size => 24
+  = text_field_tag 'q', (@last_search_term ? sanitize(h(@last_search_term)) : ''), :size => 24
   = submit_tag 'Find MP'
 
-%div.text.flash= flash[:not_found] if flash[:not_found]
+- if flash[:not_found] && flash[:last_search_term]
+  %div.text.flash
+    - if flash[:last_search_term].strip.size < 3
+      = "<p>Sorry: we need more than two letters to search</p>"
+    - else
+      = "<p>Sorry: we couldn't find a constituency or MP when we searched for <code>#{sanitize(h(flash[:last_search_term]))}</code>. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a <strong>complete</strong> postcode. If you were looking for a Member you may wish to check the <a class=\"warn\" href=\"http://www.parliament.uk/directories/hciolists/alms.cfm\">alphabetical list of Members</a> instead.</p> <p>If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP.</p>"

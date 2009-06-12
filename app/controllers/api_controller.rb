@@ -25,7 +25,7 @@ class ApiController < ApplicationController
           if stripped_term.size > 2
             constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
             if constituencies.empty?
-              flash[:not_found] = "Sorry: we couldn't find a constituency or MP when we searched for #{search_term}. If you were searching for a postcode, please go back and check the postcode you entered, and ensure you have entered a complete postcode. If you are an expatriate, in an overseas territory, a Crown dependency or in the Armed Forces without a postcode, this service cannot be used to find your MP."
+              flash[:not_found] = "not_found"
               flash[:last_search_term] = search_term
               show_error(search_format)
             elsif constituencies.size == 1

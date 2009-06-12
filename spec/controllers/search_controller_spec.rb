@@ -56,7 +56,7 @@ describe SearchController do
         do_get
         response.should redirect_to("")
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
 
@@ -104,7 +104,7 @@ describe SearchController do
         do_get
         assigns[:last_search_term].should == @constituency_name_part
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
   end
@@ -118,9 +118,9 @@ describe SearchController do
       get :index, :q => @constituency_name_short, :format => format
     end
 
-    it 'should store "<p>Sorry: we need more than two letters to search" in flash memory</p>' do
+    it 'should store "not_found" in flash memory</p>' do
       do_get
-      flash[:not_found].should == "<p>Sorry: we need more than two letters to search</p>"
+      flash[:not_found].should == "not_found"
     end
 
     it 'should redirect to root page' do
@@ -146,9 +146,9 @@ describe SearchController do
         do_get
         response.should redirect_to("")
       end
-      
+
       it_should_behave_like "returns in correct format"
-      
+
       it 'should set last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @postcode
@@ -159,7 +159,7 @@ describe SearchController do
       before do
         Postcode.should_receive(:find_postcode_by_code).with(@postcode).and_return @postcode_record
       end
-      
+
       it 'should redirect to postcode view showing constituency' do
         do_get
         response.should redirect_to("postcodes/#{@canonical_postcode}")
@@ -243,7 +243,7 @@ describe SearchController do
         constituencies_ordered_by_name = [@other_constituency, @constituency]
         assigns[:constituencies].should == constituencies_ordered_by_name
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
   end
