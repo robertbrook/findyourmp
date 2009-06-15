@@ -40,6 +40,13 @@ describe ApiController do
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
   end
 
+  describe 'non redirecting url', :shared => true do
+    it 'should not redirect' do
+      do_get
+      response.redirect?.should be_false
+    end
+  end
+
   describe "when finding route for action" do
     it 'should display page not found for unknown routes' do
       params_from(:get, "/bad_url").should == {:controller => "application", :action => "render_not_found", :bad_route=>['bad_url']}
@@ -58,11 +65,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
 
       it 'should render js correctly' do
         do_get 'js'
@@ -88,11 +91,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed a search term which matches 2 constituencies" do
@@ -116,11 +115,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed a search term which matches 2 constituencies and is all lower case" do
@@ -139,11 +134,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
 
       it 'should assign constituency to view' do
         do_get
@@ -162,11 +153,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed a search term which returns no results" do
@@ -182,11 +169,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
 
       it 'should store the error message in flash memory' do
         do_get
@@ -205,11 +188,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
 
       it 'should store the error message in flash memory' do
         do_get
@@ -251,11 +230,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed an invalid postcode" do
@@ -285,11 +260,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed an invalid postcode_district" do
@@ -341,11 +312,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed an invalid ONS id" do
@@ -385,11 +352,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed an invalid member name" do
@@ -429,11 +392,7 @@ describe ApiController do
       end
 
       it_should_behave_like "returns in correct format"
-
-      it 'should not redirect' do
-        do_get
-        response.redirect?.should be_false
-      end
+      it_should_behave_like "non redirecting url"
     end
 
     describe "when passed an invalid constituency name" do

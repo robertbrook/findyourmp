@@ -83,7 +83,8 @@ class ApiController < ApplicationController
     search_format = params[:format]
 
     if ons_id
-      constituency = Constituency.find(:first, :conditions => "ons_id = #{ons_id}")
+      ons_id = ons_id.strip.gsub('"','')
+      constituency = Constituency.find_by_ons_id(ons_id)
       if constituency
         show_constituency(constituency, search_format)
       else
@@ -91,7 +92,8 @@ class ApiController < ApplicationController
         show_error(search_format)
       end
     elsif member_name
-      constituency = Constituency.find(:first, :conditions => "member_name = '#{member_name}'")
+      member_name = member_name.strip.gsub('"','')
+      constituency = Constituency.find_by_member_name(member_name)
       if constituency
         show_constituency(constituency, search_format)
       else
@@ -99,7 +101,8 @@ class ApiController < ApplicationController
         show_error(search_format)
       end
     elsif constituency_name
-      constituency = Constituency.find(:first, :conditions => "name = '#{constituency_name}'")
+      constituency_name = constituency_name.strip.gsub('"','')
+      constituency = Constituency.find_by_name(constituency_name)
       if constituency
         show_constituency(constituency, search_format)
       else

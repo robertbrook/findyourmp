@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ApplicationController do
-  
+
   describe 'returns in correct format', :shared => true do
     it 'should return xml when passed format=xml' do
       do_get 'xml'
@@ -27,6 +27,7 @@ describe ApplicationController do
       do_get 'yaml'
       response.content_type.should =='application/x-yaml'
     end
+
   end
 
   describe "when finding route for action" do
@@ -40,10 +41,10 @@ describe ApplicationController do
       Date.new(2009,2,14).to_s(:month_year).should == 'February 2009'
     end
   end
-  
+
   describe 'converting time to month year string' do
     it 'should render correctly' do
-      Date.new(2009,2,14).to_time.to_s(:month_year).should == 'February 2009'      
+      Date.new(2009,2,14).to_time.to_s(:month_year).should == 'February 2009'
     end
   end
 
