@@ -10,7 +10,7 @@
 
 %p.text There are currently no usage limits to the API, but they may be introduced in future.
 
-- form_remote_tag :url => 'api/search', :success => "$('result').innerHTML = '<pre>'+request.responseText.escapeHTML().gsub('{','{<br/>').gsub(',',',<br/>')+'</pre>'" do
+- form_remote_tag :url => 'search', :success => "$('result').innerHTML = '<pre>'+request.responseText.escapeHTML().gsub('{','{<br/>').gsub(',',',<br/>')+'</pre>'" do
   %p
     = label_tag 'f_xml', 'XML'
     = radio_button_tag 'f', 'xml'
