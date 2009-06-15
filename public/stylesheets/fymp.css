@@ -98,6 +98,10 @@ label.checkbox_label {
 }
 
 #mp_search {
-  padding-top: 0.1em;
+  padding-top: 1em;
+  padding-bottom: 0.1em;
+}
+
+#mp_search .padded_subheading {
   padding-bottom: 0.1em;
 }

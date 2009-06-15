@@ -1,11 +1,6 @@
 - if @constituency
   - @meta_description = meta_description(@constituency)
   = render :partial => 'constituencies/constituency', :object => @constituency
-  %h3.padded_subheading Search
-  #mp_search
-    - @last_search_term = ""
-    =render :partial => 'layouts/search_form'
-    =render :partial => 'layouts/search_hints'
 
 - elsif @constituencies or @members
   - @crumbtrail = "Search results"
@@ -19,3 +14,9 @@
     - if @members.size > 1
       %p.text A search using your full postcode will show fewer Members
     = render :partial => 'constituencies/member_match', :collection => @members
+
+#mp_search
+  %h3.padded_subheading Search
+  - @last_search_term = ""
+  =render :partial => 'layouts/search_form'
+  =render :partial => 'layouts/search_hints'
