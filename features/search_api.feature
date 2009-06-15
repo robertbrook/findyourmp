@@ -79,7 +79,7 @@ Feature: Search API
 
   Scenario: Call search API with an invalid search term, requesting XML
     Given I call the search API searching for "invalid" and requesting "xml"
-    Then I should see xml "<error>"
+    Then I should see xml "<constituencies></constituencies>"
 
   Scenario: Call search API to return a single record where the constituency name contains a "&" character, requesting XML
     Given I call the search API searching for "Newry" and requesting "xml"

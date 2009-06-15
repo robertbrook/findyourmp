@@ -8,3 +8,6 @@
     - if @members
       %members
         = render :partial => 'constituencies/constituency', :collection => @members
+    - if !@constituencies && !@members
+      %constituencies
+      %members

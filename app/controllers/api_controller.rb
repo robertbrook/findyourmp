@@ -1,6 +1,10 @@
 class ApiController < ApplicationController
 
   def index
+    @host = request.host
+    unless request.port == 80
+      @host += ':' + request.port.to_s
+    end
   end
 
   def search
@@ -182,7 +186,7 @@ class ApiController < ApplicationController
 
       respond_to do |format|
          format.html { render :template => '/constituencies/show' }
-         format.xml  { render :template => '/constituencies/show', :layout => false }
+         format.xml  { render :template => '/constituencies/show.xml.haml', :layout => false }
          format.json { render :json => results_to_json(@constituencies, @members, params[:callback]) }
          format.js   { render :json => results_to_json(@constituencies, @members, params[:callback]) }
          format.text { render :text => results_to_text(@constituencies, @members) }
@@ -194,15 +198,16 @@ class ApiController < ApplicationController
 
     def show_error format
       @error_message = flash[:not_found]
+      flash[:not_found] = nil unless format == 'html'
 
       respond_to do |format|
         format.html { render :template => '/api/index'}
-        format.xml  { render :template => '/postcodes/error', :layout => false }
-        format.json { render :json => message_to_json("error", @error_message) }
-        format.js   { render :json => message_to_json("error", @error_message) }
-        format.text { render :text => message_to_text("error", @error_message) }
-        format.csv  { render :text => message_to_csv("error", @error_message, "message", "content") }
-        format.yaml { render :text => message_to_yaml("error", @error_message) }
+        format.xml  { render :template => '/constituencies/show.xml.haml', :layout => false }
+        format.json { render :json => results_to_json([], []) }
+        format.js   { render :json => results_to_json([], []) }
+        format.text { render :text => results_to_text([], []) }
+        format.csv  { render :text => results_to_csv([], []) }
+        format.yaml { render :text => results_to_yaml([], []) }
       end
     end
 

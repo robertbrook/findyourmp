@@ -23,4 +23,5 @@ Feature: Constituencies API
 
   Scenario: Call constituencies API without a valid parameter
     Given I call the constituencies API with no parameters, requesting "xml"
-    Then I should see xml "Sorry: the API did not recognise this parameter"
+    Then I should see xml "<constituencies></constituencies>"
+
