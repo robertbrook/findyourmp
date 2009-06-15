@@ -3,6 +3,7 @@ class SearchController < ApplicationController
   def index
     params[:search_term] = params[:q] unless params[:q].blank?
     search_term = params[:search_term]
+    search_term.tr!('"', '')
 
     params[:format] = params[:f] unless params[:f].blank?
     search_format = params[:format]

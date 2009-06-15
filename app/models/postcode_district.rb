@@ -13,6 +13,7 @@ class PostcodeDistrict < ActiveRecord::Base
         code = String.new search_term
         code.strip!
         code.upcase!
+        code.tr!('"','')
         code.tr!(' ','')
         results = find(:all, :conditions => %Q|district = "#{code}"|, :include => :constituency)
         if results.empty? && code.length() == 3
