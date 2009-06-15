@@ -55,6 +55,7 @@ class Constituency < ActiveRecord::Base
     end
 
     def find_all_constituency_and_member_matches term
+      term = term.squeeze(' ').gsub('"','')
       constituencies = Constituency.find_all_name_or_member_name_matches(term)
       members = constituencies.clone
 

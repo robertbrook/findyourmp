@@ -21,7 +21,7 @@ class ApiController < ApplicationController
         if postcode
           show_postcode(postcode, search_term, search_format)
         else
-          stripped_term = search_term.strip
+          stripped_term = search_term.strip.squeeze(' ').gsub('"','')
           if stripped_term.size > 2
             constituencies = Constituency.find_all_name_or_member_name_matches(stripped_term)
             if constituencies.empty?
@@ -29,9 +29,9 @@ class ApiController < ApplicationController
               flash[:last_search_term] = search_term
               show_error(search_format)
             elsif constituencies.size == 1
-              show_constituencies([constituencies.first], search_term, search_format)
+              show_constituencies([constituencies.first], stripped_term, search_format)
             else
-              show_constituencies(constituencies, search_term, search_format)
+              show_constituencies(constituencies, stripped_term, search_format)
             end
           else
             flash[:not_found] = "Sorry: we need more than two letters to search"
