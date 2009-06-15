@@ -68,13 +68,14 @@ class Constituency < ActiveRecord::Base
 
       constituencies = constituencies.sort_by(&:name)
       members = members.sort_by(&:member_name)
-      
+
       return [constituencies, members]
     end
 
     def find_all_name_or_member_name_matches term
-      matches_name_or_member_name = %Q|name like "%#{term.squeeze(' ')}%" or | +
-          %Q|(member_name like "%#{term.squeeze(' ')}%" and member_visible = 1)|
+      term = term.squeeze(' ').gsub('"','')
+      matches_name_or_member_name = %Q|name like "%#{term}%" or | +
+          %Q|(member_name like "%#{term}%" and member_visible = 1)|
       constituencies = find(:all, :conditions => matches_name_or_member_name)
       constituencies.delete_if{|c| c.name == 'Example'}
 
@@ -87,7 +88,7 @@ class Constituency < ActiveRecord::Base
     end
 
     def case_sensitive term
-      term[/^([A-Z][a-z]+[ ]+)*([A-Z][a-z]+)$/] ? true : false
+      term.gsub('"','')[/^([A-Z][a-z]+[ ]+)*([A-Z][a-z]+)$/] ? true : false
     end
 
     def find_by_constituency_name name

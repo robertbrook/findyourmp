@@ -49,7 +49,7 @@ describe Constituency do
       constituencies, members = Constituency.find_all_constituency_and_member_matches('Ian')
       members.should == [@constituency]
     end
-    
+
     it 'should not match a hidden member name' do
       @constituency.member_name = 'Ian'
       @constituency2.member_name = 'Sian'
@@ -88,7 +88,8 @@ describe Constituency do
 
   describe 'when asked for find_all_name_or_member_name_matches' do
     def should_find_all term
-      conditions = %Q|name like "%#{term.squeeze(' ')}%" or (member_name like "%#{term.squeeze(' ')}%" and member_visible = 1)|
+      cleaned_term = term.squeeze(' ').gsub('"','')
+      conditions = %Q|name like "%#{cleaned_term}%" or (member_name like "%#{cleaned_term}%" and member_visible = 1)|
 
       @name_match_lc = mock(Constituency, :name => 'Lanark and Hamilton East', :member_name=>'member')
       @member_match_lc = mock(Constituency, :member_name => 'Ms Emily Thornberry', :name=>'place')
@@ -107,9 +108,17 @@ describe Constituency do
         Constituency.find_all_name_or_member_name_matches(term).should == @all_matches
       end
     end
-    describe 'and search term is capitalized, e.g. "Mil"' do
+    describe 'and search term is capitalized, e.g. Mil' do
       it 'should return all matches, case-sensitive' do
         term = 'Mil'
+        Constituency.case_sensitive(term).should be_true
+        should_find_all term
+        Constituency.find_all_name_or_member_name_matches(term).should == [@name_match, @member_match]
+      end
+    end
+    describe 'and search term is in brackets, e.g. "Mil"' do
+      it 'should return all matches, case-sensitive' do
+        term = '"Mil"'
         Constituency.case_sensitive(term).should be_true
         should_find_all term
         Constituency.find_all_name_or_member_name_matches(term).should == [@name_match, @member_match]
