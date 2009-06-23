@@ -28,6 +28,17 @@ namespace :fymp do
     parse_postcodes
   end
 
+  desc "Update postcodes from data files for postcode and constituency ID *only*"
+  task :update_postcodes => :environment do
+    old_file = ENV['old']
+    new_file = ENV['new']
+    if old_file && new_file
+      update_postcodes old_file, new_file
+    else
+      puts 'USAGE: rake fymp:update_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+    end
+  end
+
   desc "Populate data for postcode and constituency ID in DB"
   task :populate => :environment do
     load_postcodes
@@ -37,10 +48,10 @@ namespace :fymp do
   task :load_postcode_districts => :environment do
     load_postcode_districts
   end
-  
+
   desc "Populate the upmystreet lookup table"
   task :load_upmystreet_lookup => :environment do
     load_upmystreetcodes
   end
-  
+
 end

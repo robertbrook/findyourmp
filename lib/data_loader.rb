@@ -9,8 +9,32 @@ module FindYourMP::DataLoader
   MEMBER_FILE = "#{DATA_DIR}/FYMP_all.txt"
   CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
 
-  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
+  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_MAY_2009_UK_1M_FP.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
+
+  def update_postcodes old_file, new_file
+    return if file_not_found(old_file)
+    return if file_not_found(new_file)
+
+    diff_file = "#{RAILS_ROOT}/diff.txt"
+    cmd = "diff #{old_file} #{new_file} > #{diff_file}"
+    puts cmd
+    `#{cmd}`
+    to_delete = []
+    to_update = []
+
+    IO.foreach(diff_file) do |line|
+      parts = line.split(' ')
+      if parts[0] == '<'
+        to_delete << [parts[1], parts[2]]
+      elsif parts[0] == '>'
+        to_update << [parts[1], parts[2]]
+      end
+    end
+
+    puts 'to_delete.size ' + to_delete.size.to_s
+    puts 'to_update.size ' + to_update.size.to_s
+  end
 
   def load_members member_file
     member_file = MEMBER_FILE unless member_file
