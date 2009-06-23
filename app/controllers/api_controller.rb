@@ -139,7 +139,7 @@ class ApiController < ApplicationController
     end
 
     def show_postcode_districts postcode_districts, format
-      @search_term = ""
+      @search_term = params[:q]
       respond_to do |format|
         @postcode_districts = postcode_districts
         @constituencies = postcode_districts.collect { |postcode| postcode.constituency }

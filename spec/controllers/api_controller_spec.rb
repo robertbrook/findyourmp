@@ -151,6 +151,11 @@ describe ApiController do
       def do_get format=nil
         get :search, :q => @postcode_district, :format => format
       end
+      
+      it 'should assign the search term to the view' do
+        do_get
+        assigns[:search_term].should == @postcode_district
+      end
 
       it_should_behave_like "returns in correct format"
       it_should_behave_like "non redirecting url"
