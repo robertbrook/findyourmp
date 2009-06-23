@@ -17,7 +17,7 @@ namespace :fymp do
     end
   end
   
-  desc "Test"
+  desc "Delete old backup files from S3"
   task :cleanup_db_backup do
     max_files = ENV['files_to_keep']
     

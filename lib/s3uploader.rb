@@ -156,8 +156,9 @@ module FindYourMP::S3Uploader
     )
     backup_store = AWS::S3::Bucket.find(bucket)
     current_size = backup_store.objects.size
+    max_size = max_size.to_i
     
-    if current_size > max_size   
+    if current_size > max_size 
       files = []
       backup_store.each do |object|
         files << object.key
