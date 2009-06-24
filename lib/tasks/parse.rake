@@ -25,11 +25,16 @@ namespace :fymp do
 
   desc "Parse data file for postcode and constituency ID *only*"
   task :parse do
-    parse_postcodes
+    source_file = ENV['source']
+    if source_file
+      parse_postcodes source_file
+    else
+      puts 'USAGE: rake fymp:parse source=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+    end
   end
 
   desc "Update postcodes from data files for postcode and constituency ID *only*"
-  task :update_postcodes => :environment do
+  task :update_postcodes do
     old_file = ENV['old']
     new_file = ENV['new']
     if old_file && new_file

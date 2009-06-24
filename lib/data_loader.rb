@@ -9,31 +9,47 @@ module FindYourMP::DataLoader
   MEMBER_FILE = "#{DATA_DIR}/FYMP_all.txt"
   CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
 
-  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_MAY_2009_UK_1M_FP.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
   def update_postcodes old_file, new_file
-    return if file_not_found(old_file)
-    return if file_not_found(new_file)
+    old_postcodes = "#{DATA_DIR}/old_postcodes.txt"
+    new_postcodes = "#{DATA_DIR}/new_postcodes.txt"
 
-    diff_file = "#{RAILS_ROOT}/diff.txt"
-    cmd = "diff #{old_file} #{new_file} > #{diff_file}"
+    parse_postcodes old_file, old_postcodes unless File.exist?(old_postcodes)
+    parse_postcodes new_file, new_postcodes unless File.exist?(new_postcodes)
+
+    diff_file = "#{DATA_DIR}/diff_postcodes.txt"
+    cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
-    `#{cmd}`
-    to_delete = []
-    to_update = []
+    `#{cmd}` unless File.exist?(diff_file)
+    to_delete = {}
+    to_create = {}
+    to_update = {}
 
     IO.foreach(diff_file) do |line|
-      parts = line.split(' ')
-      if parts[0] == '<'
-        to_delete << [parts[1], parts[2]]
-      elsif parts[0] == '>'
-        to_update << [parts[1], parts[2]]
+      parts = line.strip.split(' ')
+      indicator = parts[0]
+
+      if indicator[/(<|>)/]
+        postcode = parts[1]
+        constituency_code = parts[2]
+        if indicator == '<'
+          to_delete[postcode] = constituency_code
+        elsif indicator == '>'
+          to_create[postcode] = constituency_code
+        end
       end
     end
 
+    to_create.keys.each do |postcode|
+      if to_delete.delete(postcode)
+        constituency_code = to_create.delete(postcode)
+        to_update[postcode] = constituency_code
+      end
+    end
     puts 'to_delete.size ' + to_delete.size.to_s
     puts 'to_update.size ' + to_update.size.to_s
+    puts 'to_create.size ' + to_create.size.to_s
   end
 
   def load_members member_file
@@ -83,8 +99,8 @@ module FindYourMP::DataLoader
     end
   end
 
-  def parse_postcodes
-    return if file_not_found(SOURCE_POSTCODE_FILE)
+  def parse_postcodes source_file, output_file=POSTCODE_FILE
+    return if file_not_found(source_file)
     start_timing
     blank_date = '      '
     blank_code = '   '
@@ -92,7 +108,7 @@ module FindYourMP::DataLoader
     space = ' '
     post_codes = []
 
-    IO.foreach(SOURCE_POSTCODE_FILE) do |line|
+    IO.foreach(source_file) do |line|
       termination_date = line[29..34]
       if termination_date == blank_date
         consistuency_code = line[69..71]
@@ -106,7 +122,7 @@ module FindYourMP::DataLoader
     log_duration
 
     start_timing
-    File.open(POSTCODE_FILE,'w') do |file|
+    File.open(output_file,'w') do |file|
       file.write(post_codes.join(''))
     end
     log_duration
