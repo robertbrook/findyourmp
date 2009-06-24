@@ -214,7 +214,16 @@ namespace :deploy do
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
 
-      run "cd #{current_path}; rake fymp:parse RAILS_ENV='production'" unless test_deploy
+      unless test_deploy
+        postcode_source = ""
+        message = "Which postcodes data file?\n\ne.g. data/NSPDF_MAY_2009_UK_1M_FP.txt\n"
+        postcode_source = Capistrano::CLI.ui.ask(message)
+        if File.exist?(postcode_source)
+          run "cd #{current_path}; rake fymp:parse_postcodes source=#{postcode_source} RAILS_ENV='production'"
+        else
+          raise "cannot find postcodes file: #{postcode_source}"
+        end
+      end
       run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
     end
 
@@ -331,16 +340,15 @@ namespace :deploy do
 
   desc "Perform rake tasks"
   task :update_postcodes, :roles => :app do
-    old_file = ENV['old']
-    new_file = ENV['new']
-    if old_file && new_file
-      include FindYourMP::DataLoader
-      diff_postcodes old_file, new_file
-      data = File.read("data/diff_postcodes.txt")
+    file = "data/diff_postcodes.txt"
+    if File.exist?(file)
+      data = File.read(file)
       put data, "#{current_path}/data/diff_postcodes.txt", :mode => 0664
       run "cd #{current_path}; rake fymp:update_postcodes RAILS_ENV='production'"
     else
-      puts 'USAGE EXAMPLE: cap deploy:update_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+      puts 'USAGE EXAMPLE:'
+      puts 'rake fymp:diff_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+      puts 'cap deploy:update_postcodes'
     end
   end
 

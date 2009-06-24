@@ -21,7 +21,7 @@ module FindYourMP::DataLoader
     diff_file = "#{DATA_DIR}/diff_postcodes.txt"
     cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
-    `#{cmd}`
+    `#{cmd}` unless File.exist?(diff_file)
   end
 
   def update_postcodes
@@ -42,14 +42,11 @@ module FindYourMP::DataLoader
 
       if indicator[/(<|>)/]
         ons_id = parts.pop
-        ignore = ons_id == '800' || ons_id == '900'
-        unless ignore
-          postcode = parts.join(' ').sub(indicator, '').strip
-          if indicator == '<'
-            to_delete[postcode] = ons_id
-          elsif indicator == '>'
-            to_create[postcode] = ons_id
-          end
+        postcode = parts.join(' ').sub(indicator, '').strip
+        if indicator == '<'
+          to_delete[postcode] = ons_id
+        elsif indicator == '>'
+          to_create[postcode] = ons_id
         end
       end
     end
@@ -66,25 +63,33 @@ module FindYourMP::DataLoader
     puts 'checking we have constituencies... '
 
     (to_delete.values + to_update.values + to_create.values).flatten.uniq.each do |ons_id|
-      constituency = Constituency.find_by_ons_id(ons_id)
-      raise "unexpected constituency id #{ons_id}" unless constituency
+      unless ignore_ons_id?(ons_id)
+        constituency = Constituency.find_by_ons_id(ons_id)
+        raise "unexpected constituency id #{ons_id}" unless constituency
+      end
     end
     puts 'all constituencies found'
 
-    puts "Update database? y/n"
-    answer = STDIN.gets
-    if answer.strip == 'y'
+    # puts "Update database? y/n"
+    # answer = STDIN.gets
+    # if answer.strip == 'y'
       do_postcode_update to_delete, to_update, to_create
-    else
-      puts 'exiting without database update'
-    end
+    # else
+      # puts 'exiting without database update'
+    # end
+  end
+
+  def ignore_ons_id?(ons_id)
+    ons_id == '800' || ons_id == '900'
   end
 
   def do_postcode_update to_delete, to_update, to_create
+    puts 'do_postcode_update...'
     total = (to_delete.size + to_update.size + to_create.size).to_f
     count = 0
     include ActionView::Helpers::DateHelper
     start_timing
+
     to_delete.each do |postcode, ons_id|
       if post_code = Postcode.find_by_code(postcode.sub(' ',''))
         post_code.destroy
@@ -95,9 +100,13 @@ module FindYourMP::DataLoader
       end
     end
     to_update.each do |postcode, ons_id|
-      if (post_code = Postcode.find_by_code(postcode.sub(' ',''))) && (constituency = Constituency.find_by_ons_id(ons_id))
+      if (post_code = Postcode.find_by_code(postcode.sub(' ',''))) && (ignore_ons_id?(ons_id) || constituency = Constituency.find_by_ons_id(ons_id))
         post_code.ons_id = ons_id.strip.to_i
-        post_code.constituency_id = constituency.id
+        if constituency
+          post_code.constituency_id = constituency.id
+        else
+          post_code.constituency_id = nil
+        end
         post_code.save
         count = count.next
         log_duration count / total
@@ -105,8 +114,17 @@ module FindYourMP::DataLoader
         raise "cannot delete postcode, as it was not in database: #{postcode} #{ons_id}"
       end
     end
+
     to_create.each do |postcode, ons_id|
-      Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
+      begin
+        if Postcode.exists?(:code => postcode.sub(' ',''))
+          raise 'exists ' + postcode
+        else
+          Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
+        end
+      rescue Exception => e
+        raise e
+      end
       count = count.next
       log_duration count / total
     end

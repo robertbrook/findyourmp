@@ -3,6 +3,7 @@ class Postcode < ActiveRecord::Base
 
   before_validation_on_create :populate_constituency_id
 
+  validates_uniqueness_of :code
   validates_presence_of :ons_id
 
   belongs_to :constituency

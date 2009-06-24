@@ -24,7 +24,7 @@ namespace :fymp do
   end
 
   desc "Parse data file for postcode and constituency ID *only*"
-  task :parse do
+  task :parse_postcodes do
     source_file = ENV['source']
     if source_file
       parse_postcodes source_file
@@ -33,8 +33,8 @@ namespace :fymp do
     end
   end
 
-  desc "Generate diff of postcodes from data files"
-  task :diff_postcodes do
+  desc "Update postcodes from data files for postcode and constituency ID *only*"
+  task :diff_postcodes => :environment do
     old_file = ENV['old']
     new_file = ENV['new']
     if old_file && new_file
@@ -44,8 +44,9 @@ namespace :fymp do
     end
   end
 
-  desc "Update postcodes from postcode diff file"
+  desc "Update postcodes from data files for postcode and constituency ID *only*"
   task :update_postcodes => :environment do
+    puts 'USAGE: rake fymp:update_postcodes'
     update_postcodes
   end
 
