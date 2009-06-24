@@ -1,5 +1,6 @@
 module FindYourMP
   module Timer
+
     def start_timing
       @start = Time.now
     end

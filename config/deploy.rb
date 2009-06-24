@@ -329,6 +329,21 @@ namespace :deploy do
     end
   end
 
+  desc "Perform rake tasks"
+  task :update_postcodes, :roles => :app do
+    old_file = ENV['old']
+    new_file = ENV['new']
+    if old_file && new_file
+      include FindYourMP::DataLoader
+      diff_postcodes old_file, new_file
+      data = File.read("data/diff_postcodes.txt")
+      put data, "#{current_path}/data/diff_postcodes.txt", :mode => 0664
+      run "cd #{current_path}; rake fymp:update_postcodes RAILS_ENV='production'"
+    else
+      puts 'USAGE EXAMPLE: cap deploy:update_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+    end
+  end
+
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
