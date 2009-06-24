@@ -15,13 +15,13 @@ module FindYourMP::DataLoader
     old_postcodes = "#{DATA_DIR}/old_postcodes.txt"
     new_postcodes = "#{DATA_DIR}/new_postcodes.txt"
 
-    parse_postcodes old_file, old_postcodes unless File.exist?(old_postcodes)
-    parse_postcodes new_file, new_postcodes unless File.exist?(new_postcodes)
+    parse_postcodes old_file, old_postcodes
+    parse_postcodes new_file, new_postcodes
 
     diff_file = "#{DATA_DIR}/diff_postcodes.txt"
     cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
-    `#{cmd}` unless File.exist?(diff_file)
+    `#{cmd}`
   end
 
   def update_postcodes
