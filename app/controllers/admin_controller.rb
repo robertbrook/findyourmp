@@ -1,6 +1,7 @@
 class AdminController < ApplicationController
 
   before_filter :require_user
+  before_filter :require_admin_user, :only => :shutdown
 
   def index
     @sent_message_count = Message.sent_message_count
@@ -24,4 +25,11 @@ class AdminController < ApplicationController
     @memory_stats = Message.memory_stats
   end
   
+  def shutdown
+    if request.post?
+      if params[:commit] == 'Shutdown site'
+        `rake apache:shutdown`
+      end
+    end
+  end
 end

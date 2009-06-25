@@ -40,3 +40,10 @@
 
 %p.text
   = link_to "Memory statistics", url_for(:controller=>'admin',:action=>'stats')
+
+- if @current_user.admin?
+
+  %h3.padded_subheading Emergency shutdown
+
+  %p.text
+    = link_to 'Shutdown site', shutdown_url

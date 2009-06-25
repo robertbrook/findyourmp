@@ -1,0 +1,17 @@
+- @crumbtrail = link_to_admin_home
+- @title = 'Emergency shutdown'
+
+%p.text
+  %span.warn If you continue, the whole site including this admin section will become unavailable
+
+%p.text
+  To restart the server, you will need to contact: 
+  <br /><br />
+  Server Contact <br />
+  contact@contact.us
+
+%p.text
+  If you still wish to shut the site down, please click the button below
+
+- form_tag(shutdown_url, :method => :post) do
+  = submit_tag 'Shutdown site'

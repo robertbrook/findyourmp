@@ -8,10 +8,35 @@ describe AdminController do
     end
   end
 
-  describe 'when not logged in as admin' do
+  describe 'when not logged in' do
     it 'should redirect to login page' do
       get :index
       response.should redirect_to(new_user_session_url)
+      
+      get :shutdown
+      response.should redirect_to(new_user_session_url)
+    end
+  end
+  
+  describe 'when logged in' do
+    before do
+      current_user = mock_model User
+      current_user.stub!(:admin?).and_return(false)
+      controller.stub!(:current_user).and_return(current_user)
+    end
+    
+    describe 'when asked for the index' do
+      it 'should not redirect' do
+        get :index
+        response.should_not redirect_to(new_user_session_url)
+      end
+    end
+    
+    describe 'when asked to shutdown' do
+      it 'should redirect to the admin page' do
+        get :shutdown
+        response.should redirect_to(admin_url)
+      end
     end
   end
 
@@ -72,6 +97,13 @@ describe AdminController do
 
         get :sent_by_month, :yyyy_mm => '2008_01'
         assigns[:sent_by_constituency].should == 88
+      end
+    end
+    
+    describe 'when asked to shutdown' do
+      it 'should not redirect' do
+        get :shutdown
+        response.should_not redirect_to(admin_url)
       end
     end
   end
