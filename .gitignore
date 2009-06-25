@@ -2,6 +2,7 @@ log/*.log
 tmp/**/*
 tmp
 test
+diff.txt
 coverage
 config/database.yml
 config/database.yml.bak

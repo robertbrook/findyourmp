@@ -9,8 +9,127 @@ module FindYourMP::DataLoader
   MEMBER_FILE = "#{DATA_DIR}/FYMP_all.txt"
   CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
 
-  SOURCE_POSTCODE_FILE = "#{DATA_DIR}/NSPDF_FEB_2009_UK_1M.txt"
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
+
+  def diff_postcodes old_file, new_file
+    old_postcodes = "#{DATA_DIR}/old_postcodes.txt"
+    new_postcodes = "#{DATA_DIR}/new_postcodes.txt"
+
+    parse_postcodes old_file, old_postcodes
+    parse_postcodes new_file, new_postcodes
+
+    diff_file = "#{DATA_DIR}/diff_postcodes.txt"
+    cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
+    puts cmd
+    `#{cmd}` unless File.exist?(diff_file)
+  end
+
+  def update_postcodes
+    diff_file = "#{DATA_DIR}/diff_postcodes.txt"
+
+    if file_not_found(diff_file)
+      puts "Generate or upload #{diff_file}"
+      return
+    end
+
+    to_delete = {}
+    to_create = {}
+    to_update = {}
+
+    IO.foreach(diff_file) do |line|
+      parts = line.strip.split(' ')
+      indicator = parts[0]
+
+      if indicator[/(<|>)/]
+        ons_id = parts.pop
+        postcode = parts.join(' ').sub(indicator, '').strip
+        if indicator == '<'
+          to_delete[postcode] = ons_id
+        elsif indicator == '>'
+          to_create[postcode] = ons_id
+        end
+      end
+    end
+    to_create.keys.each do |postcode|
+      if to_delete.delete(postcode)
+        ons_id = to_create.delete(postcode)
+        to_update[postcode] = ons_id
+      end
+    end
+    puts 'to_delete ' + to_delete.size.to_s + ' e.g. ' + to_delete.to_a.first.inspect
+    puts 'to_update ' + to_update.size.to_s + ' e.g. ' + to_update.to_a.first.inspect
+    puts 'to_create ' + to_create.size.to_s + ' e.g. ' + to_create.to_a.first.inspect
+
+    puts 'checking we have constituencies... '
+
+    (to_delete.values + to_update.values + to_create.values).flatten.uniq.each do |ons_id|
+      unless ignore_ons_id?(ons_id)
+        constituency = Constituency.find_by_ons_id(ons_id)
+        raise "unexpected constituency id #{ons_id}" unless constituency
+      end
+    end
+    puts 'all constituencies found'
+
+    # puts "Update database? y/n"
+    # answer = STDIN.gets
+    # if answer.strip == 'y'
+      do_postcode_update to_delete, to_update, to_create
+    # else
+      # puts 'exiting without database update'
+    # end
+  end
+
+  def ignore_ons_id?(ons_id)
+    ons_id == '800' || ons_id == '900'
+  end
+
+  def do_postcode_update to_delete, to_update, to_create
+    puts 'do_postcode_update...'
+    total = (to_delete.size + to_update.size + to_create.size).to_f
+    count = 0
+    include ActionView::Helpers::DateHelper
+    start_timing
+
+    to_delete.each do |postcode, ons_id|
+      if post_code = Postcode.find_by_code(postcode.sub(' ',''))
+        post_code.destroy
+        count = count.next
+        log_duration count / total
+      else
+        raise "cannot delete postcode, as it was not in database: #{postcode}"
+      end
+    end
+    to_update.each do |postcode, ons_id|
+      if (post_code = Postcode.find_by_code(postcode.sub(' ',''))) && (ignore_ons_id?(ons_id) || constituency = Constituency.find_by_ons_id(ons_id))
+        post_code.ons_id = ons_id.strip.to_i
+        if constituency
+          post_code.constituency_id = constituency.id
+        else
+          post_code.constituency_id = nil
+        end
+        post_code.save
+        count = count.next
+        log_duration count / total
+      else
+        raise "cannot delete postcode, as it was not in database: #{postcode} #{ons_id}"
+      end
+    end
+
+    to_create.each do |postcode, ons_id|
+      begin
+        if Postcode.exists?(:code => postcode.sub(' ',''))
+          raise 'exists ' + postcode
+        else
+          Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
+        end
+      rescue Exception => e
+        raise e
+      end
+      count = count.next
+      log_duration count / total
+    end
+    log_duration
+  end
 
   def load_members member_file
     member_file = MEMBER_FILE unless member_file
@@ -59,8 +178,8 @@ module FindYourMP::DataLoader
     end
   end
 
-  def parse_postcodes
-    return if file_not_found(SOURCE_POSTCODE_FILE)
+  def parse_postcodes source_file, output_file=POSTCODE_FILE
+    return if file_not_found(source_file)
     start_timing
     blank_date = '      '
     blank_code = '   '
@@ -68,7 +187,7 @@ module FindYourMP::DataLoader
     space = ' '
     post_codes = []
 
-    IO.foreach(SOURCE_POSTCODE_FILE) do |line|
+    IO.foreach(source_file) do |line|
       termination_date = line[29..34]
       if termination_date == blank_date
         consistuency_code = line[69..71]
@@ -82,7 +201,7 @@ module FindYourMP::DataLoader
     log_duration
 
     start_timing
-    File.open(POSTCODE_FILE,'w') do |file|
+    File.open(output_file,'w') do |file|
       file.write(post_codes.join(''))
     end
     log_duration
