@@ -26,3 +26,14 @@ rake fymp:populate
 rake fymp:load_postcode_districts
 
 rake friendly_id:make_slugs MODEL=Constituency
+
+# To get the emergency server shutdown to work, you need to run the following:
+#
+# sudo visudo
+#
+# and add in the next 2 lines, substituting [SITE_CONTEXT_USER] with the actual site or group the site runs as
+#
+# Cmnd_Alias     APACHE = /etc/init.d/apache2 start, /etc/init.d/apache2 stop, /etc/init.d/apache2 restart, /etc/init.d/apache2 reload
+# [SITE_CONTEXT_USER] ALL=NOPASSWD: APACHE
+
+
