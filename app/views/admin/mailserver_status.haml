@@ -1,0 +1,19 @@
+- @crumbtrail = link_to_admin_home
+- @title = 'Mailserver Status'
+
+%h3.padded_subheading Server ping test
+
+%pre.column_content
+  = @ping_test
+%p.text
+  = '&nbsp;'
+
+%h3.padded_subheading FastMail.FM recent status updates
+
+%div.text
+  = @feed
+
+%p.text
+  = '&nbsp;'
+%p.text
+  = link_to 'Admin home', admin_url

@@ -43,6 +43,11 @@
 
 - if @current_user.admin?
 
+  %h3.padded_subheading Mail server availability
+  
+  %p.text
+    = link_to 'Mail server status', url_for(:controller=>'admin',:action=>'mailserver_status')
+
   %h3.padded_subheading Emergency shutdown
 
   %p.text

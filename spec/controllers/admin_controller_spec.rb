@@ -15,6 +15,9 @@ describe AdminController do
       
       get :shutdown
       response.should redirect_to(new_user_session_url)
+      
+      get :mailserver_status
+      response.should redirect_to(new_user_session_url)
     end
   end
   
@@ -35,6 +38,13 @@ describe AdminController do
     describe 'when asked to shutdown' do
       it 'should redirect to the admin page' do
         get :shutdown
+        response.should redirect_to(admin_url)
+      end
+    end
+    
+    describe 'when asked for mailserver status' do
+      it 'should redirect to the admin page' do
+        get :mailserver_status
         response.should redirect_to(admin_url)
       end
     end
@@ -104,6 +114,14 @@ describe AdminController do
       it 'should not redirect' do
         get :shutdown
         response.should_not redirect_to(admin_url)
+      end
+    end
+    
+    describe 'when asked for mail server status' do
+      it 'should assign values to the view' do
+        get :mailserver_status
+        assigns[:ping_test][0].should include("PING mail.messagingengine.com")
+        assigns[:feed].should_not == ""
       end
     end
   end

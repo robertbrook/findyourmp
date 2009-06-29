@@ -1,7 +1,9 @@
+require 'rss'
+
 class AdminController < ApplicationController
 
   before_filter :require_user
-  before_filter :require_admin_user, :only => :shutdown
+  before_filter :require_admin_user, :only => [:shutdown, :mailserver_status]
 
   def index
     @sent_message_count = Message.sent_message_count
@@ -23,6 +25,25 @@ class AdminController < ApplicationController
   
   def stats
     @memory_stats = Message.memory_stats
+  end
+  
+  def mailserver_status
+    IO.popen("ping -c 4 mail.messagingengine.com") do |stream|
+      @ping_test = stream.readlines
+    end
+    
+    begin
+      output=""
+      feed = RSS::Parser.parse(open('http://status.fastmail.fm/feed/').read, false)
+      i = 0
+      feed.channel.items.each do |item|
+        output += "<p>#{item.pubDate}<br /> <a href=\"#{item.link}\">#{item.title}</a></p>" if i < 4
+        i+=1
+      end
+      @feed = output
+    rescue
+      @feed = "Error trying to open http://status.fastmail.fm/feed/"
+    end
   end
   
   def shutdown

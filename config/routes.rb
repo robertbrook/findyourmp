@@ -28,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/admin/waiting_to_be_sent', :controller => 'admin', :action => 'waiting_to_be_sent'
   map.connect '/admin/stats', :controller => 'admin', :action => 'stats'
   map.shutdown '/admin/shutdown', :controller => 'admin', :action => 'shutdown'
+  map.connect '/admin/mailserver_status', :controller => 'admin', :action => 'mailserver_status'
 
   map.api '/api', :controller => 'api', :action => 'index'
   map.connect 'api/search', :controller => 'api', :action => 'search'
