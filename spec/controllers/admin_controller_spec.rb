@@ -120,8 +120,11 @@ describe AdminController do
     describe 'when asked for mail server status' do
       it 'should assign values to the view' do
         get :mailserver_status
-        assigns[:ping_test][0].should include("PING mail.messagingengine.com")
         assigns[:feed].should_not == ""
+        assigns[:ping_test].should be_nil
+        
+        get :mailserver_status, :commit => 'Ping server'
+        assigns[:ping_test][0].should include("PING mail.messagingengine.com")
       end
     end
   end

@@ -3,8 +3,14 @@
 
 %h3.padded_subheading Server ping test
 
-%pre.column_content
-  = @ping_test
+-if params[:commit] == 'Ping server'
+  %pre.column_content
+    = @ping_test
+    %br
+
+- form_tag(mailserver_status_url, :method => :get) do
+  = submit_tag 'Ping server'
+
 %p.text
   = '&nbsp;'
 

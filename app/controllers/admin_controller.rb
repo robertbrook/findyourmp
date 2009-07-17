@@ -28,8 +28,10 @@ class AdminController < ApplicationController
   end
   
   def mailserver_status
-    IO.popen("ping -c 4 mail.messagingengine.com") do |stream|
-      @ping_test = stream.readlines
+    if params[:commit] == 'Ping server'
+      IO.popen("ping -c 4 mail.messagingengine.com") do |stream|
+        @ping_test = stream.readlines
+      end
     end
     
     begin
