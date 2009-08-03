@@ -20,7 +20,7 @@ class MessageMailer < ActionMailer::Base
 
   def sent(message, sent_at = Time.now)
     subject    "[FindYourMP] #{message.subject}"
-    recipients "#{message.recipient} <#{message.recipient_email}>"
+    recipients %Q|"#{message.recipient}" <#{message.recipient_email}>|
     from       message.sender_via_fymp_email
     reply_to   message.sender_email
     sent_on    sent_at
@@ -30,7 +30,7 @@ class MessageMailer < ActionMailer::Base
 
   def confirm(message, sent_at = Time.now)
     subject    "[FindYourMP] Confirmation of your message: #{message.subject}"
-    recipients "#{message.sender} <#{message.sender_email}>"
+    recipients %Q|"#{message.sender}" <#{message.sender_email}>|
     from       Message.noreply_email
     sent_on    sent_at
 
