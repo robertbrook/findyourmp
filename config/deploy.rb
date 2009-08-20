@@ -314,7 +314,7 @@ namespace :deploy do
     sudo "gem install treetop"
     sudo "gem install term-ansicolor"
     sudo "gem install aws-s3 --version '0.5.1'"
-    sudo "gem install adzap-ar_mailer --version '2.0.0'"
+    sudo "gem install adzap-ar_mailer --version '2.1.5'"
     sudo "cp /var/lib/gems/1.8/bin/ar_sendmail /usr/local/bin/ar_sendmail"
 
     rake_tasks
