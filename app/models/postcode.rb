@@ -71,8 +71,8 @@ class Postcode < ActiveRecord::Base
   def blacklist
     blacklisted = BlacklistedPostcode.find_by_code(code)
     unless blacklisted
-      blacklisted = BlacklistedPostcode.new(code, constituency_id, ons_id)
-      if blacklisted.save
+      blacklisted = BlacklistedPostcode.create :code => code, :constituency_id => constituency_id ,:ons_id => ons_id
+      if BlacklistedPostcode.find_by_code(code)
         self.delete
       else
         return false
