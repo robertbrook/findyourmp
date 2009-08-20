@@ -119,6 +119,8 @@ module FindYourMP::DataLoader
       begin
         if Postcode.exists?(:code => postcode.sub(' ',''))
           raise 'exists ' + postcode
+        elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
+          puts "  (ignoring blacklisted postcode - #{postcode})"
         else
           Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
         end
@@ -259,7 +261,11 @@ module FindYourMP::DataLoader
 
     def load_codes(post_codes)
       post_codes.each do |codes|
-        Postcode.create :code => codes[0], :ons_id => codes[1]
+        if BlacklistedPostcode.find_by_code codes[0]
+          puts "  (ignoring blacklisted postcode - #{codes[0]})"
+        else
+          Postcode.create :code => codes[0], :ons_id => codes[1]
+        end
       end
     end
 

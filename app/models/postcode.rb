@@ -67,6 +67,21 @@ class Postcode < ActiveRecord::Base
   def to_output_yaml
     "---\n#{to_text("yaml")}"
   end
+  
+  def blacklist
+    blacklisted = BlacklistedPostcode.find_by_code(code)
+    unless blacklisted
+      blacklisted = BlacklistedPostcode.new(code, constituency_id, ons_id)
+      if blacklisted.save
+        self.delete
+      else
+        return false
+      end
+    else
+      self.delete
+    end
+    true
+  end
 
   private
 

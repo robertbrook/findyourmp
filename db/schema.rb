@@ -9,7 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090518103907) do
+ActiveRecord::Schema.define(:version => 20090820095620) do
+
+  create_table "blacklisted_postcodes", :force => true do |t|
+    t.string   "code",            :limit => 7
+    t.integer  "constituency_id"
+    t.integer  "ons_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "blacklisted_postcodes", ["code"], :name => "index_blacklisted_postcodes_on_code"
 
   create_table "constituencies", :force => true do |t|
     t.string   "name"
@@ -35,8 +45,8 @@ ActiveRecord::Schema.define(:version => 20090518103907) do
   end
 
   create_table "message_summaries", :force => true do |t|
-    t.string   "recipient"
     t.string   "constituency_name"
+    t.string   "recipient"
     t.string   "recipient_email"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -61,12 +71,12 @@ ActiveRecord::Schema.define(:version => 20090518103907) do
     t.boolean  "sent"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "authenticity_token"
     t.string   "recipient_email"
     t.boolean  "sender_is_constituent"
     t.string   "constituency_name"
     t.string   "mailer_error"
     t.datetime "sent_at"
-    t.string   "authenticity_token"
     t.string   "sender_ip_address"
   end
 
