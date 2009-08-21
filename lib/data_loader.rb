@@ -256,6 +256,13 @@ module FindYourMP::DataLoader
       PostcodeDistrict.create!(district.attributes)
     end
   end
+  
+  def load_manual_postcodes
+    manual_codes = ManualPostcode.all
+    manual_codes.each do |manual_code|
+      Postcode.create :code => manual_code.code, :constituency_id => manual_code.constituency_id, :ons_id => manual_code.ons_id
+    end
+  end
 
   private
 

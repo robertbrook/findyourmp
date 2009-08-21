@@ -32,7 +32,7 @@ namespace :fymp do
       puts 'USAGE: rake fymp:parse source=data/NSPDF_MAY_2009_UK_1M_FP.txt'
     end
   end
-
+  
   desc "Update postcodes from data files for postcode and constituency ID *only*"
   task :diff_postcodes => :environment do
     old_file = ENV['old']
@@ -58,6 +58,11 @@ namespace :fymp do
   desc "Populate the postcode districts table"
   task :load_postcode_districts => :environment do
     load_postcode_districts
+  end
+
+  desc "Populate the manually added postcodes"
+  task :load_manual_postcodes => :environment do
+    load_manual_postcodes
   end
 
   desc "Populate the upmystreet lookup table"

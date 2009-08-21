@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090820095620) do
+ActiveRecord::Schema.define(:version => 20090820151314) do
 
   create_table "blacklisted_postcodes", :force => true do |t|
     t.string   "code",            :limit => 7
@@ -43,6 +43,16 @@ ActiveRecord::Schema.define(:version => 20090820095620) do
     t.text     "mail"
     t.datetime "created_on"
   end
+
+  create_table "manual_postcodes", :force => true do |t|
+    t.string   "code",            :limit => 7
+    t.integer  "constituency_id"
+    t.integer  "ons_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "manual_postcodes", ["code"], :name => "index_manual_postcodes_on_code"
 
   create_table "message_summaries", :force => true do |t|
     t.string   "constituency_name"

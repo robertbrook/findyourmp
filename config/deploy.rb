@@ -227,6 +227,7 @@ namespace :deploy do
       run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
     end
 
+    run "cd #{current_path}; rake fymp:load_manual_postcodes RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
   end
 
