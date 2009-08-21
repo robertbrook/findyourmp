@@ -12,6 +12,10 @@
     = link_to "Messages <strong>waiting on the server</strong> to be sent: #{number_with_delimiter(@waiting_to_be_sent_count)}", url_for(:controller=>'admin',:action=>'waiting_to_be_sent')
   - else
     There are no messages waiting on the server to be sent.
+    
+  -if @current_user.admin?
+    %p.text
+      = link_to 'Check mail server status', url_for(:controller=>'admin',:action=>'mailserver_status')
 
 %h3.padded_subheading Members database
 
@@ -41,12 +45,7 @@
 %p.text
   = link_to "Memory statistics", url_for(:controller=>'admin',:action=>'stats')
 
-- if @current_user.admin?
-
-  %h3.padded_subheading Mail server availability
-  
-  %p.text
-    = link_to 'Mail server status', url_for(:controller=>'admin',:action=>'mailserver_status')
+- if @current_user.admin?    
 
   %h3.padded_subheading Emergency shutdown
 
