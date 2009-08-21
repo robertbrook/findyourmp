@@ -25,4 +25,12 @@ class ManualPostcode < ActiveRecord::Base
       true
     end
   end
+  
+  def remove
+    postcode = Postcode.find_by_code
+    if postcode
+      postcode.delete
+    end
+    self.delete
+  end
 end

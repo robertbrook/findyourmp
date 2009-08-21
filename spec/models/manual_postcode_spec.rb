@@ -1,14 +1,16 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ManualPostcode do
+  before do
+    @code = 'BA140AB'
+    @constituency_id = 506
+    @ons_id = 111
+    
+    @postcode = mock_model(Postcode, :code => @code, :constituency_id => @constituency_id, :ons_id => @ons_id)
+  end  
   
   describe 'when asked to add a manual postcode' do
     before do
-      @code = 'BA140AB'
-      @constituency_id = 506
-      @ons_id = 111
-      
-      @postcode = mock_model(Postcode, :code => @code, :constituency_id => @constituency_id, :ons_id => @ons_id)
       @manual_postcode = mock_model(ManualPostcode, :code => @code, :constituency_id => @constituency_id, :ons_id => @ons_id)
     end
     
@@ -58,4 +60,25 @@ describe ManualPostcode do
     end
   end
   
+  describe 'when asked to remove a manual postcode' do
+    before do
+      @manual_postcode = ManualPostcode.new
+    end
+            
+    it 'should delete the Postcode entry if it exists' do
+      Postcode.should_receive(:find_by_code).and_return @postcode
+      @postcode.should_receive(:delete)
+      @manual_postcode.should_receive(:delete)
+       
+      @manual_postcode.remove
+    end
+     
+    it 'should still delete the Manual Postcode entry if there is no matching Postcode' do
+      Postcode.should_receive(:find_by_code).and_return nil
+      @postcode.should_not_receive(:delete)
+      @manual_postcode.should_receive(:delete)
+       
+      @manual_postcode.remove
+    end
+  end
 end
