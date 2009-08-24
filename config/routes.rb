@@ -33,13 +33,15 @@ ActionController::Routing::Routes.draw do |map|
   map.blacklisted_postcodes '/admin/blacklist', :controller => 'blacklisted_postcodes', :action => 'index'
   map.connect '/admin/blacklist/restore/:code', :controller => 'blacklisted_postcodes', :action => 'restore'
   map.connect '/admin/blacklist/new', :controller => 'blacklisted_postcodes', :action => 'new'
+  
+  map.manual_postcodes '/admin/manual_postcodes', :controller => 'manual_postcodes', :action => 'index'
+  map.connect '/admin/manual_postcodes/remove/:code', :controller => 'manual_postcodes', :action => 'remove'
+  map.connect '/admin/manual_postcodes/new', :controller => 'manual_postcodes', :action => 'new'
 
   map.api '/api', :controller => 'api', :action => 'index'
   map.connect 'api/search', :controller => 'api', :action => 'search'
   map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
   map.connect 'api/constituencies', :controller => 'api', :action => 'constituencies'
-  
-  map.manual_postcodes '/manual_postcodes', :controller => 'manual_postcodes', :action => 'index'
 
   map.connect '/commons/constituency/search/l/:q.html', :controller => 'search', :action => 'redir'
   map.connect '/commons/member/search/l/:q.html', :controller => 'search', :action => 'redir'

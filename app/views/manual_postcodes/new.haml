@@ -1,0 +1,29 @@
+-@title = 'Manually added postcodes'
+- @crumbtrail = link_to_admin_home
+
+-unless @constituencies
+  - form_tag('/admin/manual_postcodes/new', :method => :post) do
+    = text_field 'manual_postcodes', 'code'
+    = submit_tag 'Search'
+  %br
+
+%div.text
+  -if request.post?
+    -if @constituencies
+      %p 
+        Please choose a constituency for the postcode <code>
+        = flash[:code]
+        </code> from the dropdown:
+        
+      -form_for :manual_postcodes, :url => '/admin/manual_postcodes/new', :method => :post do |f|
+        = f.select('constituency', @constituencies.collect {|constituency| [constituency.name, constituency.id]})
+        = f.submit 'Create manual postcode'
+    -else
+      Sorry this postcode already exists in the database, please try again
+
+%p.text
+  = link_to 'Return to list', manual_postcodes_path
+
+%p.text
+  %br
+  = link_to 'Admin home', admin_path

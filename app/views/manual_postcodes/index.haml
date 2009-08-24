@@ -1,0 +1,21 @@
+-@title = 'Manually added postcodes'
+- @crumbtrail = link_to_admin_home
+
+%div.column_content
+  - unless @manual_list.size == 0
+    %table.text
+      -@manual_list.each do |postcode|
+        %tr
+          %td= postcode.code
+          %td= postcode.name
+          %td= link_to('remove', "/admin/manual_postcodes/remove/#{postcode.code}")
+  - else
+    %div.text The list is currently empty
+  %br
+          
+%div.text
+  = link_to('Add to list', '/admin/manual_postcodes/new')
+
+%p.text
+  %br
+  = link_to 'Admin home', admin_path

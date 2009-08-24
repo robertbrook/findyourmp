@@ -1,7 +1,10 @@
 class ManualPostcode < ActiveRecord::Base
-  
   validates_uniqueness_of :code
   validates_presence_of :ons_id
+  
+  belongs_to :constituency
+  
+  delegate :name, :to => :constituency
   
   class << self
     def add_manual_postcode code, constituency_id, ons_id
