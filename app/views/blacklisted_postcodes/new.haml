@@ -1,0 +1,25 @@
+-@title = 'Blacklisted postcodes'
+- @crumbtrail = link_to_admin_home
+
+- form_tag('/admin/blacklist/new', :method => :post) do
+  = text_field 'blacklist', 'code'
+  = submit_tag 'Search'
+%br
+
+%div.text
+  -if request.post?
+    -if @postcode
+      You are about to blacklist <code>
+      = @postcode.code
+      </code>, please click to confirm
+      -form_tag('/admin/blacklist/new', :method => :post) do
+        =submit_tag 'Confirm'
+    -else
+      Sorry this postcode does not exist, please try again
+
+%p.text
+  = link_to 'Return to list', blacklisted_postcodes_path
+
+%p.text
+  %br
+  = link_to 'Admin home', admin_path

@@ -25,10 +25,10 @@ describe Postcode do
     describe 'and the postcode has not already been blacklisted' do
       before do
         BlacklistedPostcode.should_receive(:find_by_code).with(@code).and_return nil
-        BlacklistedPostcode.should_receive(:create).and_return @blacklisted
       end
       
       it 'should create an entry in the blacklisted_postcodes table and delete the postcodes entry' do
+        BlacklistedPostcode.should_receive(:create).and_return true
         @blacklisted.stub!(:save).and_return true
         @postcode.should_receive(:delete).and_return true
 
@@ -36,7 +36,7 @@ describe Postcode do
       end
       
       it 'should not delete the postcode if there is a problem creating the blacklist entry' do
-        @blacklisted.stub!(:create).and_return false
+        BlacklistedPostcode.should_receive(:create).and_return false
         @postcode.should_not_receive(:delete)
         
         @postcode.blacklist

@@ -1,0 +1,21 @@
+-@title = 'Blacklisted postcodes'
+- @crumbtrail = link_to_admin_home
+
+%div.column_content
+  - unless @blacklist.size == 0
+    %table.text
+      -@blacklist.each do |postcode|
+        %tr
+          %td= postcode.code
+          %td= postcode.name
+          %td= link_to('restore', "/admin/blacklist/restore/#{postcode.code}")
+  - else
+    %div.text The blacklist is currently empty
+  %br
+          
+%div.text
+  = link_to('Add to blacklist', '/admin/blacklist/new')
+
+%p.text
+  %br
+  = link_to 'Admin home', admin_path
