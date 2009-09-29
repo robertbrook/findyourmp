@@ -147,38 +147,38 @@ class Constituency < ActiveRecord::Base
     %Q|"#{name}"\t"#{member_name}"\t"#{member_party}"\t"#{member_biography_url}"\t"#{member_email}"\t"#{member_website}"|
   end
 
-  def to_json
+  def to_json host, port
     if no_sitting_member?
-      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "No sitting member", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "#{object_url("json")}" } }|
+      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "No sitting member", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "#{object_url(host, port, "json")}" } }|
     else
-      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "#{member_name}", "member_party": "#{member_party}", "member_biography_url": "#{member_biography_url}", "member_website": "#{member_website}", "uri": "#{object_url("json")}" } }|
+      %Q|{"constituency": {"constituency_name": "#{name}", "member_name": "#{member_name}", "member_party": "#{member_party}", "member_biography_url": "#{member_biography_url}", "member_website": "#{member_website}", "uri": "#{object_url(host, port, "json")}" } }|
     end
   end
 
-  def to_text(format="txt")
+  def to_text host, port, format="txt"
     if no_sitting_member?
-      %Q|constituency_name: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: \nuri: #{object_url(format)}|
+      %Q|constituency_name: #{name}\nmember_name: No sitting member\nmember_party: \nmember_biography_url: \nmember_website: \nuri: #{object_url(host, port, format)}|
     else
-      %Q|constituency_name: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}\nuri: #{object_url(format)}|
+      %Q|constituency_name: #{name}\nmember_name: #{member_name}\nmember_party: #{member_party}\nmember_biography_url: #{member_biography_url}\nmember_website: #{member_website}\nuri: #{object_url(host, port, format)}|
     end
   end
 
-  def to_csv
+  def to_csv host, port
     headers = 'constituency_name,member_name,member_party,member_biography_url,member_website,uri'
-    values = to_csv_value
+    values = to_csv_value(host, port)
     "#{headers}\n#{values}\n"
   end
 
-  def to_csv_value
+  def to_csv_value host, port
     if no_sitting_member?
-      %Q|"#{name}","No sitting member","","","","#{object_url("csv")}"|
+      %Q|"#{name}","No sitting member","","","","#{object_url(host, port, format, "csv")}"|
     else
-      %Q|"#{name}","#{member_name}","#{member_party}","#{member_biography_url}","#{member_website}","#{object_url("csv")}"|
+      %Q|"#{name}","#{member_name}","#{member_party}","#{member_biography_url}","#{member_website}","#{object_url(host, port, "csv")}"|
     end
   end
 
-  def to_output_yaml
-    "---\n#{to_text("yaml")}"
+  def to_output_yaml host, port
+    "---\n#{to_text(host, port, "yaml")}"
   end
 
   def member_attribute_changed? attribute, constituency
@@ -196,7 +196,7 @@ class Constituency < ActiveRecord::Base
       end
     end
 
-    def object_url format=nil
-      url_for :host=>'localhost', :port=>'3000', :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+    def object_url host, port, format=nil
+      url_for :host=> host, :port=> port, :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
     end
 end

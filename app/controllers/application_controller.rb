@@ -76,16 +76,19 @@ class ApplicationController < ActionController::Base
     end
 
     def results_to_json constituencies, members, callback=nil
+      host = request.host
+      port = request.port
+      
       constituencies_json = ""
       constituencies.each do |constituency|
         constituencies_json += ", " unless constituencies_json == ""
-        constituencies_json += constituency.to_json[1..-2]
+        constituencies_json += constituency.to_json(host, port)[1..-2]
       end
 
       members_json = ""
       members.each do |member|
         members_json += ", " unless members_json == ""
-        members_json += member.to_json[1..-2]
+        members_json += member.to_json(host, port)[1..-2]
       end
 
       constituencies_results = %Q|"constituencies": {#{constituencies_json}}|
@@ -100,14 +103,17 @@ class ApplicationController < ActionController::Base
     end
 
     def results_to_text constituencies, members
+      host = request.host
+      port = request.port
+      
       results = ""
       constituencies.each do |constituency|
         results += "\n\n"
-        results += "  - " + constituency.to_text.gsub("\n", "\n\    ")
+        results += "  - " + constituency.to_text(host, port).gsub("\n", "\n\    ")
       end
       members.each do |member|
         results += "\n\n"
-        results += "  - " + member.to_text.gsub("\n", "\n    ")
+        results += "  - " + member.to_text(host, port).gsub("\n", "\n    ")
       end
       "constituencies:" + results
     end
@@ -117,15 +123,18 @@ class ApplicationController < ActionController::Base
     end
 
     def results_to_csv constituencies, members
-      headers = 'constituency_name,member_name,member_party,member_biography_url,member_website'
+      host = request.host
+      port = request.port
+
+      headers = 'constituency_name,member_name,member_party,member_biography_url,member_website, uri'
       values = ""
 
       constituencies.each do |constituency|
-        values += constituency.to_csv_value + "\n"
+        values += constituency.to_csv_value(host, port) + "\n"
       end
 
       members.each do |constituency|
-        values += constituency.to_csv_value + "\n"
+        values += constituency.to_csv_value(host, port) + "\n"
       end
 
       "#{headers}\n#{values}\n"

@@ -42,17 +42,17 @@ class Postcode < ActiveRecord::Base
     "#{code_prefix} #{suffix}"
   end
 
-  def to_json
+  def to_json host, port
     member = member_name ? %Q|, "member_name": "#{member_name.strip}"| : ''
-    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_name": "#{constituency_name}"#{member}, "uri": "#{object_url("json")}"} }|
+    %Q|{"postcode": {"code": "#{code_with_space}", "constituency_name": "#{constituency_name}"#{member}, "uri": "#{object_url(host, port, "json")}"} }|
   end
 
-  def to_text(format="txt")
+  def to_text host, port, format="txt"
     member = member_name ? %Q|\nmember_name: #{member_name.strip}| : ''
-    %Q|postcode: #{code_with_space}\nconstituency_name: #{constituency_name}#{member}\nuri: #{object_url(format)}\n|
+    %Q|postcode: #{code_with_space}\nconstituency_name: #{constituency_name}#{member}\nuri: #{object_url(host, port, format)}\n|
   end
 
-  def to_csv
+  def to_csv host, port
     headers = 'postcode,constituency_name'
     values = %Q|"#{code_with_space}","#{constituency_name}"|
     if member_name
@@ -60,12 +60,12 @@ class Postcode < ActiveRecord::Base
       values += %Q|,"#{member_name.strip}"|
     end
     headers += ",uri"
-    values += %Q|,"#{object_url("csv")}"|
+    values += %Q|,"#{object_url(host, port, "csv")}"|
     "#{headers}\n#{values}\n"
   end
 
-  def to_output_yaml
-    "---\n#{to_text("yaml")}"
+  def to_output_yaml host, port
+    "---\n#{to_text(host, port, "yaml")}"
   end
   
   def blacklist
@@ -95,7 +95,7 @@ class Postcode < ActiveRecord::Base
       end
     end
 
-    def object_url format=nil
-      url_for :host=>'localhost', :port=>'3000', :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
+    def object_url host, port, format=nil
+      url_for :host=> host, :port=> port, :controller=>"postcodes", :action=>"show", :postcode => code, :format => format, :only_path => false
     end
 end

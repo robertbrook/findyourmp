@@ -256,22 +256,22 @@ describe Constituency do
     end
     describe 'in json' do
       it 'should create json correctly' do
-        @constituency.to_json.should == %Q|{"constituency": {"constituency_name": "Islington West", "member_name": "Duncan McCloud", "member_party": "Plaid Cymru", "member_biography_url": "http://biographies.parliament.uk/parliament/default.asp?id=25476", "member_website": "http://mccloud.uk", "uri": "http://localhost:3000/constituencies/islington-west.json" } }|
+        @constituency.to_json('localhost', '3000').should == %Q|{"constituency": {"constituency_name": "Islington West", "member_name": "Duncan McCloud", "member_party": "Plaid Cymru", "member_biography_url": "http://biographies.parliament.uk/parliament/default.asp?id=25476", "member_website": "http://mccloud.uk", "uri": "http://localhost:3000/constituencies/islington-west.json" } }|
       end
     end
     describe 'in text' do
       it 'should create text correctly' do
-        @constituency.to_text.should == %Q|constituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
+        @constituency.to_text('localhost', '3000').should == %Q|constituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.txt|
       end
     end
     describe 'in csv' do
       it 'should create csv correctly' do
-        @constituency.to_csv.should == %Q|constituency_name,member_name,member_party,member_biography_url,member_website,uri\n"Islington West","Duncan McCloud","Plaid Cymru","http://biographies.parliament.uk/parliament/default.asp?id=25476","http://mccloud.uk","http://localhost:3000/constituencies/islington-west.csv"\n|
+        @constituency.to_csv('localhost', '3000').should == %Q|constituency_name,member_name,member_party,member_biography_url,member_website,uri\n"Islington West","Duncan McCloud","Plaid Cymru","http://biographies.parliament.uk/parliament/default.asp?id=25476","http://mccloud.uk","http://localhost:3000/constituencies/islington-west.csv"\n|
       end
     end
     describe 'in yaml' do
       it 'should create yaml correctly' do
-        @constituency.to_output_yaml.should == %Q|---\nconstituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
+        @constituency.to_output_yaml('localhost', '3000').should == %Q|---\nconstituency_name: Islington West\nmember_name: Duncan McCloud\nmember_party: Plaid Cymru\nmember_biography_url: http://biographies.parliament.uk/parliament/default.asp?id=25476\nmember_website: http://mccloud.uk\nuri: http://localhost:3000/constituencies/islington-west.yaml|
       end
     end
   end

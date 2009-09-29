@@ -123,6 +123,9 @@ class ApiController < ApplicationController
   private
 
     def show_postcode postcode, search_term, format
+      host = request.host
+      port = request.port
+      
       show_constituencies([postcode.constituency], nil, format)
 
       # @postcode = postcode
@@ -130,11 +133,11 @@ class ApiController < ApplicationController
       # respond_to do |format|
         # format.html { render :template => '/postcodes/show', :postcode => postcode }
         # format.xml  { render :template => '/postcodes/show', :postcode => postcode, :layout => false }
-        # format.json { render :json => postcode.to_json }
-        # format.js   { render :json => postcode.to_json }
-        # format.text { render :text => postcode.to_text }
-        # format.csv  { render :text => postcode.to_csv }
-        # format.yaml { render :text => postcode.to_output_yaml }
+        # format.json { render :json => postcode.to_json(host, port) }
+        # format.js   { render :json => postcode.to_json(host, port) }
+        # format.text { render :text => postcode.to_text(host, port) }
+        # format.csv  { render :text => postcode.to_csv(host, port) }
+        # format.yaml { render :text => postcode.to_output_yaml(host, port) }
       # end
     end
 
@@ -155,15 +158,17 @@ class ApiController < ApplicationController
 
     def show_constituency constituency, format
       @constituency = constituency
+      host = request.host
+      port = request.port
 
       respond_to do |format|
         format.html { render :template => '/constituencies/show' }
         format.xml  { render :template => '/constituencies/show.xml.haml', :layout => false }
-        format.json { render :json => constituency.to_json }
-        format.js   { render :json => constituency.to_json }
-        format.text { render :text => constituency.to_text }
-        format.csv  { render :text => constituency.to_csv }
-        format.yaml { render :text => constituency.to_output_yaml }
+        format.json { render :json => constituency.to_json(host, port) }
+        format.js   { render :json => constituency.to_json(host, port) }
+        format.text { render :text => constituency.to_text(host, port) }
+        format.csv  { render :text => constituency.to_csv(host, port) }
+        format.yaml { render :text => constituency.to_output_yaml(host, port) }
       end
     end
 

@@ -81,22 +81,22 @@ describe Postcode do
 
     describe 'in json' do
       it 'should create json correctly' do
-        @postcode.to_json.should == %Q|{"postcode": {"code": "N1 2SD", "constituency_name": "Islington South", "member_name": "Edmund Husserl", "uri": "http://localhost:3000/postcodes/N12SD.json"} }|
+        @postcode.to_json('localhost', '3000').should == %Q|{"postcode": {"code": "N1 2SD", "constituency_name": "Islington South", "member_name": "Edmund Husserl", "uri": "http://localhost:3000/postcodes/N12SD.json"} }|
       end
     end
     describe 'in text' do
       it 'should create text correctly' do
-        @postcode.to_text.should == %Q|postcode: N1 2SD\nconstituency_name: Islington South\nmember_name: Edmund Husserl\nuri: http://localhost:3000/postcodes/N12SD.txt\n|
+        @postcode.to_text('localhost', '3000').should == %Q|postcode: N1 2SD\nconstituency_name: Islington South\nmember_name: Edmund Husserl\nuri: http://localhost:3000/postcodes/N12SD.txt\n|
       end
     end
     describe 'in csv' do
       it 'should create csv correctly' do
-        @postcode.to_csv.should == %Q|postcode,constituency_name,member_name,uri\n"N1 2SD","Islington South","Edmund Husserl","http://localhost:3000/postcodes/N12SD.csv"\n|
+        @postcode.to_csv('localhost', '3000').should == %Q|postcode,constituency_name,member_name,uri\n"N1 2SD","Islington South","Edmund Husserl","http://localhost:3000/postcodes/N12SD.csv"\n|
       end
     end
     describe 'in yaml' do
       it 'should create yaml correctly' do
-        @postcode.to_output_yaml.should == %Q|---\npostcode: N1 2SD\nconstituency_name: Islington South\nmember_name: Edmund Husserl\nuri: http://localhost:3000/postcodes/N12SD.yaml\n|
+        @postcode.to_output_yaml('localhost', '3000').should == %Q|---\npostcode: N1 2SD\nconstituency_name: Islington South\nmember_name: Edmund Husserl\nuri: http://localhost:3000/postcodes/N12SD.yaml\n|
       end
     end
   end
