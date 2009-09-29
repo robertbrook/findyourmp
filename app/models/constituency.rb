@@ -197,6 +197,10 @@ class Constituency < ActiveRecord::Base
     end
 
     def object_url host, port, format=nil
-      url_for :host=> host, :port=> port, :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+      if port.to_s == "80"
+        url_for :host=> host, :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+      else
+        url_for :host=> host, :port=> port, :controller=>"constituencies", :action=>"show", :id => friendly_id, :format => format, :only_path => false
+      end
     end
 end
