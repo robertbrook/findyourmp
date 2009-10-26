@@ -8,6 +8,7 @@ class ManualPostcode < ActiveRecord::Base
   
   class << self
     def add_manual_postcode code, constituency_id, ons_id
+      code.gsub!(' ', "")
       postcode = Postcode.find_by_code code
       unless postcode 
         unless ManualPostcode.find_by_code code
@@ -30,7 +31,7 @@ class ManualPostcode < ActiveRecord::Base
   end
   
   def remove
-    postcode = Postcode.find_by_code
+    postcode = Postcode.find_by_code code
     if postcode
       postcode.delete
     end

@@ -110,12 +110,12 @@ describe AdminController do
       end
     end
     
-    describe 'when asked to shutdown' do
-      it 'should not redirect' do
-        get :shutdown
-        response.should_not redirect_to(admin_url)
-      end
-    end
+    #describe 'when asked to shutdown' do
+    #  it 'should not redirect' do
+    #    get :shutdown
+    #    response.should_not redirect_to(admin_url)
+    #  end
+    #end
     
     describe 'when asked for mail server status' do
       it 'should assign values to the view' do

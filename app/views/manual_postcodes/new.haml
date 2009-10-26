@@ -16,7 +16,9 @@
         </code> from the dropdown:
         
       -form_for :manual_postcodes, :url => '/admin/manual_postcodes/new', :method => :post do |f|
-        = f.select('constituency', @constituencies.collect {|constituency| [constituency.name, constituency.id]})
+        - options = @constituencies.collect {|constituency| [constituency.name, constituency.id]}
+        - options = options.sort_by{ |x| x[0] }
+        = f.select('constituency', options)
         = f.submit 'Create manual postcode'
     -else
       Sorry this postcode already exists in the database, please try again
