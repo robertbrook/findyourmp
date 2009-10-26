@@ -125,9 +125,13 @@ module FindYourMP::DataLoader
 
     to_delete.each do |postcode, ons_id|
       if post_code = Postcode.find_by_code(postcode.sub(' ',''))
-        post_code.destroy
-        count = count.next
-        log_duration count / total
+        if ManualPostcode.find_by_code(postcode.sub(' ',''))
+          puts "  (ignoring manually added postcode - #{postcode})"
+        else
+          post_code.destroy
+          count = count.next
+          log_duration count / total
+        end
       else
         warn "cannot delete postcode, as it was not in database: #{postcode}"
       end
@@ -143,10 +147,10 @@ module FindYourMP::DataLoader
           end
         end
 
-        # if BlacklistedPostcode.find_by_code postcode.sub(' ','')
-          # puts "  (deleting blacklisted postcode - #{postcode})"
-          # post_code.destroy
-        # else
+        if BlacklistedPostcode.find_by_code postcode.sub(' ','')
+          puts "  (deleting blacklisted postcode - #{postcode})"
+          post_code.destroy
+        else
           post_code.ons_id = ons_id.strip.to_i
           if constituency
             post_code.constituency_id = constituency.id
@@ -154,7 +158,7 @@ module FindYourMP::DataLoader
             post_code.constituency_id = nil
           end
           post_code.save
-        # end
+        end
 
         count = count.next
         log_duration count / total
@@ -167,8 +171,8 @@ module FindYourMP::DataLoader
       begin
         if Postcode.exists?(:code => postcode.sub(' ',''))
           warn 'exists ' + postcode
-        # elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
-          # puts "  (ignoring blacklisted postcode - #{postcode})"
+        elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
+          puts "  (ignoring blacklisted postcode - #{postcode})"
         else
           Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
         end
