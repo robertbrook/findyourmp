@@ -19,12 +19,18 @@ module FindYourMP::DataLoader
     parse_postcodes new_file, new_postcodes
 
     diff_file = "#{DATA_DIR}/diff_postcodes.txt"
+    if File.exist?(diff_file)
+      cmd = "mv #{diff_file} #{diff_file}.#{Time.now.to_i.to_s}"
+      puts cmd
+      `#{cmd}`
+    end
+
     cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
-    `#{cmd}` unless File.exist?(diff_file)
+    `#{cmd}`
   end
 
-  def update_postcodes
+  def determine_postcode_changes
     diff_file = "#{DATA_DIR}/diff_postcodes.txt"
 
     if file_not_found(diff_file)
@@ -70,6 +76,11 @@ module FindYourMP::DataLoader
     end
     puts 'all constituencies found'
 
+    return [to_delete, to_update, to_create]
+  end
+
+  def update_postcodes
+    to_delete, to_update, to_create = determine_postcode_changes
     # puts "Update database? y/n"
     # answer = STDIN.gets
     # if answer.strip == 'y'
@@ -81,6 +92,28 @@ module FindYourMP::DataLoader
 
   def ignore_ons_id?(ons_id)
     ons_id == '800' || ons_id == '900'
+  end
+
+  def analyze_postcode_update
+    to_delete, to_update, to_create = determine_postcode_changes
+
+    already_deleted = []
+    to_delete.each do |postcode, ons_id|
+      already_deleted << [postcode, ons_id] unless Postcode.exists?(:code => postcode.sub(' ',''))
+    end
+    puts "TO DELETE, BUT ALREADY DELETED: #{already_deleted.size}"
+
+    missing_updates = []
+    to_update.each do |postcode, ons_id|
+      missing_updates << [postcode, ons_id] unless Postcode.exists?(:code => postcode.sub(' ',''))
+    end
+    puts "TO UPDATE, BUT MISSING FROM DB: #{missing_updates.size}"
+
+    already_there = []
+    to_create.each do |postcode, ons_id|
+      already_there << [postcode, ons_id] if Postcode.exists?(:code => postcode.sub(' ',''))
+    end
+    puts "TO CREATE, BUT ALREADY IN DB: #{already_there.size}"
   end
 
   def do_postcode_update to_delete, to_update, to_create
@@ -96,31 +129,46 @@ module FindYourMP::DataLoader
         count = count.next
         log_duration count / total
       else
-        raise "cannot delete postcode, as it was not in database: #{postcode}"
+        warn "cannot delete postcode, as it was not in database: #{postcode}"
       end
     end
     to_update.each do |postcode, ons_id|
-      if (post_code = Postcode.find_by_code(postcode.sub(' ',''))) && (ignore_ons_id?(ons_id) || constituency = Constituency.find_by_ons_id(ons_id))
-        post_code.ons_id = ons_id.strip.to_i
-        if constituency
-          post_code.constituency_id = constituency.id
-        else
-          post_code.constituency_id = nil
+      post_code = Postcode.find_by_code(postcode.sub(' ',''))
+
+      if post_code
+        unless ignore_ons_id?(ons_id)
+          constituency = Constituency.find_by_ons_id(ons_id)
+          if constituency.nil?
+            raise "cannot update postcode, as constituency was not in database: #{postcode} #{ons_id}"
+          end
         end
-        post_code.save
+
+        # if BlacklistedPostcode.find_by_code postcode.sub(' ','')
+          # puts "  (deleting blacklisted postcode - #{postcode})"
+          # post_code.destroy
+        # else
+          post_code.ons_id = ons_id.strip.to_i
+          if constituency
+            post_code.constituency_id = constituency.id
+          else
+            post_code.constituency_id = nil
+          end
+          post_code.save
+        # end
+
         count = count.next
         log_duration count / total
       else
-        raise "cannot delete postcode, as it was not in database: #{postcode} #{ons_id}"
+        raise "cannot update postcode, as it was not in database: #{postcode} #{ons_id}"
       end
     end
 
     to_create.each do |postcode, ons_id|
       begin
         if Postcode.exists?(:code => postcode.sub(' ',''))
-          raise 'exists ' + postcode
-        elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
-          puts "  (ignoring blacklisted postcode - #{postcode})"
+          warn 'exists ' + postcode
+        # elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
+          # puts "  (ignoring blacklisted postcode - #{postcode})"
         else
           Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
         end
@@ -256,7 +304,7 @@ module FindYourMP::DataLoader
       PostcodeDistrict.create!(district.attributes)
     end
   end
-  
+
   def load_manual_postcodes
     manual_codes = ManualPostcode.all
     manual_codes.each do |manual_code|

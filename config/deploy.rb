@@ -339,7 +339,7 @@ namespace :deploy do
     end
   end
 
-  desc "Perform rake tasks"
+  desc "Update postcodes"
   task :update_postcodes, :roles => :app do
     file = "data/diff_postcodes.txt"
     if File.exist?(file)
@@ -353,6 +353,19 @@ namespace :deploy do
     end
   end
 
+  desc "Analyze postcodes"
+  task :analyze_postcode_update, :roles => :app do
+    file = "data/diff_postcodes.txt"
+    if File.exist?(file)
+      data = File.read(file)
+      put data, "#{current_path}/data/diff_postcodes.txt", :mode => 0664
+      run "cd #{current_path}; rake fymp:analyze_postcode_update RAILS_ENV='production'"
+    else
+      puts 'USAGE EXAMPLE:'
+      puts 'rake fymp:diff_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+      puts 'cap deploy:analyze_postcode_update'
+    end
+  end
 end
 
 before 'deploy:update_code', 'deploy:check_server', 'deploy:check_folder_setup'
