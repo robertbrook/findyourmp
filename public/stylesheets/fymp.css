@@ -80,7 +80,7 @@ label.checkbox_label {
 .row_item {
   padding-top: 0.7em;
   clear: both;
-  height: 25px;
+  min-height: 25px;
 }
 .row_label {
   float: left;
