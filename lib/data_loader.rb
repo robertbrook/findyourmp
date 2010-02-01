@@ -12,6 +12,14 @@ module FindYourMP::DataLoader
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
   def diff_postcodes old_file, new_file
+    unless File.exist?(old_file)
+      raise "#{old_file} not found"
+    end
+    
+    unless File.exist?(new_file)
+      raise "#{new_file} not found"
+    end
+    
     old_postcodes = "#{DATA_DIR}/old_postcodes.txt"
     new_postcodes = "#{DATA_DIR}/new_postcodes.txt"
 
