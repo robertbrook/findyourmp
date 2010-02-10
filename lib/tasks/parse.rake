@@ -2,10 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../data_loader')
 require File.expand_path(File.dirname(__FILE__) + '/../commons_member_biographies')
 require File.expand_path(File.dirname(__FILE__) + '/../cache_writer')
 require File.expand_path(File.dirname(__FILE__) + '/../constituency_upmystreet_links')
+require File.expand_path(File.dirname(__FILE__) + '/../boundary_changes')
 
 namespace :fymp do
   include FindYourMP::DataLoader
   include FindYourMP::CacheWriter
+  include FindYourMP::BoundaryChanges
+
+  desc "Create new_constituencies file for boundary changes"
+  task :create_new_constituencies_file => :environment do
+    create_new_constituencies_file
+  end
+
+
 
   desc "Populate data for constituencies in DB"
   task :constituencies => :environment do
