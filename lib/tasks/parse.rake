@@ -38,7 +38,19 @@ namespace :fymp do
     if source_file
       parse_postcodes source_file
     else
-      puts 'USAGE: rake fymp:parse source=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+      puts 'USAGE: rake fymp:parse_postcodes source=data/NSPDF_MAY_2009_UK_1M_FP.txt'
+    end
+  end
+
+  desc "Parse data file for postcode and constituency ID *only*"
+  task :parse_new_postcodes do
+    old_file = ENV['oldfile']
+    new_file = ENV['newfile']
+    output_file = ENV['output']
+    if old_file && new_file
+      parse_new_postcodes old_file, new_file, output_file
+    else
+      puts 'USAGE: rake fymp:parse_new_postcodes oldfile=data/postcodes.txt newfile=data/pcd_pcon_aug_2009_uk_lu/pcd_pcon_aug_2009_uk_lu.txt output=data/new_postcodes.txt'
     end
   end
 
