@@ -1,0 +1,12 @@
+pygments: true
+permalink: ./:title.html
+exclude: 
+  -data
+  -coverage
+  -log
+  -db
+  -test
+  -vendor
+  -public
+  -config
+  -*.pem

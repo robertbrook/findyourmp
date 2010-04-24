@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ page.title }} | sandbox</title>
+    <link rel="stylesheet" href="css/screen.css">
+  </head>
+  <body>
+    <div id="container">
+        <a href="index.html" class="home_link">Find Your MP</a>
+      <div id="main_panel">
+        <div id="banner">
+          <h1>{{ page.title }}</h1>
+          <div class="byline">( {{ page.author }} )</div>
+        </div>
+        {{ content }}
+      </div>
+    </div>
+  </body>
+</html>

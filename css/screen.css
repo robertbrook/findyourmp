@@ -1,0 +1,55 @@
+body {
+	font-family: lucida grande, Helvetica, Verdana, Arial, sans-serif;
+	font-size: 14pt;
+}
+
+h1 {
+	font-family: georgia, lucida grande, Helvetica, Verdana, Arial, sans-serif;
+	font-size: 1.5em;
+	text-align: center;
+	width: auto;
+}
+
+div.byline {
+  font-family: georgia, lucida grande, Helvetica, Verdana, Arial, sans-serif;
+  font-size: 0.9em;
+  color: darkgrey;
+  text-align: center;
+  margin-top: -1.2em;
+  width: auto;
+}
+
+pre, code { 
+	border: 1px solid rgb(222, 222, 222);
+	background-color: rgb(248, 248, 255);
+	color: rgb(68, 68, 68);
+	line-height: 1.3em;
+	margin: 1em 0px;
+	padding: 0.5em;
+	overflow: auto;
+	font-size: 0.9em;
+}
+
+pre code {border: none; padding: 0; margin: 0; font-size: 1em; line-height: 1em;}
+
+#container {
+text-align: center;
+}
+
+a.home_link {
+	font-size: 0.9em;
+	font-weight: bold;
+	color: silver;
+}
+
+a.home_link:hover {
+	background-color: black;
+	text-decoration: none;
+}
+
+#main_panel {
+	width: 550px;
+	margin: 0 auto;
+	text-align: left;
+	font-size: 0.8em;
+}
