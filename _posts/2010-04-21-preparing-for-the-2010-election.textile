@@ -68,7 +68,7 @@ bc. rake fymp:parse_postcodes source=data/NSPDF_AUG_2009_UK_1M_FP.txt
 
 9. Run a task to compare the postcodes.txt file with the new data to produce a postcodes.txt file containing only valid postcodes against the new ONS constituency ids
 
-bc. rake fymp:parse_new_postcodes old_file=data/postcodes.txt newfile=data/pcd_pcon_aug_2009_uk_lu.txt output=data/new_postcodes.txt
+bc. rake fymp:parse_new_postcodes oldfile=data/postcodes.txt newfile=data/pcd_pcon_aug_2009_uk_lu/pcd_pcon_aug_2009_uk_lu.txt output=data/new_postcodes.txt
 
 10. Once we have a valid file, we need to rename the files so that they can be used in the next step of the process
 
