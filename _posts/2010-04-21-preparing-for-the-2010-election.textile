@@ -72,8 +72,8 @@ bc. rake fymp:parse_new_postcodes old_file=data/postcodes.txt newfile=data/pcd_p
 
 10. Once we have a valid file, we need to rename the files so that they can be used in the next step of the process
 
-bc. mv postcodes.txt postcodes_aug09.txt
-cp new_postcodes.txt postcodes.txt
+bc. mv data/postcodes.txt data/postcodes_aug09.txt
+cp data/new_postcodes.txt data/postcodes.txt
 
 At this stage, we can run one of the regular import tasks
 
