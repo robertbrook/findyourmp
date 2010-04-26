@@ -7,7 +7,8 @@ module FindYourMP::BoundaryChanges
   
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + '/../data')
 
-  BOUNDARY_FILE = "#{DATA_DIR}/new_boundary_data.txt"
+  # RB hacked to point to local recent file
+  BOUNDARY_FILE = "#{DATA_DIR}/pcd_pcon_aug_2009_uk_lu.txt"
   
   def create_new_constituencies_file
     tab = "\t"

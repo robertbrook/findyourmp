@@ -14,8 +14,6 @@ namespace :fymp do
     create_new_constituencies_file
   end
 
-
-
   desc "Populate data for constituencies in DB"
   task :constituencies => :environment do
     load_constituencies
