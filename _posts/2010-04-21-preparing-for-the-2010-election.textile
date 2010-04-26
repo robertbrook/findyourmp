@@ -6,43 +6,77 @@ author: Liz Conlan
 
 Due to the extensive constituency changes ahead of the 2010 election, the database will have to be updated outside the usual schedule. Also the new data has not been supplied in the usual format so we are having to write one-off import routines to tidy up the database ahead of May 6th.
 
-1. Perform db migrations to change ons_id from an int to a 3 varchar string
+1. Check out the "experimental" branch from github. If you already have it then:
+
+bc. git checkout experimental
+git pull
+
+or if this is first time use then
+
+bc. git fetch origin experimental:experimental
+
+2. Perform db migrations to change ons_id from an int to a 3 varchar string
 
 bc. rake db:migrate
 
-2. Patch supplied data file to remove duplicate constituencies
+3. Patch supplied data file to remove duplicate constituencies: 
 
-3. Generate a new constituencies file
+* Open data/pcd_pcon_aug_2009_uk_lu.txt (preferably in a lightweight editor such as TextEdit)
+* Search for NE687SZ
+* Replace the string 025 with A25
+* Search for PO332HF
+* Replace the string 031 with C35
+* Save and quit
+
+4. Generate a new constituencies file
 
 bc. rake fymp:create_new_constituencies_file
 
-4. Patch new constituencies file to correct truncated constituency names
+5. Patch new constituencies file to correct truncated constituency names:
 
-5. Drop current postcodes and constituency data
+* Open data/new_constituencies.txt
+* Search for Carmarthen West and South Pembrokeshire
+* Replace with Carmarthen West and Pembrokeshire South
+* Search for Cumbernauld, Kilsyth and Kirkintilloch
+* Replace with Cumbernauld, Kilsyth and Kirkintilloch East
+* Search for Dumfriesshire, Clydesdale and Tweeddal
+* Replace with Dumfriesshire, Clydesdale and Tweeddale
+* Search for East Kilbride, Strathaven and Lesmahag
+* Replace with East Kilbride, Strathaven and Lesmahagow
+* Search for Fermanagh & South Tyrone
+* Replace with Fermanagh and South Tyrone
+* Search for Inverness, Nairn, Badenoch and Straths
+* Replace with Inverness, Nairn, Badenoch and Strathspey
+* Search for Newry & Armagh
+* Replace with Newry and Armagh
 
-bc. truncate table postcodes;
+6. Drop current postcodes and constituency data
+
+bc. mysql -uroot -p
+truncate table postcodes;
 truncate table constituencies;
+exit
 
-6. Import new constituencies and check that there are 650 of them
+7. Import new constituencies and check that there are 650 of them
 
 bc. rake fymp:constituencies
 
-7. Generate a postcodes.txt file based on the August 2009 data
+8. Generate a postcodes.txt file based on the August 2009 data
 
-bc. rake fymp:parse_postcodes source=data/NSPDC_AUG_2009_UK_1M.txt
+bc. rake fymp:parse_postcodes source=data/NSPDF_AUG_2009_UK_1M_FP.txt
 
-8. Run a task to compare the postcodes.txt file with the new data to produce a postcodes.txt file containing only valid postcodes against the new ONS constituency ids
+9. Run a task to compare the postcodes.txt file with the new data to produce a postcodes.txt file containing only valid postcodes against the new ONS constituency ids
 
 bc. rake fymp:parse_new_postcodes old_file=data/postcodes.txt newfile=data/pcd_pcon_aug_2009_uk_lu.txt output=data/new_postcodes.txt
 
-9. Once we have a valid file, we need to rename the files so that they can be used in the next step of the process
+10. Once we have a valid file, we need to rename the files so that they can be used in the next step of the process
 
 bc. mv postcodes.txt postcodes_aug09.txt
 cp new_postcodes.txt postcodes.txt
 
 At this stage, we can run one of the regular import tasks
 
-10. Import our new postcode.txt file into the database - warning this may take several hours
+11. Import our new postcode.txt file into the database - warning this may take several hours
 
 bc. rake fymp:populate
 
