@@ -81,4 +81,8 @@ At this stage, we can run one of the regular import tasks
 
 bc. rake fymp:populate
 
+12. Setup the postcode district information
+
+bc. rake fymp:load_postcode_districts
+
 (As the system wasn't designed to run against a constituency table with null member data, we are anticipating that we may also need to manually alter the constituencies table - or change the default values - to set some of the fields to blank strings instead of null with member_visible set to 0 to make sure everything works properly through all areas of the site)
