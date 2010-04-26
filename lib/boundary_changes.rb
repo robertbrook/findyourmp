@@ -54,4 +54,45 @@ module FindYourMP::BoundaryChanges
     end
     log_duration
   end
+  
+  
+  # used to compare a postcodes.txt file generated from the August '09 data
+  # with the pcd_pcon_aug_2009_uk_lu.txt file to create a new postcodes.txt
+  # file (in the example given, saved as new_postcodes.txt)
+  def parse_new_postcodes original_file, new_file, output_file=POSTCODE_FILE
+    return if file_not_found(original_file)
+    return if file_not_found(new_file)
+    start_timing
+    
+    blank_date = '      '
+    blank_code = '   '
+    new_line = "\n"
+    space = ' '
+    post_codes = []
+
+    new_data = File.open(new_file)
+    
+    IO.foreach(original_file) do |line|
+      #ignore blank lines, Guernsey and Isle of Man postcodes
+      unless line == "" || line[8..10] == "800" || line[8..10] == "900"
+        orig_post_code = line[0..6]
+        post_code = ""
+        while (post_code != orig_post_code)
+          data = new_data.readline
+          post_code = data[0..6]
+          constituency_code = data[24..26]
+        end
+        
+        post_codes << post_code << space << constituency_code
+        post_codes << new_line
+      end
+    end
+    log_duration
+
+    start_timing
+    File.open(output_file,'w') do |file|
+      file.write(post_codes.join(''))
+    end
+    log_duration
+  end
 end

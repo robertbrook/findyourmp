@@ -7,7 +7,7 @@ module FindYourMP::DataLoader
 
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + '/../data')
   MEMBER_FILE = "#{DATA_DIR}/FYMP_all.txt"
-  CONSTITUENCY_FILE = "#{DATA_DIR}/constituencies.txt"
+  CONSTITUENCY_FILE = "#{DATA_DIR}/new_constituencies.txt"
 
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 

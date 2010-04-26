@@ -9,12 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090820151314) do
+ActiveRecord::Schema.define(:version => 20100412150417) do
 
   create_table "blacklisted_postcodes", :force => true do |t|
     t.string   "code",            :limit => 7
     t.integer  "constituency_id"
-    t.integer  "ons_id"
+    t.string   "ons_id",          :limit => 3
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20090820151314) do
     t.boolean  "member_visible"
     t.string   "member_website"
     t.string   "member_requested_contact_url"
-    t.integer  "ons_id"
+    t.string   "ons_id",                       :limit => 3
     t.datetime "updated_at"
   end
 
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20090820151314) do
   create_table "manual_postcodes", :force => true do |t|
     t.string   "code",            :limit => 7
     t.integer  "constituency_id"
-    t.integer  "ons_id"
+    t.string   "ons_id",          :limit => 3
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(:version => 20090820151314) do
   create_table "postcodes", :force => true do |t|
     t.string  "code",            :limit => 7
     t.integer "constituency_id"
-    t.integer "ons_id"
+    t.string  "ons_id",          :limit => 3
   end
 
   add_index "postcodes", ["code"], :name => "index_postcodes_on_code"
