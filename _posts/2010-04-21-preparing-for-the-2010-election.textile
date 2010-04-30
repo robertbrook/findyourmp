@@ -88,6 +88,6 @@ bc. rake fymp:populate
 bc. rake fymp:load_postcode_districts
 rake friendly_id:make_slugs MODEL=Constituency
 
-*To ensure that the admin facility works properly, replace the constituency.rb model file with the one from the "experimental" file when going live as there is one method which assumes that ons_id is an integer*
+*To ensure that the admin facility works properly, replace the constituency.rb model file with the one from the "experimental" branch when going live as there is one method which assumes that ons_id is an integer*
 
 
