@@ -51,11 +51,13 @@ bc. rake fymp:create_new_constituencies_file
 * Search for Newry & Armagh
 * Replace with Newry and Armagh
 
-6. Drop current postcodes and constituency data
+6. Drop current postcodes and constituency data and, as they were based on the old data, the manually created and blacklisted postcodes as well
 
 bc. mysql -uroot -p
 truncate table postcodes;
 truncate table constituencies;
+truncate table blacklisted_postcodes;
+truncate table manual_postcodes;
 exit
 
 7. Import new constituencies and check that there are 650 of them
@@ -81,8 +83,11 @@ At this stage, we can run one of the regular import tasks
 
 bc. rake fymp:populate
 
-12. Setup the postcode district information
+12. Setup the postcode district information and regenerate the friendly ids
 
 bc. rake fymp:load_postcode_districts
+rake friendly_id:make_slugs MODEL=Constituency
 
-(As the system wasn't designed to run against a constituency table with null member data, we are anticipating that we may also need to manually alter the constituencies table - or change the default values - to set some of the fields to blank strings instead of null with member_visible set to 0 to make sure everything works properly through all areas of the site)
+*To ensure that the admin facility works properly, replace the constituency.rb model file with the one from the "experimental" file when going live as there is one method which assumes that ons_id is an integer*
+
+
