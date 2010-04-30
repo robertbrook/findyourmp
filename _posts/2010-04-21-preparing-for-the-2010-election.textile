@@ -9,7 +9,7 @@ Due to the extensive constituency changes ahead of the 2010 election, the databa
 1. Check out the "experimental" branch from github. If you already have it then:
 
 bc. git checkout experimental
-git pull
+git pull origin experimental
 
 or if this is first time use then
 
