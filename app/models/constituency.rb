@@ -130,9 +130,9 @@ class Constituency < ActiveRecord::Base
   def code
     if ons_id.nil?
       ''
-    elsif ons_id < 10
+    elsif ons_id.length == 1
       "00#{ons_id}"
-    elsif ons_id < 100
+    elsif ons_id.length == 2
       "0#{ons_id}"
     else
       ons_id.to_s
