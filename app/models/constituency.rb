@@ -15,6 +15,9 @@ class Constituency < ActiveRecord::Base
     end
 
     def remove_quotes text
+      unless text
+        text = ""
+      end
       text.strip[/^"?([^"]+)"?$/,1]
     end
 
