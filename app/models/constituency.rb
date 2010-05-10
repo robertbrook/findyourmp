@@ -96,7 +96,6 @@ class Constituency < ActiveRecord::Base
     end
 
     def find_by_constituency_name name
-      name.gsub!('St ', 'St. ')
       name.gsub!(' - ','-')
       if name[/^(.+), City of$/]
         name = "City of #{$1}"
@@ -115,6 +114,11 @@ class Constituency < ActiveRecord::Base
         name.gsub!('ô','o')
         name.gsub!('and#244;', 'o')
         constituency = find_by_name(name)
+        
+        unless constituency
+          name.gsub!('St ', 'St. ')
+          constituency = find_by_name(name)
+        end
       end
 
       unless constituency
