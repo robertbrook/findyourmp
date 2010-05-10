@@ -19,19 +19,5 @@
         .row_value
           = link_to h(@constituency.member_website.sub('http://','').chomp('/')), @constituency.member_website
     .row_item
-      .row_label= @constituency.member_requested_contact_url? ? "Contact" : "Email"
-      .row_value
-        - if @constituency.member_requested_contact_url?
-          = link_to "Contact #{member_name}", @constituency.member_requested_contact_url
-        - elsif @constituency.member_email?
-          = %Q|#{link_to("Email #{member_name}", new_constituency_message_url(@constituency) )}|
-        - else
-          = "#{member_name} cannot be contacted by email"
-          %br
-          from this website.
-    .row_item
-      .row_label Telephone
-      .row_value= "House of Commons Switchboard: 020 7219 3000. Please ask for the office of #{member_name}."
-    .row_item
-      .row_label Letter
+      .row_label Address
       .row_value= "#{member_name}, House of Commons, London SW1A 0AA"
