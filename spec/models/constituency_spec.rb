@@ -152,11 +152,10 @@ describe Constituency do
     end
 
     describe 'and search term is St Ives' do
-      it 'should search for St. Ives' do
-        term = 'St Ives'
-        expected = 'St. Ives'
-        Constituency.should_receive(:find_by_name).with(expected).and_return @match_st
-        Constituency.find_by_constituency_name(term).name.should == expected
+      it 'should search for St. Ives if St Ives produces no results' do
+        Constituency.should_receive(:find_by_name).with("St Ives").exactly(2).times.and_return nil
+        Constituency.should_receive(:find_by_name).with("St. Ives").and_return @match_st
+        Constituency.find_by_constituency_name("St Ives").should == @match_st
       end
     end
 
@@ -341,7 +340,7 @@ describe Constituency do
   end
 
   describe 'id is 1' do
-    before do; @constituency.stub!(:ons_id).and_return 1; end
+    before do; @constituency.stub!(:ons_id).and_return "1"; end
     describe 'when asked for code' do
       it 'should return 001' do
         @constituency.code.should == '001'
@@ -350,7 +349,7 @@ describe Constituency do
   end
 
   describe 'id is 10' do
-    before do; @constituency.stub!(:ons_id).and_return 10; end
+    before do; @constituency.stub!(:ons_id).and_return "10"; end
     describe 'when asked for code' do
       it 'should return 010' do
         @constituency.code.should == '010'
@@ -359,7 +358,7 @@ describe Constituency do
   end
 
   describe 'id is 100' do
-    before do; @constituency.stub!(:ons_id).and_return 100; end
+    before do; @constituency.stub!(:ons_id).and_return "100"; end
     describe 'when asked for code' do
       it 'should return 100' do
         @constituency.code.should == '100'

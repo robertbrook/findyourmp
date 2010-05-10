@@ -114,11 +114,11 @@ class Constituency < ActiveRecord::Base
         name.gsub!('ô','o')
         name.gsub!('and#244;', 'o')
         constituency = find_by_name(name)
-        
-        unless constituency
-          name.gsub!('St ', 'St. ')
-          constituency = find_by_name(name)
-        end
+      end
+
+      unless constituency
+        name.gsub!('St ', 'St. ')
+        constituency = find_by_name(name)
       end
 
       unless constituency
