@@ -31,7 +31,6 @@ Feature: Find MP from constituency name
     Then I should see "Aberdeen North"
     And I should not see "Aberdeen South"
     And I should see "Frank Doran"
-    And I should see "Email Frank Doran"
     And I should not see "Edit"
 
   Scenario: Enter a valid constituency with no sitting MP
