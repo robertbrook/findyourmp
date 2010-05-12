@@ -1,0 +1,108 @@
+/* ie7.css */
+/***********/
+
+#content{
+	margin-bottom:0;
+}
+
+FIELDSET.site-search INPUT{
+	margin-top:1px;
+	padding:2px 0;
+}
+
+#calendar FIELDSET INPUT{
+	padding:2px 0 1px 0;
+}
+
+#contact-us DIV.submission INPUT{
+	padding:0 2px;
+}
+
+#contact-us FIELDSET{
+	background:url(/assets/images/grey-repeater-line.gif) repeat-x left bottom;
+	border:0;
+}
+
+#contact-us FIELDSET.last{
+	background:none;
+}
+
+FIELDSET.site-search OL INPUT{
+	margin-top:0;
+}
+
+.tabs-injected UL#bills-list.square-bullets{
+	margin-bottom:-10px;
+}
+
+.alternate-rows LI.first{
+	margin-bottom:-3px;
+}
+
+#advanced-search FIELDSET LI LI{
+	padding-top:0;
+}
+
+#advanced-search FIELDSET LI LI LABEL{
+	width:700px;
+}
+
+.rte OL LI{
+	margin-left:24px;
+}
+
+/* Popup styles */
+/****************/
+
+.main DIV.dp-popup{
+	width:295px;
+}
+
+/* Committees */
+/**************/
+
+.committees #content .publications-and-records H4{
+	padding:3px 8px 5px 8px;
+}
+
+/* Members, Lords and Offices */
+/******************************/
+
+.mlo #members-filter-listing FIELDSET INPUT{
+	padding-left:5px;
+	padding-right:5px;
+}
+
+/* Works of Art */
+/****************/
+
+.woa .two-column-with-wide-left-content #content-small .new-to-the-collection{	
+	background-position:left 25px;
+}
+
+.woa .two-column-with-wide-left-content #content-small .new-to-the-collection .inner{
+	height:78px;
+}
+
+.highlights-images{
+	margin-bottom:15px;
+}
+
+/* Education */
+/**************/
+
+.education #content-small{
+	border:solid 1px #f0f0f0;
+}
+
+.education #content .rte .left{
+	margin-bottom:0;
+}
+
+#content .tabs-injected .inner{
+	margin-top:-1px;
+}
+
+#content .tabs-injected H4.active{
+	border-bottom:solid 1px #fff;
+}

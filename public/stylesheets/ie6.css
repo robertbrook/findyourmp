@@ -1,0 +1,590 @@
+/* ie6.css */
+/***********/
+
+P.pending{
+	height:50px;
+}
+
+P.pending STRONG{
+	height:35px;
+}
+
+A.document SPAN{
+	display:inline-block;
+	height:1.1em;
+}
+
+#content A.document SPAN IMG{
+	top:2px;
+}
+
+#content A.document IMG{
+	padding-bottom:0;
+}
+
+#secondary-navigation P.pending STRONG{
+	height:50px;
+}
+
+#content.two-column-with-navigation{	
+	width:790px;
+}
+
+.search-listings{
+	width:730px;
+}
+
+.three-column{
+	width:790px;
+}
+
+.two-column-with-panel{
+	float:none;
+}
+
+#header FIELDSET.site-search OL{
+	float:left;
+	margin-left:104px;
+}
+
+#header FIELDSET.site-search INPUT{
+	margin-top:1px;
+	padding:2px 2px 2px 2px;
+}
+
+#header FIELDSET.site-search OL INPUT{
+	margin-top:0;
+}
+
+#content IMG{
+	margin-bottom:0;
+	padding-bottom:15px;
+}
+
+#content .square-bullets EM{
+	height:14px;
+}
+
+.alternate-rows LI{
+	padding:5px 10px;
+}
+
+.alternate-rows LI.first{
+	margin-bottom:-3px;
+}
+
+#landing-basic .section-promotion .inner{
+	height:150px;
+}
+
+#sub-landing-basic .section-promotion P,
+#sub-landing-advanced .section-promotion P{
+	margin-bottom:0;
+}
+
+#landing-advanced .thumbnail-image-list{
+	margin-left:-45px;
+}
+
+.homepage #landing-advanced .section-promotion{
+	margin-bottom:15px;
+}
+
+#sub-landing-advanced .section-promotion .inner{
+	height:70px;
+}
+
+#landing-basic .no-image .inner,
+#sub-landing-advanced .no-image .inner{
+	padding-left:0;
+}
+
+#passage-of-a-bill .house LI.lords,
+#passage-of-a-bill .house LI.commons{
+	padding-left:2px;
+	width:168px;
+}
+
+#passage-of-a-bill .house{
+	border:solid 1px #fff;
+}
+
+#content-small .collections-thumbnails LI IMG{
+	padding-bottom:0;
+}
+
+#content-small .collections-thumbnails LI P{
+	height:50px;
+}
+
+#parliament-uk #panel .no-images UL LI P{
+	margin-bottom:0;
+}
+
+.thumbnail-image-list  UL LI,
+#secondary-navigation.search .local-module .thumbnail-image-list UL LI{
+	height:70px;
+}
+
+#content-small .collections-thumbnails LI P{
+	height:50px;
+}
+
+.arrows-list LI{
+	height:21px;
+}
+
+.arrows-previous-next LI A{
+	height:21px;
+}
+
+#content-small .arrows-previous-next LI{
+	width:235px;
+}
+
+.collections-thumbnails{
+	margin-left:-20px;	
+}
+
+.hero-section-with-picture,
+.hero-section{
+	height:130px;
+}
+
+#parliament-uk #content .address-information A{
+	display:inline;
+}
+
+DIV.submission INPUT{
+	padding:0 2px;
+}
+
+DIV.submission P{
+	margin-bottom:10px;
+}
+
+#website-features DIV{
+	height:240px;
+}
+
+#website-features DIV.last{
+	height:230px;
+}
+
+#website-features.injected DIV.four-wide A{
+	display:block;
+	height:110px;
+	text-decoration:none;
+	width:110px;
+}
+
+#website-features.injected DIV.four-wide EM{
+	bottom:0;
+}
+
+#website-features.injected DIV.inner{
+	margin-top:-4px;
+}
+
+.tabs-injected .triggers H4 A{
+	border-left:none;
+	border-top:none;
+	padding:6px 8px;
+	white-space:nowrap;
+	width:1px;
+}
+
+#content .tabs-injected .triggers H4.active{
+	border-right:none;
+	margin-top:0;
+}
+
+.tabs-injected .triggers H4.active A{
+	background:#efefef;
+	border-left:solid 1px #cfcfcf;
+	border-right:none;
+	border-top:solid 1px #cfcfcf;
+	padding:6px 8px 8px 8px;
+}
+
+.tabs-injected .triggers H4.last.active{
+	border-right:solid 1px #cfcfcf;
+}
+
+#content .tabs-injected .two-wide UL.square-bullets{
+	margin-bottom:0;
+}
+
+.tabs-injected .inner .inner .triggers{
+	padding-top:0;
+}
+
+.tabs-injected UL#bills-list.square-bullets{
+	margin-bottom:-10px;
+}
+
+#contact-us FIELDSET{
+	background:url(/assets/images/grey-repeater-line.gif) repeat-x left bottom;
+	border:0;
+}
+
+#contact-us FIELDSET.last{
+	background:none;
+}
+
+#send-a-friend LI{
+	padding-bottom:0;
+}
+
+#news-landing .news-hero{
+	height:150px;
+}
+
+#news-landing .inner .section-promotion H2{
+	height:70px;
+}
+
+.rte OL LI{
+	margin-left:24px;
+}
+
+.search-listings UL#results LI EM{
+	height:14px;
+}
+
+#advanced-search FIELDSET LI LI{
+	padding-top:0;
+}
+
+#advanced-search .date-search DIV{
+	margin-right:28px;
+}
+
+/* Homepage 2010 */
+.home fieldset.site-search ol #search {left:10px;height:18px}
+.home #content #website-features.injected div.inner {height:61px;top:159px;}
+.home .tabs-wrapper .thumbnail-image-list li{height:76px;}
+#wrapper.home #website-features.injected div.last{margin-right:0px;}
+.home #content #website-features h2{margin-bottom:7px;}
+.home #website-features.injected div.four-wide em{background:#000 url();filter:progid:DXImageTransform.Microsoft.Alpha(opacity=90);cursor:pointer}
+.home #website-features.injected div.four-wide a:hover em, .home #content #website-features.injected div.selected a em{background:#085196 url();filter:progid:DXImageTransform.Microsoft.Alpha(opacity=90);cursor:pointer}
+#website-features.injected div {height:235px;}
+
+
+/* Committees */
+/**************/
+
+.committees .news-listing H4 A IMG{
+	left:-20px;
+}
+
+.committees .publications-and-records H4 A IMG{
+	left:-22px;
+}
+
+.committees #content .whats-on H4,
+.committees #content .publications-and-records H4{
+	height:1px;
+}
+
+/* Members, Lords and Offices */
+/******************************/
+
+.mlo #members-filter-listing FIELDSET INPUT{
+	padding-left:5px;
+	padding-right:5px;
+}
+
+/* Works of Art */
+/****************/
+
+.woa #page-heading{
+	padding-top:20px;
+}
+
+.woa #search-collection A{
+	margin-top:-1px;
+}
+
+.woa .home .new-to-the-collection{
+	background-position:left 25px;
+	height:132px;
+	margin-top:-3px;
+}
+
+.woa .home .new-to-the-collection .inner{
+	height:78px;
+}
+
+.woa .highlights-images{
+	margin-left:-30px;
+}
+
+#content-small .highlights-images,
+.woa #content.wide .highlights-images{
+	margin-left:-40px;
+}
+
+.woa .highlights-images P{
+	height:140px;
+}
+
+.woa #content .highlights-images IMG{
+	padding-bottom:0;
+}
+
+.woa IMG#home-preview{
+	padding-bottom:1px;
+}
+
+.woa #landing-basic .section-promotion .inner{
+	height:140px;
+}
+
+.woa #landing-basic.wide .section-promotion .inner{
+	height:312px;
+}
+
+.woa #generic-landing .section-promotion .inner{
+	height:75px;
+}
+
+.woa #search-results LI{
+	height:65px;
+}
+
+.woa #compare-and-contrast .highlights-images P{
+	height:460px;
+}
+
+.woa #collection-artwork.wide #artwork-thumbnails IMG{
+	padding-bottom:0;
+}
+
+.woa #collection-artwork .flash UL{
+	margin-top:0;
+}
+
+.woa #panel .align01{
+	height:260px;
+}
+
+#panel .align02{
+	height:160px;
+}
+
+.woa #level-3,
+.woa #page-heading,
+.woa #search-collection LI,
+.woa .highlights-images,
+.woa #search-results LI LI,
+.woa #advanced-search LI,
+#previous-next-with-title,
+#previous-next-with-numbers,
+.sub-content,
+#collection-artwork .flash UL{
+	height:1px;
+}
+
+/* Education */
+/*************/
+
+.education #content{
+	background:none;
+}
+
+.education #wrapper .three-column{	
+	width:685px;
+}
+
+.education #banner-heading A{
+	height:100px;
+}
+
+.education #secondary-navigation LI STRONG{
+	height:20px;
+}
+
+.education .green H1,
+.education .orange H1,
+.education .pink H1{
+	height:24px;
+}
+
+.education #content .rte .left{
+	margin-bottom:0;
+}
+
+.education #content .rte .left IMG{
+	padding-bottom:0;
+}
+
+.education #content .tabs-injected .triggers H4.active{
+	background:#fff;
+	border-right:solid 1px #cfcfcf;
+}
+
+.education .tabs-injected .triggers H4.active A{
+	background:#fff;
+}
+
+.education .section-promotion .inner{
+	height:120px;
+}
+
+.education .resource .inner{
+	height:145px;
+}
+
+.education .resource H3{
+	margin-top:15px;
+}
+
+.education #picture-viewer{
+	border-bottom:0;
+	height:410px;	
+}
+
+.education #picture-viewer UL#thumbnails LI{
+	height:103px;
+}
+
+.education #picture-viewer #overview{
+	height:391px;
+}
+
+#sb-nav A{
+	height:16px;
+	width:50px;
+}
+
+#sb-nav-close{
+	background-image:url(/assets/images/shadowbox-close-non-png.gif);
+}
+
+.education .homepage #secondary-navigation,
+.education .section-promotion H2,
+.education .section-promotion.no-image .inner,
+.education .resource H3 A,
+.education .resource.no-image .inner,
+.education .wide .thumbnail-image-list,
+#education-footer,
+#theme-switcher{
+	height:1px;
+}
+
+/* Popvox */
+/**********/
+
+.popvox #content{
+	width:715px;
+}
+
+.popvox #banner-heading A{
+	height:100px;
+}
+
+.popvox #wrapper #content{
+	background-position:450px top;
+}
+
+.popvox #panel{
+	height:841px;
+}
+
+.popvox #panel .toggle A.more,
+.popvox #panel .toggle A.less{
+	float:none;
+}
+
+.popvox #panel .toggle,
+.popvox #panel .toggle DIV,
+UL.related-links,
+UL.related-links LI A{
+	height:1px;
+}
+
+/* Anomolies */
+/*************/
+
+/* inherent bug with IE6 requiring this style not to be shared */
+#content.two-column-with-navigation{background:url(/assets/images/tram-line-repeater.gif) left top repeat-y;}
+#content.three-column{background:url(/assets/images/tram-line-repeater.gif) left top repeat-y;}
+
+#files-listing .two-wide{
+	width:49%;
+}
+
+#files-listing LI{	
+	margin-left:36px;
+}
+
+.education #secondary-navigation{
+	margin-left:5px;
+}
+
+#wrapper,
+#header,
+#header FIELDSET.site-search UL,
+#header #navigation,
+#header UL#level-1,
+#header UL#level-2,
+#secondary-navigation LI A,
+#secondary-navigation.search .local-module UL LI,
+#secondary-navigation.search .local-module .no-images UL LI,
+#secondary-navigation.search .local-module .thumbnail-image-list UL LI.no-image,
+#secondary-navigation.search .local-module .thumbnail-image-list UL LI UL LI,
+FIELDSET.site-search UL#search-options,
+#content,
+.outer,
+.search-listings #advanced-search H4,
+#passage-of-a-bill .house,
+#passage-of-a-bill .house UL,
+#passage-of-a-bill .house UL LI OL,
+#content-small .a-to-z-listing UL,
+#landing-basic .no-image .inner,
+#sub-landing-advanced .no-image .inner,
+.collections-thumbnails,
+.square-bullets LI,
+.rte UL LI,
+.blue-arrow-bullets LI,
+#content .no-bullets LI,
+UL.#artwork-options,
+.hero-section,
+#fat-footer .inner,
+#find-your-mp FIELDSET,
+#contact-us FIELDSET,
+DIV.submission,
+.pagination,
+.get-involved,
+.alternate-rows LI,
+#website-features,
+#website-features.injected DIV.four-wide,
+#website-features.injected DIV.inner,
+.tabs-wrapper,
+.tabs-wrapper .triggers,
+.tabs-wrapper DIV.inner DIV,
+#parliament-uk #panel .no-images UL LI,
+.committees .news-listing UL.split-list,
+.committees #panel .thumbnail-image-list LI UL LI,
+#send-a-friend LI,
+.thumbnail-image-list LI UL LI,
+.no-images UL LI,
+.thumbnail-image-list H2,
+.thumbnail-image-list UL LI.no-image,
+.mlo .person,
+.photo-description,
+#bookmark-with UL,
+#news-landing .inner,
+#news-landing .inner .section-promotion.no-image H2,
+.committees #committee-archive UL.tram-lines,
+#calendar FIELDSET,
+#landing-advanced .thumbnail-image-list,
+.woa #artwork-thumbnails,
+#advanced-search FIELDSET LI,
+#panel #tweetminster UL LI,
+#files-listing .inner,
+#footer,
+#footer UL{
+	height:1px;
+}

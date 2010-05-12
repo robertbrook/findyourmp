@@ -1,0 +1,188 @@
+/* mlo.css */
+/***********/ 
+
+.mlo #biography-lord H4,
+.mlo #biography-mp H4{
+	font-weight:bold;
+	margin-bottom:5px;
+}
+
+.mlo H4.highlight{
+	color:#fff;
+	padding:5px 8px;
+}
+
+.mlo #biography-lord H4.highlight{
+	background-color:#a0070e;
+}
+
+.mlo #biography-mp H4.highlight{
+	background-color:#04771c;
+}
+
+.mlo .person{
+	min-height:1px;
+}
+
+.mlo .person H2{
+	font-size:1em;
+	font-weight:bold;
+	margin:0;
+}
+
+.mlo .person H3{
+	font-weight:bold;
+}
+
+.mlo .person H3{
+	margin-top:15px;
+}
+
+.mlo .person H3.first{
+	margin-top:0;
+}
+
+.mlo #content .person P{
+	margin-bottom:0;
+}
+
+.mlo .person .information{
+	margin-bottom:15px;
+}
+
+.mlo #biography-mp TABLE{
+	margin-top:5px;
+}
+
+.mlo #biography-mp TABLE TH{
+	background:#e3f6ff;
+}
+
+.mlo #biography-mp TABLE TD{
+	background:url(/assets/images/dotted-separator-black.gif) repeat-x left bottom;
+}
+
+.mlo #biography-mp TABLE TD.footer,
+.mlo #biography-mp TABLE TD.no-border{
+	background:none;
+}
+
+.mlo #biography-mp TABLE TD.footer{
+	background:#f5f5f5;
+	border-bottom:solid 1px #fff;
+}
+
+.mlo #biography-mp TABLE .first{
+	width:200px;
+}
+
+.mlo #biography-mp TABLE .last{
+	text-align:right;
+}
+
+.mlo #members-filter-listing FIELDSET{	
+	background-image:url(/assets/images/mlo/members-filter-listing-default.gif);
+	background-position:left bottom;
+	background-repeat:no-repeat;
+	margin-bottom:15px;
+	padding:10px 10px 25px 10px;
+}
+
+.mlo .commons #members-filter-listing FIELDSET{
+	background-color:#009926;
+	background-image:url(/assets/images/mlo/members-filter-listing-commons.gif);
+}
+
+.mlo .lords #members-filter-listing FIELDSET{
+	background-color:#b2200d;
+	background-image:url(/assets/images/mlo/members-filter-listing-lords.gif);
+}
+
+.mlo #members-filter-listing FIELDSET LABEL{
+	color:#000;
+	display:block;
+	padding-bottom:10px;
+}
+
+.mlo .commons #members-filter-listing FIELDSET LABEL,
+.mlo .lords #members-filter-listing FIELDSET LABEL{
+	color:#fff;
+}
+
+.mlo #members-filter-listing FIELDSET SELECT{
+	margin-right:5px;
+	width:195px;
+}
+
+.mlo #members-filter-listing FIELDSET OL,
+.mlo #members-filter-listing FIELDSET INPUT{
+	float:left;
+}
+
+.mlo #members-filter-listing FIELDSET INPUT{
+	background:#fff;
+	border:solid 1px #ccc;;
+	color:#000;
+	font-size:0.9em;
+	font-weight:bold;
+	margin-left:5px;
+	padding:2px 2px 3px 2px;
+}
+
+.mlo .commons #members-filter-listing FIELDSET INPUT,
+.mlo .lords #members-filter-listing FIELDSET INPUT{
+	border:0;
+}
+
+.mlo #members-filter-listing TABLE TH,
+.mlo #members-filter-listing TABLE TD{
+	width:261px;
+}
+
+.mlo #members-filter-listing TABLE TH{
+	background:url(/assets/images/dotted-separator-black-mlo-th-header.gif) repeat-x left bottom;
+	padding-bottom:10px;
+}
+
+.mlo #members-filter-listing TABLE TD.highlight{
+	background:#e3f6ff;
+    border-top:2px solid #ffffff;
+	border-bottom:2px solid #ffffff;
+}
+.mlo #members-filter-listing table td.address {background:#F6FBFE;}
+.mlo #members-filter-listing TABLE TD{
+	background:#f5f5f5;
+}
+
+.mlo #members-filter-listing TABLE TD.alternate{
+	background:#fff;
+}
+
+.mlo #members-filter-listing TABLE.hide-headers THEAD{
+	display:none;
+}
+
+.mlo #members-filter-listing P.top{
+	padding:0 8px;
+}
+
+.mlo #members-filter-listing .a-to-z-listing{
+	border-top:solid 1px #cfcfcf;
+	padding-top:10px;
+}
+
+.mlo .alternate-table TH{
+	background:#e3f6ff;
+}
+
+.mlo .alternate-table TD.alternate{
+	background:#f5f5f5;
+}
+
+.mlo .person:after{
+	clear:both;
+	content:".";
+	display:block;
+	height:0;	
+	visibility:hidden;
+}

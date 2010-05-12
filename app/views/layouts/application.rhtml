@@ -1,245 +1,248 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head profile="http://gmpg.org/xfn/11">
-<% if RAILS_ENV != 'test' %>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>UK Parliament - <%= @title ? "#{@title} (Find Your MP)" : "Search (Find Your MP)" %></title>
-  <% if @meta_description %><meta name="description" content="<%= @meta_description %>" /><% end %>
-  <meta name="keywords" content="UK Parliament, Find your MP, Find my MP, Member of Parliament" />
-  <% if @nofollow %><meta name="robots" content="NOINDEX, NOFOLLOW" /><% end %>
-  <style type="text/css" media="screen, projection">
-    @import url("/stylesheets/fymp.css");
-    @import url("/stylesheets/homepage.css");
-    @import url("/stylesheets/grid.css");
-    @import url("/stylesheets/main.css");
-  </style>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
-  <% if @show_postcode_autodiscovery_links %>
-  <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
-  <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
-  <%= auto_discovery_link_tag(:js, @url_for_this + ".js") %>
-  <%= auto_discovery_link_tag(:text, @url_for_this + ".text") %>
-  <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
-  <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
-  <% end %>
-  <% if @javascript %>
-  <%= javascript_include_tag @javascript %>
-  <% end %>
-<% end %>
-  <script language="JavaScript1.1" type="text/javascript">
-    <!--
-    function displayDate() {
-    var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-    var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/reset.css" />
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/grid.css" />
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/main.css" />
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/mlo.css" />
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/fymp.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="/stylesheets/print.css" />
+  <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/ie8.css" />
+  <![endif]-->
+  <!--[if IE 7]>
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/ie7.css" />
+  <![endif]-->
+  <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" media="projection,screen" href="/stylesheets/ie6.css" />
+  <![endif]-->
 
-     today = new Date();
-   formattedDate = DAY_NAMES[today.getDay()] + ' ' + today.getDate() + ' ' + MONTH_NAMES[today.getMonth()] + ' ' + today.getFullYear();
-   return formattedDate;
-    }
-    -->
-  </script>
-</head>
-<body>
-  <div id="outer_container">
-    <div id="inner_container">
-<% if RAILS_ENV != 'test' %>
-      <span class="hidden"><a href="#maincontent">Skip to main content</a></span>
-  <div id="top_nav">
-    <div id="top_nav_content">
-      <ul>
-        <li class="first"><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
-        <li><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
-        <li><a href="http://www.parliament.uk/glossary/glossary.cfm">Glossary</a></li>
-        <li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
-        <li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
-      </ul>
-    </div>
-  </div>
-      <div id="banner">
-        <div id="banner_top">
-          <div id="banner_img">
-            <a href="http://www.parliament.uk/"><img src="/images/parliament-uk.gif" width="300" height="55" alt="United Kingdom Parliament" /></a>
-          </div>
-          <div class="banner_divider">&nbsp;</div>
-        <div id="banner_time">
-        <div id="big_ben"><object type="application/x-shockwave-flash" data="/images/bigben.swf" width="50" height="50" id="bigben"></object></div>
-        <div id="time_text"><span><script language="Javascript 1.1" type="text/javascript">document.write(displayDate());</script></span></div>
-      </div>
-          <div class="banner_divider">&nbsp;</div>
-          <form action="http://www.publications.parliament.uk/cgi-bin/search.pl" method="post">
-            <div id="banner_search">
-              <h2 class="hidden">Search</h2>
-                <label for="search" class="hidden">Search</label>
-                <input type="text" name="QUERY00" id="search" class="searchBox" />
-                <input type="submit" class="searchSubmit" value="Search" name="CMD=search.run" />
-                <input type="hidden" name="STYPE" value="SIMPLE" />
-                <input type="hidden" name="DB" value="semukparl" />
-                <input type="hidden" name="SHOWCONCEPT" value="1" />
-                <input type="hidden" name="ORGANISE_CODED" value="R:date" />
-                <input type="hidden" name="ENDDATE" value="TODAY" />
-                <input type="hidden" name="DAYSMINUS" value="730" />
-            </div>
-          </form>
-        </div>
-        <div id="main_nav">
-          <ul>
-      <li class="first"><a href="http://www.parliament.uk/">Home</a></li>
-      <li><a href="http://www.parliament.uk/visiting">Visiting</a></li>
-            <li><a href="http://www.parliament.uk/about/">About</a></li>
-      <li><a href="http://www.parliament.uk/business/">Parliamentary Business</a></li>
-      <li class="selected"><a href="http://www.parliament.uk/mpslordsandoffices/">MPs, Lords and Offices</a></li>
-      <li><a href="http://www.parliament.uk/getinvolved/">Get Involved</a></li>
-      <li><a href="http://www.parliament.uk/topics/topical-issues.htm">Topical Issues</a></li>
-      <li><a href="http://www.parliament.uk/education/">Education</a></li>
-          </ul>
-        </div>
-        <div id="secondary_nav">
-          <ul>
-            <li class="selected"><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords.cfm">MPs and Lords</a></li>
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/government_and_opposition.cfm">Government &amp; Opposition</a></li>
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/offices.cfm">Parliamentary Offices</a></li>
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/finances.cfm">Members' Allowances</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/standards.cfm">Standards</a></li>
-          </ul>
-        </div>
-      </div>
+    <script type="text/javascript" src="/javascripts/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.equalheights.js"></script>
+    <script type="text/javascript" src="/javascripts/parliament-uk.js"></script>
+    <script type="text/javascript" src="/javascripts/swfobject.js"></script>
 
-      <div id="breadcrumb">
-        You are here:
-        <a href="http://www.parliament.uk/">Parliament Home</a> &gt;
-        <a href="http://www.parliament.uk/mpslordsandoffices/">MPs and Lords</a> &gt;
-        <%= @crumbtrail ? "<a href=\"/\">Find your MP</a> &gt; #{@crumbtrail}" : "Find your MP" %>
-      </div>
-<% end %>
+    <% if @show_postcode_autodiscovery_links %>
+      <%= auto_discovery_link_tag(:xml, @url_for_this + ".xml") %>
+      <%= auto_discovery_link_tag(:json, @url_for_this + ".json") %>
+      <%= auto_discovery_link_tag(:js, @url_for_this + ".js") %>
+      <%= auto_discovery_link_tag(:text, @url_for_this + ".text") %>
+      <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
+      <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
+    <% end %>
+    
+    <% if @javascript %>
+      <%= javascript_include_tag @javascript %>
+    <% end %>
 
-      <div id="page_content">
-<% if RAILS_ENV != 'test' %>
-        <div class="column_wrapper_right">
-          <div id="leftnav">
-          <ul id="sidebarleft">
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/alms.cfm">Alphabetical list of MPs</a></li>
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/alcm.cfm">MPs by constituency</a></li>
-            <li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/clomps.cfm">MPs by county and unitary authority</a></li>
-        	<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/party.cfm">MPs by party</a></li>
-        	<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/gender.cfm">MPs by gender</a></li>
-        	<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/stateparties.cfm">Current state of the parties</a></li>
-        	<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/selmem.cfm">Commons Select Committee membership</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/alphabetical_list_of_members.cfm">Lords: alphabetical list of Members</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/analysis_by_composition.cfm">Lords by party and type of peerage</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/conservative_members.cfm">Lords by party - Conservative</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/labour_members.cfm">Lords by party - Labour</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/liberal_democrat_members.cfm">Lords by party - Liberal Democrat</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/crossbench_members.cfm">Lords by party - Crossbench</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/other_members.cfm">Lords by party - other</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/house_of_lords_bishops.cfm">Lords Bishops</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/deceased_members.cfm">Lords who have died since 1 January 2009</a></li>
-			<li><a href="http://www.parliament.uk/mpslordsandoffices/mps_and_lords/new_members.cfm">New Members in the Lords</a></li>
-          </ul>
-        </div>
-      <div class="spacer">&nbsp;</div>
-        </div>
-<% end %>
-
-         <div class="spacer9">&nbsp;</div>
-         <div class="<%= is_admin? ? "column-620" : "column-460" %>">
-         <h1><a href="/">Find your MP</a></h1>
-           <h2><a name="maincontent" id="maincontent"></a><%= @title ? "#{@title}" : "Search" %></h2>
-           <% if flash[:notice] %>
-             <div class="text <%= flash[:notice][/Successful/] ? 'info' : 'flash' %>">
-               <%= flash[:notice] %>
-             </div>
-           <% end %>
-           <div><%= yield %></div>
-         </div>
-         <div class="spacer9">&nbsp;</div>
-
-<% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
-        <div class="column_wrapper_left">
-      <div class="spacer">&nbsp;</div>
-          <div class="column-300">
-            <div class="column_content">
-                <h3 class="section_head">Help and contacts</h3>
-                <div class="column_content">
-                  <ul class="greybullet text tight">
-                    <li><a href="http://www.parliament.uk/directories/hcio/findyourmp_help.cfm">Help using Find your MP</a></li>
-                    <li><a href="http://www.parliament.uk/directories/hcio.cfm">House of Commons Information Office</a></li>
-                  </ul>
-                </div>
-                <div class="hspacer">&nbsp;</div>
-                <h3 class="section_head">About Parliament</h3>
-                <div class="column_content">
-                  <ul class="greybullet text tight">
-                    <li><a href="http://www.parliament.uk/about/how/members/mps.cfm">What MPs do</a></li>
-                    <li><a href="http://www.parliament.uk/about/how/members/mps_contact.cfm">Contacting your MP</a></li>
-                    <li><a href="http://www.parliament.uk/about/how/members/mps_contact/when.cfm">When to contact your MP</a></li>
-                    <li><a href="http://www.parliament.uk/about/how/members/mps_contact/what.cfm">What your MP can do for you</a></li>
-                    <li><a href="http://www.parliament.uk/about/languages/yourmp.cfm">You and your MP (multiple languages)</a></li>
-                  </ul>
-                </div>
-                <div class="hspacer">&nbsp;</div>
-                <h3 class="section_head">Follow Parliament on</h3>
-                <div class="column_content">
-                  <ul class="greybullet text tight">
-                    <li><a href="http://www.flickr.com/photos/25334641@N08">Flickr photostream</a></li>
-                    <li><a href="http://lordsoftheblog.wordpress.com">Lords of the blog</a></li>
-                    <li><a href="http://www.parliament.uk/podcasts/">Podcasts</a></li>
-                    <li><a href="http://parliamentlabs.wordpress.com">Parliament Labs blog</a></li>
-                    <li><a href="http://twitter.com/ukparliament">Twitter</a></li>
-                    <li><a href="http://youtube.com/UKParliament">Parliament&#8217;s YouTube channel</a></li>
-                  </ul>
-                </div>
-                <div class="hspacer">&nbsp;</div>
-              </div>
-            </div>
-          </div>
-<% end %>
-        </div>
-        <div id="footer_nav">
-          <p>Source: NSPD 2008, National Statistics Crown copyright material is reproduced with the permission of the Controller of HMSO and Queen’s Printer for Scotland.</p>
-          <ul>
-            <li class="first"><a href="http://www.parliament.uk/index/">A-Z Index</a></li>
-      <li><a href="http://www.parliament.uk/site_information/accessibility.cfm">Accessibility</a></li>
-      <li><a href="http://www.parliament.uk/site_information/careers/jobs.cfm">Jobs</a></li>
-      <li><a href="http://www.parliament.uk/site_information/contact_us.cfm">Contact Us</a></li>
-      <li><a href="http://www.parliament.uk/parliamentary_publications_and_archives/foi_introduction.cfm">Freedom of Information</a></li>
-      <li><a href="http://www.parliament.uk/site_information/glossary.cfm">Glossary</a></li>
-      <li><a href="http://www.parliament.uk/site_information/help.cfm">Help</a></li>
-      <li><a href="http://www.parliament.uk/site_information/site_information.cfm">Using this website</a></li>
-      <!-- <%= link_to 'API', api_path %> -->
-            <% if is_admin? %>
-              <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
-              <li><%= link_to 'Admin home', admin_path %></li>
-            <% elsif RAILS_ENV == 'test' %>
-              <li><%= link_to "Log In", new_user_session_path %></li>
-            <% end %>
-          </ul>
-        </div>
-        <div class="hspacer">&nbsp;</div>
-      </div>
-    </div>
-  <% if RAILS_ENV == 'production' %>
     <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-    try{
-    var pageTracker = _gat._getTracker("UA-2953405-1");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
-    <script language="JavaScript1.1" type="text/javascript">
-      <!--
-      var gDomain="www.stats.tso.co.uk";
-      var gDcsId="dcs8a1rrculeroaqmbjq87oq1_4s7l";
-      var gFpcDom=".parliament.uk";
-      var gFpc="WT_FPC";
-      var gConvert=true;
-      if((typeof(gConvert)!="undefined")&&gConvert&&(document.cookie.indexOf(gFpc+"=")==-1)&&(document.cookie.indexOf("WTLOPTOUT=")==-1)){
-        document.write("<scr"+"ipt type='text/javascript' SRC='"+"http"+(window.location.protocol.indexOf('https:')==0?'s':'')+"://"+gDomain+"/"+gDcsId+"/wtid.js"+"'><\/scr"+"ipt>");
+        /*<![CDATA[*/
+    $(document).ready(function(){
+      var settings = {
+        main:{
+          advancedSearchAjaxUrl: '/AJAX/MemberNames.ashx',
+          calendarListingAjaxUrl: '/AJAX/CalendarMonth.ashx',
+          publicationsAndRecordsInitialShow: 3	    
+        },
+        woa:{
+          ajaxFlashZoomArtworkUrl: '/AJAX/ImageZoom.ashx'
+        },
+        masterPage: 'threecolumn',
+        pageType: 'main-generic-content',
+        pageInstanceId: '29500'
       }
-      -->
+      parliamentUK.init(settings);			
+    });
+    /*]]>*/
     </script>
-    <script language="JavaScript1.1" src="/javascripts/webtrends.js" type="text/javascript"></script>
-  <% end %>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />    
+    <title><%= @title ? "#{@title} Find Your MP" : "Search (Find Your MP)" %> - UK Parliament</title>
+    <meta name="keywords" content="UK Parliament, Find your MP, Find my MP, Member of Parliament" />
+    <% if @meta_description %><meta name="description" content="<%= @meta_description %>" /><% end %>
+    <% if @nofollow %><meta name="robots" content="NOINDEX, NOFOLLOW" /><% end %>
+    <meta name="language" content="English" />
+    <meta name="viewport" content="width=940" />
+    <meta name="sections" content="Parliament home page~MPs, Lords &amp; offices~MPs~Find your MP" />
+    <title>
+      Find your MP - UK Parliament
+    </title>
+  </head>
+    
+  <body class="mlo">
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      //load any sub-site JavaScript files (if required)
+      parliamentUK.loadSubSiteJavaScript($(document.body).attr('class'));	
+      /*]]>*/
+    </script>
+
+    <div id="wrapper" class="commons">
+      <div id="header">
+        <a href="/"><img src="/images/parliament-uk-logo.gif" alt="Parliament UK" /></a>
+        <fieldset class="site-search">
+        <ul>
+          <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl01_hypLink" href="/site-information/accessibility/">Accessibility</a></li>	
+          <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl02_hypLink" href="/site-information/contact-us/">Contact us</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl03_hypLink" href="/site-information/rss-feeds/">RSS feeds</a></li>
+          <li class="last"><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl04_hypLink" href="/site-information/email-alerts/">Email alerts</a></li>
+        </ul>
+        
+        <form method="get" action="http://www.parliament.uk/search/results">
+        <h4 class="marker">Site search</h4>
+        <ol>
+          <li>
+            <label for="q" id="q" class="access">Search</label>
+            <input name="q" type="text" id="q" />
+          </li>
+        </ol>
+        <input type="submit" value="Search" />
+        <ul id="search-options">
+          <li class="last"><a href="/search/advanced/">Advanced search</a></li>    
+        </ul>
+        </fieldset>	
+        </form>
+        
+        <div id="navigation">
+          <ul id="level-1">
+            <li><a href="http://www.parliament.uk/">Home</a></li>    
+            <li><a href="http://www.parliament.uk/business/">Parliamentary business</a></li>    
+            <li class="over"><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a></li>	    
+            <li><a href="http://www.parliament.uk/about/">About Parliament</a></li>
+            <li><a href="http://www.parliament.uk/get-involved/">Get involved</a></li>
+            <li><a href="http://www.parliament.uk/visiting/">Visiting</a></li>
+            <li class="last"><a href="http://www.parliament.uk/education/">Education</a></li>
+          </ul>
+          <ul id="level-2">
+            <li><a href="http://www.parliament.uk/mps-lords-and-offices/lords/">Lords</a></li>
+            <li class="over"><a href="http://www.parliament.uk/mps-lords-and-offices/mps/">MPs</a></li>
+            <li><a href="http://www.parliament.uk/mps-lords-and-offices/offices/">Parliamentary offices</a></li>
+            <li><a href="http://www.parliament.uk/mps-lords-and-offices/members-allowances/">Members' allowances</a></li>
+            <li><a href="http://www.parliament.uk/mps-lords-and-offices/standards-and-interests/">Standards &amp; financial interests</a></li>
+            <li><a href="http://www.parliament.uk/mps-lords-and-offices/government-and-opposition/">Government &amp; opposition</a></li>
+          </ul>
+        </div>
+        
+        <div id="breadcrumb">
+          <div class="inner">
+            <strong>You are here:</strong>
+            <ul><li><a href="http://www.parliament.uk/">Parliament home page</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/mps/">MPs</a><ul><li><%= @crumbtrail ? "<a href=\"/\">Find your MP</a> #{@crumbtrail}" : "Find your MP" %></li></ul></li></ul></li></ul></li></ul>
+          </div>
+        </div>
+        
+      </div>
+
+      <h4 class="marker">Navigation</h4>
+
+      <div id="secondary-navigation">
+        <ul>
+          <li class="grand-parent"><a href="/mps-lords-and-offices/mps/">MPs</a>
+            <ul>
+              <li class="parent">
+                <a href="/mps-lords-and-offices/mps/Find-your-MP/">Find your MP</a>
+                <ul>
+                  <li><a href="/mps-lords-and-offices/mps/Find-your-MP/help/">Help with Find your MP</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      
+      <div id="content" class="three-column">
+        
+        <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
+        <div id="content-small">
+        <%else%>
+        <div id="admin-content">
+        <%end%>
+          
+          <h4 class="marker">Main content</h4>
+          
+          <h1 id="ctl00_ctl00_SiteSpecificPlaceholder_ctlHeadingH1_h1Item"><!-- Start Indexing -->
+            Find your MP<!-- Stop Indexing -->
+          </h1>
+          
+          <div class="inner">
+            
+            <!-- Start Indexing -->
+            <div id="ctl00_ctl00_SiteSpecificPlaceholder_PageContent_ctlMainBody_wrapperDiv" class="rte">
+              
+              <h2><%= @title ? "#{@title}" : "Search" %></h2>
+              <% if flash[:notice] %>
+                <div class="text <%= flash[:notice][/Successful/] ? 'info' : 'flash' %>">
+                  <%= flash[:notice] %>
+                </div>
+              <% end %>
+              <div><%= yield %></div>
+              
+              <!-- Stop Indexing -->
+            </div>
+            
+          </div>
+        </div>
+        
+        <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
+        <div id="panel">
+          <div class="local-module">
+            <h2>Related information</h2>
+          
+            <strong>Commons Information Office</strong>
+            <p>
+            Contact us to find out more about the work, history and membership of the House of Commons
+            <ul class="square-bullets">
+              <li>E: <a href="mailto:hcinfo@parliament.uk">hcinfo@parliament.uk</a></li>
+              <li>T: 020 7219 4272</li>
+            </ul>
+            More information about this office can be found on the <a href="http://www.parliament.uk/mps-lords-and-offices/offices/commons/hcio/">House of Commons Information Office page</a>.
+            </p>
+          </div>
+        </div>
+        <%end%>
+          
+      </div>
+        
+      <div id="footer">
+        <h4 class="marker">Footer links</h4>
+        
+        <ul>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl01_hypLink" href="/site-information/azindex/">A-Z index</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl02_hypLink" href="/site-information/glossary/">Glossary</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl03_hypLink" href="/site-information/contact-us/">Contact us</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl04_hypLink" href="/site-information/foi/">Freedom of Information</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl05_hypLink" href="/site-information/job-opportunities/">Jobs</a></li>
+          <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl06_hypLink" href="/site-information/using-this-website/">Using this website</a></li>
+          <% if is_admin? %>
+             <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
+             <li><%= link_to 'Admin home', admin_path %></li>
+           <% elsif RAILS_ENV == 'test' %>
+             <li><%= link_to "Log In", new_user_session_path %></li>
+           <% end %>
+          <li class="last"><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl07_hypLink" href="/site-information/copyright/">Copyright</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <% if RAILS_ENV == 'production' %>
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+     /*]]>*/
+    </script>
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      if(tracking.enabled){
+        try{
+          var pageTracker = _gat._getTracker(tracking.accountID);
+          pageTracker._trackPageview();
+        }
+        catch(err){}
+      }
+      /*]]>*/
+    </script>
+    <script type="text/javascript" src="/javascripts/lbi_ga.js"></script>
+    <%end%>
   </body>
 </html>

@@ -1,136 +1,101 @@
-body {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 14px;
-	color: #000000;
-}
-
-img {
-	border: 0;
-}
-
-#banner_img,
-#banner_time {
-	float: left;
-}
-
-#banner {
-	float: left;
-	clear: both;
-	width: 100%;
-}
-
-.column_wrapper_right,
-.column_wrapper,
-#banner_top {
-	border: 0;
-}
-
-#homepage_banner_promo img,
-#homepage_banner_thumbs,
-.banner_divider,
-#banner_time object,
-#main_nav,
-#secondary_nav,
-#leftnav,
-.home_tab_bar div,
-#homepage_banner_thumbs,
-#banner_search {
-	display: none;
-}
-
-#homepage_banner_text,
-#homepage_banner,
-#homepage_banner_image {
-	float: none;
-	clear: both;
-	margin: 0;
-}
-
-
-.hidden {
-	display: none;
-}
-
-h1 {
-	font-size: 24px;
-	font-weight: normal;
-}
-
-h2 {
-	font-size: 18px;
-	font-weight: normal;
-}
-
-h3 {
-	font-size: 14px;
-}
-
-h4 {
-	font-size: 12px;
-}
-
-.text {
-	font-size: 12px;
-}
-
-.small_text {
-	font-size: 11px;
-}
-
-ul.greybullet {
-	list-style: disc;
-	list-style-image: none;
-	list-style-position: inside;
-	margin: 0;
-}
-
-.hspacer {
-	display: block;
-	width: 100%;
-	height: 1px;
-	font-size: 1pt;
-	float: left;
-	margin: 0 0 20px 0;
-	padding: 0;
-}
-
-.hspacer8 {
-	display: block;
-	width: 100%;
-	height: 1px;
-	font-size: 1pt;
-	float: left;
-	margin: 0 0 8px 0;
-	padding: 0;
-}
-
-h1.hidden {
-	display: block;
-}
-
-ul.news_highlights {
-	list-style: none;
-}
-
-ul.news_highlights li {
-	height: 70px;
-	margin: 4px 0;
-}
-
-ul.news_highlights .thumb {
-	width: 80px;
-	height: 80px;
-}
-
-ul.news_highlights .content {
-	margin-left: 80px;
-	margin-top: -70px;
-}
-
-ul.news_highlights .content ul {
-	list-style: none;
-}
-
-#footer_nav {
-	display: none;
+/* print.css */
+/************/
+
+H1,
+H2,
+H3,
+H4{
+	clear:both;
+}
+
+H4.marker,
+#header FIELDSET,
+UL#level-1,
+UL#level-2,
+#secondary-navigation,
+UL.print-email,
+UL.arrows-previous-next,
+#members-filter-listing FIELDSET,
+#members-filter-listing .a-to-z-listing,
+.pagination,
+#inquiries .thumbnail-image-list LI A,
+.news-listing .thumbnail-image-list LI A,
+#inquiries H4,
+.publications-and-records,
+#page-heading,
+#fat-footer,
+#panel,
+#footer{
+	display:none;
+}
+
+TABLE{
+	border:solid 1px #cfcfcf;
+	border-collapse:collapse;
+}
+
+TH{
+	text-align:left;
+}
+
+TH,
+TD{
+	padding:3px 6px;
+}
+
+A IMG{
+	border:none;
+}
+
+.thumbnail-image-list UL LI,
+UL.collections-thumbnails LI{
+	list-style-type:none;
+}
+
+.thumbnail-image-list UL,
+UL.collections-thumbnails,
+.a-to-z-listing UL{
+	margin:0;
+	padding:0;
+}
+
+.thumbnail-image-list UL LI EM{
+	display:block;
+}
+
+UL.square-bullets A{
+	margin-right:5px;
+}
+
+.a-to-z-listing UL{
+	margin-bottom:15px;
+	min-height:1px;
+}
+
+.a-to-z-listing UL LI{	
+	float:left;
+	list-style-type:none;
+	margin-right:8px;
+}
+
+.a-to-z-listing UL.square-bullets{
+	clear:left;
+}
+
+#content .a-to-z-listing UL.square-bullets LI{
+	float:none;	
+	list-style-position:inside;
+	list-style-type:disc;		
+}
+
+.a-to-z-listing P{
+	clear:left;
+}
+
+.a-to-z-listing UL:after{
+	clear:both;
+	content:".";
+	display:block;
+	height:0;	
+	visibility:hidden;
 }
