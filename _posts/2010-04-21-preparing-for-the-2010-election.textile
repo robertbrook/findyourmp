@@ -4,8 +4,11 @@ title: Preparing for the 2010 election
 author: Liz Conlan
 ---
 
+(Edited to remove references to the now defunct "experimetal" branch)
+
 Due to the extensive constituency changes ahead of the 2010 election, the database will have to be updated outside the usual schedule. Also the new data has not been supplied in the usual format so we are having to write one-off import routines to tidy up the database ahead of May 6th.
 
+<del>
 1. Check out the "experimental" branch from github. If you already have it then:
 
 bc. git checkout experimental
@@ -15,6 +18,7 @@ or if this is first time use then
 
 bc. git fetch origin experimental:experimental
 git checkout experimental
+</del>
 
 2. Perform db migrations to change ons_id from an int to a 3 varchar string
 
@@ -88,6 +92,6 @@ bc. rake fymp:populate
 bc. rake fymp:load_postcode_districts
 rake friendly_id:make_slugs MODEL=Constituency
 
-*To ensure that the admin facility works properly, replace the constituency.rb model file with the one from the "experimental" branch when going live as there is one method which assumes that ons_id is an integer*
+*Please note: The constituency.rb model was also updated during this process as it contained a number of methods that treated ons_id as an integer*
 
 
