@@ -225,24 +225,23 @@
     </div>
     
     <% if RAILS_ENV == 'production' %>
-    <script type="text/javascript">
-      /*<![CDATA[*/
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-     /*]]>*/
-    </script>
-    <script type="text/javascript">
-      /*<![CDATA[*/
-      if(tracking.enabled){
-        try{
-          var pageTracker = _gat._getTracker(tracking.accountID);
-          pageTracker._trackPageview();
-        }
-        catch(err){}
-      }
-      /*]]>*/
-    </script>
-    <script type="text/javascript" src="/javascripts/lbi_ga.js"></script>
+      <script type="text/javascript">
+        /*<![CDATA[*/
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        /*]]>*/
+      </script>
+      <script type="text/javascript">
+        /*<![CDATA[*/
+          try{
+            var pageTracker = _gat._getTracker('UA-15845045-1');
+            pageTracker._setDomainName('.parliament.uk');
+            pageTracker._trackPageview();
+          }
+          catch(err){}
+        /*]]>*/
+      </script>
+      <script type="text/javascript" src="http://www.parliament.uk/assets/scripts/lbi_ga.js"></script>
     <%end%>
   </body>
 </html>
