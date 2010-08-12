@@ -3,7 +3,7 @@
 
 - form_tag('/admin/blacklist/new', :method => :post) do
   = text_field 'blacklist', 'code'
-  = submit_tag 'Search'
+  = submit_tag 'Add to blacklist'
 %br
 
 %div.text
@@ -15,7 +15,7 @@
       -form_tag('/admin/blacklist/new', :method => :post) do
         =submit_tag 'Confirm'
     -else
-      Sorry this postcode does not exist, please try again
+      Sorry this postcode is not currently in the database, please try again
 
 %p.text
   = link_to 'Return to list', blacklisted_postcodes_path
