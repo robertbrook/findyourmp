@@ -18,6 +18,3 @@
         .row_label Website
         .row_value
           = link_to h(@constituency.member_website.sub('http://','').chomp('/')), @constituency.member_website
-    .row_item
-      .row_label Address
-      .row_value= "#{member_name}, House of Commons, London SW1A 0AA"
