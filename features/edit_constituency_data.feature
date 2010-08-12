@@ -17,13 +17,11 @@ Feature: Edit constituency data
     And I fill in "Member party" with "SNP"
     And I fill in "Member email" with "bill@parl.uk"
     And I fill in "Member biography url" with "http://the.re"
-    And I fill in "Member website" with "http://it.is"
     And I press "Update"
     Then I should see "Aberdeen East"
     And I should see "William Wallace"
     And I should see "SNP"
     And I should see link to "http://the.re"
-    And I should see link to "http://it.is"
 
   Scenario: Edit member email to be empty
     Given I am logged in as an admin user

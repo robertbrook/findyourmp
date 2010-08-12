@@ -1,4 +1,4 @@
-- form_tag(search_url, :method => :get) do
+- form_tag(search_url, :method => :get, :class => "search") do
   = text_field_tag 'q', (@last_search_term ? h(sanitize(@last_search_term)) : ''), :size => 24
   = submit_tag 'Find MP'
 
