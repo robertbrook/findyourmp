@@ -52,6 +52,20 @@ namespace :fymp do
     end
   end
 
+  task :diff_ons_ids => :environment do
+    old_file = ENV['old']
+    new_file = ENV['new']
+    if old_file && new_file
+      diff_ons_ids old_file, new_file
+    else
+      puts 'USAGE: rake fymp:diff_ons_ids old=data/constituencies.txt new=data/new_constituencies.txt'
+    end
+  end
+  
+  task :patch_ons_ids => :environment do
+    patch_ons_ids
+  end
+
   desc "Update postcodes from data files for postcode and constituency ID *only*"
   task :diff_postcodes => :environment do
     old_file = ENV['old']

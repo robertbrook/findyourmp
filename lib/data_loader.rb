@@ -11,6 +11,46 @@ module FindYourMP::DataLoader
 
   POSTCODE_FILE = "#{DATA_DIR}/postcodes.txt"
 
+  def diff_ons_ids old_file, new_file
+    unless File.exist?(old_file)
+      raise "#{old_file} not found"
+    end
+    
+    unless File.exist?(new_file)
+      raise "#{new_file} not found"
+    end
+    
+    diff_file = "#{DATA_DIR}/diff_ons_ids.txt"
+    if File.exist?(diff_file)
+      cmd = "mv #{diff_file} #{diff_file}.#{Time.now.to_i.to_s}"
+      puts cmd
+      `#{cmd}`
+    end
+    
+    constituencies_by_id = {}
+    constituencies_by_name = {}
+    old_data = File.open(old_file)
+    old_data.each do |line|
+      line.gsub!("\n", "")
+      parts = line.split("\t")
+      constituencies_by_id[parts[0]] = parts[1].strip
+      constituencies_by_name[parts[1]] = parts[0]
+    end
+    
+    new_data = File.open(new_file)
+    output = File.open(diff_file, 'w')
+    new_data.each do |line|
+      line.gsub!("\n", "")
+      parts = line.split("\t")
+      unless constituencies_by_id.has_key?(parts[0])
+        if constituencies_by_name.has_key?(parts[1].strip)
+          correction =  "#{constituencies_by_name[parts[1].strip]}\t#{parts[0]}\n"
+          output.write(correction)
+        end
+      end
+    end
+  end
+  
   def diff_postcodes old_file, new_file
     unless File.exist?(old_file)
       raise "#{old_file} not found"
@@ -36,6 +76,30 @@ module FindYourMP::DataLoader
     cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
     `#{cmd}`
+  end
+  
+  def patch_ons_ids
+    patch_file = "#{DATA_DIR}/diff_ons_ids.txt"
+    
+    unless File.exist?(patch_file)
+      raise "#{patch_file} not found"
+    end
+    
+    start_timing
+    
+    data = File.open(patch_file)
+    data.each do |line|
+      line.gsub!("\n", "")
+      parts = line.split("\t")
+      old_id = parts[0].strip
+      new_id = parts[1].strip
+      
+      ActiveRecord::Base.connection.execute("UPDATE blacklisted_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
+      ActiveRecord::Base.connection.execute("UPDATE manual_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
+      ActiveRecord::Base.connection.execute("UPDATE postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
+    end
+    
+    log_duration
   end
 
   def determine_postcode_changes
