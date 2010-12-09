@@ -90,7 +90,7 @@ module FindYourMP::DataLoader
       if match
         ons_id = match.values_at(1).to_s
         postcode.delete
-        Postcode.create! :code => postcode, :ons_id => ons_id
+        Postcode.create! :code => postcode.code, :ons_id => ons_id
       else
         warn "trouble matching #{postcode.code}"
       end
