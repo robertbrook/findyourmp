@@ -81,6 +81,10 @@ namespace :fymp do
   task :analyze_postcode_update => :environment do
     analyze_postcode_update
   end
+  
+  task :patch_postcodes => :environment do
+    patch_postcodes
+  end
 
   desc "Update postcodes from data files for postcode and constituency ID *only*"
   task :update_postcodes => :environment do

@@ -42,24 +42,72 @@ module FindYourMP::DataLoader
     new_data.each do |line|
       line.gsub!("\n", "")
       parts = line.split("\t")
+      name = parts[1].strip
       unless constituencies_by_id.has_key?(parts[0])
-        if constituencies_by_name.has_key?(parts[1].strip)
-          correction =  "#{constituencies_by_name[parts[1].strip]}\t#{parts[0]}\n"
+        unless constituencies_by_name.has_key?(name)
+          name.gsub!("&", "and")
+        end
+        if constituencies_by_name.has_key?(name)
+          correction =  "#{constituencies_by_name[name]}\t#{parts[0]}\n"
           output.write(correction)
         end
       end
     end
   end
   
+  def patch_postcodes
+    new_data = "\n" + File.open("#{DATA_DIR}/new_postcodes.txt").read
+    
+    start_timing
+    
+    Postcode.find_all_by_ons_id("0").each do |postcode|
+      search_code = postcode.code
+      if postcode.code.length < 6
+        code = "#{postcode.code[0..postcode.code.length-4]}  #{postcode.code[postcode.code.length-3..postcode.code.length]}"
+      elsif postcode.code.length < 7
+        code = "#{postcode.code[0..postcode.code.length-4]} #{postcode.code[postcode.code.length-3..postcode.code.length]}"
+      end
+      match = new_data.match(/\n#{code} ([A-Z0-9]{3})/)
+      if match
+        ons_id = match.values_at(1).to_s
+        constituency = Constituency.find_by_ons_id(ons_id)
+        postcode.ons_id = ons_id
+        postcode.constituency_id = constituency.id
+        postcode.save!
+      else
+        warn "trouble matching #{postcode.code}"
+      end
+    end
+    
+    BlacklistedPostcode.find_all_by_ons_id("0").each do |postcode|
+      search_code = postcode.code
+      if postcode.code.length < 6
+        code = "#{postcode.code[0..postcode.code.length-4]}  #{postcode.code[postcode.code.length-3..postcode.code.length]}"
+      elsif postcode.code.length < 7
+        code = "#{postcode.code[0..postcode.code.length-4]} #{postcode.code[postcode.code.length-3..postcode.code.length]}"
+      end
+      match = new_data.match(/\n#{code} ([A-Z0-9]{3})/)
+      if match
+        ons_id = match.values_at(1).to_s
+        postcode.delete
+        Postcode.create! :code => postcode, :ons_id => ons_id
+      else
+        warn "trouble matching #{postcode.code}"
+      end
+    end
+    
+    log_duration
+  end
+  
   def diff_postcodes old_file, new_file
     unless File.exist?(old_file)
       raise "#{old_file} not found"
     end
-    
+
     unless File.exist?(new_file)
       raise "#{new_file} not found"
     end
-    
+
     old_postcodes = "#{DATA_DIR}/old_postcodes.txt"
     new_postcodes = "#{DATA_DIR}/new_postcodes.txt"
 
@@ -76,7 +124,7 @@ module FindYourMP::DataLoader
     cmd = "diff #{old_postcodes} #{new_postcodes} > #{diff_file}"
     puts cmd
     `#{cmd}`
-  end
+    end
   
   def patch_ons_ids
     patch_file = "#{DATA_DIR}/diff_ons_ids.txt"
@@ -96,7 +144,7 @@ module FindYourMP::DataLoader
       
       ActiveRecord::Base.connection.execute("UPDATE blacklisted_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
       ActiveRecord::Base.connection.execute("UPDATE manual_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
-      ActiveRecord::Base.connection.execute("UPDATE postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
+      ActiveRecord::Base.connection.execute("UPDATE constituencies SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
     end
     
     log_duration
@@ -140,7 +188,7 @@ module FindYourMP::DataLoader
 
     puts 'checking we have constituencies... '
 
-    (to_delete.values + to_update.values + to_create.values).flatten.uniq.each do |ons_id|
+    (to_update.values + to_create.values).flatten.uniq.each do |ons_id|
       unless ignore_ons_id?(ons_id)
         constituency = Constituency.find_by_ons_id(ons_id)
         raise "unexpected constituency id #{ons_id}" unless constituency
@@ -177,13 +225,17 @@ module FindYourMP::DataLoader
 
     missing_updates = []
     to_update.each do |postcode, ons_id|
-      missing_updates << [postcode, ons_id] unless Postcode.exists?(:code => postcode.sub(' ',''))
+      unless Postcode.exists?(:code => postcode.sub(' ',''))  
+        missing_updates << [postcode, ons_id] unless BlacklistedPostcode.exists?(:code => postcode.sub(' ',''))
+      end
     end
     puts "TO UPDATE, BUT MISSING FROM DB: #{missing_updates.size}"
 
     already_there = []
     to_create.each do |postcode, ons_id|
-      already_there << [postcode, ons_id] if Postcode.exists?(:code => postcode.sub(' ',''))
+      if Postcode.exists?(:code => postcode.sub(' ',''))
+        already_there << [postcode, ons_id] if ManualPostcode.exists?(:code => postcode.sub(' ',''))
+      end
     end
     puts "TO CREATE, BUT ALREADY IN DB: #{already_there.size}"
   end
@@ -195,10 +247,11 @@ module FindYourMP::DataLoader
     include ActionView::Helpers::DateHelper
     start_timing
 
+    #process deletions
     to_delete.each do |postcode, ons_id|
       if post_code = Postcode.find_by_code(postcode.sub(' ',''))
         if ManualPostcode.find_by_code(postcode.sub(' ',''))
-          puts "  (ignoring manually added postcode - #{postcode})"
+          warn "deleted postcode #{postcode}) exists as manual postcode"
         else
           post_code.destroy
           count = count.next
@@ -208,6 +261,8 @@ module FindYourMP::DataLoader
         warn "cannot delete postcode, as it was not in database: #{postcode}"
       end
     end
+    
+    #process updates
     to_update.each do |postcode, ons_id|
       post_code = Postcode.find_by_code(postcode.sub(' ',''))
 
@@ -219,37 +274,57 @@ module FindYourMP::DataLoader
           end
         end
 
-        if BlacklistedPostcode.find_by_code postcode.sub(' ','')
+        blacklisted = BlacklistedPostcode.find_by_code postcode.sub(' ','')
+        if blacklisted
           puts "  (deleting blacklisted postcode - #{postcode})"
-          post_code.destroy
-        else
-          post_code.ons_id = ons_id.strip.to_i
-          if constituency
-            post_code.constituency_id = constituency.id
-          else
-            post_code.constituency_id = nil
+          unless blacklisted.ons_id == ons_id
+            blacklisted.delete
           end
-          post_code.save
         end
-
+        post_code.ons_id = ons_id.strip
+        if constituency
+          post_code.constituency_id = constituency.id
+        else
+          post_code.constituency_id = nil
+        end
+        post_code.save
+        
         count = count.next
         log_duration count / total
       else
-        raise "cannot update postcode, as it was not in database: #{postcode} #{ons_id}"
+        blacklisted = BlacklistedPostcode.find_by_code postcode.sub(' ', '')
+        if blacklisted
+          blacklisted.delete
+        end
+        constituency = Constituency.find_by_ons_id(ons_id)
+        Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id, :constituency_id => constituency.id
       end
     end
 
+    #process new postcodes
     to_create.each do |postcode, ons_id|
-      begin
-        if Postcode.exists?(:code => postcode.sub(' ',''))
-          warn 'exists ' + postcode
-        elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
-          puts "  (ignoring blacklisted postcode - #{postcode})"
-        else
-          Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id.strip.to_i
+      unless ignore_ons_id?(ons_id)
+        constituency = Constituency.find_by_ons_id(ons_id)
+        if constituency.nil?
+          raise "cannot create postcode, as constituency was not in database: #{postcode} #{ons_id}"
         end
-      rescue Exception => e
-        raise e
+
+        begin
+          if Postcode.exists?(:code => postcode.sub(' ',''))
+            warn 'exists: ' + postcode
+          elsif BlacklistedPostcode.find_by_code postcode.sub(' ','')
+            warn 'exists (and blacklisted): ' + postcode
+          else
+            manual = ManualPostcode.find_by_code postcode.sub(' ', '')
+            if manual
+              manual.delete
+            end
+            constituency = Constituency.find_by_ons_id(ons_id)
+            Postcode.create! :code => postcode.sub(' ',''), :ons_id => ons_id, :constituency_id => constituency.id
+          end
+        rescue Exception => e
+          raise e
+        end
       end
       count = count.next
       log_duration count / total
