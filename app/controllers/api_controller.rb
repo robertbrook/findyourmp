@@ -8,6 +8,7 @@ class ApiController < ApplicationController
   end
 
   def search
+    params[:search_term] = params[:q1] unless params[:q1].blank?
     params[:search_term] = params[:q] unless params[:q].blank?
     search_term = params[:search_term]
 

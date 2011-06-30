@@ -21,12 +21,12 @@
     = label_tag 'f_csv', 'CSV'
     = radio_button_tag 'f', 'csv'
   %p
-    = text_field_tag 'q', '', :size => 24
+    = text_field_tag 'q1', '', :size => 24
     = submit_tag 'Find MP'
 = observe_field :f_xml, :frequency => 0.5, :function => 'if($("f_xml").checked) { $("format").innerHTML = $("f_xml").value }'
 = observe_field :f_js, :frequency => 0.5, :function => 'if($("f_js").checked) { $("format").innerHTML = $("f_js").value }'
 = observe_field :f_csv, :frequency => 0.5, :function => 'if($("f_csv").checked) { $("format").innerHTML = $("f_csv").value }'
-= observe_field :q, :frequency => 0.5, :function => '$("query").innerHTML = escape($("q").value)'
+= observe_field :q1, :frequency => 0.5, :function => '$("query").innerHTML = escape($("q1").value)'
 %p
   URL:
 %p
