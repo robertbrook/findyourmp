@@ -67,7 +67,7 @@ class Postcode < ActiveRecord::Base
   def to_output_yaml host, port
     "---\n#{to_text(host, port, "yaml")}"
   end
-  
+
   def blacklist
     blacklisted = BlacklistedPostcode.find_by_code(code)
     unless blacklisted

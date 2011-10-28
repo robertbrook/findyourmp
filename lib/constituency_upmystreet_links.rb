@@ -15,14 +15,14 @@ class UpMyStreet
       get_start_nodes(doc).each do |node|
         code_data = load_code node
         #puts code_data.to_yaml
-        
+
         upmystreetcode = UpMyStreetCode.find_by_code(code_data.code)
         unless upmystreetcode
           upmystreetcode = UpMyStreetCode.new()
           upmystreetcode.code = code_data.code
         end
         constituency = Constituency.find_by_constituency_name(code_data.constituency)
-        
+
         upmystreetcode.constituency = constituency.friendly_id
         upmystreetcode.save!
       end
@@ -81,14 +81,14 @@ class UpMyStreetData < UpMyStreet
     def set_code(node)
       url = node.at('a')['href']
       contact_url = url unless url == 'noemail.cfm'
-      
+
       code = nil
       unless contact_url.nil?
         if contact_url[/email\/l\/(\d+).html$/]
           code = $1
         end
       end
-      
+
       self.code = code unless code.nil?
     end
 end

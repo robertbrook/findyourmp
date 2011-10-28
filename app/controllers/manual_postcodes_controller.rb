@@ -1,11 +1,11 @@
 class ManualPostcodesController < ApplicationController
-  
+
   before_filter :require_admin_user
-  
+
   def index
     @manual_list = ManualPostcode.all
   end
-  
+
   def new
     if request.post?
       if params[:commit] == 'Create manual postcode'
@@ -14,7 +14,7 @@ class ManualPostcodesController < ApplicationController
         constituency_id = params[:manual_postcodes][:constituency]
         constituency = Constituency.find_by_id constituency_id
         postcode = ManualPostcode.add_manual_postcode code, constituency_id, constituency.ons_id
-        
+
         redirect_to :manual_postcodes
       else
         if params[:manual_postcodes]
@@ -30,14 +30,14 @@ class ManualPostcodesController < ApplicationController
       end
     end
   end
-  
+
   def remove
     code = params[:code]
     manual_code = ManualPostcode.find_by_code code
     unless manual_code.nil?
       manual_code.remove
     end
-    
+
     redirect_to :manual_postcodes
   end
 end

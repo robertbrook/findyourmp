@@ -3,7 +3,7 @@ class PasswordResetsController < ApplicationController
   before_filter :require_no_user
 
   before_filter :load_user_using_perishable_token, :only => [:edit, :update]
-  
+
   def new
     render
   end
@@ -24,7 +24,7 @@ class PasswordResetsController < ApplicationController
   def edit
     render
   end
-  
+
   def update
     @user.password = params[:user][:password]
     @user.password_confirmation = params[:user][:password_confirmation]
@@ -35,7 +35,7 @@ class PasswordResetsController < ApplicationController
       render :action => :edit
     end
   end
-  
+
   private
     def load_user_using_perishable_token
       @user = User.find_using_perishable_token(params[:id])

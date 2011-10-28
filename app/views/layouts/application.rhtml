@@ -31,7 +31,7 @@
       <%= auto_discovery_link_tag(:csv, @url_for_this + ".csv") %>
       <%= auto_discovery_link_tag(:yaml, @url_for_this + ".yaml") %>
     <% end %>
-    
+
     <% if @javascript %>
       <%= javascript_include_tag @javascript %>
     <% end %>
@@ -43,7 +43,7 @@
         main:{
           advancedSearchAjaxUrl: '/AJAX/MemberNames.ashx',
           calendarListingAjaxUrl: '/AJAX/CalendarMonth.ashx',
-          publicationsAndRecordsInitialShow: 3	    
+          publicationsAndRecordsInitialShow: 3
         },
         woa:{
           ajaxFlashZoomArtworkUrl: '/AJAX/ImageZoom.ashx'
@@ -52,12 +52,12 @@
         pageType: 'main-generic-content',
         pageInstanceId: '29500'
       }
-      parliamentUK.init(settings);			
+      parliamentUK.init(settings);
     });
     /*]]>*/
     </script>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><%= @title ? "#{@title} Find Your MP" : "Search (Find Your MP)" %> - UK Parliament</title>
     <meta name="keywords" content="UK Parliament, Find your MP, Find my MP, Member of Parliament" />
     <% if @meta_description %><meta name="description" content="<%= @meta_description %>" /><% end %>
@@ -69,12 +69,12 @@
       Find your MP - UK Parliament
     </title>
   </head>
-    
+
   <body class="mlo">
     <script type="text/javascript">
       /*<![CDATA[*/
       //load any sub-site JavaScript files (if required)
-      parliamentUK.loadSubSiteJavaScript($(document.body).attr('class'));	
+      parliamentUK.loadSubSiteJavaScript($(document.body).attr('class'));
       /*]]>*/
     </script>
 
@@ -83,12 +83,12 @@
         <a href="http://www.parliament.uk"><img src="/images/parliament-uk-logo.gif" alt="Parliament UK" /></a>
         <fieldset class="site-search">
         <ul>
-          <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl01_hypLink" href="http://www.parliament.uk/site-information/accessibility/">Accessibility</a></li>	
+          <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl01_hypLink" href="http://www.parliament.uk/site-information/accessibility/">Accessibility</a></li>
           <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl02_hypLink" href="http://www.parliament.uk/site-information/contact-us/">Contact us</a></li>
           <li><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl03_hypLink" href="http://www.parliament.uk/site-information/rss-feeds/">RSS feeds</a></li>
           <li class="last"><a id="ctl00_ctl00_ctlGlobalHeader_ctlNavigationLinks_rptLinks_ctl04_hypLink" href="http://www.parliament.uk/site-information/email-alerts/">Email alerts</a></li>
         </ul>
-        
+
         <form method="get" action="http://www.parliament.uk/search/results">
         <h4 class="marker">Site search</h4>
         <ol>
@@ -99,16 +99,16 @@
         </ol>
         <input type="submit" value="Search" />
         <ul id="search-options">
-          <li class="last"><a href="http://www.parliament.uk/search/advanced/">Advanced search</a></li>    
+          <li class="last"><a href="http://www.parliament.uk/search/advanced/">Advanced search</a></li>
         </ul>
-        </fieldset>	
+        </fieldset>
         </form>
-        
+
         <div id="navigation">
           <ul id="level-1">
-            <li><a href="http://www.parliament.uk/">Home</a></li>    
-            <li><a href="http://www.parliament.uk/business/">Parliamentary business</a></li>    
-            <li class="over"><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a></li>	    
+            <li><a href="http://www.parliament.uk/">Home</a></li>
+            <li><a href="http://www.parliament.uk/business/">Parliamentary business</a></li>
+            <li class="over"><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a></li>
             <li><a href="http://www.parliament.uk/about/">About Parliament</a></li>
             <li><a href="http://www.parliament.uk/get-involved/">Get involved</a></li>
             <li><a href="http://www.parliament.uk/visiting/">Visiting</a></li>
@@ -123,14 +123,14 @@
             <li><a href="http://www.parliament.uk/mps-lords-and-offices/government-and-opposition/">Government &amp; opposition</a></li>
           </ul>
         </div>
-        
+
         <div id="breadcrumb">
           <div class="inner">
             <strong>You are here:</strong>
             <ul><li><a href="http://www.parliament.uk/">Parliament home page</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/mps/">MPs</a><ul><li><%= @crumbtrail ? "<a href=\"/\">Find your MP</a> #{@crumbtrail}" : "Find your MP" %></li></ul></li></ul></li></ul></li></ul>
           </div>
         </div>
-        
+
       </div>
 
       <h4 class="marker">Navigation</h4>
@@ -149,26 +149,26 @@
           </li>
         </ul>
       </div>
-      
+
       <div id="content" class="three-column">
-        
+
         <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
         <div id="content-small">
         <%else%>
         <div id="admin-content">
         <%end%>
-          
+
           <h4 class="marker">Main content</h4>
-          
+
           <h1 id="ctl00_ctl00_SiteSpecificPlaceholder_ctlHeadingH1_h1Item"><!-- Start Indexing -->
             Find your MP<!-- Stop Indexing -->
           </h1>
-          
+
           <div class="inner">
-            
+
             <!-- Start Indexing -->
             <div id="ctl00_ctl00_SiteSpecificPlaceholder_PageContent_ctlMainBody_wrapperDiv" class="rte">
-              
+
               <h2><%= @title ? "#{@title}" : "Search" %></h2>
               <% if flash[:notice] %>
                 <div class="text <%= flash[:notice][/Successful/] ? 'info' : 'flash' %>">
@@ -176,18 +176,18 @@
                 </div>
               <% end %>
               <div><%= yield %></div>
-              
+
               <!-- Stop Indexing -->
             </div>
-            
+
           </div>
         </div>
-        
+
         <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
         <div id="panel">
           <div class="local-module">
             <h2>Related information</h2>
-          
+
             <strong>Commons Information Office</strong>
             <p>
             Contact us to find out more about the work, history and membership of the House of Commons
@@ -200,12 +200,12 @@
           </div>
         </div>
         <%end%>
-          
+
       </div>
-        
+
       <div id="footer">
         <h4 class="marker">Footer links</h4>
-        
+
         <ul>
           <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl01_hypLink" href="http://www.parliament.uk/site-information/azindex/">A-Z index</a></li>
           <li><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl02_hypLink" href="http://www.parliament.uk/site-information/glossary/">Glossary</a></li>
@@ -223,7 +223,7 @@
         </ul>
       </div>
     </div>
-    
+
     <% if RAILS_ENV == 'production' %>
       <script type="text/javascript">
         /*<![CDATA[*/

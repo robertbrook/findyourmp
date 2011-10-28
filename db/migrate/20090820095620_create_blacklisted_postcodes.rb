@@ -7,7 +7,7 @@ class CreateBlacklistedPostcodes < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     add_index :blacklisted_postcodes, :code
   end
 

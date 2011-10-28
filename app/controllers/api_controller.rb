@@ -126,7 +126,7 @@ class ApiController < ApplicationController
     def show_postcode postcode, search_term, format
       host = request.host
       port = request.port
-      
+
       show_constituencies([postcode.constituency], nil, format)
 
       # @postcode = postcode

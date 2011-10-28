@@ -15,18 +15,18 @@ module FindYourMP::DataLoader
     unless File.exist?(old_file)
       raise "#{old_file} not found"
     end
-    
+
     unless File.exist?(new_file)
       raise "#{new_file} not found"
     end
-    
+
     diff_file = "#{DATA_DIR}/diff_ons_ids.txt"
     if File.exist?(diff_file)
       cmd = "mv #{diff_file} #{diff_file}.#{Time.now.to_i.to_s}"
       puts cmd
       `#{cmd}`
     end
-    
+
     constituencies_by_id = {}
     constituencies_by_name = {}
     old_data = File.open(old_file)
@@ -36,7 +36,7 @@ module FindYourMP::DataLoader
       constituencies_by_id[parts[0]] = parts[1].strip
       constituencies_by_name[parts[1]] = parts[0]
     end
-    
+
     new_data = File.open(new_file)
     output = File.open(diff_file, 'w')
     new_data.each do |line|
@@ -54,12 +54,12 @@ module FindYourMP::DataLoader
       end
     end
   end
-  
+
   def patch_postcodes
     new_data = "\n" + File.open("#{DATA_DIR}/new_postcodes.txt").read
-    
+
     start_timing
-    
+
     Postcode.find_all_by_ons_id("0").each do |postcode|
       search_code = postcode.code
       if postcode.code.length < 6
@@ -78,7 +78,7 @@ module FindYourMP::DataLoader
         warn "trouble matching #{postcode.code}"
       end
     end
-    
+
     BlacklistedPostcode.find_all_by_ons_id("0").each do |postcode|
       search_code = postcode.code
       if postcode.code.length < 6
@@ -95,10 +95,10 @@ module FindYourMP::DataLoader
         warn "trouble matching #{postcode.code}"
       end
     end
-    
+
     log_duration
   end
-  
+
   def diff_postcodes old_file, new_file
     unless File.exist?(old_file)
       raise "#{old_file} not found"
@@ -125,28 +125,28 @@ module FindYourMP::DataLoader
     puts cmd
     `#{cmd}`
     end
-  
+
   def patch_ons_ids
     patch_file = "#{DATA_DIR}/diff_ons_ids.txt"
-    
+
     unless File.exist?(patch_file)
       raise "#{patch_file} not found"
     end
-    
+
     start_timing
-    
+
     data = File.open(patch_file)
     data.each do |line|
       line.gsub!("\n", "")
       parts = line.split("\t")
       old_id = parts[0].strip
       new_id = parts[1].strip
-      
+
       ActiveRecord::Base.connection.execute("UPDATE blacklisted_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
       ActiveRecord::Base.connection.execute("UPDATE manual_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
       ActiveRecord::Base.connection.execute("UPDATE constituencies SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
     end
-    
+
     log_duration
   end
 
@@ -225,7 +225,7 @@ module FindYourMP::DataLoader
 
     missing_updates = []
     to_update.each do |postcode, ons_id|
-      unless Postcode.exists?(:code => postcode.sub(' ',''))  
+      unless Postcode.exists?(:code => postcode.sub(' ',''))
         missing_updates << [postcode, ons_id] unless BlacklistedPostcode.exists?(:code => postcode.sub(' ',''))
       end
     end
@@ -261,7 +261,7 @@ module FindYourMP::DataLoader
         warn "cannot delete postcode, as it was not in database: #{postcode}"
       end
     end
-    
+
     #process updates
     to_update.each do |postcode, ons_id|
       post_code = Postcode.find_by_code(postcode.sub(' ',''))
@@ -288,7 +288,7 @@ module FindYourMP::DataLoader
           post_code.constituency_id = nil
         end
         post_code.save
-        
+
         count = count.next
         log_duration count / total
       else

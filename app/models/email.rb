@@ -1,7 +1,7 @@
 class Email < ActiveRecord::Base
 
   named_scope :waiting
-  
+
   before_create :check_header
 
   class << self
@@ -15,13 +15,13 @@ class Email < ActiveRecord::Base
   end
 
   private
-  
-    def check_header     
+
+    def check_header
       to_line = ""
       new_to_line = ""
       from_line = ""
       new_from_line = ""
-       
+
       unless mail.nil?
         mail.each do |line|
           if line[0..5] == 'From: '

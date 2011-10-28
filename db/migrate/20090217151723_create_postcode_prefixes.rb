@@ -4,7 +4,7 @@ class CreatePostcodePrefixes < ActiveRecord::Migration
       t.string :prefix, :limit => 4
       t.integer :constituency_id
     end
-    
+
     add_index :postcode_prefixes, :prefix
   end
 

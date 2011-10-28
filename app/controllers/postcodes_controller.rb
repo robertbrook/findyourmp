@@ -1,5 +1,5 @@
 class PostcodesController < ApplicationController
-  
+
   caches_page :show
 
   def index
@@ -22,7 +22,7 @@ class PostcodesController < ApplicationController
       end
     end
   end
-  
+
   def redir
     redirect_to :root
   end
@@ -86,7 +86,7 @@ class PostcodesController < ApplicationController
         redirect_to :action=>'index'
       end
     end
-    
+
     def show_error format
       @error_message = flash[:not_found]
 
@@ -100,5 +100,5 @@ class PostcodesController < ApplicationController
         format.yaml { render :text => message_to_yaml("error", @error_message) }
       end
     end
-    
+
 end

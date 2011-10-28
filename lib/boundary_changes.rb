@@ -2,29 +2,29 @@ require File.expand_path(File.dirname(__FILE__) + '/timer')
 
 module FindYourMP; end
 module FindYourMP::BoundaryChanges
-  
+
   include FindYourMP::Timer
-  
+
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + '/../data')
 
   # RB hacked to point to local recent file
   BOUNDARY_FILE = "#{DATA_DIR}/pcd_pcon_aug_2009_uk_lu.txt"
-  
+
   def create_new_constituencies_file
     tab = "\t"
     new_constituencies = []
     new_line = "\n"
-    
+
     constituencies_file = "#{DATA_DIR}/new_constituencies.txt"
-    
+
     start_timing
-    
+
     if File.exist?(constituencies_file)
       cmd = "mv #{constituencies_file} #{constituencies_file}.#{Time.now.to_i.to_s}"
       puts cmd
       `#{cmd}`
     end
-    
+
     constituencies = {}
     IO.foreach(BOUNDARY_FILE) do |line|
       ons_id = line[24..26]
@@ -39,23 +39,23 @@ module FindYourMP::BoundaryChanges
         end
       end
     end
-    
+
     keys = constituencies.keys.sort
-      
+
     line = []
     keys.each do |key|
       new_constituencies << key << tab << constituencies[key] << new_line
     end
     log_duration
-    
+
     start_timing
     File.open(constituencies_file,'w') do |file|
       file.write(new_constituencies.join(''))
     end
     log_duration
   end
-  
-  
+
+
   # used to compare a postcodes.txt file generated from the August '09 data
   # with the pcd_pcon_aug_2009_uk_lu.txt file to create a new postcodes.txt
   # file (in the example given, saved as new_postcodes.txt)
@@ -63,7 +63,7 @@ module FindYourMP::BoundaryChanges
     return if file_not_found(original_file)
     return if file_not_found(new_file)
     start_timing
-    
+
     blank_date = '      '
     blank_code = '   '
     new_line = "\n"
@@ -71,7 +71,7 @@ module FindYourMP::BoundaryChanges
     post_codes = []
 
     new_data = File.open(new_file)
-    
+
     IO.foreach(original_file) do |line|
       #ignore blank lines, Guernsey and Isle of Man postcodes
       unless line == "" || line[8..10] == "800" || line[8..10] == "900"
@@ -82,7 +82,7 @@ module FindYourMP::BoundaryChanges
           post_code = data[0..6]
           constituency_code = data[24..26]
         end
-        
+
         post_codes << post_code << space << constituency_code
         post_codes << new_line
       end
