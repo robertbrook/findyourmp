@@ -5,6 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
 require File.expand_path(File.dirname(__FILE__) + "/spec_utils.rb")
+Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these

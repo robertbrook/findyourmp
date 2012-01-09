@@ -69,12 +69,12 @@ describe ApiController do
 
       it 'should render js correctly' do
         do_get 'js'
-        response.body.should == %Q|{"results": { "constituencies": {json version of data}, "members": {} }} |
+        response.body.should == %Q|{"results": { "constituencies": [json version of data], "members": [] }} |
       end
 
       it 'should render js with callback correctly' do
         get :search, :q => @postcode_no_space, :format => 'js', :callback => 'callback_function'
-        response.body.should == %Q|callback_function({"results": { "constituencies": {json version of data}, "members": {} }} )|
+        response.body.should == %Q|callback_function({"results": { "constituencies": [json version of data], "members": [] }} )|
       end
     end
 

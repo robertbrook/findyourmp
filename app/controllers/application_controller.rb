@@ -91,8 +91,8 @@ class ApplicationController < ActionController::Base
         members_json += member.to_json(host, port)[1..-2]
       end
 
-      constituencies_results = %Q|"constituencies": {#{constituencies_json}}|
-      members_results = %Q|"members": {#{members_json}}|
+      constituencies_results = %Q|"constituencies": [#{constituencies_json.gsub('"constituency": ', "")}]|
+      members_results = %Q|"members": [#{members_json.gsub('"constituency": ', "").gsub("/r/n", "")}]|
 
       json = %Q|{"results": { #{constituencies_results}, #{members_results} }} |
       if callback

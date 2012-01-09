@@ -22,7 +22,7 @@ Feature: Search API
 
   Scenario: Call search API with valid postcode, requesting JSON
     Given I call the search API searching for "AB101AA" and requesting "json"
-    Then I should see json {"results": { "constituencies": {"constituency": {"constituency_name": "Aberdeen North", "member_name": "Frank Doran", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "http://www.example.com/constituencies/aberdeen-north.json" } }, "members": {} }}
+    Then I should see json {"results": { "constituencies": [{"constituency_name": "Aberdeen North", "member_name": "Frank Doran", "member_party": "", "member_biography_url": "", "member_website": "", "uri": "http://www.example.com/constituencies/aberdeen-north.json" } ], "members": [] }}
 
   Scenario: Call search API with valid postcode, requesting CSV
     Given I call the search API searching for "AB101AA" and requesting "csv"
@@ -41,7 +41,7 @@ Feature: Search API
 
   Scenario: Call search API with valid constituency name, requesting JSON
     Given I call the search API searching for "Aberdeen South" and requesting "json"
-    Then I should see json {"constituency": {
+    Then I should see json { "constituencies": [
     And I should see json "constituency_name": "Aberdeen South"
     And I should see json "member_name": "Miss Anne Begg"
     And I should see json "member_party": ""
