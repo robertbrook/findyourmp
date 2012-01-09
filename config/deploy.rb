@@ -346,6 +346,7 @@ namespace :deploy do
       data = File.read(file)
       put data, "#{current_path}/data/diff_postcodes.txt", :mode => 0664
       run "cd #{current_path}; rake fymp:update_postcodes RAILS_ENV='production'"
+      run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
     else
       puts 'USAGE EXAMPLE:'
       puts 'rake fymp:diff_postcodes old=data/NSPDF_FEB_2009_UK_1M.txt new=data/NSPDF_MAY_2009_UK_1M_FP.txt'
