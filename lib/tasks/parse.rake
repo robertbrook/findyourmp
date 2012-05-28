@@ -61,7 +61,7 @@ namespace :fymp do
       puts 'USAGE: rake fymp:diff_ons_ids old=data/constituencies.txt new=data/new_constituencies.txt'
     end
   end
-  
+
   task :patch_ons_ids => :environment do
     patch_ons_ids
   end
@@ -81,7 +81,7 @@ namespace :fymp do
   task :analyze_postcode_update => :environment do
     analyze_postcode_update
   end
-  
+
   task :patch_postcodes => :environment do
     patch_postcodes
   end

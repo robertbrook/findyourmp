@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
     def results_to_json constituencies, members, callback=nil
       host = request.host
       port = request.port
-      
+
       constituencies_json = ""
       constituencies.each do |constituency|
         constituencies_json += ", " unless constituencies_json == ""
@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
     def results_to_text constituencies, members
       host = request.host
       port = request.port
-      
+
       results = ""
       constituencies.each do |constituency|
         results += "\n\n"

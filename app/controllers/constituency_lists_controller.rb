@@ -1,7 +1,7 @@
 class ConstituencyListsController < ApplicationController
 
   before_filter :require_admin_user
-  
+
   def edit
     @constituency_list = ConstituencyList.new
   end

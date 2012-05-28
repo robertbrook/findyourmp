@@ -26,11 +26,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/admin/stats', :controller => 'admin', :action => 'stats'
   map.shutdown '/admin/shutdown', :controller => 'admin', :action => 'shutdown'
   map.mailserver_status '/admin/mailserver_status', :controller => 'admin', :action => 'mailserver_status'
-  
+
   map.blacklisted_postcodes '/admin/blacklist', :controller => 'blacklisted_postcodes', :action => 'index'
   map.connect '/admin/blacklist/restore/:code', :controller => 'blacklisted_postcodes', :action => 'restore'
   map.connect '/admin/blacklist/new', :controller => 'blacklisted_postcodes', :action => 'new'
-  
+
   map.manual_postcodes '/admin/manual_postcodes', :controller => 'manual_postcodes', :action => 'index'
   map.connect '/admin/manual_postcodes/remove/:code', :controller => 'manual_postcodes', :action => 'remove'
   map.connect '/admin/manual_postcodes/new', :controller => 'manual_postcodes', :action => 'new'

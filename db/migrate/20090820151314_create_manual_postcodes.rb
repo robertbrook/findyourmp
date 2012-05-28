@@ -7,7 +7,7 @@ class CreateManualPostcodes < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     add_index :manual_postcodes, :code
   end
 

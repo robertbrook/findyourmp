@@ -147,7 +147,7 @@ namespace :serverbuild do
       gemversion.gsub!('(', "")
       gemversion.gsub!(')', "")
       gemversion.gsub!(',', "")
-    else 
+    else
       gemversion = "not installed"
     end
     gemversion

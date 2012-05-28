@@ -10,11 +10,11 @@
 %div.text
   -if request.post?
     -if @constituencies
-      %p 
+      %p
         Please choose a constituency for the postcode <code>
         = flash[:code]
         </code> from the dropdown:
-        
+
       -form_for :manual_postcodes, :url => '/admin/manual_postcodes/new', :method => :post do |f|
         - options = @constituencies.collect {|constituency| [constituency.name, constituency.id]}
         - options = options.sort_by{ |x| x[0] }

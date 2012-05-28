@@ -43,11 +43,11 @@ class UsersController < ApplicationController
       save_user
     end
   end
-  
+
   def destroy
     # todo
   end
-  
+
   private
 
     def save_user
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
         render :action => :edit
       end
     end
-    
+
     def set_user
       user_id = params[:id]
       if current_user.id == user_id.to_i
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
         @own_account = false
       else
         flash[:notice] = "You must be logged in as an admin user to access this page"
-        redirect_to admin_path      
+        redirect_to admin_path
       end
     end
 end

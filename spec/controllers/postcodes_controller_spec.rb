@@ -106,7 +106,7 @@ describe PostcodesController do
       before do
         @matches = [ @district_record, @other_district_record ]
         PostcodeDistrict.should_receive(:find_all_by_district).with(@postcode_district).and_return @matches
-        
+
         @constituency.stub!(:to_json).and_return "stuff"
         @other_constituency.stub!(:to_json).and_return "stuff"
         @constituency.stub!(:to_text).and_return "stuff"
@@ -121,7 +121,7 @@ describe PostcodesController do
         do_get
         assigns[:postcode_districts].should == @matches
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
   end
@@ -145,17 +145,17 @@ describe PostcodesController do
         do_get
         assigns[:postcode].should == @postcode_record
       end
-      
+
       it 'should set postcode in flash memory' do
         do_get
         flash[:postcode].should == @postcode_with_space
       end
-      
+
       it 'should assign constituency to view' do
         do_get
         assigns[:constituency].should == @constituency
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
 
@@ -180,12 +180,12 @@ describe PostcodesController do
         do_get
         response.should redirect_to(:action=>'index')
       end
-      
+
       it 'should set non-matching postcode text as last_search_term in flash memory' do
         do_get
         flash[:last_search_term].should == @canonical_postcode
       end
-      
+
       it_should_behave_like "returns in correct format"
     end
   end

@@ -75,11 +75,11 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find).and_raise ActiveRecord::RecordNotFound.new("Couldn't find Constituency")
     end
-    
+
     def do_get
       get :show, :id => @friendly_id
     end
-    
+
     it 'should respond with file not found' do
       do_get
       response.status.should == '404 Not Found'
@@ -90,17 +90,17 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find).and_return @constituency
     end
-    
+
     def do_get format=nil
       get :show, :id => @friendly_id, :format => format
     end
-    
+
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@friendly_id).and_return @constituency
       do_get
       assigns[:constituency].should == @constituency
     end
-    
+
     it 'should keep :postcode in flash memory' do
       flash = mock('flash')
       @controller.stub!(:flash).and_return flash
@@ -108,7 +108,7 @@ describe ConstituenciesController do
       flash.stub!(:sweep)
       do_get
     end
-    
+
     it_should_behave_like "returns in correct format"
   end
 
@@ -116,17 +116,17 @@ describe ConstituenciesController do
     before do
       Constituency.stub!(:find).and_return @constituency_without_mp
     end
-    
+
     def do_get format=nil
       get :show, :id => @constituency_without_mp_friendly_id, :format => format
     end
-    
+
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
       do_get
       assigns[:constituency].should == @constituency_without_mp
     end
-    
+
     it_should_behave_like "returns in correct format"
   end
 
@@ -167,7 +167,7 @@ describe ConstituenciesController do
         response.should redirect_to('/')
       end
     end
-    
+
     describe "when asked for hide_members" do
       it "should respond with 'Unauthorized'" do
         get :hide_members
@@ -175,19 +175,19 @@ describe ConstituenciesController do
       end
     end
   end
-  
+
   describe "when asked to redirect from an upmystreet style url" do
     it "should redirect to the constituency when given a valid upmystreet code" do
       get :redir, :up_my_street_code => 436
       response.should redirect_to('/constituencies/spelthorne')
     end
-    
+
     it "should redirect to root when given an invalid upmystreet code" do
       get :redir, :up_my_street_code => 'invalid'
       response.should redirect_to('/')
     end
   end
-  
+
   # describe "when asked for 'mail to constituency MP' page" do
     # def do_get
       # get :mail, :id => @constituency_id
