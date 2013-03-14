@@ -44,7 +44,7 @@ describe "/constituencies/show.haml" do
     assigns[:members] = []
 
     render "/constituencies/show.haml"
-    response.should have_text(/Islington North<\/a>\n  &mdash; no sitting Member/)
-    response.should have_text(/Islington South<\/a>\n  &mdash; member_name/)
+    response.should have_text(/Islington North<\/a>\n&mdash; no sitting Member/)
+    response.should have_text(/Islington South<\/a>\n&mdash; member_name/)
   end
 end

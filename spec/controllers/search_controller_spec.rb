@@ -250,7 +250,7 @@ describe SearchController do
 
   describe 'search route' do
     it 'should route correctly' do
-      params_from(:get, "/search?q=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :q=>'E3+2AT', :commit=>"Find+MP"}
+      params_from(:get, "/search?q=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :q=>'E3 2AT', :commit=>"Find MP"}
     end
   end
 
