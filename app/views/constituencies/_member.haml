@@ -13,7 +13,7 @@
     .row_item
       .row_label Party
       .row_value= h(@constituency.member_party)
-    - if @constituency.member_website?
+    - if @constituency.member_website? and @constituency.member_website.strip != "NULL"
       .row_item
         .row_label Website
         .row_value
