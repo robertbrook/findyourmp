@@ -1,0 +1,21 @@
+development:
+  adapter: mysql
+  database: findyourmp_development
+  username: root
+  password: 
+  socket: /tmp/mysql.sock
+
+test:
+  adapter: mysql
+  database: findyourmp_test
+  username: root
+  password: 
+  socket: /tmp/mysql.sock
+    
+    
+production:
+  adapter: mysql
+  database: findyourmp_production
+  username: root
+  password: 
+  socket: /tmp/mysql.sock
