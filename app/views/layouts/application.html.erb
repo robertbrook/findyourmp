@@ -127,7 +127,7 @@
         <div id="breadcrumb">
           <div class="inner">
             <strong>You are here:</strong>
-            <ul><li><a href="http://www.parliament.uk/">Parliament home page</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/mps/">MPs</a><ul><li><%= @crumbtrail ? "<a href=\"/\">Find your MP</a> #{@crumbtrail}" : "Find your MP" %></li></ul></li></ul></li></ul></li></ul>
+            <ul><li><a href="http://www.parliament.uk/">Parliament home page</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/">MPs, Lords &amp; offices</a><ul><li><a href="http://www.parliament.uk/mps-lords-and-offices/mps/">MPs</a><ul><li><%= @crumbtrail ? link_to("Find Your MP", "/") + @crumbtrail : "Find your MP" %></li></ul></li></ul></li></ul></li></ul>
           </div>
         </div>
         
@@ -152,7 +152,7 @@
       
       <div id="content" class="three-column">
         
-        <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
+        <% if !is_admin? && Rails.env != 'test' && @title != 'API' %>
         <div id="content-small">
         <%else%>
         <div id="admin-content">
@@ -183,7 +183,7 @@
           </div>
         </div>
         
-        <% if !is_admin? && RAILS_ENV != 'test' && @title != 'API' %>
+        <% if !is_admin? && Rails.env != 'test' && @title != 'API' %>
         <div id="panel">
           <div class="local-module">
             <h2>Related information</h2>
@@ -216,7 +216,7 @@
           <% if is_admin? %>
              <li><%= link_to "Logout", user_session_path, :method => :delete %></li>
              <li><%= link_to 'Admin home', admin_path %></li>
-           <% elsif RAILS_ENV == 'test' %>
+           <% elsif Rails.env == 'test' %>
              <li><%= link_to "Log In", new_user_session_path %></li>
            <% end %>
           <li class="last"><a id="ctl00_ctl00_ctlGlobalFooter_ctlNavigationLinks_rptLinks_ctl07_hypLink" href="http://www.parliament.uk/site-information/copyright/">Copyright</a></li>
@@ -224,7 +224,7 @@
       </div>
     </div>
     
-    <% if RAILS_ENV == 'production' %>
+    <% if Rails.env == 'production' %>
       <script type="text/javascript">
         /*<![CDATA[*/
         var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
