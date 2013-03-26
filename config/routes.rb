@@ -1,55 +1,113 @@
-ActionController::Routing::Routes.draw do |map|
+FindYourMP::Application.routes.draw do
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
 
-  map.resources :constituencies
+  # Sample of regular route:
+  #   match 'products/:id' => 'catalog#view'
+  # Keep in mind you can assign values other than :controller and :action
 
-  map.resource :account, :controller => "users"
-  map.resources :users
-  map.resource :user_session
-  map.resource :constituency_list
+  # Sample of named route:
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  # This route can be invoked with purchase_url(:id => product.id)
 
-  map.resources :password_resets
-
-  map.root :controller => "postcodes"
-  map.connect '/postcodes/:postcode.:format', :controller => "postcodes", :action => 'show'
-  map.connect '/postcodes/:postcode', :controller => "postcodes", :action => 'show'
-  map.connect '/search/:q.:format', :controller => "search", :action => 'show'
-  map.connect '/search/:q', :controller => "search", :action => 'show'
-  map.search '/search', :controller => "search", :action => 'index'
-
-  map.connect '/constituencies/hide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'hide_members'
-  map.connect '/constituencies/unhide_members',  :conditions => { :method => :post }, :controller => "constituencies", :action => 'unhide_members'
-
-  map.admin '/admin', :controller => 'admin', :action => 'index'
-  map.connect '/admin/sent', :controller => 'admin', :action => 'sent'
-  map.connect '/admin/sent/:yyyy_mm', :controller => 'admin', :action => 'sent_by_month'
-  map.connect '/admin/waiting_to_be_sent', :controller => 'admin', :action => 'waiting_to_be_sent'
-  map.connect '/admin/stats', :controller => 'admin', :action => 'stats'
-  map.shutdown '/admin/shutdown', :controller => 'admin', :action => 'shutdown'
-  map.mailserver_status '/admin/mailserver_status', :controller => 'admin', :action => 'mailserver_status'
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   resources :products
   
-  map.blacklisted_postcodes '/admin/blacklist', :controller => 'blacklisted_postcodes', :action => 'index'
-  map.connect '/admin/blacklist/restore/:code', :controller => 'blacklisted_postcodes', :action => 'restore'
-  map.connect '/admin/blacklist/new', :controller => 'blacklisted_postcodes', :action => 'new'
+  resources :constituencies
   
-  map.manual_postcodes '/admin/manual_postcodes', :controller => 'manual_postcodes', :action => 'index'
-  map.connect '/admin/manual_postcodes/remove/:code', :controller => 'manual_postcodes', :action => 'remove'
-  map.connect '/admin/manual_postcodes/new', :controller => 'manual_postcodes', :action => 'new'
+  resource :account, :controller => "users"
+  resources :users
+  resource :user_session
+  resource :constituency_list
+  
+  resources :password_resets
+  
+  root :to => 'postcodes#index'
+  
+  match '/postcodes/:postcode' => 'postcodes#show'
+  match '/search/:q' => 'search#show'
+  match '/search' => 'search#index', :as => "search"
+  
+  resource :constituencies do
+    post 'hide_members'
+    post 'unhide_members'
+  end
+  
+  match '/admin' => 'admin#index', :as => "admin"
+  match '/admin/sent'  => 'admin#sent'
+  match '/admin/sent/:yyyy_mm' => 'admin#sent_by_month'
+  match '/admin/waiting_to_be_sent' => 'admin#waiting_to_be_sent'
+  match '/admin/stats' => 'admin#stats'
+  match '/admin/shutdown' => 'admin#shutdown', :as => "shutdown"
+  match '/admin/mailserver_status' => 'admin#mailserver_status', :as => "mailserver_status"
+  
+  match '/admin/blacklist' => 'blacklisted_postcodes#index', :as => "blacklisted_postcodes"
+  match '/admin/blacklist/restore/:code' => 'blacklisted_postcodes#restore'
+  match '/admin/blacklist/new' => 'blacklisted_postcodes#new'
+  
+  match '/admin/manual_postcodes' => 'manual_postcodes#index', :as => "manual_postcodes"
+  match '/admin/manual_postcodes/remove/:code' => 'manual_postcodes#remove'
+  match '/admin/manual_postcodes/new' => 'manual_postcodes#new'
+  
+  match '/api' => 'api#index', :as => "api"
+  match '/api/search' => 'api#search'
+  match '/api/postcodes' => 'api#postcodes'
+  match '/api/constituencies' => 'api#constituencies'
+  
+  match '/commons/constituency/search/l/:q.html' => 'search#redir'
+  match '/commons/member/search/l/:q.html' => 'search#redir'
+  match '/commons/postcode/search/l/:q.html' => 'search#redir'
+  
+  match '/commons/constituency/cons/l/:up_my_street_code.html' => 'constituencies#redir'
+  match '/commons/member/cons/l/:up_my_street_code.html' => 'constituencies#redir'
+  match '/commons/email/l/:up_my_street_code.html' => 'constituencies#redir'
+  
+  match '/commons/l/' => 'postcodes#redir'
+  match '/commons/' => 'postcodes#redir'
+  
+  match '*bad_route' => 'application#render_not_found', :as => "bad_route"
+  
+  
+  # Sample resource route with options:
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
+  #   end
 
-  map.api '/api', :controller => 'api', :action => 'index'
-  map.connect 'api/search', :controller => 'api', :action => 'search'
-  map.connect 'api/postcodes', :controller => 'api', :action => 'postcodes'
-  map.connect 'api/constituencies', :controller => 'api', :action => 'constituencies'
+  # Sample resource route with sub-resources:
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
 
-  map.connect '/commons/constituency/search/l/:q.html', :controller => 'search', :action => 'redir'
-  map.connect '/commons/member/search/l/:q.html', :controller => 'search', :action => 'redir'
-  map.connect '/commons/postcode/search/l/:q.html', :controller => 'search', :action => 'redir'
+  # Sample resource route with more complex sub-resources
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
+  #   end
 
-  map.connect '/commons/constituency/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
-  map.connect '/commons/member/cons/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
-  map.connect '/commons/email/l/:up_my_street_code.html', :controller => 'constituencies', :action => 'redir'
+  # Sample resource route within a namespace:
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
+  #   end
 
-  map.connect '/commons/l/', :controller => 'postcodes', :action => 'redir'
-  map.connect '/commons/', :controller => 'postcodes', :action => 'redir'
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  # root :to => 'welcome#index'
 
-  map.connect '*bad_route', :controller => 'application', :action => 'render_not_found'
+  # See how all your routes lay out with "rake routes"
+
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  # match ':controller(/:action(/:id))(.:format)'
 end
