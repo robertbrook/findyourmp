@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe SearchController do
 
@@ -52,9 +52,13 @@ describe SearchController do
     end
 
     describe 'and a matching constituency is not found' do
-      it 'should redirect to root page' do
+      before do
+        Constituency.should_receive(:find_all_name_or_member_name_matches).and_return []
+      end
+      
+      it 'should redirect to root page' do  
         do_get
-        response.should redirect_to("")
+        response.should redirect_to("/")
       end
 
       it_should_behave_like "returns in correct format"
@@ -66,7 +70,7 @@ describe SearchController do
       end
       it 'should redirect to constituency view showing constituency' do
         do_get
-        response.should redirect_to("constituencies/#{@friendly_constituency_id}")
+        response.should redirect_to("/constituencies/#{@friendly_constituency_id}")
       end
     end
   end
@@ -82,8 +86,9 @@ describe SearchController do
 
     describe 'and a matching constituency is not found' do
       it 'should redirect to root page' do
+        Constituency.should_receive(:find_all_name_or_member_name_matches).and_return []
         do_get
-        response.should redirect_to("")
+        response.should redirect_to("/")
       end
     end
 
@@ -96,6 +101,7 @@ describe SearchController do
       end
 
       it 'should show list of matching constituencies' do
+        @controller.should_receive(:render).with()
         @controller.should_receive(:render).with :template => '/constituencies/show'
         do_get
       end
@@ -125,7 +131,7 @@ describe SearchController do
 
     it 'should redirect to root page' do
       do_get
-      response.should redirect_to("")
+      response.should redirect_to("/")
     end
 
     it_should_behave_like "returns in correct format"
@@ -144,7 +150,7 @@ describe SearchController do
     describe 'and no matching postcode is found' do
       it 'should redirect to root page' do
         do_get
-        response.should redirect_to("")
+        response.should redirect_to("/")
       end
 
       it_should_behave_like "returns in correct format"
@@ -162,7 +168,7 @@ describe SearchController do
 
       it 'should redirect to postcode view showing constituency' do
         do_get
-        response.should redirect_to("postcodes/#{@canonical_postcode}")
+        response.should redirect_to("/postcodes/#{@canonical_postcode}")
       end
     end
   end
@@ -250,7 +256,7 @@ describe SearchController do
 
   describe 'search route' do
     it 'should route correctly' do
-      params_from(:get, "/search?q=E3+2AT&commit=Find+MP").should == {:controller => "search", :action => "index", :q=>'E3 2AT', :commit=>"Find MP"}
+      { :get => "/search?q=E3+2AT&commit=Find+MP" }.should route_to(:controller => "search", :action => "index")
     end
   end
 
