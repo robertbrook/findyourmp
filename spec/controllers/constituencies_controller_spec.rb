@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe ConstituenciesController do
-
   before do
     @postcode_with_space = 'N1 1AA'
     @constituency_id = 801
@@ -38,39 +37,7 @@ describe ConstituenciesController do
     @constituency_without_mp.stub!(:to_text)
     @constituency_without_mp.stub!(:to_json)
   end
-
-  def self.get_request_should_be_successful
-    eval %Q|    it "should be successful" do
-      do_get
-      response.should be_success
-    end|
-  end
-
-  def self.should_render_template template_name
-    eval %Q|    it "should render #{template_name} template" do
-      do_get
-      response.should render_template('#{template_name}')
-    end|
-  end
-
-  describe "when finding route for action" do
-    it 'should find index root' do
-      route_for(:controller => "constituencies", :action => "index").should == "/constituencies"
-      params_from(:get, "/constituencies").should == {:controller => "constituencies", :action => "index"}
-    end
-    it 'should find show action' do
-      route_for(:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}").should == "/constituencies/#{@constituency_id}"
-      params_from(:get, "/constituencies/#{@constituency_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}"}
-
-      route_for(:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}").should == "/constituencies/#{@friendly_id}"
-      params_from(:get, "/constituencies/#{@friendly_id}").should == {:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}"}
-    end
-    # it 'should find message action' do
-      # route_for(:controller => "constituencies", :action => "mail", :id=>@constituency_id).should == "/constituencies/#{@constituency_id}/mail"
-      # params_from(:get, "/constituencies/#{@constituency_id}/mail").should == {:controller => "constituencies", :action => "mail", :id=>@constituency_id.to_s}
-    # end
-  end
-
+  
   describe "when asked for one constituency by wrong id" do
     before do
       Constituency.stub!(:find).and_raise ActiveRecord::RecordNotFound.new("Couldn't find Constituency")
@@ -82,29 +49,29 @@ describe ConstituenciesController do
     
     it 'should respond with file not found' do
       do_get
-      response.status.should == '404 Not Found'
+      response.status.should == 404
     end
   end
 
   describe "when asked for one constituency by friendly_id along with search term" do
     before do
-      Constituency.stub!(:find).and_return @constituency
+      @controller.should_receive(:ensure_current_constituency_url).and_return true
+      Constituency.should_receive(:find).with(@friendly_id).and_return @constituency
     end
     
     def do_get format=nil
-      get :show, :id => @friendly_id, :format => format
+      get :show, {:id => @friendly_id, :format => format}
     end
     
     it 'should assign constituency to view' do
-      Constituency.should_receive(:find).with(@friendly_id).and_return @constituency
       do_get
-      assigns[:constituency].should == @constituency
+      expect(assigns(:constituency)).to eq(@constituency)
     end
     
     it 'should keep :postcode in flash memory' do
-      flash = mock('flash')
+      flash[:postcode] = "test"
       @controller.stub!(:flash).and_return flash
-      flash.should_receive(:keep).with(:postcode)
+      flash.should_receive(:keep)
       flash.stub!(:sweep)
       do_get
     end
@@ -114,7 +81,7 @@ describe ConstituenciesController do
 
   describe "when asked for a constituency by friendly_id which does not have a sitting MP" do
     before do
-      Constituency.stub!(:find).and_return @constituency_without_mp
+      @controller.should_receive(:ensure_current_constituency_url).and_return true
     end
     
     def do_get format=nil
@@ -124,7 +91,7 @@ describe ConstituenciesController do
     it 'should assign constituency to view' do
       Constituency.should_receive(:find).with(@constituency_without_mp_friendly_id).and_return @constituency_without_mp
       do_get
-      assigns[:constituency].should == @constituency_without_mp
+      assigns(:constituency).should eq(@constituency_without_mp)
     end
     
     it_should_behave_like "returns in correct format"
@@ -171,7 +138,7 @@ describe ConstituenciesController do
     describe "when asked for hide_members" do
       it "should respond with 'Unauthorized'" do
         get :hide_members
-        response.status.should == '401 Unauthorized'
+        response.status.should == 401
       end
     end
   end
@@ -192,15 +159,15 @@ describe ConstituenciesController do
     # def do_get
       # get :mail, :id => @constituency_id
     # end
-#
+    #
     # describe 'and constituency is found' do
       # before do
         # Constituency.stub!(:find).and_return @constituency
       # end
-#
+      #
       # get_request_should_be_successful
       # should_render_template 'mail'
-#
+      #
       # it 'should find constituency by id' do
         # Constituency.should_receive(:find).with(@constituency_id.to_s).and_return @constituency
         # do_get
@@ -215,4 +182,28 @@ describe ConstituenciesController do
       # end
     # end
   # end
+  def self.get_request_should_be_successful
+    eval %Q|    it "should be successful" do
+      do_get
+      response.should be_success
+    end|
+  end
+
+  def self.should_render_template template_name
+    eval %Q|    it "should render #{template_name} template" do
+      do_get
+      response.should render_template('#{template_name}')
+    end|
+  end
+
+  describe "when finding route for action" do
+    it 'should find index root' do
+      { :get => "/constituencies" }.should route_to(:controller => "constituencies", :action => "index")
+    end
+    
+    it 'should find show action' do      
+      { :get => "/constituencies/#{@constituency_id}" }.should route_to(:controller => "constituencies", :action => "show", :id=>"#{@constituency_id}")
+      { :get => "/constituencies/#{@friendly_id}" }.should route_to(:controller => "constituencies", :action => "show", :id=>"#{@friendly_id}")
+    end
+  end
 end

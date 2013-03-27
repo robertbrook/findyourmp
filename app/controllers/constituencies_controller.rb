@@ -1,5 +1,4 @@
-class ConstituenciesController < ResourceController::Base
-
+class ConstituenciesController < ApplicationController  
   caches_page :show, :if => '!is_admin?'
   cache_sweeper :constituency_sweeper, :only => [:update, :destroy, :hide_members, :unhide_members]
 
@@ -57,11 +56,11 @@ class ConstituenciesController < ResourceController::Base
     respond_to do |format|
       format.html { @constituency }
       format.xml  { render :xml => @constituency }
-      format.json { render :json => @constituency.to_json }
-      format.js   { render :json => @constituency.to_json }
-      format.text { render :text => @constituency.to_text }
-      format.csv  { render :text => @constituency.to_csv }
-      format.yaml { render :text => @constituency.to_output_yaml }
+      format.json { render :json => @constituency.to_json(request.host, request.port) }
+      format.js   { render :json => @constituency.to_json(request.host, request.port) }
+      format.text { render :text => @constituency.to_text(request.host, request.port) }
+      format.csv  { render :text => @constituency.to_csv(request.host, request.port) }
+      format.yaml { render :text => @constituency.to_output_yaml(request.host, request.port) }
     end
   end
 
@@ -94,7 +93,7 @@ class ConstituenciesController < ResourceController::Base
     def ensure_current_constituency_url
       begin
         constituency = Constituency.find(params[:id])
-        redirect_to constituency, :status => :moved_permanently if constituency.has_better_id?
+        redirect_to constituency, :status => :moved_permanently if params[:id] != constituency.slug
       rescue
         render_not_found
       end
