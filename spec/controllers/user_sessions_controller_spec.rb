@@ -32,8 +32,10 @@ describe UserSessionsController do
       
       describe 'when the credentials supplied are correct' do   
         before do
-          @user_session = mock_model UserSession
+          @user_session = mock(UserSession)
           @user_session.stub!(:find_record)
+          @user_session.stub!(:priority_record=)
+          @user_session.stub!(:persisting?)
           UserSession.stub!(:new).and_return(@user_session)
         end
                
@@ -50,10 +52,10 @@ describe UserSessionsController do
   
   describe 'when logged in' do
     before do
-      current_user = mock_model User
+      current_user = mock(User)
       current_user.stub!(:admin?).and_return(false)
       controller.stub!(:current_user).and_return(current_user)
-      current_user_session = mock_model UserSession
+      current_user_session = mock(UserSession)
       current_user_session.stub!(:destroy)
       controller.stub!(:current_user_session).and_return(current_user_session)
     end
