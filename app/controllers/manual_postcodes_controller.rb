@@ -12,7 +12,7 @@ class ManualPostcodesController < ApplicationController
         code = flash[:code]
         flash[:code] = nil
         constituency_id = params[:manual_postcodes][:constituency]
-        constituency = Constituency.find_by_id constituency_id
+        constituency = Constituency.find constituency_id
         postcode = ManualPostcode.add_manual_postcode code, constituency_id, constituency.ons_id
         
         redirect_to :manual_postcodes

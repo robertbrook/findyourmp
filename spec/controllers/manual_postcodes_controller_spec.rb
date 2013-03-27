@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe ManualPostcodesController do
   before do
@@ -8,8 +8,8 @@ describe ManualPostcodesController do
   end
   
   describe "when finding route for action" do
-    it 'should display index' do
-      params_from(:get, "/admin/manual_postcodes").should == {:controller => "manual_postcodes", :action => "index"}
+    it 'should display index' do      
+      { :get => "/admin/manual_postcodes" }.should route_to(:controller => "manual_postcodes", :action => "index")
     end
   end
   
@@ -68,13 +68,14 @@ describe ManualPostcodesController do
     describe "when a constituency is chosen" do
       it 'should retrieve the code from flash memory and redirect after performing an update' do
         flash[:code] = @code
-        constituency_id = 1
-        ons_id = 2
+        @controller.stub!(:flash).and_return(flash)
+        constituency_id = "1"
+        ons_id = "2"
         @constituency = mock('Constituency', :constituency_id => constituency_id, :ons_id => ons_id)
-        Constituency.should_receive(:find_by_id).with(constituency_id).and_return @constituency
+        Constituency.should_receive(:find).with(constituency_id).and_return @constituency
         ManualPostcode.should_receive(:add_manual_postcode).with(@code, constituency_id, ons_id).and_return @postcode
       
-        post :new, :manual_postcodes => { :constituency => constituency_id }, :commit => 'Create manual postcode'
+        post :new, {:manual_postcodes => { :constituency => constituency_id }, :commit => 'Create manual postcode'}
         flash[:code].should == nil
         response.should redirect_to('/admin/manual_postcodes')
       end
