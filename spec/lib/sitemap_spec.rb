@@ -69,27 +69,22 @@ describe SiteMap do
         map = ConstituencySiteMap.new 'hostname'
 
         date = Date.new(2009,1,1)
-        resource = mock('resource', :friendly_id => 'islington', :name => 'Islington', :updated_at => date)
+        resource = mock('resource', :friendly_id => 'islington', :name => 'Islington', :updated_at => date, :id => 1)
         Constituency.should_receive(:find).with(:all).and_return [resource]
 
         entry0 = mock('entry')
         entry = mock('entry')
 
         map.should_receive(:new_entry).with('').and_return entry0
-        map.should_receive(:url_for).with(:constituency_url, resource).and_return 'constituencies/islington'
+        map.should_receive(:url_for).with({:controller => "constituencies", :action => "show", :id => 1, :host=>"hostname"}).and_return 'constituencies/islington'
         map.should_receive(:new_entry).with('constituencies/islington',date).and_return entry
 
         map.should_receive(:populate_sitemap).with('constituencies', [entry0, entry])
         map.create_sitemap
       end
     end
-
   end
-
-  it 'should have a RouteHelper' do
-    SiteMap.new('hostname').route_helper.should be_an_instance_of(RouteHelper)
-  end
-
+  
   describe 'when initializing in subclass' do
     it 'should set a model type' do
       [ConstituencySiteMap].each do |type|
@@ -98,21 +93,21 @@ describe SiteMap do
       end
     end
   end
-
+  
   describe 'when creating entry representing sitemap' do
     it 'should create entry with location and modification date' do
       most_recent = mock('most_recent_modification')
-
+      
       map = SiteMap.new 'hostname'
       map.stub!(:location).and_return 'public/location'
       map.stub!(:most_recent_modification).and_return most_recent
-
-      entry = mock('entry')
+      
+      entry = mock('entry', :stub => "foo")
       SiteMapEntry.should_receive(:new).with('location', most_recent, 'hostname').and_return entry
       map.entry.should == entry
     end
   end
-
+  
   describe 'when writing out sitemap' do
     before do
       @map = SiteMap.new 'hostname'
@@ -120,17 +115,17 @@ describe SiteMap do
       @sitemap_text = 'sitemap text'
       @map.stub!(:site_map).and_return mock('site_map', :site_map=> @sitemap_text, :location => 'public/sitemap.xml.gz')
     end
-
+    
     it 'should raise exception if there are no entries' do
       @map.stub!(:empty?).and_return true
       lambda { @map.write_to_file! }.should raise_error(Exception)
     end
-
+    
     it 'should write_to_zip the file' do
       file = mock('file')
       file.should_receive(:write).with @sitemap_text
       Zlib::GzipWriter.should_receive(:open).with('public/sitemap.xml.gz').and_yield file
-
+      
       @map.write_to_file!
     end
   end

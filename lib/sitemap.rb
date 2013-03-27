@@ -1,17 +1,11 @@
 class SiteMap
+  include Rails.application.routes.url_helpers
   attr_reader :most_recent_modification, :location, :model, :empty, :site_map
-
-  def route_helper
-    @@route_helper ||= RouteHelper.new nil, nil, @hostname
-  end
-
+  
+  
   def initialize hostname, logger=nil
     @logger = logger
     @hostname = hostname
-  end
-
-  def url_for url_helper_method, id_hash
-    route_helper.send url_helper_method, id_hash
   end
 
   def entry
@@ -20,7 +14,7 @@ class SiteMap
 
   # over ride in subclass
   def create_sitemap
-    if (RAILS_ENV != 'test') && File.exists?("public/sitemap.xml.gz")
+    if (ENV["RAILS_ENV"] != 'test') && File.exists?("public/sitemap.xml.gz")
       site_map_time = File.new("public/sitemap.xml.gz").mtime
       last_update_time = Constituency.all.collect(&:updated_at).max
       needs_update = last_update_time > site_map_time
@@ -35,26 +29,26 @@ class SiteMap
       @site_map.create_sitemap
     end
   end
-
+  
   def write_to_file!
     create_sitemap
     if site_map
       raise "can't write empty sitemap to file" if empty?
       raise "can only write to file once" unless site_map
-
+      
       Zlib::GzipWriter.open(site_map.location) do |file|
         @logger.write 'writing: ' + site_map.location + "\n" if @logger
         file.write site_map.site_map
       end
-
+      
       @site_map = nil
     end
   end
-
+  
   def empty?
     empty
   end
-
+  
   def populate_sitemap name, pages
     unless (@empty = pages.empty?)
       site_map = [] <<
@@ -72,45 +66,39 @@ class SiteMap
       end
       site_map <<
           %Q|</urlset>\n|
-
+      
       @most_recent_modification = pages.collect(&:last_modification).max
         @site_map = site_map.join('')
       @location = "public/sitemap.xml.gz"
     end
   end
-
+  
   protected
-
+  
     def new_entry location, last_modification=Date.today
       SiteMapEntry.new location, last_modification, @hostname
     end
-
+    
 end
 
 class ModelSiteMap < SiteMap
   def create_sitemap
-    pages = [new_entry('')]
-    populate_sitemap_for_model pages, model, url_name
+    pages = [new_entry('')]    
+    populate_sitemap_for_model pages, model
   end
-
-  def url_name
-    nil
-  end
-
-  def populate_sitemap_for_model pages, model_class, url_helper_method=nil
-    type = model_class.name.downcase
-    url_helper_method = "#{type}_url".to_sym unless url_helper_method
-
+  
+  def populate_sitemap_for_model pages, model_class
+    type = model_class.name.downcase    
     resources = all_resources
-
+    
     pages += resources.collect do |resource|
-      url = url_for(url_helper_method, resource)
+      resource_id = resource.respond_to?(:slug) ? resource.slug : resource.id
+      url = url_for({:controller => type.pluralize, :action => "show", :id => resource_id, :host => @hostname})
       new_entry(url, resource.updated_at)
     end
-
+    
     populate_sitemap type.pluralize, pages
   end
-
 end
 
 class ConstituencySiteMap < ModelSiteMap
@@ -123,10 +111,6 @@ class ConstituencySiteMap < ModelSiteMap
   def model
     Constituency
   end
-
-  def url_name
-    :constituency_url
-  end
 end
 
 class SiteMapEntry
@@ -137,5 +121,3 @@ class SiteMapEntry
     @location, @last_modification = location, last_modification
   end
 end
-
-
