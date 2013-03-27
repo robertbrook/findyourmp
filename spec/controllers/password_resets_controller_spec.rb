@@ -38,6 +38,7 @@ describe PasswordResetsController do
     it 'should render the :edit view if the password reset is unsuccessful' do
       User.stub!(:find_using_perishable_token).and_return(@user)
       @user.stub!(:save).and_return(false)
+      @controller.should_receive(:render).with()
       @controller.should_receive(:render).with(:action => :edit)
       post :update, :id => 1, :user => {:password => 'pass', :password_confirmation => 'pass'}
     end

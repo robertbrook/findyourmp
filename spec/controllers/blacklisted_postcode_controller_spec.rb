@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe BlacklistedPostcodesController do
   before do
@@ -9,7 +9,7 @@ describe BlacklistedPostcodesController do
   
   describe "when finding route for action" do
      it 'should display index' do
-       params_from(:get, "/admin/blacklist").should == {:controller => "blacklisted_postcodes", :action => "index"}
+       {:get => "/admin/blacklist" }.should route_to(:controller => "blacklisted_postcodes", :action => "index")
      end
    end
    
@@ -66,13 +66,14 @@ describe BlacklistedPostcodesController do
       end
     end
     
-    describe "when an update is confirmed" do
+    describe "when an update is confirmed" do      
       it 'should retrieve the code from flash memory and redirect after performing an update' do
-        flash[:code] = @code
         @postcode = mock('Postcode')
+        flash[:code] = @code
+        @controller.stub!(:flash).and_return(flash)
         Postcode.should_receive(:find_by_code).with(@code).and_return @postcode
         @postcode.should_receive(:blacklist)
-      
+        
         post :new, :commit => 'Confirm'
         flash[:code].should == nil
         response.should redirect_to('/admin/blacklist')
