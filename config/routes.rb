@@ -15,6 +15,9 @@ FindYourMP::Application.routes.draw do
   
   resources :constituencies
   
+  match '/constituencies/hide_members' => 'constituencies#hide_members', :via => :post
+  match '/constituencies/unhide_members' => 'constituencies#unhide_members', :via => :post
+  
   resource :account, :controller => "users"
   resources :users
   resource :user_session
@@ -27,11 +30,6 @@ FindYourMP::Application.routes.draw do
   match '/postcodes/:postcode' => 'postcodes#show'
   match '/search/:q' => 'search#show'
   match '/search' => 'search#index', :as => "search"
-  
-  resource :constituencies do
-    post 'hide_members'
-    post 'unhide_members'
-  end
   
   match '/admin' => 'admin#index', :as => "admin"
   match '/admin/sent'  => 'admin#sent'
