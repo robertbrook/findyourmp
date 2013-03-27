@@ -4,10 +4,10 @@ describe UsersController do
   
   describe "when logged in as admin" do
     before do
-      @current_user = mock_model User
+      @current_user = mock(User)
       @current_user.stub!(:admin?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
-      current_user_session = mock_model UserSession
+      current_user_session = mock(UserSession)
       current_user_session.stub!(:destroy)
       @current_user.stub!(:id).and_return(1)
       controller.stub!(:current_user_session).and_return(current_user_session)
@@ -15,12 +15,13 @@ describe UsersController do
     
     describe 'when asked to create a new user' do
       before do
-        @user = mock_model User
+        @user = mock(User)
         @user.stub!(:save)
         User.stub!(:new).and_return(@user)
       end
     
       it 'should render the :new action if save fails' do
+        @controller.should_receive(:render).with()
         @controller.should_receive(:render).with :action => :new
         get :create
       end
@@ -47,7 +48,7 @@ describe UsersController do
       end
             
       it 'should successfully update another user\'s account' do
-        user2 = mock_model User
+        user2 = mock(User)
         
         User.should_receive(:find).with("2").and_return(user2)
         user2.should_receive(:save).and_return(true)
@@ -59,12 +60,13 @@ describe UsersController do
       end
       
       it 'should render the :edit view if the save fails' do
-        user2 = mock_model User
+        user2 = mock(User)
         
         User.should_receive(:find).with("2").and_return(user2)
         user2.should_receive(:save).and_return(false)
         user2.stub!(:email=)
         user2.stub!(:admin=)
+        @controller.should_receive(:render).with()
         @controller.should_receive(:render).with(:action => :edit)  
         post :update, :id => 2, :user => {:email => 'test@test.com', :password => 'pass', :password_confirmation => 'pass', :admin => 'false'}      
       end
