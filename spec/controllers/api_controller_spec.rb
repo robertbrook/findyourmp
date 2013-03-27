@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe ApiController do
 
@@ -15,7 +15,7 @@ describe ApiController do
     @member_name = 'Mickey Muse'
     @friendly_constituency_id = 'islington-south'
 
-    @constituency = mock_model(Constituency, :name => @constituency_name,
+    @constituency = mock(Constituency, :name => @constituency_name,
         :id => @constituency_id,
         :member_name => @member_name,
         :friendly_id => @friendly_constituency_id,
@@ -27,7 +27,7 @@ describe ApiController do
         :to_output_yaml => 'yaml version of data')
 
     @other_constituency_id = 802
-    @other_constituency = mock_model(Constituency, :name => 'Islington & North',
+    @other_constituency = mock(Constituency, :name => 'Islington & North',
       :id => 802,
       :member_name => 'A Biggens-South',
       :to_text => 'text version of data',
@@ -35,12 +35,12 @@ describe ApiController do
       :to_json => '(json version of data)',
       :to_output_yaml => 'yaml version of data')
 
-    @postcode_record = mock_model(Postcode, :constituency_id => @constituency_id,
+    @postcode_record = mock(Postcode, :constituency_id => @constituency_id,
         :code => @canonical_postcode, :code_with_space => @postcode_with_space, :constituency => @constituency,
         :to_json => @json, :to_text => @text, :to_csv => @csv, :to_output_yaml=>@yaml)
   end
 
-  describe 'non redirecting url', :shared => true do
+  shared_examples "non redirecting url" do
     it 'should not redirect' do
       do_get
       response.redirect?.should be_false
@@ -49,7 +49,7 @@ describe ApiController do
 
   describe "when finding route for action" do
     it 'should display page not found for unknown routes' do
-      params_from(:get, "/bad_url").should == {:controller => "application", :action => "render_not_found", :bad_route=>['bad_url']}
+      {:get => "/bad_url"}.should route_to(:controller => "application", :action => "render_not_found", :bad_route=>'bad_url')
     end
   end
 
@@ -303,10 +303,9 @@ describe ApiController do
   describe "the constituencies api" do
     describe "when passed a valid ONS id" do
       before do
-        Constituency.stub!(:find).and_return @constituency
-        Constituency.should_receive(:find).and_return @constituency
+        Constituency.should_receive(:find_by_ons_id).and_return @constituency
       end
-
+      
       def do_get format=nil
         get :constituencies, :ons_id => '123', :format => format
       end
@@ -322,8 +321,7 @@ describe ApiController do
 
     describe "when passed an invalid ONS id" do
       before do
-        Constituency.stub!(:find).and_return nil
-        Constituency.should_receive(:find).and_return nil
+        Constituency.should_receive(:find_by_ons_id).and_return nil
       end
 
       def do_get format=nil
@@ -343,8 +341,7 @@ describe ApiController do
 
     describe "when passed a valid member name" do
       before do
-        Constituency.stub!(:find).and_return @constituency
-        Constituency.should_receive(:find).and_return @constituency
+        Constituency.should_receive(:find_by_member_name).and_return @constituency
       end
 
       def do_get format=nil
@@ -362,8 +359,7 @@ describe ApiController do
 
     describe "when passed an invalid member name" do
       before do
-        Constituency.stub!(:find).and_return nil
-        Constituency.should_receive(:find).and_return nil
+        Constituency.should_receive(:find_by_member_name).and_return nil
       end
 
       def do_get format=nil
@@ -383,8 +379,7 @@ describe ApiController do
 
     describe "when passed a valid constituency name" do
       before do
-        Constituency.stub!(:find).and_return @constituency
-        Constituency.should_receive(:find).and_return @constituency
+        Constituency.should_receive(:find_by_name).and_return @constituency
       end
 
       def do_get format=nil
@@ -402,8 +397,7 @@ describe ApiController do
 
     describe "when passed an invalid constituency name" do
       before do
-        Constituency.stub!(:find).and_return nil
-        Constituency.should_receive(:find).and_return nil
+        Constituency.should_receive(:find_by_name).and_return nil
       end
 
       def do_get format=nil
