@@ -1,10 +1,10 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe AdminController do
 
   describe "when finding route for action" do
     it 'should display index' do
-      params_from(:get, "/admin").should == {:controller => "admin", :action => "index"}
+      { :get => "/admin" }.should route_to(:controller => "admin", :action => "index")
     end
   end
 
@@ -23,7 +23,7 @@ describe AdminController do
   
   describe 'when logged in' do
     before do
-      current_user = mock_model User
+      current_user = mock(User)
       current_user.stub!(:admin?).and_return(false)
       controller.stub!(:current_user).and_return(current_user)
     end
@@ -52,7 +52,7 @@ describe AdminController do
 
   describe 'when logged in as admin' do
     before do
-      current_user = mock_model User
+      current_user = mock(User)
       current_user.stub!(:admin?).and_return(true)
       controller.stub!(:current_user).and_return(current_user)
     end
@@ -69,8 +69,8 @@ describe AdminController do
         
         get :index
         
-        assigns[:sent_message_count].should == 20
-        assigns[:waiting_to_be_sent_count].should == 2
+        assigns(:sent_message_count).should eq(20)
+        assigns(:waiting_to_be_sent_count).should eq(2)
       end
     end
     

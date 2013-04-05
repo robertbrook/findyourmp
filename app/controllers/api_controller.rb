@@ -1,5 +1,6 @@
 class ApiController < ApplicationController
-
+  respond_to :xml, :json, :html, :csv, :yaml
+  
   def index
     @host = request.host
     unless request.port == 80

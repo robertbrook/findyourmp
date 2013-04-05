@@ -1,6 +1,6 @@
-class MessagesController < ResourceController::Base
+class MessagesController < ApplicationController
 
-  belongs_to :constituency
+  # belongs_to :constituency
 
   before_filter :respond_not_found_if_constituency_doesnt_exist
   before_filter :ensure_current_constituency_url, :only => ['new', 'index']

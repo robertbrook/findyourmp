@@ -1,5 +1,5 @@
-class MembersController < ResourceController::Base
+class MembersController < ApplicationController
 
-  belongs_to :constituency
+  # belongs_to :constituency
 
 end

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe PostcodesController do
 
@@ -54,19 +54,16 @@ describe PostcodesController do
 
   def self.should_route_show_action format
     eval %Q|    it 'should find show action with #{format} format' do
-      route_for(:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format => '#{format}').should == "/postcodes/N11AA.#{format}"
-      params_from(:get, "/postcodes/N11AA.#{format}").should == {:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format=>'#{format}'}
+      { :get => "/postcodes/N11AA.#{format}" }.should route_to(:controller => "postcodes", :action => "show", :postcode=>'N11AA', :format=>'#{format}')
     end|
   end
 
   describe "when finding route for action" do
     it 'should find index root' do
-      route_for(:controller => "postcodes", :action => "index").should == "/"
-      params_from(:get, "/").should == {:controller => "postcodes", :action => "index"}
+      { :get =>  "/" }.should route_to(:controller => "postcodes", :action => "index")
     end
     it 'should find show action' do
-      route_for(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode).should == "/postcodes/#{@canonical_postcode}"
-      params_from(:get, "/postcodes/#{@canonical_postcode}").should == {:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode}
+      { :get => "/postcodes/#{@canonical_postcode}" }.should route_to(:controller => "postcodes", :action => "show", :postcode=>@canonical_postcode)
     end
     should_route_show_action 'xml'
     should_route_show_action 'json'

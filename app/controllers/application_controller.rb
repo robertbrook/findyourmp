@@ -2,15 +2,15 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-
-  filter_parameter_logging :password, :password_confirmation, :message, :constituency_list
+  # Configure sensitive parameters which will be filtered from the log file.
+  config.filter_parameters = [:password, :password_confirmation, :message, :constituency_list]
 
   helper_method :current_user_session, :is_admin?
 
   def render_not_found message='Page not found.'
     @title = "Page cannot be found (404 error)"
     @crumbtrail = "Error: page cannot be found"
-    render :template => 'public/404.html', :status => 404
+    render :template => 'layouts/404.html', :status => 404
   end
 
   private
@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     end
 
     def store_location
-      session[:return_to] = request.request_uri
+      session[:return_to] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
     end
 
     def redirect_back_or_default(default)
