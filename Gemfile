@@ -1,21 +1,22 @@
 source "http://rubygems.org"
 
 gem 'rake'
-gem 'rails', '2.3.17'
+gem 'rails', '3.2.13'
 gem 'rdoc'
-gem 'haml', '3.1.8'
-gem 'authlogic', '1.4.1'
-gem 'friendly_id', '2.3.4'
+gem 'haml', '4.0.1'
+gem 'authlogic'
+gem 'friendly_id'
 gem 'xss_terminate'
 gem 'hpricot'
-gem 'aws-s3', '0.5.1'
+gem 'aws-s3'
 gem 'mysql', '2.8.1'
 gem 'unicode'
-gem 'resource_controller'
+gem 'dynamic_form'
 
 group :test do
   gem 'webrat'
-  gem 'rspec', '1.3.2'
-  gem 'rspec-rails', '1.3.2'
+  gem 'rspec-rails'
   gem 'cucumber-rails'
+  gem 'mocha'
+  gem 'simplecov'
 end
