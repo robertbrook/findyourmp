@@ -2,7 +2,8 @@ namespace :friendly_id do
   desc "Make slugs for a model."
   task :make_slugs => :environment do
     raise 'USAGE: rake friendly_id:make_slugs MODEL=MyModelName' if ENV["MODEL"].nil?
-    if !sluggable_class.friendly_id_options[:use_slug]
+    
+    if !sluggable_class.friendly_id_config
       raise "Class \"#{sluggable_class.to_s}\" doesn't appear to be using slugs"
     end
     while records = sluggable_class.find(:all, :include => :slugs, :conditions => "slugs.id IS NULL", :limit => 1000) do
@@ -18,24 +19,11 @@ namespace :friendly_id do
   desc "Regenereate slugs for a model."
   task :redo_slugs => :environment do
     raise 'USAGE: rake friendly_id:redo_slugs MODEL=MyModelName' if ENV["MODEL"].nil?
-    if !sluggable_class.friendly_id_options[:use_slug]
+    
+    if !sluggable_class.respond_to?(:friendly_id_config)
       raise "Class \"#{sluggable_class.to_s}\" doesn't appear to be using slugs"
     end
-    Slug.destroy_all(["sluggable_type = ?", sluggable_class.to_s])
-    Rake::Task["friendly_id:make_slugs"].invoke
-  end
-
-  desc "Kill obsolete slugs older than 45 days."
-  task :remove_old_slugs => :environment do
-    if ENV["DAYS"].nil?
-      @days = 45
-    else
-      @days = ENV["DAYS"].to_i
-    end
-    slugs = Slug.find(:all, :conditions => ["created_at < ?", DateTime.now - @days.days])
-    slugs.each do |s|
-      s.destroy if !s.is_most_recent?
-    end
+    sluggable_class.all.each { |model| model.save! }
   end
 end
 
