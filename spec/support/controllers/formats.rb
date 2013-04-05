@@ -1,4 +1,5 @@
 shared_examples_for "returns in correct format" do
+  
   it 'should return xml when passed format=xml' do
     do_get 'xml'
     response.content_type.should == "application/xml"
