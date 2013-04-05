@@ -10,11 +10,12 @@ describe "/constituencies/index.haml" do
     constituency_99 = mock_model(Constituency, :member_visible => true, :member_name => 'Mr Brown')
     constituency_99.should_receive(:name).any_number_of_times.and_return("There")
     constituency_99.should_receive(:code).and_return('010')
-    assigns[:constituencies] = [constituency_98, constituency_99]
+    assign(:constituencies,[constituency_98, constituency_99])
   end
 
   it "should render list of constituencies" do
-    render "/constituencies/index.haml"
-    response.should have_tag("tr>td", "Here", 2)
+    render
+    view.should render_template(:index)    
+    response.should have_selector("td", :content => "Here")
   end
 end

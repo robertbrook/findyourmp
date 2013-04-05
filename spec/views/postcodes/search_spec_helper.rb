@@ -1,25 +1,31 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "renders search form", :shared => true do
+shared_examples "renders search form" do
   def do_render
-    @layout ? render(@template, :layout=>@layout) : render(@template)
+    render
+    #@layout ? render_template(@template, :layout=>@layout) : render_template(@template)
   end
+  
   it "should render search form" do
-    do_render
-    response.should have_tag('form')
+    render
+    view.should render_template(:"layouts/_search_form")
+    response.should have_selector("form")
   end
+  
   it "should show search term input field" do
     do_render
-    response.should have_tag("input[id=q][name=q]")
+    response.should have_field("q")
   end
+  
   it 'should show search term in input field if term is assigned to view' do
     if @searched_for
       do_render
-      response.should have_tag("input[id=q][name=q][value=#{@searched_for}]")
+      response.should have_field("q", :value => @searched_for)
     end
   end
+  
   it 'should show submit search button' do
     do_render
-    response.should have_tag("input[value=Find MP][type=submit]")
+    response.should have_selector("input", :type => "submit", :value => "Find MP")
   end
 end

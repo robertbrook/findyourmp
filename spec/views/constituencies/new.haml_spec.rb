@@ -3,17 +3,16 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe "/constituencies/new.haml" do
 
   before do
-    @constituency = mock_model(Constituency)
+    @constituency = Constituency.new
     @constituency.stub!(:new_record?).and_return(true)
     @constituency.stub!(:name).and_return("MyString")
-    assigns[:constituency] = @constituency
   end
 
   it "should render new form" do
-    render "/constituencies/new.haml"
-
-    response.should have_tag("form[action=?][method=post]", constituencies_path) do
-      with_tag("input#constituency_name[name=?]", "constituency[name]")
-    end
+    render
+    view.should render_template(:new)
+    
+    response.should have_selector("form", :method => "post", :action => constituencies_path)
+    response.body.should have_field("constituency_name")
   end
 end

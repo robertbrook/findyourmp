@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "/constituency/edit.haml" do
+describe "/constituencies/edit.haml" do
 
   before do
     @constituency = mock_model(Constituency, :member_name => 'member_name',
@@ -13,14 +13,14 @@ describe "/constituency/edit.haml" do
         :member_visible=>false
       )
     @constituency.stub!(:name).and_return("MyString")
-    assigns[:constituency] = @constituency
   end
 
   it "should render edit form" do
-    render "/constituencies/edit.haml"
-
-    response.should have_tag("form[action=#{constituency_path(@constituency)}][method=post]") do
-      with_tag('input#constituency_name[name=?]', "constituency[name]")
-    end
+    assign(:constituency, @constituency)
+    render
+    view.should render_template(:edit)
+    
+    response.should have_selector("form", :method => "post", :action => "#{constituency_path(@constituency)}")
+    response.body.should have_field("constituency_name", :with => @constituency.name)
   end
 end

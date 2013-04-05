@@ -3,22 +3,16 @@ require File.dirname(__FILE__) + '/search_spec_helper'
 
 describe "/postcodes/show.haml" do
   before do
-    @template = 'postcodes/show.haml'
-    @layout = 'application'
-    assigns[:postcode] = mock_model(Postcode, :code_with_space=>'GY1 1AA')
-    assigns[:constituency] = nil
+    postcode = mock(Postcode, :code_with_space=>'GY1 1AA')
+    assign(:postcode, postcode)
     @controller.stub!(:current_user).and_return nil
-    template.stub!(:postcode_format_links).and_return ''
-  end
-
-  def do_render
-    @layout ? render(@template, :layout=>@layout) : render(@template)
+    view.stub!(:postcode_format_links).and_return ''
   end
 
   describe 'when there is no constituency' do
     it 'should show no consituency found warning' do
-      do_render
-      response.should have_tag("p",'No constituency found.')
+      render(:template => "postcodes/show.html")
+      response.should have_selector('p', :content => 'No constituency found')
     end
   end
 end

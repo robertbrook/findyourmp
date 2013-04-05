@@ -17,7 +17,7 @@
       .row_item
         .row_label Website
         .row_value
-          = link_to @constituency.member_website
+          %a{:href => @constituency.member_website}= @constituency.member_website.gsub("http://", "")
   - if @constituency.member_biography_url?
     %p
       %br
