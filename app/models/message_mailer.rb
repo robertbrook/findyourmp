@@ -1,10 +1,12 @@
+require 'mail'
+
 class MessageMailer < ActionMailer::Base
 
   self.delivery_method = :activerecord
 
   class << self
     def parse_email text
-      email = TMail::Address.parse(text)
+      email = Mail::Address.new(text)
       domain = email.domain
       if domain
         if domain.downcase[/\.([a-z]+)$/] && ($1.size >= 2)

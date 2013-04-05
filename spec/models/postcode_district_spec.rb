@@ -1,9 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PostcodeDistrict do
-
-  assert_model_belongs_to :constituency
-
+  
   before do
      @postcode_district = PostcodeDistrict.new
      @constituency_name = 'Islington South'

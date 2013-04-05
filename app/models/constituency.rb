@@ -1,7 +1,9 @@
-class Constituency < ActiveRecord::Base
-  include ActionController::UrlWriter
+# encoding: utf-8
 
-  has_friendly_id :name, :use_slug => true, :approximate_ascii => true
+class Constituency < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+  extend FriendlyId
+  friendly_id :name, :use => :slugged
 
   has_many :postcodes
   has_many :postcode_districts
@@ -198,7 +200,7 @@ class Constituency < ActiveRecord::Base
         begin
           self.member_email = MessageMailer.parse_email(member_email).address
         rescue
-          errors.add_to_base("Member email must be a valid email")
+          errors[:base] << "Member email must be a valid email"
         end
       end
     end

@@ -5,8 +5,8 @@ class MessageSummary < ActiveRecord::Base
   validates_presence_of :constituency_name
   validates_presence_of :sent_month
 
-  named_scope :sent
-  named_scope :sent_in_month, lambda { |date| {:conditions => ["MONTH(sent_month) = ? AND YEAR(sent_month) = ?" , date.month, date.year]} }
+  scope :sent
+  scope :sent_in_month, lambda { |date| {:conditions => ["MONTH(sent_month) = ? AND YEAR(sent_month) = ?" , date.month, date.year]} }
 
   class << self
 

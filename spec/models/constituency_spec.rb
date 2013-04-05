@@ -1,15 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Constituency do
-
-  assert_model_has_many :postcodes
-  assert_model_has_many :messages
-
   before do
+    Constituency.any_instance.stub(:primary_key_name)
     @constituency = Constituency.new
     @constituency2 = Constituency.new
   end
-
+  
   describe 'when asked for find_all_constituency_and_member_matches' do
     before do
       @constituency.name = 'Bethnal Green and Bow'

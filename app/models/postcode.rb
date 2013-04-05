@@ -1,7 +1,8 @@
 class Postcode < ActiveRecord::Base
-  include ActionController::UrlWriter
+  # include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
-  before_validation_on_create :populate_constituency_id
+  before_validation :populate_constituency_id, :on => :create
 
   validates_uniqueness_of :code
   validates_presence_of :ons_id

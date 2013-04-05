@@ -1,6 +1,6 @@
 class Email < ActiveRecord::Base
 
-  named_scope :waiting
+  scope :waiting
   
   before_create :check_header
 

@@ -2,7 +2,7 @@ class Message < ActiveRecord::Base
 
   belongs_to :constituency
 
-  before_validation_on_create :populate_defaulted_fields
+  before_validation :populate_defaulted_fields, :on => create
   before_validation :populate_postcode_and_sender_is_constituent
   before_validation :clean_address_whitespace
   before_validation :clean_message_whitespace
@@ -21,8 +21,8 @@ class Message < ActiveRecord::Base
   validate :postcode_valid
   validate :message_not_default
 
-  named_scope :sent, :conditions => {:sent => true}
-  named_scope :sent_in_month, lambda { |date| {:conditions => ["sent = 1 AND MONTH(created_at) = ? AND YEAR(created_at) = ?" , date.month, date.year]} }
+  scope :sent, :conditions => {:sent => true}
+  scope :sent_in_month, lambda { |date| {:conditions => ["sent = 1 AND MONTH(created_at) = ? AND YEAR(created_at) = ?" , date.month, date.year]} }
 
   class << self
 

@@ -30,8 +30,6 @@ describe Message do
     Message.delete_all
   end
 
-  assert_model_belongs_to :constituency
-
   assert_checks_presence :sender
   assert_checks_presence :sender_email
   assert_checks_presence :constituency_name
@@ -84,7 +82,10 @@ describe Message do
     end
 
     it "should create a new instance given valid attributes" do
-      message = Message.new(@valid_attributes)
+      message = Message.new()
+      @valid_attributes.each do |var_name, value|
+        eval("message.#{var_name.to_s} = value")
+      end
       message.valid?.should be_true
       message.recipient.should == @member_name
       message.address.should == "100 Path
