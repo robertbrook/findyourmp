@@ -4,6 +4,8 @@ class Constituency < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   extend FriendlyId
   friendly_id :name, :use => :slugged
+  attr_accessible :name, :member_name, :member_party, :member_email, :member_visible, :member_website,
+    :member_requested_contact_url, :ons_id, :slug, :member_biography_url
 
   has_many :postcodes
   has_many :postcode_districts
@@ -42,7 +44,7 @@ class Constituency < ActiveRecord::Base
         non_matching = non_matching || ( member_contact[/http:\/\//] ?
           (existing.member_requested_contact_url.to_s.strip != member_contact.to_s.strip) : (existing.member_email.to_s.strip != member_contact.to_s.strip) )
         if non_matching
-          new_constituency = Constituency.new(existing.attributes)
+          new_constituency = Constituency.new
           new_constituency.member_name = member_name
           new_constituency.member_party = member_party
           new_constituency.member_biography_url = member_bio_url

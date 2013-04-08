@@ -3,15 +3,15 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe "/constituencies/show.haml" do
 
   before do
-    @constituency = Constituency.new()
-    @constituency.member_name = 'member_name'
-    @constituency.member_party = 'member_party'
-    @constituency.member_biography_url = 'http://here.it.is'
-    @constituency.member_website = 'http://the.re'
-    @constituency.member_email = "member@email"
-    @constituency.member_requested_contact_url = ''
-    @constituency.name = "Islington North"
-    @constituency.member_visible = true
+    @constituency = Constituency.new(
+      :member_name => 'member_name',
+      :member_party => 'member_party',
+      :member_biography_url => 'http://here.it.is',
+      :member_website => 'http://the.re',
+      :member_email => "member@email",
+      :member_requested_contact_url => '',
+      :name => "Islington North",
+      :member_visible => true)
     @constituency.stub!(:friendly_id).and_return 'islington_north'
 
     @other_constituency = Constituency.new()
