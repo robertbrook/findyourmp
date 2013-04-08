@@ -9,7 +9,7 @@ gem 'friendly_id'
 gem 'xss_terminate'
 gem 'hpricot'
 gem 'aws-s3'
-gem 'mysql', '2.8.1'
+gem 'mysql2'
 gem 'unicode'
 gem 'dynamic_form'
 
