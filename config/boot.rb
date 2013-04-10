@@ -36,15 +36,21 @@ module Rails
   class Boot
     def run
       load_initializer
+      
+      Rails::Initializer.class_eval do
+        def load_gems
+          @bundler_loaded ||= Bundler.require :default, Rails.env
+        end
+      end
+      
       Rails::Initializer.run(:set_load_path)
     end
   end
 
   class VendorBoot < Boot
     def load_initializer
-      require "#{RAILS_ROOT}/vendor/rails/railties/lib/initializer"
+      require 'initializer'
       Rails::Initializer.run(:install_gem_spec_stubs)
-      Rails::GemDependency.add_frozen_gem_path
     end
   end
 
@@ -54,7 +60,7 @@ module Rails
       load_rails_gem
       require 'initializer'
     end
-
+    
     def load_rails_gem
       if version = self.class.gem_version
         gem 'rails', version
