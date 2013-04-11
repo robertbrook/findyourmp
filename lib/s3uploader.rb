@@ -42,7 +42,7 @@ module FindYourMP::S3Uploader
     puts ""
     puts "backing up database to #{outfile} ..."
     unless s3_options[:db_password].blank?
-      system("mysqldump --user=#{s3_options[:db_user]} --password=#{s3_options[:db_password]} --opt --quote-names --ski-set-charset --default-character-set=latin1 findyourmp_#{env} > #{outfile}")
+      system("mysqldump --user=#{s3_options[:db_user]} --password=#{s3_options[:db_password]} --opt --quote-names --skip-set-charset --default-character-set=latin1 findyourmp_#{env} > #{outfile}")
     else
       system("mysqldump --user=#{s3_options[:db_user]} --opt --quote-names --skip-set-charset --default-character-set=latin1 findyourmp_#{env} > #{outfile}")
     end
