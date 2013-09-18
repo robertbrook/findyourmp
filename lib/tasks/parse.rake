@@ -65,6 +65,10 @@ namespace :fymp do
   task :patch_ons_ids => :environment do
     patch_ons_ids
   end
+  
+  task :dump_postcodes_to_file => :environment do
+    output_current_postcodes_file
+  end
 
   desc "Update postcodes from data files for postcode and constituency ID *only*"
   task :diff_postcodes => :environment do

@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 require File.expand_path(File.dirname(__FILE__) + '/timer')
 
 module FindYourMP; end
@@ -139,12 +141,13 @@ module FindYourMP::DataLoader
     data.each do |line|
       line.gsub!("\n", "")
       parts = line.split("\t")
-      old_id = parts[0].strip
-      new_id = parts[1].strip
+      new_id = parts[0].strip
+      old_id = parts[1].strip
       
       ActiveRecord::Base.connection.execute("UPDATE blacklisted_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
       ActiveRecord::Base.connection.execute("UPDATE manual_postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
       ActiveRecord::Base.connection.execute("UPDATE constituencies SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
+      ActiveRecord::Base.connection.execute("UPDATE postcodes SET ons_id = '#{new_id}' WHERE ons_id = '#{old_id}';")
     end
     
     log_duration
@@ -211,7 +214,7 @@ module FindYourMP::DataLoader
   end
 
   def ignore_ons_id?(ons_id)
-    ons_id == '800' || ons_id == '900'
+    ons_id == 'M99999999' || ons_id == 'L99999999' || ons_id == '800' || ons_id == '900'
   end
 
   def analyze_postcode_update
@@ -387,13 +390,13 @@ module FindYourMP::DataLoader
     new_line = "\n"
     space = ' '
     post_codes = []
-
+    
     IO.foreach(source_file) do |line|
       termination_date = line[29..34]
       if termination_date == blank_date
-        consistuency_code = line[69..71]
-        unless consistuency_code == blank_code
-          post_code = line[0..6]
+        consistuency_code = line[114..122]
+        unless consistuency_code.strip == ""
+          post_code = line[0..6].gsub(" ", "")
           post_codes << post_code << space << consistuency_code
           post_codes << new_line
         end
@@ -461,6 +464,20 @@ module FindYourMP::DataLoader
     manual_codes.each do |manual_code|
       Postcode.create :code => manual_code.code, :constituency_id => manual_code.constituency_id, :ons_id => manual_code.ons_id
     end
+  end
+
+  def output_current_postcodes_file output_file="./data/postcodes_current.txt"
+    output = []
+    start_timing
+    Postcode.find_in_batches do |batch|
+      batch.each do |postcode|
+        output << "#{postcode.code.gsub(' ', '')} #{postcode.ons_id}"
+      end
+    end
+    File.open(output_file, "w") do |file|
+      file.write(output.join("\n"))
+    end
+    log_duration
   end
 
   private
