@@ -1,16 +1,42 @@
 # Be sure to restart your server when you modify this file
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-#RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.17' unless defined? RAILS_GEM_VERSION
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
+
+# With thanks to http://djellemah.com/blog/2013/02/27/rails-23-with-ruby-20/
+module Gem
+  def self.source_index
+    sources
+  end
+
+  def self.cache
+    sources
+  end
+
+  SourceIndex = Specification
+
+  class SourceList
+    # If you want vendor gems, this is where to start writing code.
+    def search( *args ); []; end
+    def each( &block ); end
+    include Enumerable
+  end
+end
 
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
 
+  
+  require "bundler"
+  Bundler.setup
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
 
@@ -65,14 +91,18 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
+
 end
 
+#require 'action_mailer/ar_mailer'
 require 'passenger_mgt'
-require 'route_helper'
+#require 'route_helper'
 require 'sitemap'
 require 'zlib'
+require 'friendly_id'
 
 Haml::Template.options[:format] = :html5
+Haml::Template.options[:encoding] = "utf-8"
 
 ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(
   :month_year => "%B %Y"

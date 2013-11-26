@@ -19,6 +19,6 @@ config.action_controller.allow_forgery_protection    = $allow_forgery_protection
 # Tell Action Mailer not to deliver emails to the real world.
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
-# config.action_mailer.delivery_method = :test
+config.action_mailer.delivery_method = :test
 
-require "webrat"
+require "#{RAILS_ROOT}/vendor/plugins/webrat/lib/webrat"

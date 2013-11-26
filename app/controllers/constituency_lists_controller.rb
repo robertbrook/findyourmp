@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 class ConstituencyListsController < ApplicationController
 
   before_filter :require_admin_user

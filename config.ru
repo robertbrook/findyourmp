@@ -1,3 +1,4 @@
+#encoding: utf-8
 # Rack Dispatcher
 
 # Require your environment file to bootstrap Rails

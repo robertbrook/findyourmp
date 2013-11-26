@@ -13,13 +13,11 @@
     .row_item
       .row_label Party
       .row_value= h(@constituency.member_party)
-    - if @constituency.member_website? and @constituency.member_website.strip != "NULL"
+    - if @constituency.member_website?
       .row_item
         .row_label Website
         .row_value
-          = link_to @constituency.member_website
-  - if @constituency.member_biography_url?
-    %p
-      %br
-      = link_to "More information about #{member_name} MP", @constituency.member_biography_url
-      
+          = link_to h(@constituency.member_website.sub('http://','').chomp('/')), @constituency.member_website
+    .row_item
+      .row_label Address
+      .row_value= "#{member_name}, House of Commons, London SW1A 0AA"

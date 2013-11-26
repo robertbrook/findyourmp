@@ -1,7 +1,9 @@
+#encoding: utf-8
+
 class Constituency < ActiveRecord::Base
   include ActionController::UrlWriter
 
-  has_friendly_id :name, :use_slug => true, :approximate_ascii => true
+  has_friendly_id :name, :use_slug => true, :strip_diacritics => true
 
   has_many :postcodes
   has_many :postcode_districts
