@@ -14,7 +14,9 @@ gem 'unicode'
 gem 'resource_controller'
 
 group :test do
+  gem 'test-unit', '1.2.3'
   gem 'webrat'
+  gem 'simplecov'
   gem 'rspec', '1.3.2'
   gem 'rspec-rails', '1.3.2'
   gem 'cucumber-rails'

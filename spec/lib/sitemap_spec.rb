@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/sitemap'
+require './spec/spec_helper'
+require './lib/sitemap'
 
 describe SiteMapEntry, 'when created' do
 

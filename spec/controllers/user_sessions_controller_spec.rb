@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe UserSessionsController do
 
@@ -34,6 +34,8 @@ describe UserSessionsController do
         before do
           @user_session = mock_model UserSession
           @user_session.stub!(:find_record)
+          @user_session.stub!(:priority_record=)
+          @user_session.stub!(:persisting?)
           UserSession.stub!(:new).and_return(@user_session)
         end
                

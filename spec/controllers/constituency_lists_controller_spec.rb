@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe ConstituencyListsController do
 
@@ -41,8 +41,8 @@ describe ConstituencyListsController do
     
     describe 'when asked to update' do
       before do
-        @header = "Constituency	Member	Party"
-        @line_1 = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=1"\t"dm@parliament.uk"	"http://www.dm.co.uk/"|
+        @header = "Constituency Member  Party"
+        @line_1 = %Q|"Islington West"\t"Duncan McCloud"\t"(SDP)"\t"http://biographies.parliament.uk/parliament/default.asp?id=1"\t"dm@parliament.uk"  "http://www.dm.co.uk/"|
         @items = "#{@header}
   #{@line_1}"
         @constituency_1 = mock(Constituency, 

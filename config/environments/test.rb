@@ -21,4 +21,4 @@ config.action_controller.allow_forgery_protection    = $allow_forgery_protection
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-require "#{RAILS_ROOT}/vendor/plugins/webrat/lib/webrat"
+require "webrat"

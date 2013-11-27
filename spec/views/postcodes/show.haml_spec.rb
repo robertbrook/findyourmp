@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../../spec_helper'
-require File.dirname(__FILE__) + '/search_spec_helper'
+require './spec/spec_helper'
+require './spec/views/postcodes/search_spec_helper'
 
 describe "/postcodes/show.haml" do
   before do

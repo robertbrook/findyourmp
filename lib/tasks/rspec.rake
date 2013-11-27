@@ -36,14 +36,12 @@ namespace :spec do
   end
   
   
-  desc "Run all specs in spec directory with RCov (excluding plugin specs)"
-  Spec::Rake::SpecTask.new(:rcov) do |t|
+  desc "Run all specs in spec directory with SimpleCov (excluding plugin specs)"
+  Spec::Rake::SpecTask.new(:cov) do |t|
+    require "simplecov"
     t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
     t.spec_files = FileList['spec/**/*_spec.rb']
-    t.rcov = true
-    t.rcov_opts = lambda do
-      IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
-    end
+    ENV["COVERAGE"] = "1"
   end
   
   desc "Print Specdoc for all specs (excluding plugin specs)"

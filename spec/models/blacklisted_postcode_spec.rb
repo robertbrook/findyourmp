@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require './spec/spec_helper'
 
 describe BlacklistedPostcode do
   before do
@@ -25,7 +25,7 @@ describe BlacklistedPostcode do
       @code = 'N215SD'
       @blacklisted_postcode.stub!(:ons_id).and_return @ons_id
       @blacklisted_postcode.stub!(:constituency_id).and_return @constituency_id
-      @blacklisted_postcoed.stub!(:code).and_return @code
+      @blacklisted_postcode.stub!(:code).and_return @code
     end
     
     it 'should insert a new Postcode entry if none already exists' do

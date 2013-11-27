@@ -1,8 +1,19 @@
-# This file is copied to ~/spec when you run 'ruby script/generate rspec'
-# from the project root directory.
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter 'spec'
+    add_filter 'config'
+    add_group 'models', "app/models"
+    add_group 'controllers', "app/controllers"
+    add_group 'lib', "lib"
+    add_group 'helpers', "app/helpers"
+    add_group 'sweepers', "app/sweepers"
+  end
+end
+
 ENV["RAILS_ENV"] = "test"
 
-require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require "./config/environment.rb"
 
 require 'spec'
 require 'spec/rails'
