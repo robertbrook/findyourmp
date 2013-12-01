@@ -96,7 +96,7 @@ Then /^I should see csv (.+)$/ do |csv|
 end
 
 Then /^I should see xml "(.+)"$/ do |xml|
-  response.body.should include(xml)
+  response.body.should include(xml.strip)
 end
 
 Then /^I should see html "(.+)"$/ do |html|

@@ -16,8 +16,12 @@ gem 'resource_controller'
 group :test do
   gem 'test-unit', '1.2.3'
   gem 'webrat'
+  gem 'nokogiri'
   gem 'simplecov'
   gem 'rspec', '1.3.2'
   gem 'rspec-rails', '1.3.2'
-  gem 'cucumber-rails'
+  gem "capybara", "1.1.1"
+  gem "gherkin", "2.5.0"
+  gem 'cucumber', '1.1.0'
+  gem 'cucumber-rails', '0.3.2'
 end

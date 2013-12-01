@@ -1,5 +1,5 @@
 When /^I search for "(.*)"$/ do |search_term|
-  within '.search' do
+  within '#search' do
     fill_in("q", :with => search_term)
   end
   And 'I press "Find MP"'
