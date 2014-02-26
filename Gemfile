@@ -8,15 +8,16 @@ gem 'authlogic', '2.1.9'
 gem 'friendly_id', '2.3.4', :require => "friendly_id"
 gem 'xss_terminate'
 gem 'hpricot'
+gem 'nokogiri'
 gem 'aws-s3'
 gem 'mysql2', '0.2.6'
 gem 'unicode'
 gem 'resource_controller'
+gem 'rest-client'
 
 group :test do
   gem 'test-unit', '1.2.3'
   gem 'webrat'
-  gem 'nokogiri'
   gem 'simplecov'
   gem 'rspec', '1.3.2'
   gem 'rspec-rails', '1.3.2'

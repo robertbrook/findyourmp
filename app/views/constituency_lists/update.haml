@@ -38,6 +38,7 @@
           - member_biography_url_changed = constituency.member_attribute_changed?(:member_biography_url, new_constituency)
           - member_website_changed = constituency.member_attribute_changed?(:member_website, new_constituency)
           - member_requested_contact_url_changed = constituency.member_attribute_changed?(:member_requested_contact_url, new_constituency)
+          - member_visible_changed = constituency.member_attribute_changed?(:member_visible, new_constituency)
           %p
             - if member_name_changed
               = f.label :member_name, "#{constituency.member_name} -> "
@@ -80,6 +81,13 @@
             - else
               = f.label :member_requested_contact_url, 'Requested contact URL'
               = f.text_field :member_requested_contact_url, :size=>60
+          %p
+            - if member_visible_changed
+              = f.label :member_visible, "#{constituency.member_visible} -> "
+              = f.check_box :member_visible, :checked => new_constituency.member_visible
+            - else
+              = f.label :member_visible, 'Visible?'
+              = f.check_box :member_visible
           %p
             %label &nbsp;
             = f.submit "Update #{constituency.name}"

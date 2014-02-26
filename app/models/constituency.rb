@@ -22,23 +22,33 @@ class Constituency < ActiveRecord::Base
       end
       text.strip[/^"?([^"]+)"?$/,1]
     end
-
+    
     def load_tsv_line line
       parts = line.split("\t")
-
+      
       constituency_name = remove_quotes(parts[0])
       member_name = remove_quotes(parts[1])
       member_party = remove_quotes(parts[2])
       member_bio_url = remove_quotes(parts[3])
       member_contact = remove_quotes(parts[4])
       member_website = remove_quotes(parts[5])
+      member_visible = remove_quotes(parts[6]) if parts.size > 6
       member_contact = "" unless member_contact
-
+      case member_visible
+      when "False"
+        member_visible = false
+      when "True"
+        member_visible = true
+      else
+        member_visible = nil
+      end
+      
       existing = Constituency.find_by_constituency_name(constituency_name)
+      member_visible = existing.member_visible if member_visible.nil?
       new_constituency = nil
-
+      
       if existing
-        non_matching = (existing.member_name != member_name || existing.member_party != member_party || existing.member_biography_url != member_bio_url)
+        non_matching = (existing.member_name != member_name || existing.member_party != member_party || existing.member_biography_url != member_bio_url || existing.member_visible != member_visible)
         non_matching = non_matching || ( member_contact[/http:\/\//] ?
           (existing.member_requested_contact_url.to_s.strip != member_contact.to_s.strip) : (existing.member_email.to_s.strip != member_contact.to_s.strip) )
         if non_matching
@@ -52,6 +62,7 @@ class Constituency < ActiveRecord::Base
             new_constituency.member_email = member_contact.chomp('.')
           end
           new_constituency.member_website = member_website
+          new_constituency.member_visible = member_visible
         end
         [existing, new_constituency]
       else

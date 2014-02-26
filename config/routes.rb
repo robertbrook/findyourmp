@@ -5,6 +5,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :account, :controller => "users"
   map.resources :users
   map.resource :user_session
+  map.connect '/constituency_list/edit', :conditions => { :method => :post }, :controller => 'constituency_lists', :action => 'load_latest'
+  map.connect '/constituency_list/edit', :controller => 'constituency_lists', :action => 'edit'
+  map.connect '/constituency_list/', :conditions => { :method => :post }, :controller => 'constituency_lists', :action => 'update'
   map.resource :constituency_list
 
   map.resources :password_resets

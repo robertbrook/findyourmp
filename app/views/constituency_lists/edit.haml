@@ -1,6 +1,10 @@
 - @crumbtrail = link_to_admin_home
 - @title = 'Edit constituency list'
 
+- form_tag('edit', :method=>:post) do
+  %p.text
+    = submit_tag "Load latest PICT data"
+
 - form_tag('/constituency_list', :method=>:put) do
   %p.text
     = text_area :constituency_list, :items, :size=>'90x646'
