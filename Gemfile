@@ -14,6 +14,7 @@ gem 'mysql2', '0.2.6'
 gem 'unicode'
 gem 'resource_controller'
 gem 'rest-client'
+gem 'newrelic_rpm'
 
 group :test do
   gem 'test-unit', '1.2.3'

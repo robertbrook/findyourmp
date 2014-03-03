@@ -57,6 +57,7 @@ GEM
     mini_portile (0.5.2)
     multi_json (1.8.2)
     mysql2 (0.2.6)
+    newrelic_rpm (3.7.2.195)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     rack (1.1.6)
@@ -121,6 +122,7 @@ DEPENDENCIES
   haml (= 3.1.8)
   hpricot
   mysql2 (= 0.2.6)
+  newrelic_rpm
   nokogiri
   rails (= 2.3.17)
   rake
