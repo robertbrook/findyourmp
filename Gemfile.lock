@@ -68,7 +68,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.8.0)
+    net-ssh (2.7.0)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     newrelic_rpm (3.7.3.204)
@@ -95,6 +95,8 @@ GEM
       rack (>= 1.0.0)
       rspec (>= 1.3.0)
     rubyzip (1.1.0)
+    rvm-capistrano (1.5.1)
+      capistrano (~> 2.15.4)
     selenium-webdriver (2.40.0)
       childprocess (>= 0.5.0)
       multi_json (~> 1.0)
@@ -137,6 +139,7 @@ DEPENDENCIES
   haml (= 3.1.8)
   hpricot
   mysql2 (= 0.2.6)
+  net-ssh (= 2.7.0)
   newrelic_rpm
   nokogiri
   rails (= 2.3.17)
@@ -146,6 +149,7 @@ DEPENDENCIES
   rest-client
   rspec (= 1.3.2)
   rspec-rails (= 1.3.2)
+  rvm-capistrano
   simplecov
   test-unit (= 1.2.3)
   unicode

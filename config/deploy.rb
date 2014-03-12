@@ -1,3 +1,5 @@
+require "rvm/capistrano"
+
 load File.expand_path(File.dirname(__FILE__) + '/virtualserver/deploy_secrets.rb')
 
 default_run_options[:pty] = true
@@ -19,6 +21,12 @@ role :db,  domain, :primary => true
 set :test_deploy, true
 
 set :master_data_file, 'NSPDC_AUG_2008_UK_100M.txt'
+
+namespace :rvm do
+  task :trust_rvmrc do
+    run "rvm rvmrc trust #{release_path}"
+  end
+end
 
 namespace :deploy do
   set :user, deployuser
@@ -208,8 +216,14 @@ namespace :deploy do
 
   desc "Perform rake tasks"
   task :rake_tasks, :roles => :app, :except => { :no_release => true } do
+  run "cd #{current_path}; gem list bundler | grep 'bundler ('" do |channel, stream, message|
+      unless message =~ /bundler \(\d+\.\d+\.d+/
+        run "cd #{current_path}; gem install bundler"
+      end
+    end
+    run "cd #{current_path}; bundle install"
+    
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
-
     if overwrite
       run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
       run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"

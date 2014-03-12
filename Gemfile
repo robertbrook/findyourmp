@@ -30,4 +30,6 @@ end
 
 group :development do
   gem 'capistrano', '2.15.5'
+  gem 'rvm-capistrano'
+  gem 'net-ssh', '2.7.0'
 end
