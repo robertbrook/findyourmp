@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'rake'
+gem 'rake', '10.1.0'
 gem 'rails', '2.3.17'
 gem 'rdoc'
 gem 'haml', '3.1.8'
