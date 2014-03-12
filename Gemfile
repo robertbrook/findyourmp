@@ -27,3 +27,7 @@ group :test do
   gem 'cucumber', '1.1.0'
   gem 'cucumber-rails', '0.3.2'
 end
+
+group :development do
+  gem 'capistrano', '2.15.5'
+end
