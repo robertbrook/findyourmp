@@ -139,23 +139,23 @@ namespace :deploy do
   task :put_data, :roles => :app do
     data_dir = "#{deploy_to}/shared/cached-copy/data"
 
-    if overwrite
-      run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
-
-      run "rm #{data_dir}/FYMP_all.txt"
-      put_data data_dir, 'FYMP_all.txt'
-
-      run "rm #{data_dir}/constituencies.txt"
-      put_data data_dir, 'constituencies.txt'
-
-      if test_deploy
-        run "rm #{data_dir}/postcodes.txt"
-        put_data data_dir, 'postcodes.txt'
-      else
-        run "rm #{data_dir}/#{master_data_file}"
-        put_data data_dir, "#{master_data_file}"
-      end
-    end
+    # if overwrite
+    #   run "if [ -d #{data_dir} ]; then echo #{data_dir} exists ; else mkdir #{data_dir} ; fi"
+    # 
+    #   run "rm #{data_dir}/FYMP_all.txt"
+    #   put_data data_dir, 'FYMP_all.txt'
+    # 
+    #   run "rm #{data_dir}/constituencies.txt"
+    #   put_data data_dir, 'constituencies.txt'
+    # 
+    #   if test_deploy
+    #     run "rm #{data_dir}/postcodes.txt"
+    #     put_data data_dir, 'postcodes.txt'
+    #   else
+    #     run "rm #{data_dir}/#{master_data_file}"
+    #     put_data data_dir, "#{master_data_file}"
+    #   end
+    # end
 
     log_dir = "#{deploy_to}/shared/log"
     run "if [ -d #{log_dir} ]; then echo #{log_dir} exists ; else mkdir #{log_dir} ; fi"
@@ -180,18 +180,18 @@ namespace :deploy do
     end
   end
 
-  def prompt_for_value(var)
-    puts ""
-    puts "*************************************"
-    answer = ""
-    message = "Do you want to overwrite the data?\n\nIf yes, type: YES, OVERWRITE!!\n(To continue without overwriting, just hit return)\n"
-    answer = Capistrano::CLI.ui.ask(message)
-    if answer == "YES, OVERWRITE!!"
-      set var, true
-    else
-      set var, false
-    end
-  end
+  # def prompt_for_value(var)
+  #   puts ""
+  #   puts "*************************************"
+  #   answer = ""
+  #   message = "Do you want to overwrite the data?\n\nIf yes, type: YES, OVERWRITE!!\n(To continue without overwriting, just hit return)\n"
+  #   answer = Capistrano::CLI.ui.ask(message)
+  #   if answer == "YES, OVERWRITE!!"
+  #     set var, true
+  #   else
+  #     set var, false
+  #   end
+  # end
 
   def check_correct_ip
     puts ""
@@ -224,33 +224,33 @@ namespace :deploy do
     run "cd #{current_path}; bundle install"
     
     run "cd #{current_path}; rake db:migrate RAILS_ENV='production'"
-    if overwrite
-      run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
-      run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
-
-      unless test_deploy
-        postcode_source = ""
-        message = "Which postcodes data file?\n\ne.g. data/NSPDF_MAY_2009_UK_1M_FP.txt\n"
-        postcode_source = Capistrano::CLI.ui.ask(message)
-        if File.exist?(postcode_source)
-          run "cd #{current_path}; rake fymp:parse_postcodes source=#{postcode_source} RAILS_ENV='production'"
-        else
-          raise "cannot find postcodes file: #{postcode_source}"
-        end
-      end
-      run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
-    end
+    # if overwrite
+    #   run "cd #{current_path}; rake fymp:constituencies RAILS_ENV='production'"
+    #   run "cd #{current_path}; rake fymp:members RAILS_ENV='production'"
+    # 
+    #   unless test_deploy
+    #     postcode_source = ""
+    #     message = "Which postcodes data file?\n\ne.g. data/NSPDF_MAY_2009_UK_1M_FP.txt\n"
+    #     postcode_source = Capistrano::CLI.ui.ask(message)
+    #     if File.exist?(postcode_source)
+    #       run "cd #{current_path}; rake fymp:parse_postcodes source=#{postcode_source} RAILS_ENV='production'"
+    #     else
+    #       raise "cannot find postcodes file: #{postcode_source}"
+    #     end
+    #   end
+    #   run "cd #{current_path}; rake fymp:populate RAILS_ENV='production'"
+    # end
 
     run "cd #{current_path}; rake fymp:load_manual_postcodes RAILS_ENV='production'"
     run "cd #{current_path}; rake fymp:load_postcode_districts RAILS_ENV='production'"
   end
 
   task :check_folder_setup, :roles => :app do
-    if is_first_run?
-      set :overwrite, true
-    else
-      prompt_for_value(:overwrite)
-    end
+    # if is_first_run?
+    #   set :overwrite, true
+    # else
+    #   prompt_for_value(:overwrite)
+    # end
 
     puts 'checking folders...'
     run "if [ -d #{deploy_to} ]; then echo exists ; else echo not there ; fi" do |channel, stream, message|
